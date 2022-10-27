@@ -1,0 +1,17 @@
+{
+  "path": "basic",
+  "url": "http://localhost:3000",
+  "waitFor": "#app",
+  "aliases": {
+    "group": [
+      {
+        "name": "card",
+        "selectors": [".card-stat"]
+      },
+      {
+        "name": "swiper",
+        "selectors": [".swiper"]
+      }
+    ]
+  }
+}
