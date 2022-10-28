@@ -1,17 +1,17 @@
 export interface Config {
-  path: string;
-  url: string;
-  waitFor: string;
-  aliases: Aliases;
+    path: string;
+    url: string;
+    waitFor: string;
+    aliases: Aliases;
 }
 
 export type Aliases = {
-  group: Alias[];
-  action: Alias[];
-  input: Alias[];
+    group: Alias[];
+    action: Alias[];
+    input: Alias[];
 };
 
 export type Alias = {
-  name?: string;
-  selectors: string[];
+    name?: string;
+    selectors: string[];
 };
