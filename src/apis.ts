@@ -127,7 +127,7 @@ export default class ApiGenerator {
             ", "
           )}): Promise<{data: ${responseType} | undefined | null}> {`
         );
-        const pathName = path.replace(/\{/g, "${");
+        let pathName = path.replace(/\{/g, "${");
 
         if (formData && formData.length > 0) {
           headers.push(`'content-Type': 'application/x-www-form-urlencoded'`);
@@ -138,6 +138,22 @@ export default class ApiGenerator {
             );
           });
         }
+
+        let pathNames = pathName.split("/");
+        const searchPathParams = pathParameters.map(
+          (path: any) => path.split(":")[0]
+        );
+        for (let i = 1; i <= pathNames.length - 1; i++) {
+          const pathNameReplace = pathNames[i].replace(/\${|\}|/g, "");
+          if (
+            pathNameReplace !== pathNames[i] &&
+            !searchPathParams.includes(pathNameReplace)
+          ) {
+            pathNames[i] = pathNameReplace;
+          }
+        }
+
+        pathName = pathNames.join("/");
 
         lines.push(`        return await axios(\`${pathName}${query}\`, {`);
         lines.push(`             method: '${method}',`);
