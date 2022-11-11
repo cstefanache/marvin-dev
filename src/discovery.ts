@@ -8,6 +8,12 @@ import {
 import {log} from './utils/logger';
 
 const defaultAliases = {
+    info: [
+        // {
+        //     name: 'headers',
+        //     selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        // },
+    ],
     group: [],
     action: [
         {
@@ -26,6 +32,7 @@ export default class Discovery {
 
     constructor(private readonly config: Config) {
         this.aliases = {
+            info: [...defaultAliases.info, ...(config.aliases?.info || [])],
             group: [...defaultAliases.group, ...(config.aliases?.group || [])],
             action: [
                 ...defaultAliases.action,
@@ -52,10 +59,12 @@ export default class Discovery {
         if (classes.length) {
             locator += `.${classes.join('.')}`;
         }
-
-        // if (text) {
-        //     locator += `:contains(${text})`;
-        // }
+        if (tag.toLowerCase() === 'input') {
+            const type = await element.evaluate(el => el.getAttribute('type'));
+            if (type) {
+                locator += `[type=${type}]`;
+            }
+        }
 
         return locator;
     }
@@ -64,8 +73,30 @@ export default class Discovery {
         element: ElementHandle<Element> | Page
     ): Promise<DiscoveryResult> {
         log('Capturing inputs ...');
+        const info: IdentifiableElement[] = [];
         const input: IdentifiableElement[] = [];
         const actions: IdentifiableElement[] = [];
+
+        for (const infoSelector of this.aliases.info) {
+            const elements = await element.$$(
+                infoSelector.selectors.join(', ')
+            );
+
+            for (const element of elements) {
+                const text = (await element.evaluate(
+                    el => el.textContent
+                )) as string;
+                info.push({
+                    text,
+                    details: await element.evaluate(el =>
+                        el.textContent?.trim()
+                    ),
+                    type: await element.evaluate(el => el.getAttribute('type')),
+                    locator: await this.getLocator(element),
+                    // el: element,
+                });
+            }
+        }
 
         for (const inputSelector of this.aliases.input) {
             const elements = await element.$$(
@@ -83,7 +114,7 @@ export default class Discovery {
                     ),
                     type: await element.evaluate(el => el.getAttribute('type')),
                     locator: await this.getLocator(element),
-                    el: element,
+                    // el: element,
                 });
             }
         }
@@ -100,12 +131,13 @@ export default class Discovery {
                 actions.push({
                     text,
                     locator: await this.getLocator(element),
-                    el: element,
+                    // el: element,
                 });
             }
         }
 
         const result = {
+            info,
             input,
             actions,
         };
@@ -128,22 +160,24 @@ export default class Discovery {
         log('Capturing groups ...');
 
         const items = await this.discoverGroup(page);
-        const groups: DiscoveryResult[] = [];
+        // const groups: DiscoveryResult[] = [];
+        // const actions: DiscoveryResult[] = [];
 
-        for (const group of this.aliases.group) {
-            const elements = await page.$$(group.selectors.join(', '));
-            log(`Found ${elements.length} groups`);
-            for (const element of elements) {
-                const name = group.name || 'Unnamed Group';
-                log(`Discovering group: ${name} ...`);
-                const discoveredGroup = await this.discoverGroup(element);
-                groups.push(discoveredGroup);
-                await element.screenshot({
-                    path: `${this.config.path}/group-${name}.png`,
-                });
-            }
-        }
+        // for (const group of this.aliases.group) {
+        //     const elements = await page.$$(group.selectors.join(', '));
+        //     log(`Found ${elements.length} groups`);
+        //     for (const element of elements) {
+        //         const name = group.name || 'Unnamed Group';
+        //         log(`Discovering group: ${name} ...`);
+        //         const discoveredGroup = await this.discoverGroup(element);
+        //         groups.push(discoveredGroup);
+        //         await element.screenshot({
+        //             path: `${this.config.path}/group-${name}.png`,
+        //         });
+        //     }
+        // }
 
-        return {items, groups};
+        // return {items, groups, actions};
+        return {items};
     }
 }

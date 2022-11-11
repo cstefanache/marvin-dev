@@ -1,10 +1,5 @@
 import {ElementHandle} from 'puppeteer';
 
-export type DiscoveryResult = IdentifiableElement & {
-    actions: IdentifiableElement[];
-    input: IdentifiableElement[];
-};
-
 export type IdentifiableElement = {
     text?: string;
     locator?: string;
@@ -13,7 +8,14 @@ export type IdentifiableElement = {
     el?: ElementHandle<Element>;
 };
 
+export type DiscoveryResult = IdentifiableElement & {
+    info: IdentifiableElement[];
+    input: IdentifiableElement[];
+    actions: IdentifiableElement[];
+};
+
 export type PageDiscoveryResult = {
-    items: DiscoveryResult;
-    groups: DiscoveryResult[];
+    items?: DiscoveryResult;
+    groups?: DiscoveryResult[];
+    actions?: DiscoveryResult[];
 };
