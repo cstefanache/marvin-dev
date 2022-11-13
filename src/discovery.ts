@@ -42,13 +42,27 @@ export default class Discovery {
         };
     }
 
-    async getLocator(element: ElementHandle<Element>): Promise<string> {
+    async getLocator(
+        element: ElementHandle<Element>,
+        page: Page
+    ): Promise<string> {
         const tag = await element.evaluate(el => el.tagName);
         const id = await element.evaluate(el => el.id);
         const classes = Object.values(
             await element.evaluate(el => el.classList)
         );
+
         const text = await element.evaluate(el => el.textContent);
+
+        var attributes = await page.evaluate(
+            element =>
+                Array.from(element.attributes, ({name, value}) => [
+                    name,
+                    value,
+                ]),
+            element
+        );
+        const dataAttr = attributes.filter(attr => attr[0].startsWith('data-'));
 
         let locator = tag.toLowerCase();
 
@@ -56,9 +70,21 @@ export default class Discovery {
             locator += `#${id}`;
         }
 
-        if (classes.length) {
+        let validDataAttr = false;
+        if (dataAttr.length) {
+            for (const attribute of dataAttr) {
+                const value = attribute[1].trim();
+                if (value) {
+                    validDataAttr = true;
+                    locator += `[${[attribute[0]]}=${value}]`;
+                }
+            }
+        }
+
+        if (!validDataAttr && classes.length) {
             locator += `.${classes.join('.')}`;
         }
+
         if (tag.toLowerCase() === 'input') {
             const type = await element.evaluate(el => el.getAttribute('type'));
             if (type) {
@@ -66,19 +92,22 @@ export default class Discovery {
             }
         }
 
+        // console.log(locator, text);
+
         return locator;
     }
 
     async discoverGroup(
-        element: ElementHandle<Element> | Page
+        element: ElementHandle<Element> | null,
+        page: Page
     ): Promise<DiscoveryResult> {
         log('Capturing inputs ...');
         const info: IdentifiableElement[] = [];
         const input: IdentifiableElement[] = [];
         const actions: IdentifiableElement[] = [];
-
+        const rootElement = element || page;
         for (const infoSelector of this.aliases.info) {
-            const elements = await element.$$(
+            const elements = await rootElement.$$(
                 infoSelector.selectors.join(', ')
             );
 
@@ -92,14 +121,14 @@ export default class Discovery {
                         el.textContent?.trim()
                     ),
                     type: await element.evaluate(el => el.getAttribute('type')),
-                    locator: await this.getLocator(element),
+                    locator: await this.getLocator(element, page),
                     // el: element,
                 });
             }
         }
 
         for (const inputSelector of this.aliases.input) {
-            const elements = await element.$$(
+            const elements = await rootElement.$$(
                 inputSelector.selectors.join(', ')
             );
             // input.push(...elements);
@@ -113,14 +142,14 @@ export default class Discovery {
                         el.getAttribute('placeholder')
                     ),
                     type: await element.evaluate(el => el.getAttribute('type')),
-                    locator: await this.getLocator(element),
+                    locator: await this.getLocator(element, page),
                     // el: element,
                 });
             }
         }
 
         for (const actionSelector of this.aliases.action) {
-            const elements = await element.$$(
+            const elements = await rootElement.$$(
                 actionSelector.selectors.join(', ')
             );
 
@@ -130,7 +159,7 @@ export default class Discovery {
                 )) as string;
                 actions.push({
                     text,
-                    locator: await this.getLocator(element),
+                    locator: await this.getLocator(element, page),
                     // el: element,
                 });
             }
@@ -142,11 +171,12 @@ export default class Discovery {
             actions,
         };
 
-        if (element.constructor.name === 'ElementHandle') {
+        if (rootElement.constructor.name === 'ElementHandle') {
             return {
                 ...result,
                 locator: await this.getLocator(
-                    element as ElementHandle<Element>
+                    rootElement as ElementHandle<Element>,
+                    page
                 ),
             };
         } else {
@@ -159,7 +189,7 @@ export default class Discovery {
 
         log('Capturing groups ...');
 
-        const items = await this.discoverGroup(page);
+        const items = await this.discoverGroup(null, page);
         // const groups: DiscoveryResult[] = [];
         // const actions: DiscoveryResult[] = [];
 

@@ -6,6 +6,7 @@ export interface Config {
     aliases: Aliases;
     actions: {[key: string]: Action[]};
     discover: string[][];
+    sequence: string[];
 }
 
 export type Aliases = {
