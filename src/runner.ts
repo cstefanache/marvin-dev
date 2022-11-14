@@ -2,10 +2,15 @@ import {Page} from 'puppeteer';
 import Flow from './flow';
 import {Aliases, Config, Sequence} from './models/config';
 import {ActionItem, Actions} from './models/models';
+import {State} from './state';
 import {log} from './utils/logger';
 
 export default class Runner {
-    constructor(private readonly config: Config, private readonly flow: Flow) {}
+    constructor(
+        private readonly config: Config,
+        private readonly flow: Flow,
+        private readonly state: State
+    ) {}
 
     public async run(page: Page, sequence: String[]) {
         const {graph, actions} = this.flow.flow;
@@ -26,15 +31,27 @@ export default class Runner {
                 if (method) {
                     for (const sequenceItem of method.sequence) {
                         const {type, locator} = sequenceItem;
-                        const element = await page.$(locator);
-                        if (element) {
-                            if (type === 'fill') {
-                                log(
-                                    `Filling ${locator} with ${parameters[locator]}`,
-                                    'yellow'
+                        if (type === 'fill') {
+                            log(
+                                `Filling ${locator} with ${parameters[locator]}`,
+                                'yellow'
+                            );
+                            // await element.type(parameters[locator]);
+                            // await page.$eval(locator, (e: any) => e.blur());
+                            await page.focus(locator);
+                            await page.keyboard.type(parameters[locator]);
+                        } else {
+                            const element = await page.$(locator);
+                            if (element) {
+                                var attributes = await page.evaluate(
+                                    element =>
+                                        Array.from(
+                                            element.attributes,
+                                            ({name, value}) => [name, value]
+                                        ),
+                                    element
                                 );
-                                await element.type(parameters[locator]);
-                            } else {
+                                console.log(attributes);
                                 const text = await element.evaluate(el =>
                                     el.textContent?.trim()
                                 );
@@ -51,6 +68,7 @@ export default class Runner {
                             'Network idle timeout. Runner will continue.',
                             'red'
                         );
+                        this.state.reportOnPendingRequests();
                     }
                 } else {
                     throw new Error(`Method ${methodName} not found`);

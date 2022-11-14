@@ -5,10 +5,10 @@ import Runner from './runner';
 import {Config} from './models/config';
 import {loadJSON} from './utils/loaders';
 import {log} from './utils/logger';
+import {State} from './state';
 
 (async () => {
     const [, , ...args] = process.argv;
-    const logRequests = false;
     log('Marvin started', 'yellow');
 
     log(`Loaded configuration from ${args[0]}`, 'yellow');
@@ -20,25 +20,18 @@ import {log} from './utils/logger';
     // Discover current page
     const flow = new Flow(config, browser);
     const page = await flow.navigateTo(config.url);
+    const state = new State(page);
+
     await page.setRequestInterception(true);
-
-    if (logRequests) {
-        page.on(puppeteer.PageEmittedEvents.Request, interceptedRequest => {
-            log(interceptedRequest.url(), 'yellow');
-            interceptedRequest.continue();
-        });
-
-        page.on(puppeteer.PageEmittedEvents.Response, response => {
-            log(response.url(), 'yellow');
-        });
-    }
 
     await page.waitForNetworkIdle();
 
-    const runner = new Runner(config, flow);
+    const runner = new Runner(config, flow, state);
     await runner.run(page, config.sequence);
-    await flow.stateScreenshot(page, 'runstate');
+
+    log('Taking screenshot', 'yellow');
     await flow.discover(page, true);
+    await flow.stateScreenshot(page, 'runstate');
 
     flow.export();
 })();
