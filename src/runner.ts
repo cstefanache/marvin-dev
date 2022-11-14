@@ -26,13 +26,32 @@ export default class Runner {
                 if (method) {
                     for (const sequenceItem of method.sequence) {
                         const {type, locator} = sequenceItem;
-                        if (type === 'fill') {
-                            await page.type(locator, parameters[locator]);
-                        } else {
-                            await page.click(locator);
+                        const element = await page.$(locator);
+                        if (element) {
+                            if (type === 'fill') {
+                                log(
+                                    `Filling ${locator} with ${parameters[locator]}`,
+                                    'yellow'
+                                );
+                                await element.type(parameters[locator]);
+                            } else {
+                                const text = await element.evaluate(el =>
+                                    el.textContent?.trim()
+                                );
+                                log(`Clicking on ${text}`, 'yellow');
+                                await element.click();
+                                log(`Clicked on ${text}`, 'yellow');
+                            }
                         }
                     }
-                    await page.waitForNetworkIdle();
+                    try {
+                        await page.waitForNetworkIdle();
+                    } catch (e) {
+                        log(
+                            'Network idle timeout. Runner will continue.',
+                            'red'
+                        );
+                    }
                 } else {
                     throw new Error(`Method ${methodName} not found`);
                 }
