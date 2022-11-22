@@ -24,13 +24,13 @@ import {State} from './state';
 
     await page.setRequestInterception(true);
 
-    await page.waitForNetworkIdle();
+    await page.waitForNetworkIdle({timeout: config.defaultTimeout});
 
     const runner = new Runner(config, flow, state);
     await runner.run(page, config.sequence);
 
     log('Taking screenshot', 'yellow');
-    await flow.discover(page, true);
+    await flow.discover(page, false);
     await flow.stateScreenshot(page, 'runstate');
 
     flow.export();

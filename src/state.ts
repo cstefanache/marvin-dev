@@ -47,8 +47,12 @@ export class State {
         if (pendingRequests.length > 0) {
             for (const url of pendingRequests) {
                 const time = now - this.netowrkRequests[url];
+                const elapsed = new Date(time);
                 log(
-                    `Pending request ${url.slice(0, 100)} for ${time} ms`,
+                    `Pending request ${url.slice(
+                        0,
+                        100
+                    )} for ${elapsed.getSeconds()}:${elapsed.getMilliseconds()} [s:ms]`,
                     'red'
                 );
             }

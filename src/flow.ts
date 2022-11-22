@@ -125,7 +125,9 @@ export default class Flow {
         const page = await this.browser.newPage();
         await page.goto(url);
         if (waitForNetworkIdle) {
-            await page.waitForNetworkIdle();
+            await page.waitForNetworkIdle({
+                timeout: this.config.defaultTimeout,
+            });
         }
         return page;
     }

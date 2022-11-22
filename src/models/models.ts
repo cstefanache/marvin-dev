@@ -44,6 +44,7 @@ export type Sequence = {
 
 export type Actions = {
     name: string;
+    itemRoot: string;
     sequence: Sequence[];
 };
 

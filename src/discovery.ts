@@ -1,5 +1,5 @@
 import {ElementHandle, Page} from 'puppeteer';
-import {Aliases, Config} from './models/config';
+import {Alias, Aliases, Config} from './models/config';
 import {
     DiscoveryResult,
     IdentifiableElement,
@@ -14,7 +14,6 @@ const defaultAliases = {
         //     selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         // },
     ],
-    group: [],
     action: [
         {
             selectors: ['button', 'a'],
@@ -33,7 +32,6 @@ export default class Discovery {
     constructor(private readonly config: Config) {
         this.aliases = {
             info: [...defaultAliases.info, ...(config.aliases?.info || [])],
-            group: [...defaultAliases.group, ...(config.aliases?.group || [])],
             action: [
                 ...defaultAliases.action,
                 ...(config.aliases?.action || []),
@@ -42,15 +40,45 @@ export default class Discovery {
         };
     }
 
+    async isLocatorUnique(
+        locator: string,
+        page: Page,
+        shouldBe = false
+    ): Promise<boolean> {
+        const elements = await page.$$(locator);
+
+        if (elements.length > 1 && shouldBe === true) {
+            log(`Locator ${locator} is not unique.`);
+        }
+
+        if (elements.length === 0) {
+            throw new Error(`Locator ${locator} is not valid.`);
+        }
+
+        return elements.length === 1;
+    }
+
+    async getElementsForLocator(
+        locator: string,
+        page: Page
+    ): Promise<ElementHandle[]> {
+        return await page.$$(locator);
+    }
+
     async getLocator(
         element: ElementHandle<Element>,
         page: Page
     ): Promise<string> {
         const tag = await element.evaluate(el => el.tagName);
         const id = await element.evaluate(el => el.id);
-        const classes = Object.values(
-            await element.evaluate(el => el.classList)
-        );
+        let locator = tag.toLowerCase();
+
+        if (id) {
+            locator += `#${id}`;
+            if (await this.isLocatorUnique(locator, page, true)) {
+                return locator;
+            }
+        }
 
         const text = await element.evaluate(el => el.textContent);
 
@@ -62,37 +90,65 @@ export default class Discovery {
                 ]),
             element
         );
-        const dataAttr = attributes.filter(attr => attr[0].startsWith('data-'));
-
-        let locator = tag.toLowerCase();
-
-        if (id) {
-            locator += `#${id}`;
-        }
-
+        const dataAttr = attributes.filter(
+            attr =>
+                attr[0].startsWith('data-') ||
+                attr[0].startsWith('aria-') ||
+                attr[0] === 'href' ||
+                attr[0] === 'role'
+        );
         let validDataAttr = false;
         if (dataAttr.length) {
             for (const attribute of dataAttr) {
                 const value = attribute[1].trim();
                 if (value) {
                     validDataAttr = true;
-                    locator += `[${[attribute[0]]}=${value}]`;
+                    const isUnique = await this.isLocatorUnique(
+                        locator + `[${[attribute[0]]}="${value}"]`,
+                        page,
+                        false
+                    );
+                    if (isUnique) {
+                        return locator + `[${[attribute[0]]}="${value}"]`;
+                    }
                 }
             }
         }
 
-        if (!validDataAttr && classes.length) {
-            locator += `.${classes.join('.')}`;
-        }
+        let isUniqueSoFar = await this.isLocatorUnique(locator, page);
 
-        if (tag.toLowerCase() === 'input') {
-            const type = await element.evaluate(el => el.getAttribute('type'));
-            if (type) {
-                locator += `[type=${type}]`;
+        if (!isUniqueSoFar) {
+            const classes = Object.values(
+                await element.evaluate(el => el.classList)
+            );
+
+            for (let currentClass of classes) {
+                const isUnique = await this.isLocatorUnique(
+                    locator + `.${currentClass}`,
+                    page,
+                    false
+                );
+                if (isUnique) {
+                    return locator + `.${currentClass}`;
+                }
+            }
+
+            const parent = await element.$x('..');
+            const parentElement =
+                parent[0].asElement() as ElementHandle<Element>;
+            if (parentElement) {
+                const parentLocator = await this.getLocator(
+                    parentElement,
+                    page
+                );
+                let parentLocatorUnique = await this.isLocatorUnique(
+                    parentLocator,
+                    page
+                );
+                // console.log(parentLocator, parentLocatorUnique);
+                locator = parentLocator + ' > ' + locator;
             }
         }
-
-        // console.log(locator, text);
 
         return locator;
     }
@@ -106,12 +162,23 @@ export default class Discovery {
         const input: IdentifiableElement[] = [];
         const actions: IdentifiableElement[] = [];
         const rootElement = element || page;
+
+        const getLocatorForElement = async (
+            actionSelector: Alias,
+            index: number,
+            element: ElementHandle
+        ) =>
+            actionSelector.skipOptimizer
+                ? `${actionSelector.selectors.join(', ')}:nth-of-type(${
+                      index + 1
+                  })`
+                : await this.getLocator(element, page);
         for (const infoSelector of this.aliases.info) {
             const elements = await rootElement.$$(
                 infoSelector.selectors.join(', ')
             );
 
-            for (const element of elements) {
+            for (const [index, element] of elements.entries()) {
                 const text = (await element.evaluate(
                     el => el.textContent
                 )) as string;
@@ -121,8 +188,11 @@ export default class Discovery {
                         el.textContent?.trim()
                     ),
                     type: await element.evaluate(el => el.getAttribute('type')),
-                    locator: await this.getLocator(element, page),
-                    // el: element,
+                    locator: await getLocatorForElement(
+                        infoSelector,
+                        index,
+                        element
+                    ),
                 });
             }
         }
@@ -131,8 +201,7 @@ export default class Discovery {
             const elements = await rootElement.$$(
                 inputSelector.selectors.join(', ')
             );
-            // input.push(...elements);
-            for (const element of elements) {
+            for (const [index, element] of elements.entries()) {
                 const text = (await element.evaluate(
                     el => el.textContent
                 )) as string;
@@ -142,8 +211,11 @@ export default class Discovery {
                         el.getAttribute('placeholder')
                     ),
                     type: await element.evaluate(el => el.getAttribute('type')),
-                    locator: await this.getLocator(element, page),
-                    // el: element,
+                    locator: await getLocatorForElement(
+                        inputSelector,
+                        index,
+                        element
+                    ),
                 });
             }
         }
@@ -153,14 +225,17 @@ export default class Discovery {
                 actionSelector.selectors.join(', ')
             );
 
-            for (const element of elements) {
+            for (const [index, element] of elements.entries()) {
                 const text = (await element.evaluate(
                     el => el.textContent
                 )) as string;
                 actions.push({
                     text,
-                    locator: await this.getLocator(element, page),
-                    // el: element,
+                    locator: await getLocatorForElement(
+                        actionSelector,
+                        index,
+                        element
+                    ),
                 });
             }
         }

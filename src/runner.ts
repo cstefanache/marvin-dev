@@ -29,8 +29,82 @@ export default class Runner {
                     (item: Actions) => item.name === methodName
                 );
                 if (method) {
+                    let prefix = '';
+
+                    if (method.itemRoot && this.config.aliases.iterators) {
+                        const {itemRoot} = method;
+
+                        const iteratorConfig =
+                            this.config.aliases.iterators.find(
+                                configIterator =>
+                                    configIterator.name === itemRoot
+                            );
+
+                        if (iteratorConfig && iteratorConfig.identifiers) {
+                            console.log(iteratorConfig.selectors.join(', '));
+                            const elements = await page.$$(
+                                iteratorConfig.selectors.join(', ')
+                            );
+
+                            if (elements && elements.length) {
+                                console.log(elements);
+                                for (const [
+                                    index,
+                                    element,
+                                ] of elements.entries()) {
+                                    let isRoot = true;
+                                    for (const identifier of iteratorConfig.identifiers) {
+                                        const {name, selector} = identifier;
+                                        const valueElement = selector
+                                            ? await element.$(selector)
+                                            : element;
+                                        if (valueElement) {
+                                            const text =
+                                                (await valueElement.evaluate(
+                                                    el => el.textContent
+                                                )) as string;
+                                            console.log(
+                                                `[${index}] ${name}: ${text} - ${parameters[name]}`
+                                            );
+                                            if (text !== parameters[name]) {
+                                                isRoot = false;
+                                                break;
+                                            }
+                                        } else {
+                                            isRoot = false;
+                                        }
+                                    }
+                                    if (isRoot) {
+                                        prefix = `${
+                                            iteratorConfig.selectors[0]
+                                        }:nth-of-type(${index + 1})`;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                log(`No elements found for ${itemRoot}`, 'red');
+                            }
+                        } else {
+                            throw new Error(
+                                `Missing iterator config for ${itemRoot}`
+                            );
+                        }
+
+                        if (prefix === '') {
+                            throw new Error(
+                                `No root element found for ${itemRoot} for parameters ${JSON.stringify(
+                                    parameters
+                                )}`
+                            );
+                        }
+                    }
+
                     for (const sequenceItem of method.sequence) {
-                        const {type, locator} = sequenceItem;
+                        let {type, locator} = sequenceItem;
+                        locator = `${prefix !== '' ? prefix : ''}${
+                            prefix !== '' && locator ? ' ' : ''
+                        }${locator || ''}`;
+                        console.log(type, locator);
                         if (type === 'fill') {
                             log(
                                 `Filling ${locator} with ${parameters[locator]}`,
@@ -62,7 +136,9 @@ export default class Runner {
                         }
                     }
                     try {
-                        await page.waitForNetworkIdle();
+                        await page.waitForNetworkIdle({
+                            timeout: this.config.defaultTimeout,
+                        });
                     } catch (e) {
                         log(
                             'Network idle timeout. Runner will continue.',

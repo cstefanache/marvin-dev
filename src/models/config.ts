@@ -1,5 +1,6 @@
 export interface Config {
     path: string;
+    defaultTimeout: number;
     output: string;
     url: string;
     waitFor: string;
@@ -10,15 +11,17 @@ export interface Config {
 }
 
 export type Aliases = {
-    group: Alias[];
     action: Alias[];
     input: Alias[];
     info: Alias[];
+    iterators?: Alias[];
 };
 
 export type Alias = {
     name?: string;
+    skipOptimizer?: boolean;
     selectors: string[];
+    identifiers?: {name: string; selector: string}[];
 };
 
 export type Action = {
