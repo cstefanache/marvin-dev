@@ -17,8 +17,15 @@ export default class Runner {
         let currentStep = graph;
 
         for (const step of sequence) {
-            const url = page.url();
+            let url = page.url();
             log(`Current path: ${url}`, 'yellow');
+            for (const replacer of this.config.urlReplacers) {
+                const re = new RegExp(replacer.regex, 'g');
+                if (re.exec(url) !== null) {
+                    url = url.replace(re, replacer.alias);
+                    break;
+                }
+            }
             const action = currentStep.find(
                 (item: ActionItem) => item.description === step
             );

@@ -49,7 +49,14 @@ export default class Flow {
         page: Page,
         overwrite = false
     ): Promise<PageDiscoveryResult> {
-        const currentUrl = page.url();
+        let currentUrl = page.url();
+        for (const replacer of this.config.urlReplacers) {
+            const re = new RegExp(replacer.regex, 'g')
+            if (re.exec(currentUrl) !== null) {
+                currentUrl = currentUrl.replace(re, replacer.alias);
+                break;
+            }
+        }
         const discoveryResults: PageDiscoveryResult =
             await this.discovery.discoverPage(page);
         if (this.output.discovered[currentUrl] && !overwrite) {

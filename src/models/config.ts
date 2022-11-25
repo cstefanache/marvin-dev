@@ -1,8 +1,9 @@
 export interface Config {
     path: string;
     defaultTimeout: number;
+    urlReplacers: Replacer[];
     output: string;
-    url: string;
+    baseUrl: string;
     waitFor: string;
     aliases: Aliases;
     actions: {[key: string]: Action[]};
@@ -15,6 +16,11 @@ export type Aliases = {
     input: Alias[];
     info: Alias[];
     iterators?: Alias[];
+};
+
+export type Replacer = {
+    regex: string;
+    alias: string;
 };
 
 export type Alias = {
