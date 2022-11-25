@@ -1,4 +1,6 @@
-export function processUrl(rootUrl: string, replacers: any): string {
+import {Replacer} from '../models/config';
+
+export function processUrl(rootUrl: string, replacers: Replacer[]): string {
     let url = rootUrl;
     for (const replacer of replacers) {
         const regex = new RegExp(replacer.regex, 'g');
