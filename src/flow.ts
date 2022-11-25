@@ -51,9 +51,9 @@ export default class Flow {
     ): Promise<PageDiscoveryResult> {
         let currentUrl = page.url();
         for (const replacer of this.config.urlReplacers) {
-            const re = new RegExp(replacer.regex, 'g')
-            if (re.exec(currentUrl) !== null) {
-                currentUrl = currentUrl.replace(re, replacer.alias);
+            const regex = new RegExp(replacer.regex, 'g')
+            if (regex.exec(currentUrl) !== null) {
+                currentUrl = currentUrl.replace(regex, replacer.alias);
                 break;
             }
         }

@@ -20,9 +20,9 @@ export default class Runner {
             let url = page.url();
             log(`Current path: ${url}`, 'yellow');
             for (const replacer of this.config.urlReplacers) {
-                const re = new RegExp(replacer.regex, 'g');
-                if (re.exec(url) !== null) {
-                    url = url.replace(re, replacer.alias);
+                const regex = new RegExp(replacer.regex, 'g');
+                if (regex.exec(url) !== null) {
+                    url = url.replace(regex, replacer.alias);
                     break;
                 }
             }

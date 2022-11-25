@@ -18,7 +18,7 @@ export type Aliases = {
     iterators?: Alias[];
 };
 
-export type Replacer = {
+type Replacer = {
     regex: string;
     alias: string;
 };
