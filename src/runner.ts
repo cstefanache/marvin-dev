@@ -4,6 +4,7 @@ import {Aliases, Config, Sequence} from './models/config';
 import {ActionItem, Actions} from './models/models';
 import {State} from './state';
 import {log} from './utils/logger';
+import {processUrl} from './utils/processes';
 
 export default class Runner {
     constructor(
@@ -18,14 +19,15 @@ export default class Runner {
 
         for (const step of sequence) {
             let url = page.url();
+            url = processUrl(url, this.config.urlReplacers);
             log(`Current path: ${url}`, 'yellow');
-            for (const replacer of this.config.urlReplacers) {
-                const regex = new RegExp(replacer.regex, 'g');
-                if (regex.exec(url) !== null) {
-                    url = url.replace(regex, replacer.alias);
-                    break;
-                }
-            }
+            // for (const replacer of this.config.urlReplacers) {
+            //     const regex = new RegExp(replacer.regex, 'g');
+            //     if (regex.exec(url) !== null) {
+            //         url = url.replace(regex, replacer.alias);
+            //         break;
+            //     }
+            // }
             const action = currentStep.find(
                 (item: ActionItem) => item.description === step
             );
