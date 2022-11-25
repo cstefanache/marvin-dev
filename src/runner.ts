@@ -21,13 +21,6 @@ export default class Runner {
             let url = page.url();
             url = processUrl(url, this.config.urlReplacers);
             log(`Current path: ${url}`, 'yellow');
-            // for (const replacer of this.config.urlReplacers) {
-            //     const regex = new RegExp(replacer.regex, 'g');
-            //     if (regex.exec(url) !== null) {
-            //         url = url.replace(regex, replacer.alias);
-            //         break;
-            //     }
-            // }
             const action = currentStep.find(
                 (item: ActionItem) => item.description === step
             );

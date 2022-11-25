@@ -52,13 +52,6 @@ export default class Flow {
     ): Promise<PageDiscoveryResult> {
         let currentUrl = page.url();
         currentUrl = processUrl(currentUrl, this.config.urlReplacers)
-        // for (const replacer of this.config.urlReplacers) {
-        //     const regex = new RegExp(replacer.regex, 'g')
-        //     if (regex.exec(currentUrl) !== null) {
-        //         currentUrl = currentUrl.replace(regex, replacer.alias);
-        //         break;
-        //     }
-        // }
         const discoveryResults: PageDiscoveryResult =
             await this.discovery.discoverPage(page);
         if (this.output.discovered[currentUrl] && !overwrite) {
