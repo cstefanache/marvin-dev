@@ -19,7 +19,7 @@ import {State} from './state';
 
     // Discover current page
     const flow = new Flow(config, browser);
-    const page = await flow.navigateTo(config.url);
+    const page = await flow.navigateTo(config.baseUrl);
     const state = new State(page);
 
     await page.setRequestInterception(true);

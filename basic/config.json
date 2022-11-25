@@ -1,17 +1,51 @@
 {
-  "path": "basic",
-  "url": "http://localhost:3000",
-  "waitFor": "#app",
-  "aliases": {
-    "group": [
-      {
-        "name": "card",
-        "selectors": [".card-stat"]
-      },
-      {
-        "name": "swiper",
-        "selectors": [".swiper"]
-      }
-    ]
-  }
+    "path": "basic",
+    "baseUrl": "",
+    "defaultTimeout": 10000,
+    "urlReplacers": [
+        {
+            "regex": "({){0,1}[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(}){0,1}",
+            "alias": "{resourceId}"
+        }
+        // {
+        //     "regex": "(?<=recommended/)[A-Za-z0-9-]+",
+        //     "alias": "{resourceName}"
+        // }
+    ],
+    "aliases": {
+        "info": [
+            {
+                "name": "alert",
+                "selectors": [".MuiAlert-message"]
+            }
+        ],
+        "action": [
+            {
+                "name": "",
+                "skipOptimizer": true,
+                "selectors": []
+            },
+            {
+                "name": "",
+                "selectors": []
+            }
+        ],
+        "iterators": [
+            {
+                "name": "",
+                "selectors": [],
+                "identifiers": [
+                    {
+                        "name": ""
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "selectors": [""],
+                "identifiers": [{"name": "", "selector": ""}]
+            }
+        ]
+    },
+    "sequence": []
 }

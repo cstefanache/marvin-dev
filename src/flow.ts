@@ -9,6 +9,7 @@ import {
     FlowModel,
 } from './models/models';
 import {log} from './utils/logger';
+import {processUrl} from './utils/processes'
 
 export default class Flow {
     public flow: FlowModel;
@@ -49,7 +50,8 @@ export default class Flow {
         page: Page,
         overwrite = false
     ): Promise<PageDiscoveryResult> {
-        const currentUrl = page.url();
+        let currentUrl = page.url();
+        currentUrl = processUrl(currentUrl, this.config.urlReplacers)
         const discoveryResults: PageDiscoveryResult =
             await this.discovery.discoverPage(page);
         if (this.output.discovered[currentUrl] && !overwrite) {

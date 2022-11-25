@@ -4,6 +4,7 @@ import {Aliases, Config, Sequence} from './models/config';
 import {ActionItem, Actions} from './models/models';
 import {State} from './state';
 import {log} from './utils/logger';
+import {processUrl} from './utils/processes';
 
 export default class Runner {
     constructor(
@@ -17,7 +18,8 @@ export default class Runner {
         let currentStep = graph;
 
         for (const step of sequence) {
-            const url = page.url();
+            let url = page.url();
+            url = processUrl(url, this.config.urlReplacers);
             log(`Current path: ${url}`, 'yellow');
             const action = currentStep.find(
                 (item: ActionItem) => item.description === step
