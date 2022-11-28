@@ -16,20 +16,26 @@ export default class Runner {
     public async run(page: Page, sequence: String[]) {
         const {graph, actions} = this.flow.flow;
         let currentStep = graph;
-
         for (const step of sequence) {
             let url = page.url();
             url = processUrl(url, this.config.urlReplacers);
             log(`Current path: ${url}`, 'yellow');
-            const action = currentStep.find(
-                (item: ActionItem) => item.description === step
+            let action = currentStep.find(
+                (item: ActionItem) => item.sequence_step === step
             );
             if (action) {
                 const {method: methodName, parameters} = action;
                 const urlActions = actions[url];
-                const method = urlActions.find(
-                    (item: Actions) => item.name === methodName
-                );
+                let method: any;
+                if (urlActions) {
+                    method = urlActions.find(
+                        (item: Actions) => item.method === methodName
+                    );
+                } else {
+                    throw new Error(
+                        `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
+                    );
+                }
                 if (method) {
                     let prefix = '';
 
@@ -154,7 +160,13 @@ export default class Runner {
             } else {
                 throw new Error(`Action ${step} not found in flow`);
             }
-            currentStep = action.children;
+            if (action.children) {
+                currentStep = action.children;
+            } else {
+                throw new Error(
+                    `children[] array does not exist in the current node << ${step} >> in the graph flow`
+                );
+            }
         }
 
         log(`Sequence ended on page: ${page.url()}`, 'green');

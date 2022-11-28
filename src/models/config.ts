@@ -3,7 +3,7 @@ export interface Config {
     defaultTimeout: number;
     urlReplacers: Replacer[];
     output: string;
-    baseUrl: string;
+    rootUrl: string;
     waitFor: string;
     aliases: Aliases;
     actions: {[key: string]: Action[]};

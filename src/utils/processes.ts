@@ -1,7 +1,7 @@
 import {Replacer} from '../models/config';
 
-export function processUrl(rootUrl: string, replacers: Replacer[]): string {
-    let url = rootUrl;
+export function processUrl(currentUrl: string, replacers: Replacer[]): string {
+    let url = currentUrl;
     for (const replacer of replacers) {
         const regex = new RegExp(replacer.regex, 'g');
         if (regex.exec(url) !== null) {
