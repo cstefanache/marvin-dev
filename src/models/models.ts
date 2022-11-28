@@ -32,7 +32,7 @@ export type Output = {
 export type ActionItem = {
     url: string;
     method: string;
-    description: string;
+    sequence_step: string;
     parameters: {[key: string]: string};
     children: ActionItem[];
 };
@@ -43,7 +43,7 @@ export type Sequence = {
 };
 
 export type Actions = {
-    name: string;
+    method: string;
     itemRoot: string;
     sequence: Sequence[];
 };
