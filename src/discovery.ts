@@ -83,7 +83,6 @@ export default class Discovery {
                         break;
                     } else {
                         locator += `#${id}`;
-                        break;
                     }
                 }
             } else {
