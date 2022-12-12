@@ -74,7 +74,7 @@ export default class Discovery {
         const name = await element.evaluate(el => el.getAttribute('name'));
         let locator = tag.toLowerCase();
 
-        if (id) {
+        if (id && name) {
             if (this.config.discoveryOptimizer) {
                 for (const excludeItem of this.config.discoveryOptimizer) {
                     const regex = new RegExp(excludeItem.value_pattern, 'g');
