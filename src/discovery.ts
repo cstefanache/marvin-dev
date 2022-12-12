@@ -71,10 +71,24 @@ export default class Discovery {
     ): Promise<string> {
         const tag = await element.evaluate(el => el.tagName);
         const id = await element.evaluate(el => el.id);
+        const name = await element.evaluate(el => el.getAttribute('name'));
         let locator = tag.toLowerCase();
 
         if (id) {
-            locator += `#${id}`;
+            if (this.config.discoveryOptimizer) {
+                for (const excludeItem of this.config.discoveryOptimizer) {
+                    const regex = new RegExp(excludeItem.value_pattern, 'g');
+                    if (excludeItem.tag === 'id' && regex.exec(id) !== null) {
+                        locator += `[name='${name}']`;
+                        break;
+                    } else {
+                        locator += `#${id}`;
+                        break;
+                    }
+                }
+            } else {
+                locator += `#${id}`;
+            }
             if (await this.isLocatorUnique(locator, page, true)) {
                 return locator;
             }

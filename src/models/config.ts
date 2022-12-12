@@ -2,6 +2,7 @@ export interface Config {
     path: string;
     defaultTimeout: number;
     urlReplacers: Replacer[];
+    discoveryOptimizer?: Optimizer[];
     output: string;
     rootUrl: string;
     waitFor: string;
@@ -21,6 +22,11 @@ export type Aliases = {
 export type Replacer = {
     regex: string;
     alias: string;
+};
+
+export type Optimizer = {
+    tag: string;
+    value_pattern: string;
 };
 
 export type Alias = {

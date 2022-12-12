@@ -6,6 +6,16 @@
         {
             "regex": "({){0,1}[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(}){0,1}",
             "alias": "{resourceId}"
+        },
+        {
+            "regex": "(?<=recommended/)[A-Za-z0-9-]+",
+            "alias": "{resourceName}"
+        }
+    ],
+    "discoveryOptimizer": [
+        {
+            "tag": "id",
+            "value_pattern": "(mui-.*)[^\"][^\"]"
         }
     ],
     "aliases": {
@@ -17,31 +27,43 @@
         ],
         "action": [
             {
-                "name": "",
+                "name": "Select Company",
                 "skipOptimizer": true,
-                "selectors": []
+                "selectors": ["form > div"]
             },
             {
-                "name": "",
-                "selectors": []
+                "name": "Navigation",
+                "selectors": ["nav a"]
+            },
+            {
+                "name": "Service Card Title",
+                "selectors": ["h6.MuiTypography-root"]
             }
         ],
         "iterators": [
             {
-                "name": "",
-                "selectors": [],
+                "name": "Select Company By Name",
+                "selectors": ["form > div"],
                 "identifiers": [
                     {
-                        "name": ""
+                        "name": "Company Name"
                     }
                 ]
             },
             {
-                "name": "",
-                "selectors": [""],
-                "identifiers": [{"name": "", "selector": ""}]
+                "name": "Service Card",
+                "selectors": ["section > div"],
+                "identifiers": [
+                    {"name": "title", "selector": "h6.MuiTypography-root"}
+                ]
+            },
+            {
+                "name": "Service Table Row",
+                "selectors": ["tr"],
+                "identifiers": [
+                    {"name": "first column", "selector": "td:nth-child(1)"}
+                ]
             }
         ]
-    },
-    "sequence": []
+    }
 }
