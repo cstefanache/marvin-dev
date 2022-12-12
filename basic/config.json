@@ -1,6 +1,6 @@
 {
     "path": "basic",
-    "rootUrl": "",
+    "rootUrl": "https://app.staging.gremlin.com/login",
     "defaultTimeout": 10000,
     "urlReplacers": [
         {
@@ -18,52 +18,6 @@
             "value_pattern": "(mui-.*)[^\"][^\"]"
         }
     ],
-    "aliases": {
-        "info": [
-            {
-                "name": "alert",
-                "selectors": [".MuiAlert-message"]
-            }
-        ],
-        "action": [
-            {
-                "name": "Select Company",
-                "skipOptimizer": true,
-                "selectors": ["form > div"]
-            },
-            {
-                "name": "Navigation",
-                "selectors": ["nav a"]
-            },
-            {
-                "name": "Service Card Title",
-                "selectors": ["h6.MuiTypography-root"]
-            }
-        ],
-        "iterators": [
-            {
-                "name": "Select Company By Name",
-                "selectors": ["form > div"],
-                "identifiers": [
-                    {
-                        "name": "Company Name"
-                    }
-                ]
-            },
-            {
-                "name": "Service Card",
-                "selectors": ["section > div"],
-                "identifiers": [
-                    {"name": "title", "selector": "h6.MuiTypography-root"}
-                ]
-            },
-            {
-                "name": "Service Table Row",
-                "selectors": ["tr"],
-                "identifiers": [
-                    {"name": "first column", "selector": "td:nth-child(1)"}
-                ]
-            }
-        ]
-    }
+    "aliases": {},
+    "sequence": []
 }
