@@ -1,1 +1,115 @@
-# marvin
+# Marvin
+
+TBD
+
+# Config
+
+Format:
+
+```
+{
+    "path": "basic",
+    "rootUrl": "",
+    "defaultTimeout": 10000,
+    "aliases": {
+        "info": [ ... ],
+        "input": [ ... ],
+        "action": [ ... ],
+        "iterators": [ ... ]
+    },
+    "urlReplacers": [ ... ],
+    "optimizer": {
+        "exclude": [ ... ]
+    },
+    "sequence": [ ... ],
+}
+```
+
+`path` - the local folder where the output will be generated
+
+`rootUrl` - the root URL from which the discovery will start
+
+`defaultTimeout` - the default waiting time before proceeding with actions if the network does not turn to idle. Usually the case when polling is used in pages
+
+`aliases` - the list of custom identifiable items in the page. By default Marvin is initialized with a list of discoverable elements such as `<h[1-6]>`, `<p>` for info, `<input ...` for inputs, `<a ...`, `<button ...` for action but most applications come with custom complex classes that require definition
+
+-   `info` - discoverable elements that display information.
+-   `input` - elements that support keyboard typing
+-   `action` - clickable elements
+-   `iterators` - TBD
+
+Example:
+
+```
+"aliases": {
+    "info": [
+        {
+            "name": "Alert",
+            "selectors": [".alert", ".MuiAlert-message"]
+        },
+        {
+            "name": "Form error",
+            "selectors": ["form .error"]
+        }
+    ],
+    "action": [
+        {
+            "name": "Card Header",
+            "selectors": [".card .card-title h1"]
+        }
+    ],
+}
+```
+
+`optimizer` - TBD
+
+`urlReplacers` - used when the identifiable pages reference a specific resource (e.g. `/user/4/profile`) and the output should merge all discovered elements under the same url.
+
+if no urlReplacers are present the generated discovered output will result:
+
+```
+{
+    ...
+    "/user/4/profile": {
+        ...
+    },
+    "/user/6/profile": {
+        ....
+    }
+}
+```
+
+To merge the discovered outputs to be merged under a single object a config entry can be added:
+
+```
+"urlReplacers": [
+    {
+        "regex": "\/user\/\d\/profile",
+        "alias": "{userIdId}"
+    }
+],
+```
+
+the generated output will be:
+
+```
+{
+    ...
+    "/user/{userId}/profile": {
+        ...
+    }
+}
+```
+
+Replacer samples:
+
+-   **UUID** - uuid format replaced with `{resourceId}`
+
+```
+    {
+        "regex": "({){0,1}[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(}){0,1}",
+        "alias": "{resourceId}"
+    }
+```
+
+`sequence` - This is just for development purpose. will be removed in the future
