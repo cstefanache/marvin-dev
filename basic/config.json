@@ -1,6 +1,6 @@
 {
     "path": "basic",
-    "rootUrl": "https://app.staging.gremlin.com/login",
+    "rootUrl": "",
     "defaultTimeout": 10000,
     "urlReplacers": [
         {
@@ -12,12 +12,85 @@
             "alias": "{resourceName}"
         }
     ],
-    "discoveryOptimizer": [
-        {
-            "tag": "id",
-            "value_pattern": "(mui-.*)[^\"][^\"]"
-        }
-    ],
-    "aliases": {},
-    "sequence": []
+    "optimizer": {
+        "exclude": [
+            {
+                "type": "tag",
+                "value": ["aside"]
+            },
+            {
+                "type": "attribute",
+                "name": "id",
+                "regex": ["mui-[0-9]{1,}"]
+            },
+            {
+                "type": "attribute",
+                "name": "data-x",
+                "value": ["input-email"]
+            },
+            {
+                "type": "attribute",
+                "value": ["whatever"]
+            },
+            {
+                "type": "attribute",
+                "name": "data-colindex"
+            },
+            {
+                "type": "class",
+                "value": ["Mui1", "Mui2"]
+            }
+        ]
+    },
+    "aliases": {
+        "info": [
+            {
+                "name": "alert",
+                "selectors": [".MuiAlert-message"]
+            }
+        ],
+        "action": [
+            {
+                "name": "Select Company",
+                "skipOptimizer": true,
+                "selectors": ["form > div"]
+            },
+            {
+                "name": "Navigation",
+                "selectors": ["nav a"]
+            },
+            {
+                "name": "Service Card Title",
+                "selectors": ["h6.MuiTypography-root"]
+            }
+        ],
+        "iterators": [
+            {
+                "name": "Select Company By Name",
+                "selectors": ["form > div"],
+                "identifiers": [
+                    {
+                        "name": "Company Name"
+                    }
+                ]
+            },
+            {
+                "name": "Service Card",
+                "selectors": ["section > div"],
+                "identifiers": [
+                    {"name": "title", "selector": "h6.MuiTypography-root"}
+                ],
+                "optimizer": {}
+            },
+            {
+                "name": "Service Table Row",
+                "selectors": ["tr"],
+                "identifiers": [
+                    {"name": "first column", "selector": "td:nth-child(1)"}
+                ]
+            }
+        ]
+    },
+    "sequence": [],
+    "asequence": []
 }
