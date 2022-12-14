@@ -1,5 +1,5 @@
 import {ElementHandle, Page} from 'puppeteer';
-import {Alias, Aliases, Config} from './models/config';
+import {Alias, Aliases, Config, Exclude} from './models/config';
 import {
     DiscoveryResult,
     IdentifiableElement,
@@ -40,11 +40,43 @@ export default class Discovery {
         };
     }
 
+    matches(val: string, rule: Exclude) {
+        const {regex, value} = rule;
+
+        if (!value && !regex) {
+            return true;
+        }
+
+        if (
+            (regex && regex.find(reg => new RegExp(reg).test(val))) ||
+            (value && value.find(item => item === val)) ||
+            (value &&
+                value.find(item => item === val) &&
+                regex &&
+                regex.find(reg => new RegExp(reg).test(val)))
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    matchesAnyRule(name: string, val: string, type: string, rules: Exclude[]) {
+        const typeFilter = rules.filter(rule => rule.type === type);
+        const filter = rules.filter(
+            rule => rule.type === type && (!rule.name || rule.name === name)
+        );
+        return filter.find(rule => this.matches(val, rule)) !== undefined;
+    }
+
     async isLocatorUnique(
         locator: string,
         page: Page,
         shouldBe = false
     ): Promise<boolean> {
+        if (!locator || locator.trim() === '') {
+            return false;
+        }
         const elements = await page.$$(locator);
 
         if (elements.length > 1 && shouldBe === true) {
@@ -70,10 +102,16 @@ export default class Discovery {
         page: Page
     ): Promise<string> {
         const tag = await element.evaluate(el => el.tagName);
-        const id = await element.evaluate(el => el.id);
-        let locator = tag.toLowerCase();
+        let locator: any = '';
 
-        if (id) {
+        let excludeRules = this.config.optimizer?.exclude || [];
+
+        if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
+            locator += tag.toLowerCase();
+        }
+
+        const id = await element.evaluate(el => el.id);
+        if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
             locator += `#${id}`;
             if (await this.isLocatorUnique(locator, page, true)) {
                 return locator;
@@ -92,10 +130,12 @@ export default class Discovery {
         );
         const dataAttr = attributes.filter(
             attr =>
-                attr[0].startsWith('data-') ||
-                attr[0].startsWith('aria-') ||
-                attr[0] === 'href' ||
-                attr[0] === 'role'
+                !this.matchesAnyRule(
+                    attr[0],
+                    attr[1],
+                    'attribute',
+                    excludeRules
+                ) && attr[0] !== 'id'
         );
         let validDataAttr = false;
         if (dataAttr.length) {
@@ -122,7 +162,11 @@ export default class Discovery {
                 await element.evaluate(el => el.classList)
             );
 
-            for (let currentClass of classes) {
+            const filterClasses = classes.filter(
+                cls => !this.matchesAnyRule('', cls, 'class', excludeRules)
+            );
+
+            for (let currentClass of filterClasses) {
                 const isUnique = await this.isLocatorUnique(
                     locator + `.${currentClass}`,
                     page,
@@ -146,7 +190,9 @@ export default class Discovery {
                     page
                 );
                 // console.log(parentLocator, parentLocatorUnique);
-                locator = parentLocator + ' > ' + locator;
+                if (locator !== '' && parentLocator !== '') {
+                    locator = parentLocator + ' > ' + locator;
+                }
             }
         }
 
