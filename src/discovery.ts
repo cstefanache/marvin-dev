@@ -43,30 +43,30 @@ export default class Discovery {
     matches(val: string, rule: Exclude) {
         const {regex, value} = rule;
 
-        if (regex) {
-            const found = regex.find(reg => new RegExp(reg).test(val));
-            if (found) {
-                return true;
-            }
+        if (!value && !regex) {
+            return true;
         }
 
-        if (value) {
-            const found = value.find(item => item === val);
-            if (found) {
-                return true;
-            }
+        if (
+            (regex && regex.find(reg => new RegExp(reg).test(val))) ||
+            (value && value.find(item => item === val)) ||
+            (value &&
+                value.find(item => item === val) &&
+                regex &&
+                regex.find(reg => new RegExp(reg).test(val)))
+        ) {
+            return true;
         }
+
         return false;
     }
 
     matchesAnyRule(name: string, val: string, type: string, rules: Exclude[]) {
         const typeFilter = rules.filter(rule => rule.type === type);
-
-        const nameFilter = typeFilter.filter(
-            rule => !rule.name || rule.name === name
+        const filter = rules.filter(
+            rule => rule.type === type && (!rule.name || rule.name === name)
         );
-
-        return nameFilter.find(rule => this.matches(val, rule)) !== undefined;
+        return filter.find(rule => this.matches(val, rule)) !== undefined;
     }
 
     async isLocatorUnique(
