@@ -1,8 +1,8 @@
-import Discovery from './discovery';
-import {Config} from './models/config';
-import {PageDiscoveryResult} from './models/models';
+import Discovery from '../../discovery';
+import {Config} from '../../models/config';
+import {PageDiscoveryResult} from '../../models/models';
 
-describe('Test discovery', () => {
+describe('Test discovery - One Exclusion rule', () => {
     it('simple discovery test', async () => {
         const discovery = new Discovery({} as Config);
         await page.evaluate(() => {
@@ -22,7 +22,7 @@ describe('Test discovery', () => {
         expect(result).toEqual(['input#input1', 'input[name="input2"]']);
     });
 
-    it('exclusion - tag name', async () => {
+    it('exclusion - only tag - by value - only one match', async () => {
         const discovery = new Discovery({
             optimizer: {
                 exclude: [
@@ -47,6 +47,18 @@ describe('Test discovery', () => {
         expect(result).toEqual(['#input1', '#input2']);
     });
 
+    it('exclusion - only tag - by value - multiple matches', async () => {
+        
+    });
+
+    it('exclusion - only tag - by regex - only one match', async () => {});
+
+    it('exclusion - only tag - by regex - multiple matches', async () => {});
+
+    it('exclusion - only tag - by regex & by value - only one match per each value / regex', async () => {});
+
+    it('exclusion - only tag - by regex & by value - multiple matches per each value / regex', async () => {});
+
     it('exclusion - id property', async () => {
         const discovery = new Discovery({
             optimizer: {
@@ -70,37 +82,5 @@ describe('Test discovery', () => {
             await discovery.discoverPage(page);
         const result = discoveryResults.items?.input?.map(item => item.locator);
         expect(result).toEqual(['body > input', 'input[name="input2"]']);
-    });
-
-    it('exclusion - id and tag property', async () => {
-        const discovery = new Discovery({
-            optimizer: {
-                exclude: [
-                    {
-                        type: 'tag',
-                        value: ['input'],
-                    },
-                    {
-                        type: 'attribute',
-                        name: 'id',
-                    },
-                ],
-            },
-        } as Config);
-        await page.evaluate(() => {
-            document.body.innerHTML = `
-                <body>                        
-                    <input id="input1" type="text" name="name_input1"/>
-                    <input id="input2" type="text" name="name_input2" />
-                </body>
-            `;
-        });
-        const discoveryResults: PageDiscoveryResult =
-            await discovery.discoverPage(page);
-        const result = discoveryResults.items?.input?.map(item => item.locator);
-        expect(result).toEqual([
-            '[name="name_input1"]',
-            '[name="name_input2"]',
-        ]);
     });
 });
