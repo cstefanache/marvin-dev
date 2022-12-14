@@ -15,6 +15,7 @@ describe('Test discovery', () => {
                 </body>
             `;
         });
+        
         const discoveryResults: PageDiscoveryResult =
             await discovery.discoverPage(page);
 

@@ -2,7 +2,20 @@
   "discovered": {
     "http://localhost:4200/": {
       "items": {
-        "info": [],
+        "info": [
+          {
+            "text": "nx connect-to-nx-cloud",
+            "details": "nx connect-to-nx-cloud",
+            "type": null,
+            "locator": "div#nx-cloud > pre"
+          },
+          {
+            "text": "# see what's been affected by changesnx affected:graph# run tests for current changesnx affected:test# run e2e tests for current changesnx affected:e2e",
+            "details": "# see what's been affected by changesnx affected:graph# run tests for current changesnx affected:test# run e2e tests for current changesnx affected:e2e",
+            "type": null,
+            "locator": "div#commands > details > pre"
+          }
+        ],
         "input": [],
         "actions": [
           {

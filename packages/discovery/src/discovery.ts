@@ -305,7 +305,7 @@ export default class Discovery {
         }
     }
 
-    async discoverPage(page: Page): Promise<PageDiscoveryResult> {
+    async discoverPage(page: Page | any): Promise<PageDiscoveryResult> {
         log('Starting page discovery ...');
 
         log('Capturing groups ...');

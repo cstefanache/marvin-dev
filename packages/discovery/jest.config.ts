@@ -1,15 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'discovery',
-  preset: '../../jest.preset.js',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
-  },
+  testTimeout: 30000,
+  testMatch: ['**/?(*.)+(spec|test).[t]s'],
+  preset: 'jest-puppeteer',
   transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
+      '^.+\\.ts$': 'ts-jest',
   },
-  moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/discovery',
+  testPathIgnorePatterns: ['/node_modules/', 'dist'],
 };
