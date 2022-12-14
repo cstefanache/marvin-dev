@@ -1,7 +1,10 @@
+import {exitCode} from 'process';
+
 export interface Config {
     path: string;
     defaultTimeout: number;
     urlReplacers: Replacer[];
+    optimizer?: Optimizer;
     output: string;
     rootUrl: string;
     waitFor: string;
@@ -21,6 +24,17 @@ export type Aliases = {
 export type Replacer = {
     regex: string;
     alias: string;
+};
+
+export type Optimizer = {
+    exclude: Exclude[];
+};
+
+export type Exclude = {
+    type: string;
+    name?: string;
+    regex?: string[];
+    value?: string[];
 };
 
 export type Alias = {
