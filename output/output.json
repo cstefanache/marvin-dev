@@ -4,55 +4,105 @@
       "items": {
         "info": [
           {
-            "text": "nx connect-to-nx-cloud",
-            "details": "nx connect-to-nx-cloud",
+            "text": "Marvin Sample App",
+            "details": "Marvin Sample App",
             "type": null,
-            "locator": "div#nx-cloud > pre"
+            "locator": "h6"
           },
           {
-            "text": "# see what's been affected by changesnx affected:graph# run tests for current changesnx affected:test# run e2e tests for current changesnx affected:e2e",
-            "details": "# see what's been affected by changesnx affected:graph# run tests for current changesnx affected:test# run e2e tests for current changesnx affected:e2e",
+            "text": "List 2",
+            "details": "List 2",
             "type": null,
-            "locator": "div#commands > details > pre"
+            "locator": "div.MuiGrid-container > div > div > div > div"
           }
         ],
-        "input": [],
+        "input": [
+          {
+            "text": "",
+            "details": "Enter username",
+            "type": "text",
+            "locator": "input[placeholder=\"Enter username\"]"
+          },
+          {
+            "text": "",
+            "details": "Enter password",
+            "type": "password",
+            "locator": "input[placeholder=\"Enter password\"]"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "checkbox",
+            "locator": "input[name=\"checkedB\"]"
+          }
+        ],
         "actions": [
           {
-            "text": " What's next? ",
-            "locator": "a[href=\"#commands\"]"
+            "text": "Sign in",
+            "locator": "button[tabindex=\"0\"]"
           },
           {
-            "text": "Documentation Everything is in there ",
-            "locator": "a[href=\"https://nx.dev/getting-started/intro?utm_source=nx-project\"]"
+            "text": "Sign Up",
+            "locator": "div[style=\"margin: 20px auto; padding: 20px; width: 380px;\"] > p > a"
           },
           {
-            "text": "Blog Changelog, features & events ",
-            "locator": "a[href=\"https://blog.nrwl.io/?utm_source=nx-project\"]"
+            "text": "Sign Up",
+            "locator": "div[style=\"margin: 20px auto; padding: 20px; width: 380px;\"] > p > a"
           },
           {
-            "text": "YouTubeYouTube channel Nx Show, talks & tutorials ",
-            "locator": "a[href=\"https://www.youtube.com/c/Nrwl_io/videos?utm_source=nx-project&sub_confirmation=1\"]"
+            "text": "Marvin Sample App",
+            "locator": "a[href=\"/\"]"
           },
           {
-            "text": "Interactive tutorials Create an app, step-by-step ",
-            "locator": "a[href=\"https://nx.dev/react-tutorial/1-code-generation?utm_source=nx-project\"]"
+            "text": "Create New List",
+            "locator": "a[href=\"/newitem\"]"
           },
           {
-            "text": "Video courses Nx custom courses ",
-            "locator": "a[href=\"https://nxplaybook.com/?utm_source=nx-project\"]"
+            "text": "Logout",
+            "locator": "button.MuiButton-textInherit"
           },
           {
-            "text": "Visual Studio CodeInstall Nx ConsolePlugin for VSCode",
-            "locator": "a#nx-console"
+            "text": "Open",
+            "locator": "a[href=\"/item/1671029121527\"]"
           },
           {
-            "text": " What is Nx Cloud? ",
-            "locator": "a[href=\"https://nx.app/?utm_source=nx-project\"]"
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div > div > div > button"
           },
           {
-            "text": "Nx is open source Love Nx? Give us a star! ",
-            "locator": "a#nx-repo"
+            "text": "Open",
+            "locator": "a[href=\"/item/1671029586094\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671029631053\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671029659589\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671029727961\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671104352383\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671104371008\"]"
+          }
+        ],
+        "iterable": [
+          {
+            "text": "Card Iterator",
+            "identifiers": [
+              {
+                "text": "List 2",
+                "locator": "div.MuiGrid-container > div > div > div > div"
+              }
+            ]
           }
         ]
       }

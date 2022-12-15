@@ -1,4 +1,44 @@
 {
-  "graph": [],
-  "actions": {}
+  "graph": [
+    {
+      "sequence_step": "Login as user@marvinapp.io",
+      "url": "http://localhost:4200/",
+      "method": "login",
+      "parameters": {
+        "input[placeholder=\"Enter username\"]": "user@marvinapp.io",
+        "input[placeholder=\"Enter password\"]": "password123"
+      },
+      "children": []
+    }
+  ],
+  "actions": {
+    "http://localhost:4200/": [
+      {
+        "method": "login",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter username\"]"
+          },
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter password\"]"
+          },
+          {
+            "type": "click",
+            "locator": "button[tabindex=\"0\"]"
+          }
+        ]
+      },
+      {
+        "method": "Select List",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a"
+          }
+        ]
+      }
+    ]
+  }
 }

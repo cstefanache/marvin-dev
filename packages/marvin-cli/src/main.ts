@@ -6,17 +6,43 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
   const browser = await puppeteer.launch({ headless: true });
   const config = {
     path: 'output',
+    defaultTimeout: 1000,
     rootUrl: 'http://localhost:4200/',
     urlReplacers: [],
-    aliases: {
-      info: [{ name: 'code', selectors: ['pre'] }],
+    optimizer: {
+      exclude: [
+        {
+          type: 'attribute',
+          name: 'id',
+        },
+      ],
     },
-    sequence: [],
+    aliases: {
+      info: [
+        {
+          name: 'Card Title',
+          selectors: ['.MuiTypography-h5'],
+        },
+      ],
+      iterators: [
+        {
+          name: 'Card Iterator',
+          selectors: ['.grid-card'],
+          identifiers: [
+            {
+              name: 'Card Title',
+              selector: '.MuiTypography-h5',
+            },
+          ],
+        },
+      ],
+    },
+    sequence: ['Login as user@marvinapp.io'],
   } as any;
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);
-  // const state = new State(page);
-  const state = undefined;
+  const state = new State(page);
+  // const state = undefined;
 
   await page.setRequestInterception(true);
 
@@ -27,7 +53,7 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
 
   // log('Taking screenshot', 'yellow');
   await flow.discover(page, false);
-  // await flow.stateScreenshot(page, 'runstate');
+  await flow.stateScreenshot(page, 'runstate');
 
   flow.export();
 })();

@@ -41,7 +41,7 @@ export default class Runner {
 
                     if (method.itemRoot && this.config.aliases.iterators) {
                         const {itemRoot} = method;
-
+                        log(`Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`)
                         const iteratorConfig =
                             this.config.aliases.iterators.find(
                                 configIterator =>
@@ -49,7 +49,6 @@ export default class Runner {
                             );
 
                         if (iteratorConfig && iteratorConfig.identifiers) {
-                            console.log(iteratorConfig.selectors.join(', '));
                             const elements = await page.$$(
                                 iteratorConfig.selectors.join(', ')
                             );
