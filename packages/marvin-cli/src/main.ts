@@ -8,7 +8,10 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
     path: 'output',
     defaultTimeout: 1000,
     rootUrl: 'http://localhost:4200/',
-    urlReplacers: [],
+    urlReplacers: [{
+      regex: '\/[0-9]+',
+      alias: '/:id',
+    }],
     optimizer: {
       exclude: [
         {
@@ -19,10 +22,7 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
     },
     aliases: {
       info: [
-        {
-          name: 'Card Title',
-          selectors: ['.MuiTypography-h5'],
-        },
+       
       ],
       iterators: [
         {
@@ -33,11 +33,17 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
               name: 'Card Title',
               selector: '.MuiTypography-h5',
             },
+            { name: 'Open Button', selector: 'a' },
+            { name: 'Delete Button', selector: 'button' },
           ],
         },
       ],
     },
-    sequence: ['Login as user@marvinapp.io'],
+    sequence: [
+      'Login as user@marvinapp.io', 
+      // 'Select List 2'
+      'Click on create new list'
+    ],
   } as any;
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);

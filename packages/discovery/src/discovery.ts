@@ -25,8 +25,17 @@ const defaultAliases = {
     },
   ],
   iterators: [
-
-  ]
+    {
+      name: 'List Iterator',
+      selectors: ['ul', 'ol'],
+      identifiers: [
+        {
+          name: 'List Item',
+          selector: 'li',
+        },
+      ],
+    },
+  ],
 };
 
 export default class Discovery {
@@ -37,7 +46,10 @@ export default class Discovery {
       info: [...defaultAliases.info, ...(config.aliases?.info || [])],
       action: [...defaultAliases.action, ...(config.aliases?.action || [])],
       input: [...defaultAliases.input, ...(config.aliases?.input || [])],
-      iterators: [...defaultAliases.iterators, ...(config.aliases?.iterators || [])],
+      iterators: [
+        ...defaultAliases.iterators,
+        ...(config.aliases?.iterators || []),
+      ],
     };
   }
 
@@ -72,13 +84,13 @@ export default class Discovery {
 
   async isLocatorUnique(
     locator: string,
-    page: Page,
+    parent: Page | ElementHandle,
     shouldBe = false
   ): Promise<boolean> {
     if (!locator || locator.trim() === '') {
       return false;
     }
-    const elements = await page.$$(locator);
+    const elements = await parent.$$(locator);
 
     if (elements.length > 1 && shouldBe === true) {
       log(`Locator ${locator} is not unique.`);
@@ -100,10 +112,12 @@ export default class Discovery {
 
   async getLocator(
     element: ElementHandle<Element>,
-    page: Page
+    page: Page,
+    parent?: ElementHandle<Element>
   ): Promise<string> {
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
+    let rootEl = parent || page;
 
     let excludeRules = this.config.optimizer?.exclude || [];
 
@@ -111,15 +125,19 @@ export default class Discovery {
       locator += tag.toLowerCase();
     }
 
+    if (await this.isLocatorUnique(locator, rootEl, true)) {
+      return locator;
+    }
+
     const id = await element.evaluate((el) => el.id);
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
       locator += `#${id}`;
-      if (await this.isLocatorUnique(locator, page, true)) {
+      if (await this.isLocatorUnique(locator, rootEl, true)) {
         return locator;
       }
     }
 
-    const text = await element.evaluate((el) => el.textContent);
+    // const text = await element.evaluate((el) => el.textContent);
 
     var attributes = await page.evaluate(
       (element) =>
@@ -130,7 +148,8 @@ export default class Discovery {
       (attr) =>
         !this.matchesAnyRule(attr[0], attr[1], 'attribute', excludeRules) &&
         attr[0] !== 'id' &&
-        attr[0] !== 'class'
+        attr[0] !== 'class' &&
+        attr[0] !== 'style'
     );
     let validDataAttr = false;
     if (dataAttr.length) {
@@ -140,7 +159,7 @@ export default class Discovery {
           validDataAttr = true;
           const isUnique = await this.isLocatorUnique(
             locator + `[${[attribute[0]]}="${value}"]`,
-            page,
+            rootEl,
             false
           );
           if (isUnique) {
@@ -150,7 +169,7 @@ export default class Discovery {
       }
     }
 
-    let isUniqueSoFar = await this.isLocatorUnique(locator, page);
+    let isUniqueSoFar = await this.isLocatorUnique(locator, rootEl);
 
     if (!isUniqueSoFar) {
       const classes = Object.values(
@@ -164,7 +183,7 @@ export default class Discovery {
       for (let currentClass of filterClasses) {
         const isUnique = await this.isLocatorUnique(
           locator + `.${currentClass}`,
-          page,
+          rootEl,
           false
         );
         if (isUnique) {
@@ -176,11 +195,7 @@ export default class Discovery {
       const parentElement = parent[0].asElement() as ElementHandle<Element>;
       if (parentElement) {
         const parentLocator = await this.getLocator(parentElement, page);
-        let parentLocatorUnique = await this.isLocatorUnique(
-          parentLocator,
-          page
-        );
-        // console.log(parentLocator, parentLocatorUnique);
+
         if (locator !== '' && parentLocator !== '') {
           locator = parentLocator + ' > ' + locator;
         }
@@ -204,11 +219,13 @@ export default class Discovery {
     const getLocatorForElement = async (
       actionSelector: Alias,
       index: number,
-      element: ElementHandle
+      element: ElementHandle,
+      parent?: ElementHandle
     ) =>
       actionSelector.skipOptimizer
         ? `${actionSelector.selectors.join(', ')}:nth-of-type(${index + 1})`
-        : await this.getLocator(element, page);
+        : await this.getLocator(element, page, parent);
+
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
 
@@ -252,26 +269,21 @@ export default class Discovery {
       }
     }
 
-    
     if (this.aliases.iterators && this.aliases.iterators.length) {
-      log('Capturing iterators ...')
+      log('Capturing iterators ...');
       for (const iteratorSelector of this.aliases.iterators) {
         const elements = await rootElement.$$(
           iteratorSelector.selectors.join(', ')
         );
 
-
-        for (const [index, element] of elements.entries()) {
+        if (elements.length) {
+          element = elements[0];
           const identifiers: IdentifiableElement[] = [];
           if (iteratorSelector.identifiers) {
-
             for (const identifierSelector of iteratorSelector.identifiers) {
-              const elements = await element.$$(
-                identifierSelector.selector
-              );
-
-              for (const [index, element] of elements.entries()) {
-                const text = (await element.evaluate(
+              const elements = await element.$$(identifierSelector.selector);
+              for (const [index, childElement] of elements.entries()) {
+                const text = (await childElement.evaluate(
                   (el) => el.textContent
                 )) as string;
                 identifiers.push({
@@ -279,33 +291,26 @@ export default class Discovery {
                   locator: await getLocatorForElement(
                     {
                       name: identifierSelector.name,
+                      skipOptimizer: identifierSelector.skipOptimizer || false,
                       selectors: [identifierSelector.selector],
                     },
                     index,
+                    childElement,
                     element
                   ),
                 });
               }
             }
+
+            iterable.push({
+              text: iteratorSelector.name,
+              locator: iteratorSelector.selectors.join(', '),
+              identifiers,
+            });
           }
-
-          iterable.push({
-            text: iteratorSelector.name,
-            identifiers
-          })
-
-          // identifiers.push({
-          //   'type': 'iterable',
-          //   iteratorSelector,
-          // });
-          // actions.push({
-          //   text,
-          //   locator: await getLocatorForElement(actionSelector, index, element),
-          // });
         }
       }
     }
-
 
     const result = {
       info,

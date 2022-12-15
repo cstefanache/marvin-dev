@@ -27,6 +27,7 @@ export default class Runner {
                 const {method: methodName, parameters} = action;
                 const urlActions = actions[url];
                 let method: any;
+                console.log('------------------')
                 if (urlActions) {
                     method = urlActions.find(
                         (item: Actions) => item.method === methodName
@@ -36,6 +37,7 @@ export default class Runner {
                         `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
                     );
                 }
+
                 if (method) {
                     let prefix = '';
 
@@ -54,12 +56,11 @@ export default class Runner {
                             );
 
                             if (elements && elements.length) {
-                                console.log(elements);
                                 for (const [
                                     index,
                                     element,
                                 ] of elements.entries()) {
-                                    let isRoot = true;
+                                    let isRoot = false;
                                     for (const identifier of iteratorConfig.identifiers) {
                                         const {name, selector} = identifier;
                                         const valueElement = selector
@@ -73,14 +74,14 @@ export default class Runner {
                                             console.log(
                                                 `[${index}] ${name}: ${text} - ${parameters[name]}`
                                             );
-                                            if (text !== parameters[name]) {
-                                                isRoot = false;
+                                            if (text === parameters[name]) {
+                                                console.log(text, parameters[name], 'isRoot = false')
+                                                isRoot = true;
                                                 break;
                                             }
-                                        } else {
-                                            isRoot = false;
                                         }
                                     }
+
                                     if (isRoot) {
                                         prefix = `${
                                             iteratorConfig.selectors[0]
@@ -164,9 +165,7 @@ export default class Runner {
             if (action.children) {
                 currentStep = action.children;
             } else {
-                throw new Error(
-                    `children[] array does not exist in the current node << ${step} >> in the graph flow`
-                );
+                currentStep = [];
             }
         }
 

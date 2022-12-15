@@ -3,18 +3,43 @@
     {
       "sequence_step": "Login as user@marvinapp.io",
       "url": "http://localhost:4200/",
-      "method": "login",
+      "method": "Login",
       "parameters": {
         "input[placeholder=\"Enter username\"]": "user@marvinapp.io",
         "input[placeholder=\"Enter password\"]": "password123"
       },
-      "children": []
+      "children": [
+        {
+          "sequence_step": "Click on create new list",
+          "url": "http://localhost:4200/",
+          "method": "Click on create new list",
+          "children": [
+            {
+              "sequence_step": "Add a new list with no items",
+              "url": "http://localhost:4200/newitem",
+              "method": "Set list name",
+              "parameters": {
+                "input[placeholder=\"Enter list name\"]": "Newly Created List"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "sequence_step": "Select List 2",
+          "url": "http://localhost:4200/",
+          "method": "Click on list card",
+          "parameters": {
+            "Card Title": "List 2"
+          }
+        }
+      ]
     }
   ],
   "actions": {
     "http://localhost:4200/": [
       {
-        "method": "login",
+        "method": "Login",
         "sequence": [
           {
             "type": "fill",
@@ -31,11 +56,45 @@
         ]
       },
       {
-        "method": "Select List",
+        "method": "Click on list card",
+        "itemRoot": "Card Iterator",
         "sequence": [
           {
             "type": "click",
             "locator": "a"
+          }
+        ]
+      },
+      {
+        "method": "Click on create new list",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a[href=\"/newitem\"]"
+          }
+        ]
+      }
+    ],
+    "http://localhost:4200/newitem": [
+      {
+        "method": "Set list name",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter list name\"]"
+          }
+        ]
+      },
+      {
+        "method": "Add Item",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "div.MuiBox-root > div > div > input"
+          },
+          {
+            "type": "click",
+            "locator": "button.MuiButton-contained"
           }
         ]
       }
