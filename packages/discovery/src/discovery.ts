@@ -135,7 +135,7 @@ export default class Discovery {
                     attr[1],
                     'attribute',
                     excludeRules
-                ) && attr[0] !== 'id'
+                ) && attr[0] !== 'id' && attr[0] !== 'class'
         );
         let validDataAttr = false;
         if (dataAttr.length) {
@@ -163,7 +163,7 @@ export default class Discovery {
             );
 
             const filterClasses = classes.filter(
-                cls => !this.matchesAnyRule('', cls, 'class', excludeRules)
+                cls => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
             );
 
             for (let currentClass of filterClasses) {
