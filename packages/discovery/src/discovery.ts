@@ -129,13 +129,11 @@ export default class Discovery {
             element
         );
         const dataAttr = attributes.filter(
-            attr =>
-                !this.matchesAnyRule(
-                    attr[0],
-                    attr[1],
-                    'attribute',
-                    excludeRules
-                ) && attr[0] !== 'id'
+          (attr) =>
+            !this.matchesAnyRule(attr[0], attr[1], 'attribute', excludeRules) &&
+            attr[0] !== 'id' &&
+            attr[0] !== 'class' &&
+            attr[0] !== 'style'
         );
         let validDataAttr = false;
         if (dataAttr.length) {
@@ -163,7 +161,7 @@ export default class Discovery {
             );
 
             const filterClasses = classes.filter(
-                cls => !this.matchesAnyRule('', cls, 'class', excludeRules)
+                cls => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
             );
 
             for (let currentClass of filterClasses) {
