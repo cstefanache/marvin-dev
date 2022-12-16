@@ -48,7 +48,7 @@
             "locator": "button"
           },
           {
-            "text": "Forgot password ?",
+            "text": "Sign Up",
             "locator": "div.MuiPaper-root > p > a"
           },
           {
@@ -98,6 +98,10 @@
           {
             "text": "Open",
             "locator": "a[href=\"/item/1671161788559\"]"
+          },
+          {
+            "text": "Sign in",
+            "locator": "button[tabindex=\"0\"]"
           }
         ],
         "iterable": [

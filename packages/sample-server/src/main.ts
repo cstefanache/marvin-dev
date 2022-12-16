@@ -95,10 +95,11 @@ app.post('/api/logout', (req, res) => {
   const { token } = req.headers;
 
   if (token) {
-    const user = getUserBySessionToken(token as string);
+    const [_, user] = getUserBySessionToken(token as string);
     user.sessions = user.sessions.filter(
       (session: string) => session !== token
     );
+    
     db.syncDB();
     res.status(200).send();
   } else {

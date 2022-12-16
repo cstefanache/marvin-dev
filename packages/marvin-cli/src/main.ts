@@ -45,7 +45,8 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
       'Add a new list with single item',
       'Add New Item',
       'Save List',
-      'Delete Newly Created List'
+      'Delete Newly Created List',
+      'Logout',
     ],
   } as any;
   const flow = new Flow(config, browser);

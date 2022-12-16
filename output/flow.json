@@ -41,7 +41,14 @@
                           "method": "Delete List Card",
                           "parameters": {
                             "Card Title": "Newly Created List"
-                          }
+                          },
+                          "children": [
+                            {
+                              "sequence_step": "Logout",
+                              "url": "http://localhost:4200/",
+                              "method": "Logout"
+                            }
+                          ]
                         }
                       ]
                     }
@@ -107,6 +114,15 @@
           {
             "type": "click",
             "locator": "a[href=\"/newitem\"]"
+          }
+        ]
+      },
+      {
+        "method": "Logout",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "button.MuiButton-textInherit"
           }
         ]
       }
