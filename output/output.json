@@ -111,11 +111,11 @@
               },
               {
                 "text": "Open",
-                "locator": "a"
+                "locator": "a[tabindex=\"0\"]"
               },
               {
                 "text": "Delete",
-                "locator": "button"
+                "locator": "button[tabindex=\"0\"]"
               }
             ]
           }

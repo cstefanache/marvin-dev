@@ -125,9 +125,9 @@ export default class Discovery {
       locator += tag.toLowerCase();
     }
 
-    if (await this.isLocatorUnique(locator, rootEl, true)) {
-      return locator;
-    }
+    // if (await this.isLocatorUnique(locator, rootEl, true)) {
+    //   return locator;
+    // }
 
     const id = await element.evaluate((el) => el.id);
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
@@ -177,7 +177,7 @@ export default class Discovery {
       );
 
       const filterClasses = classes.filter(
-        (cls) => !this.matchesAnyRule('', cls, 'class', excludeRules)
+        cls => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
       );
 
       for (let currentClass of filterClasses) {
