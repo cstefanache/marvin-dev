@@ -272,7 +272,7 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     );
     expect(resultInfos).toEqual([
       'div.cls2 > span',
-      'legend[data="legend"] > span',
+      'legend > span',
     ]);
     const resultInputs = discoveryResults.items?.input.map(
       (item: any) => item.locator

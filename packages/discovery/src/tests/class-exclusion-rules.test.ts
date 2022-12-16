@@ -51,7 +51,7 @@ describe('Test Discovery - class exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -110,7 +110,7 @@ describe('Test Discovery - class exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator

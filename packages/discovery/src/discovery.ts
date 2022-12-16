@@ -125,9 +125,11 @@ export default class Discovery {
       locator += tag.toLowerCase();
     }
 
-    // if (await this.isLocatorUnique(locator, rootEl, true)) {
-    //   return locator;
-    // }
+    if (await this.isLocatorUnique(locator, rootEl, true)) {
+      return locator;
+    }
+
+    
 
     const id = await element.evaluate((el) => el.id);
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
@@ -155,6 +157,7 @@ export default class Discovery {
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
         const value = attribute[1].trim();
+        
         if (value) {
           validDataAttr = true;
           const isUnique = await this.isLocatorUnique(
@@ -162,6 +165,7 @@ export default class Discovery {
             rootEl,
             false
           );
+          
           if (isUnique) {
             return locator + `[${[attribute[0]]}="${value}"]`;
           }

@@ -150,7 +150,7 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -217,7 +217,7 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -279,7 +279,7 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -594,7 +594,7 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls11 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -643,7 +643,7 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls11 > span',
-      'legend[name="Legend"] > span',
+      'legend > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
