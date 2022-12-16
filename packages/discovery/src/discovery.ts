@@ -1,3 +1,4 @@
+import { red } from 'colors';
 import { ElementHandle, Page } from 'puppeteer';
 import { Alias, Aliases, Config, Exclude } from './models/config';
 import {
@@ -40,6 +41,7 @@ const defaultAliases = {
 
 export default class Discovery {
   private aliases: Aliases;
+  private keepParent: any
 
   constructor(private readonly config: Config) {
     this.aliases = {
@@ -198,10 +200,24 @@ export default class Discovery {
       const parent = await element.$x('..');
       const parentElement = parent[0].asElement() as ElementHandle<Element>;
       if (parentElement) {
-        const parentLocator = await this.getLocator(parentElement, page);
-
-        if (locator !== '' && parentLocator !== '') {
-          locator = parentLocator + ' > ' + locator;
+        let parentLocator: any
+        if (await this.getLocator(parentElement, page) !== '') {
+           parentLocator = await this.getLocator(parentElement, page);
+        }
+        if (locator !== '') {
+            if (parentLocator) {
+              locator = parentLocator + ' > ' + locator;
+            } else {
+              if (this.keepParent) {
+                locator = this.keepParent + ' ' + locator
+              }
+            }
+        } else {
+          if (parentLocator) {
+            this.keepParent = parentLocator
+          } else {
+              log('The locator is empty and its parent is excluded. Please review your excluder otions', 'red')
+          }
         }
       }
     }

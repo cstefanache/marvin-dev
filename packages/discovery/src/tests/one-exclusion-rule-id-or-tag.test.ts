@@ -477,10 +477,10 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     ]);
   });
 
-  it('exclusion - tag - when the first child does not generate an unique locator', async () => {
+  it('exclusion - tag - when the first parent is excluded and we need to search a parent in the higher level', async () => {
     const discovery = new Discovery({
       aliases: {
-        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        info: [{ name: 'Legend', selectors: ['span', 'label']}],
       },
       optimizer: {
         exclude: [
