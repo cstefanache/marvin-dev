@@ -6,6 +6,7 @@ export type IdentifiableElement = {
     details?: string | null;
     type?: string | null;
     el?: ElementHandle<Element>;
+    identifiers?: IdentifiableElement[];
 };
 
 export type DiscoveryResult = IdentifiableElement & {
@@ -13,6 +14,7 @@ export type DiscoveryResult = IdentifiableElement & {
     info: IdentifiableElement[];
     input: IdentifiableElement[];
     actions: IdentifiableElement[];
+    iterable: IdentifiableElement[];
 };
 
 export type PageDiscoveryResult = {

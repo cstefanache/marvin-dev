@@ -1,7 +1,5 @@
 import {
-    PageEmittedEvents,
     Page,
-    PageEventObject,
     HTTPRequest,
     HTTPResponse,
 } from 'puppeteer';
@@ -14,7 +12,7 @@ export class State {
         const logRequests = false;
 
         page.on(
-            PageEmittedEvents.Request,
+            "request",
             (interceptedRequest: HTTPRequest) => {
                 const url = interceptedRequest.url();
                 if (logRequests) {
@@ -30,7 +28,7 @@ export class State {
             }
         );
 
-        page.on(PageEmittedEvents.Response, (response: HTTPResponse) => {
+        page.on("response", (response: HTTPResponse) => {
             const url = response.url();
             if (logRequests) {
                 log(`Response: ${url}`, 'yellow');
