@@ -78,6 +78,26 @@
           {
             "text": "Open",
             "locator": "a[href=\"/item/1671104371008\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671160942840\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161174796\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161584465\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161659293\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161788559\"]"
           }
         ],
         "iterable": [
@@ -102,40 +122,6 @@
         ]
       }
     },
-    "http://localhost:4200/item/1671104371008": {
-      "items": {
-        "info": [
-          {
-            "text": "Marvin Sample App",
-            "details": "Marvin Sample App",
-            "type": null,
-            "locator": "h6"
-          },
-          {
-            "text": "List 2",
-            "details": "List 2",
-            "type": null,
-            "locator": "h1"
-          }
-        ],
-        "input": [],
-        "actions": [
-          {
-            "text": "Marvin Sample App",
-            "locator": "a[href=\"/\"]"
-          },
-          {
-            "text": "Create New List",
-            "locator": "a[tabindex=\"0\"]"
-          },
-          {
-            "text": "Logout",
-            "locator": "button"
-          }
-        ],
-        "iterable": []
-      }
-    },
     "http://localhost:4200/item/:id": {
       "items": {
         "info": [
@@ -146,8 +132,8 @@
             "locator": "h6"
           },
           {
-            "text": "List 2",
-            "details": "List 2",
+            "text": "Newly Created List",
+            "details": "Newly Created List",
             "type": null,
             "locator": "h1"
           }
@@ -173,24 +159,8 @@
             "locator": "ul, ol",
             "identifiers": [
               {
-                "text": "a",
-                "locator": "ul > li"
-              },
-              {
-                "text": "b",
-                "locator": "ul > li"
-              },
-              {
-                "text": "c",
-                "locator": "ul > li"
-              },
-              {
-                "text": "d",
-                "locator": "ul > li"
-              },
-              {
-                "text": "e",
-                "locator": "ul > li"
+                "text": "Item Test",
+                "locator": "li"
               }
             ]
           }
@@ -219,6 +189,12 @@
             "details": null,
             "type": "text",
             "locator": "div.MuiBox-root > div > div > input"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "text",
+            "locator": "div.css-mifb2i > div > div > input"
           }
         ],
         "actions": [
@@ -245,6 +221,10 @@
           {
             "text": "Cancel",
             "locator": "div.MuiCardActions-root > a"
+          },
+          {
+            "text": "",
+            "locator": "button.MuiIconButton-root"
           }
         ],
         "iterable": []

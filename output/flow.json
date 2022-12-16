@@ -15,22 +15,48 @@
           "method": "Click on create new list",
           "children": [
             {
-              "sequence_step": "Add a new list with no items",
+              "sequence_step": "Add a new list with single item",
               "url": "http://localhost:4200/newitem",
               "method": "Set list name",
               "parameters": {
                 "input[placeholder=\"Enter list name\"]": "Newly Created List"
               },
-              "children": []
+              "children": [
+                {
+                  "sequence_step": "Add New Item",
+                  "url": "http://localhost:4200/newitem",
+                  "method": "Add Item",
+                  "parameters": {
+                    "div.MuiBox-root > div > div > input": "Item Test"
+                  },
+                  "children": [
+                    {
+                      "sequence_step": "Save List",
+                      "url": "http://localhost:4200/newitem",
+                      "method": "Save List",
+                      "children": [
+                        {
+                          "sequence_step": "Delete Newly Created List",
+                          "url": "http://localhost:4200/",
+                          "method": "Delete List Card",
+                          "parameters": {
+                            "Card Title": "Newly Created List"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
         {
-          "sequence_step": "Select List 2",
+          "sequence_step": "Delete Newly Created List",
           "url": "http://localhost:4200/",
-          "method": "Click on list card",
+          "method": "Delete List Card",
           "parameters": {
-            "Card Title": "List 2"
+            "Card Title": "Newly Created List"
           }
         }
       ]
@@ -66,6 +92,16 @@
         ]
       },
       {
+        "method": "Delete List Card",
+        "itemRoot": "Card Iterator",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "button"
+          }
+        ]
+      },
+      {
         "method": "Click on create new list",
         "sequence": [
           {
@@ -95,6 +131,15 @@
           {
             "type": "click",
             "locator": "button.MuiButton-contained"
+          }
+        ]
+      },
+      {
+        "method": "Save List",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "button.MuiButton-textPrimary"
           }
         ]
       }
