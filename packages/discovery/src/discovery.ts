@@ -216,7 +216,7 @@ export default class Discovery {
           if (parentLocator) {
             this.keepParent = parentLocator
           } else {
-              log('The locator is empty and its parent is excluded. Please review your excluder otions', 'red')
+              log('The locator is empty and its parent is excluded. Please review your excluder options', 'red')
           }
         }
       }
