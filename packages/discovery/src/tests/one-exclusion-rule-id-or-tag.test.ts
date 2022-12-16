@@ -476,4 +476,48 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
       'button[type="button"]',
     ]);
   });
+
+  it('exclusion - tag - when the first child does not generate an unique locator', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+        <fieldset aria-hidden="true" class="legend">
+           <legend class="cls2">
+              <span>Identifier</span>
+           </legend>
+        </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'fieldset span',
+      '#mui-60-label',
+    ]);
+  })
 });
