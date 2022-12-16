@@ -131,8 +131,6 @@ export default class Discovery {
       return locator;
     }
 
-    
-
     const id = await element.evaluate((el) => el.id);
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
       locator += `#${id}`;
