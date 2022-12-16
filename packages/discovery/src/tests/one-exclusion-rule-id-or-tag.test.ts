@@ -477,7 +477,7 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     ]);
   });
 
-  it('exclusion - tag - when the a parent is excluded and we need to search a parent in the higher level', async () => {
+  it('exclusion - tag - when a parent is excluded and we need to search a parent in the higher level', async () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label']}],
@@ -521,7 +521,7 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     ]);
   })
 
-  it('exclusion - tag - when the multiple parents are excluded and we need to search a parent in the higher level', async () => {
+  it('exclusion - tag - when multiple parents are excluded and we need to search a parent in the higher level', async () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label']}],
