@@ -1,4 +1,4 @@
-import { red } from 'colors';
+import { text } from 'body-parser';
 import { ElementHandle, Page } from 'puppeteer';
 import { Alias, Aliases, Config, Exclude } from './models/config';
 import {
@@ -41,7 +41,6 @@ const defaultAliases = {
 
 export default class Discovery {
   private aliases: Aliases;
-  private keepParent: any
 
   constructor(private readonly config: Config) {
     this.aliases = {
@@ -115,12 +114,21 @@ export default class Discovery {
   async getLocator(
     element: ElementHandle<Element>,
     page: Page,
-    parent?: ElementHandle<Element>
+    parent?: ElementHandle<Element>,
+    ascendentLocator?: string
   ): Promise<string> {
+    const getDescententLocator = (locator: any) => 
+        locator +
+        (locator &&
+        locator.trim() !== '' &&
+        ascendentLocator &&
+        ascendentLocator.trim() !== ''
+          ? ' > '
+          : ' ') 
+
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
     let rootEl = parent || page;
-
     let excludeRules = this.config.optimizer?.exclude || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
@@ -128,14 +136,14 @@ export default class Discovery {
     }
 
     if (await this.isLocatorUnique(locator, rootEl, true)) {
-      return locator;
+      return getDescententLocator(locator);
     }
 
     const id = await element.evaluate((el) => el.id);
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
       locator += `#${id}`;
       if (await this.isLocatorUnique(locator, rootEl, true)) {
-        return locator;
+        return getDescententLocator(locator);
       }
     }
 
@@ -157,7 +165,6 @@ export default class Discovery {
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
         const value = attribute[1].trim();
-        
         if (value) {
           validDataAttr = true;
           const isUnique = await this.isLocatorUnique(
@@ -165,9 +172,10 @@ export default class Discovery {
             rootEl,
             false
           );
-          
           if (isUnique) {
-            return locator + `[${[attribute[0]]}="${value}"]`;
+            return getDescententLocator(
+              locator + `[${[attribute[0]]}="${value}"]`
+            );
           }
         }
       }
@@ -181,7 +189,7 @@ export default class Discovery {
       );
 
       const filterClasses = classes.filter(
-        cls => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
+        (cls) => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
       );
 
       for (let currentClass of filterClasses) {
@@ -191,36 +199,35 @@ export default class Discovery {
           false
         );
         if (isUnique) {
-          return locator + `.${currentClass}`;
-        }
-      }
-
-      const parent = await element.$x('..');
-      const parentElement = parent[0].asElement() as ElementHandle<Element>;
-      if (parentElement) {
-        let parentLocator: any
-        if (await this.getLocator(parentElement, page) !== '') {
-           parentLocator = await this.getLocator(parentElement, page);
-        }
-        if (locator !== '') {
-            if (parentLocator) {
-              locator = parentLocator + ' > ' + locator;
-            } else {
-              if (this.keepParent) {
-                locator = this.keepParent + ' ' + locator
-              }
-            }
-        } else {
-          if (parentLocator) {
-            this.keepParent = parentLocator
-          } else {
-              log('The locator or its parent is excluded. Please review your excluder options', 'red')
-          }
+          return getDescententLocator(locator + `.${currentClass}`);
         }
       }
     }
 
-    return locator;
+    isUniqueSoFar = await this.isLocatorUnique(locator, rootEl);
+
+    if (!isUniqueSoFar) {
+      const parent = await element.$x('..');
+      const parentElement = parent[0].asElement() as ElementHandle<Element>;
+
+      if (parentElement) {
+        let parentLocator = await this.getLocator(
+          parentElement,
+          page,
+          undefined,
+          locator
+        );
+
+        if (parentLocator.trim() !== '') {
+          return (
+            parentLocator.trim() + ' ' +
+            getDescententLocator(locator)
+          );
+        }
+      }
+    }
+
+    return getDescententLocator(locator);
   }
 
   async discoverGroup(
@@ -242,7 +249,7 @@ export default class Discovery {
     ) =>
       actionSelector.skipOptimizer
         ? `${actionSelector.selectors.join(', ')}:nth-of-type(${index + 1})`
-        : await this.getLocator(element, page, parent);
+        : (await this.getLocator(element, page, parent)).trim();
 
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
