@@ -13,6 +13,7 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
       alias: '/:id',
     }],
     optimizer: {
+      priority: ['name', 'placeholder', 'role', 'type', 'href'],
       exclude: [
         {
           type: 'attribute',

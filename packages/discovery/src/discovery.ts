@@ -1,4 +1,3 @@
-import { text } from 'body-parser';
 import { ElementHandle, Page } from 'puppeteer';
 import { Alias, Aliases, Config, Exclude } from './models/config';
 import {
@@ -82,6 +81,11 @@ export default class Discovery {
     return filter.find((rule) => this.matches(val, rule)) !== undefined;
   }
 
+  getPriorityIndex(name: string, rules: string[]) {
+     const index = rules.findIndex((rule: any) => name === rule)
+     return index >=0 ? index.toString() : (index * - 50).toString()
+  }
+
   async isLocatorUnique(
     locator: string,
     parent: Page | ElementHandle,
@@ -129,6 +133,7 @@ export default class Discovery {
     let locator: any = '';
     let rootEl = parent || page;
     let excludeRules = this.config.optimizer?.exclude || [];
+    let priorityRules = this.config.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
@@ -160,6 +165,14 @@ export default class Discovery {
         attr[0] !== 'class' &&
         attr[0] !== 'style'
     );
+
+    dataAttr.forEach((item: string[]) => {
+      item.push(this.getPriorityIndex(item[0], priorityRules))
+    })
+    dataAttr.sort((x: string[], y: string[]) => {
+      return parseInt(x[2]) - parseInt(y[2])
+    })
+
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
