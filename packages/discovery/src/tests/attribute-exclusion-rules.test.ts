@@ -145,7 +145,10 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class1" name="Legend">
+                  <span>Identifier</span>
+               </legend>
+               <legend class="identifier-class2">
                   <span>Identifier</span>
                </legend>
             </fieldset>
@@ -173,7 +176,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend"] > span',
+      'legend.identifier-class2 > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -206,7 +210,10 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
+                  <span>Identifier</span>
+               </legend>
+               <legend class="identifier-class" name="Legend2">
                   <span>Identifier</span>
                </legend>
             </fieldset>
@@ -234,7 +241,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -267,9 +275,12 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" name="Legend2", id="id2">
+               <span>Identifier</span>
+            </legend>
             </fieldset>
             <input class="cls11" placeholder="mui-89-0" name="Identif" data-shrink="true">Identifier</label>
             <div class="g-1t62lt9">
@@ -295,7 +306,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend#id2 > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -328,7 +340,10 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class1" name="Legend">
+                  <span>Identifier</span>
+               </legend>
+               <legend class="identifier-class2" name="Legend">
                   <span>Identifier</span>
                </legend>
             </fieldset>
@@ -356,7 +371,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend.identifier-class1 > span',
+      'legend.identifier-class2 > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -390,9 +406,12 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" name="Legend2">
+               <span>Identifier</span>
+            </legend>
             </fieldset>
             <input class="cls11" name="Identifier" placeholder="mui-89-0" data-shrink="true">Identifier</label>
             <div class="g-1t62lt9">
@@ -418,7 +437,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -760,6 +780,9 @@ describe('Test Discovery - attribute exclusion rule', () => {
                <legend class="identifier-class" placeholder="mui-54656">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" placeholder="mui-7777">
+                  <span>Identifier</span>
+               </legend>
             </fieldset>
             <input class="cls11" data-shrink="true" name="mui-456" placeholder="tab-89-0" role="Identifier">Identifier</label>
             <div class="g-1t62lt9">
@@ -785,7 +808,8 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[placeholder="mui-54656"] > span',
+      'legend[placeholder="mui-7777"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator

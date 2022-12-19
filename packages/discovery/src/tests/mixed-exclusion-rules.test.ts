@@ -123,9 +123,12 @@ describe('Test discovery', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" name="Legend2">
+               <span>Identifier</span>
+            </legend>
             </fieldset>
             <input class="cls11" name="Identif" data-shrink="false" id="Identif">Identifier</label>
             <div class="g-1t62lt9">
@@ -150,7 +153,8 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -193,9 +197,12 @@ describe('Test discovery', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" name="Legend2">
+               <span>Identifier</span>
+            </legend>
             </fieldset>
             <input class="cls11" role="mui-7888" name="Identif" data-shrink="false" id="Identif">Identifier</label>
             <div class="g-1t62lt9">
@@ -217,7 +224,8 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -255,9 +263,12 @@ describe('Test discovery', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
                   <span>Identifier</span>
                </legend>
+               <legend class="identifier-class" name="Legend2">
+               <span>Identifier</span>
+            </legend>
             </fieldset>
             <input class="cls11" role="mui-7888" name="Identif" data-shrink="false" id="Identif">Identifier</label>
             <div class="g-1t62lt9">
@@ -279,7 +290,8 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls2 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -570,7 +582,10 @@ describe('Test discovery', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
+                  <span>Identifier</span>
+               </legend>
+               <legend class="identifier-class" name="Legend2">
                   <span>Identifier</span>
                </legend>
             </fieldset>
@@ -594,7 +609,8 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls11 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span'
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
@@ -619,7 +635,10 @@ describe('Test discovery', () => {
                <span>Port</span>
             </div>
             <fieldset aria-hidden="true" class="legend">
-               <legend class="identifier-class" name="Legend">
+               <legend class="identifier-class" name="Legend1">
+                  <span>Identifier</span>
+               </legend>
+               <legend class="identifier-class" name="Legend2">
                   <span>Identifier</span>
                </legend>
             </fieldset>
@@ -643,7 +662,8 @@ describe('Test discovery', () => {
     );
     expect(resultInfo).toEqual([
       'div.cls11 > span',
-      'legend > span',
+      'legend[name="Legend1"] > span',
+      'legend[name="Legend2"] > span',
     ]);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator

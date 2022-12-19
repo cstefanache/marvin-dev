@@ -76,7 +76,6 @@ export default class Discovery {
   }
 
   matchesAnyRule(name: string, val: string, type: string, rules: Exclude[]) {
-    const typeFilter = rules.filter((rule) => rule.type === type);
     const filter = rules.filter(
       (rule) => rule.type === type && (!rule.name || rule.name === name)
     );
