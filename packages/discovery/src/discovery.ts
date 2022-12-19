@@ -169,8 +169,8 @@ export default class Discovery {
     dataAttr.forEach((item: string[]) => {
       item.push(this.getPriorityIndex(item[0], priorityRules))
     })
-    dataAttr.sort((x: string[], y: string[]) => {
-      return parseInt(x[2]) - parseInt(y[2])
+    dataAttr.sort((firstItem: string[], secondItem: string[]) => {
+      return parseInt(firstItem[2]) - parseInt(secondItem[2])
     })
 
     let validDataAttr = false;
