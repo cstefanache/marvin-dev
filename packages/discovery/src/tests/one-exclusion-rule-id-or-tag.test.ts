@@ -251,7 +251,10 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
          <span>Port</span>
       </div>
       <fieldset aria-hidden="true" class="legend">
-         <legend data="legend" class="identifier-class" id="mui-200">
+         <legend data="legend1" class="identifier-class" id="mui-200">
+            <span>Identifier</span>
+         </legend>
+         <legend data="legend2" class="identifier-class" id="mui-200">
             <span>Identifier</span>
          </legend>
       </fieldset>
@@ -272,7 +275,8 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     );
     expect(resultInfos).toEqual([
       'div.cls2 > span',
-      'legend[data="legend"] > span',
+      'legend[data="legend1"] > span',
+      'legend[data="legend2"] > span',
     ]);
     const resultInputs = discoveryResults.items?.input.map(
       (item: any) => item.locator
@@ -474,6 +478,248 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     expect(resultActions).toEqual([
       'button[type="submit"]',
       'button[type="button"]',
+    ]);
+  });
+
+  it('exclusion - tag - only one direct parent excluded - one child', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+        <fieldset aria-hidden="true" class="legend">
+           <legend class="cls2">
+              <span>Identifier</span>
+           </legend>
+        </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'fieldset span',
+      '#mui-60-label',
+    ]);
+  });
+
+  it('exclusion - tag - multiple direct parents excluded - one child', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+        <fieldset aria-hidden="true" class="legend">
+           <legend class="cls2">
+              <aside>
+                <span>Identifier</span>
+              </aside>
+           </legend>
+        </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'fieldset span',
+      '#mui-60-label',
+    ]);
+  });
+  it('exclusion - tag - multiple direct parents excluded - multiple children under the same excluded parent', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+        <fieldset aria-hidden="true" class="legend">
+           <legend class="cls2">
+              <aside>
+                <span id="id1">Identifier</span>
+              </aside>
+              <aside>
+                <span id="id2">Identifier</span>
+              </aside>
+           </legend>
+        </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'span#id1',
+      'span#id2',
+      '#mui-60-label',
+    ]);
+  });
+
+  it('exclusion - tag - multiple direct parents excluded - multiple children under different excluded parents', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+        <fieldset aria-hidden="true" class="legend1">
+           <legend class="cls2">
+              <aside>
+                <span>Identifier</span>
+              </aside>
+           </legend>
+        </fieldset>
+        <fieldset aria-hidden="true" class="legend2">
+           <legend class="cls2">
+              <aside>
+                <span>Identifier</span>
+              </aside>
+           </legend>
+        </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'fieldset.legend1 span',
+      'fieldset.legend2 span',
+      '#mui-60-label',
+    ]);
+  });
+
+  it('exclusion - tag - multiple direct parents excluded - one child - multiple levels ', async () => {
+    const discovery = new Discovery({
+      aliases: {
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
+      },
+      optimizer: {
+        exclude: [
+          {
+            type: 'tag',
+            value: ['legend', 'label', 'aside'],
+          },
+        ],
+      },
+    } as Config);
+    await page.evaluate(() => {
+      document.body.innerHTML = `
+        <body>
+        <label class="cls1" data-shrink="false" for="mui-59" id="mui-59-label">Dependency Name</label>
+        <div class="cls2">
+           <span>Port</span>
+        </div>
+         <fieldset>
+           <legend class="cls2">
+              <aside>
+                 <label>
+                   <span>Identifier</span>
+                </label>
+              </aside>
+           </legend>
+         </fieldset>
+        <label class="cls1" data-shrink="false" for="mui-60" id="mui-60-label">Identifier</label>
+       </body>
+        `;
+    });
+    const discoveryResults: PageDiscoveryResult = await discovery.discoverPage(
+      page
+    );
+    const result = discoveryResults.items?.info.map(
+      (item: any) => item.locator
+    );
+    expect(result).toEqual([
+      '#mui-59-label',
+      'div > span',
+      'fieldset',
+      'fieldset span',
+      '#mui-60-label',
     ]);
   });
 });
