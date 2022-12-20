@@ -2,7 +2,7 @@ import Discovery from '../discovery';
 import { Config } from '../models/config';
 import { PageDiscoveryResult } from '../models/models';
 
-describe('Test discovery', () => {
+describe('Test discovery - mixed exclusion rules', () => {
   it('exclusion - id and tag property', async () => {
     const discovery = new Discovery({
       optimizer: {
