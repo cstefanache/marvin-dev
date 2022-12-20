@@ -1,5 +1,6 @@
 import SquirrelEvents from './app/events/squirrel.events';
 import ElectronEvents from './app/events/electron.events';
+import WorkspaceEvents from './app/events/workspace.events';
 import UpdateEvents from './app/events/update.events';
 import { app, BrowserWindow } from 'electron';
 import App from './app/app';
@@ -20,6 +21,7 @@ export default class Main {
 
   static bootstrapAppEvents() {
     ElectronEvents.bootstrapElectronEvents();
+    WorkspaceEvents.bootstrapWorkspaceEvents();
 
     // initialize auto updater service
     if (!App.isDevelopmentMode()) {

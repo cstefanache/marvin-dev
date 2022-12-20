@@ -1,0 +1,42 @@
+{
+  "rootUrl": "http://localhost:4200",
+  "defaultTimeout": 1000,
+  "aliases": {
+    "info": [
+      {
+        "name": "Headers",
+        "selectors": [".card-title"]
+      }
+    ],
+    "iterators": [
+      {
+        "name": "Card Iterator",
+        "selectors": [".grid-card"],
+        "identifiers": [
+          {
+            "name": "Card Title",
+            "selector": ".MuiTypography-h5"
+          },
+          {
+            "name": "Open Button",
+            "selector": "a"
+          },
+          {
+            "name": "Delete Button",
+            "selector": "button"
+          }
+        ]
+      }
+    ]
+  },
+  "urlReplacers": [
+    {
+      "alias": ":id",
+      "regex": "/[0-9]+"
+    },
+    {
+      "alias": ":name",
+      "regex": "/[a-zA-Z]+"
+    }
+  ]
+}

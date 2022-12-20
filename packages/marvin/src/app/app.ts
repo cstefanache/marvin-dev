@@ -58,8 +58,8 @@ export default class App {
 
   private static initMainWindow() {
     const workAreaSize = screen.getPrimaryDisplay().workAreaSize;
-    const width = Math.min(1280, workAreaSize.width || 1280);
-    const height = Math.min(720, workAreaSize.height || 720);
+    const width = Math.max(1280, workAreaSize.width || 1280);
+    const height = Math.max(720, workAreaSize.height || 720);
 
     // Create the browser window.
     App.mainWindow = new BrowserWindow({
@@ -74,7 +74,8 @@ export default class App {
       },
     });
     App.mainWindow.setMenu(null);
-    App.mainWindow.center();
+    App.mainWindow.openDevTools();
+    // App.mainWindow.center();
 
     // if main window is ready to show, close the splash window and show the main window
     App.mainWindow.once('ready-to-show', () => {
