@@ -1,4 +1,3 @@
-import { text } from 'body-parser';
 import { ElementHandle, Page } from 'puppeteer';
 import { Alias, Aliases, Config, Exclude } from './models/config';
 import {
@@ -82,6 +81,16 @@ export default class Discovery {
     return filter.find((rule) => this.matches(val, rule)) !== undefined;
   }
 
+  sortAttrByPriority(dataArray: string[][], priorityRules: string[]) {
+      dataArray.sort((a: string[], b: string[]) => {
+        const firstIndex = priorityRules.indexOf(a[0])
+        const secondIndex = priorityRules.indexOf(b[0])
+        return firstIndex !== -1 && secondIndex !== -1
+        ? firstIndex - secondIndex
+        : secondIndex - firstIndex
+      })
+  }
+
   async isLocatorUnique(
     locator: string,
     parent: Page | ElementHandle,
@@ -116,19 +125,20 @@ export default class Discovery {
     parent?: ElementHandle<Element>,
     ascendentLocator?: string
   ): Promise<string> {
-    const getDescententLocator = (locator: any) => 
-        locator +
-        (locator &&
-        locator.trim() !== '' &&
-        ascendentLocator &&
-        ascendentLocator.trim() !== ''
-          ? ' > '
-          : ' ') 
+    const getDescententLocator = (locator: any) =>
+      locator +
+      (locator &&
+      locator.trim() !== '' &&
+      ascendentLocator &&
+      ascendentLocator.trim() !== ''
+        ? ' > '
+        : ' ');
 
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
     let rootEl = parent || page;
     let excludeRules = this.config.optimizer?.exclude || [];
+    let priorityRules = this.config.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
@@ -160,6 +170,9 @@ export default class Discovery {
         attr[0] !== 'class' &&
         attr[0] !== 'style'
     );
+
+    this.sortAttrByPriority(dataAttr, priorityRules)
+    
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
@@ -218,10 +231,7 @@ export default class Discovery {
         );
 
         if (parentLocator.trim() !== '') {
-          return (
-            parentLocator.trim() + ' ' +
-            getDescententLocator(locator)
-          );
+          return parentLocator.trim() + ' ' + getDescententLocator(locator);
         }
       }
     }

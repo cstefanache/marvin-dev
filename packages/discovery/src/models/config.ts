@@ -28,6 +28,7 @@ export type Replacer = {
 
 export type Optimizer = {
   exclude: Exclude[];
+  priority: string[]
 };
 
 export type Exclude = {
