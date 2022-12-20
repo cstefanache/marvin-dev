@@ -48,7 +48,7 @@ describe('Test Discovery - attribute priority', () => {
         document.body.innerHTML = `
           <body>
             <label class="cls1" data-shrink="false" placeholder="placeholderLabel" data="labelData" for="mui-59" id="id1">Dependency Name</label>
-            <label class="cls1" data-shrink="false" for="mui-60", id="id2">Identifier</label>
+            <label class="cls1" data-shrink="false" for="mui-60" id="id2">Identifier</label>
           </body>
           `;
       });
@@ -81,7 +81,7 @@ describe('Test Discovery - attribute priority', () => {
         document.body.innerHTML = `
           <body>
             <label class="cls1" data-shrink="false" placeholder="placeholderLabel" data="labelData" for="mui-59", id="id1">Dependency Name</label>
-            <label class="cls1" data-shrink="false" for="mui-60", id="id2">Identifier</label>
+            <label class="cls1" data-shrink="false" for="mui-60" id="id2">Identifier</label>
           </body>
           `;
       });
@@ -113,7 +113,7 @@ describe('Test Discovery - attribute priority', () => {
         document.body.innerHTML = `
           <body>
             <label class="cls1" data-shrink="false" placeholder="placeholderLabel" data="labelData" for="mui-59">Dependency Name</label>
-            <label class="cls1" data-shrink="false" for="mui-60", id="id2">Identifier</label>
+            <label class="cls1" data-shrink="false" for="mui-60" id="id2">Identifier</label>
           </body>
           `;
       });

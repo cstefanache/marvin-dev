@@ -81,9 +81,14 @@ export default class Discovery {
     return filter.find((rule) => this.matches(val, rule)) !== undefined;
   }
 
-  getPriorityIndex(name: string, rules: string[]) {
-     const index = rules.findIndex((rule: any) => name === rule)
-     return index >=0 ? index.toString() : (index * - 50).toString()
+  sortAttrByPriority(dataArray: string[][], priorityRules: string[]) {
+      dataArray.sort((a: string[], b: string[]) => {
+        const firstIndex = priorityRules.indexOf(a[0])
+        const secondIndex = priorityRules.indexOf(b[0])
+        return firstIndex !== -1 && secondIndex !== -1
+        ? firstIndex - secondIndex
+        : secondIndex - firstIndex
+      })
   }
 
   async isLocatorUnique(
@@ -120,14 +125,14 @@ export default class Discovery {
     parent?: ElementHandle<Element>,
     ascendentLocator?: string
   ): Promise<string> {
-    const getDescententLocator = (locator: any) => 
-        locator +
-        (locator &&
-        locator.trim() !== '' &&
-        ascendentLocator &&
-        ascendentLocator.trim() !== ''
-          ? ' > '
-          : ' ') 
+    const getDescententLocator = (locator: any) =>
+      locator +
+      (locator &&
+      locator.trim() !== '' &&
+      ascendentLocator &&
+      ascendentLocator.trim() !== ''
+        ? ' > '
+        : ' ');
 
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
@@ -166,13 +171,8 @@ export default class Discovery {
         attr[0] !== 'style'
     );
 
-    dataAttr.forEach((item: string[]) => {
-      item.push(this.getPriorityIndex(item[0], priorityRules))
-    })
-    dataAttr.sort((firstItem: string[], secondItem: string[]) => {
-      return parseInt(firstItem[2]) - parseInt(secondItem[2])
-    })
-
+    this.sortAttrByPriority(dataAttr, priorityRules)
+    
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
@@ -231,10 +231,7 @@ export default class Discovery {
         );
 
         if (parentLocator.trim() !== '') {
-          return (
-            parentLocator.trim() + ' ' +
-            getDescententLocator(locator)
-          );
+          return parentLocator.trim() + ' ' + getDescententLocator(locator);
         }
       }
     }
