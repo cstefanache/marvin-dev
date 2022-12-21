@@ -11,8 +11,12 @@ const defaultAliases = {
   info: [
     {
       name: 'headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5',  'h6'],
     },
+    {
+      name: 'paragraph',
+      selectors: ['legend', 'p']
+    }
   ],
   action: [
     {
@@ -82,13 +86,32 @@ export default class Discovery {
   }
 
   sortAttrByPriority(dataArray: string[][], priorityRules: string[]) {
-      dataArray.sort((a: string[], b: string[]) => {
-        const firstIndex = priorityRules.indexOf(a[0])
-        const secondIndex = priorityRules.indexOf(b[0])
-        return firstIndex !== -1 && secondIndex !== -1
+    dataArray.sort((a: string[], b: string[]) => {
+      const firstIndex = priorityRules.indexOf(a[0]);
+      const secondIndex = priorityRules.indexOf(b[0]);
+      return firstIndex !== -1 && secondIndex !== -1
         ? firstIndex - secondIndex
-        : secondIndex - firstIndex
-      })
+        : secondIndex - firstIndex;
+    });
+  }
+
+  setSelectors(customSelectors: string[], defaultSelectors: string[]) {
+    let found: any;
+    for (const selector of customSelectors) {
+      found = defaultSelectors.findIndex(item => selector === item);
+      if (found && found >= 0) {
+        defaultSelectors.splice(found, 1);
+      }
+    }
+    console.log(defaultSelectors)
+  }
+
+  setAliases(customAliases: Alias[], defaultAliases: Alias[]) {
+    for (const customAlias of customAliases) {
+      for (const defaultAlias of defaultAliases) {
+        this.setSelectors(customAlias.selectors, defaultAlias.selectors);
+      }
+    }
   }
 
   async isLocatorUnique(
@@ -140,6 +163,8 @@ export default class Discovery {
     let excludeRules = this.config.optimizer?.exclude || [];
     let priorityRules = this.config.optimizer?.priority || [];
 
+    this.setAliases(this.config.aliases.info, defaultAliases.info)
+
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
     }
@@ -171,8 +196,8 @@ export default class Discovery {
         attr[0] !== 'style'
     );
 
-    this.sortAttrByPriority(dataAttr, priorityRules)
-    
+    this.sortAttrByPriority(dataAttr, priorityRules);
+
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
