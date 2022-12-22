@@ -5,14 +5,132 @@ import {
   Chip,
   IconButton,
   Paper,
+  Box,
+  Button,
+  Tab,
+  Tabs,
   Divider,
+  InputAdornment,
+  MenuItem,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import DataArrayIcon from '@mui/icons-material/DataArray';
+import CodeIcon from '@mui/icons-material/Code';
+import HttpIcon from '@mui/icons-material/Http';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
+
+import React, { useEffect, useState } from 'react';
 export interface CustomProps {
   property: any;
   value: any;
+  enum: any[];
   onChange: Function;
+}
+import TabPanel from '../components/TabPanel';
+
+const getAdornment = (property: any) => {
+  const lowerName = property.title?.toLowerCase();
+  if (lowerName === 'name') {
+    return <AccountCircle />;
+  } else if (lowerName === 'selector') {
+    return <CodeIcon />;
+  } else if (lowerName === 'root url') {
+    return <HttpIcon />;
+  } else if (lowerName === 'default timeout') {
+    return <AccessTimeIcon />;
+  } else if (lowerName === 'identifiers') {
+    return <DataArrayIcon style={{ verticalAlign: 'middle' }} />;
+  } else if (lowerName === 'identifier') {
+    return <FingerprintIcon style={{ verticalAlign: 'middle' }} />;
+  } else if (lowerName === 'type') {
+    return <ListAltIcon style={{ verticalAlign: 'middle' }} />;
+  } else if (lowerName === 'regex') {
+    return <IntegrationInstructionsIcon style={{ verticalAlign: 'middle' }} />;
+  }
+};
+
+function SubmitButton({ property, value, onChange, children }: any) {
+  return (
+    <Box sx={{ m: 2, textAlign: 'right' }}>
+      <Button variant="contained" onClick={onChange}>
+        {value ? value : children}
+      </Button>
+    </Box>
+  );
+}
+
+function RemoveButton({ property, value, onChange, children }: any) {
+  return (
+    <Box sx={{ m: 2, textAlign: 'right' }}>
+      <Button variant="contained" color="error" onClick={onChange}>
+        {value ? value : children}
+      </Button>
+    </Box>
+  );
+}
+
+function AddButton({ property, value, onChange, children }: any) {
+  return (
+    <Box sx={{ m: 2, textAlign: 'left' }}>
+      <Button variant="contained" color="secondary" onClick={onChange}>
+        {value ? value : children}
+      </Button>
+    </Box>
+  );
+}
+
+function CustomSelect(props: CustomProps) {
+  const { property, value, onChange } = props;
+  const { type, enum: list } = property;
+  const handleChange = (event: any) => {
+    if (type === 'integer') {
+      onChange(parseInt(event.target.value));
+    } else {
+      onChange(event.target.value);
+    }
+  };
+
+  console.log(list);
+
+  return (
+    <TextField
+      fullWidth={true}
+      margin="none"
+      value={value || ''}
+      onChange={handleChange}
+      error={!!property.error}
+      variant="filled"
+      size="small"
+      type={type === 'integer' ? 'number' : 'text'}
+      label={property.title}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            {getAdornment(property)}
+          </InputAdornment>
+        ),
+      }}
+      helperText={
+        property.error
+          ? property.error[0].keyword
+          : property.description
+          ? property.description
+          : ''
+      }
+      required={property.isRequired}
+      select
+    >
+      {list.map((item: any) => (
+        <MenuItem key={item} value={item}>
+          {item}
+        </MenuItem>
+      ))}
+    </TextField>
+  );
 }
 
 function Selectors(props: CustomProps) {
@@ -23,7 +141,6 @@ function Selectors(props: CustomProps) {
   const handleDelete = (index: number) => () => {
     const newValue = [...(value || [])];
     newValue.splice(index, 1);
-    console.log(newValue);
     onChange(newValue);
   };
 
@@ -41,7 +158,10 @@ function Selectors(props: CustomProps) {
       <TextField
         fullWidth={true}
         value={addValue}
+        size="small"
         variant="standard"
+        label="Add Selector"
+        helperText="Press enter to add"
         onChange={(e) => setAddValue(e.target.value)}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
@@ -49,6 +169,11 @@ function Selectors(props: CustomProps) {
           }
         }}
         InputProps={{
+          startAdornment: (
+            <IconButton>
+              <CodeIcon />
+            </IconButton>
+          ),
           endAdornment: (
             <IconButton onClick={add}>
               <AddIcon />
@@ -60,13 +185,18 @@ function Selectors(props: CustomProps) {
           '& .Mui-focused .MuiIconButton-root': { color: 'primary.main' },
         }}
       />
+      <Typography variant="body2" component="span">
+        Selectors:{' '}
+      </Typography>
       {value &&
         value.map((locator: string, index: number) => (
           <Chip
             size="small"
+            key={locator}
+            color="primary"
             sx={{ mr: 1 }}
             label={locator}
-            variant="outlined"
+            variant="filled"
             onDelete={handleDelete(index)}
           />
         ))}
@@ -84,6 +214,7 @@ function CustomTextField(props: CustomProps) {
       onChange(event.target.value);
     }
   };
+
   return (
     <TextField
       fullWidth={true}
@@ -91,76 +222,142 @@ function CustomTextField(props: CustomProps) {
       value={value || ''}
       onChange={handleChange}
       error={!!property.error}
-      variant="standard"
+      variant="filled"
+      size="small"
       type={type === 'integer' ? 'number' : 'text'}
       label={property.title}
-      helperText={property.error ? property.error[0].keyword : ' '}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            {getAdornment(property)}
+          </InputAdornment>
+        ),
+      }}
+      helperText={
+        property.error
+          ? property.error[0].keyword
+          : property.description
+          ? property.description
+          : ''
+      }
       required={property.isRequired}
     />
   );
 }
 
-const types: any = {
-  'Root Url': { type: 'item', sx: 6 },
-  'Default Timeout': { type: 'item', sx: 6 },
-  'URL Replacers': { type: 'container' },
-  'URL Replacer': { type: 'container' },
-  Alias: { type: 'item', sx: 4 },
-  Regex: { type: 'item', sx: 4 },
-  'Exact Match': { type: 'item', sx: 4 },
+type ConfigContextType = {
+  configTab: number;
+  setConfigTab: Function;
 };
 
-function Wrapper({ property, children }: { property: any; children: any }) {
-  const { type, title, description, registryKey, $ref } = property;
+export const ConfigContext = React.createContext<ConfigContextType | null>(
+  null
+);
+const ConfigContextProvider: React.FC<React.ReactNode> = ({
+  children,
+}: any) => {
+  const [configTab, setConfigTab] = useState(0);
+  return (
+    <ConfigContext.Provider value={{ configTab, setConfigTab }}>
+      {children}
+    </ConfigContext.Provider>
+  );
+};
 
-  const [wrapperType] = useState(types[title] || { type: 'item', sx: 12 });
+function Wrapper({
+  property,
+  children,
+  parentValue,
+}: {
+  property: any;
+  children: any;
+  parentValue?: any;
+}) {
+  const { type, title, description, properties, size, uiType, uiIndex, sx } =
+    property;
 
-  console.log(property);
+  const [configTab, setConfigTab] = useState(0);
 
-  if (wrapperType.type === 'container') {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    // setValue(newValue);
+    // changeTab(newValue);
+  };
+
+  if (uiType === 'divider') {
     return (
       <Grid
         item
         xs={12}
-        style={{ display: 'flex', flexWrap: 'wrap' }}
-        sx={{ p: 1 }}
+        sx={{ mb: 1, pb: 1, borderBottom: '2px solid #808080' }}
+      ></Grid>
+    );
+  } else if (uiType === 'container') {
+    return (
+      <Grid
+        container
+        sx={{
+          ml: 2,
+          pl: 2,
+        }}
       >
         {description && type !== 'object' && (
           <Grid item xs={12}>
-            <Typography variant="body2">{description}</Typography>
+            <Typography variant="body2" sx={{ alignItems: 'flex-end' }}>
+              {getAdornment(property)} {description}
+            </Typography>
           </Grid>
         )}
         {type === 'object' && (
           <Grid item xs={12}>
-            <Typography variant="body2">{title}</Typography>
+            <Typography variant="body2">
+              {getAdornment(property)} {title}
+            </Typography>
           </Grid>
         )}
-        {/* <Grid container spacing={2}>{children}</Grid> */}
         {children}
       </Grid>
     );
+  } else if (uiType === 'tabs') {
+    return (
+      <Grid item xs={12}>
+        <ConfigContext.Provider
+          value={{
+            configTab,
+            setConfigTab: (value: number) => setConfigTab(value),
+          }}
+        >
+          <Tabs
+            value={configTab}
+            onChange={(evt: any, newValue: number) => {
+              setConfigTab(newValue);
+            }}
+          >
+            {Object.keys(properties).map((key) => (
+              <Tab key={key} label={properties[key].title} />
+            ))}
+          </Tabs>
+
+          {children}
+        </ConfigContext.Provider>
+      </Grid>
+    );
+  } else if (uiType === 'tab') {
+    const configCtx = React.useContext(ConfigContext) as ConfigContextType;
+    return (
+      <TabPanel value={configCtx.configTab} index={uiIndex}>
+        <Grid container sx={{ mr: 1, mt: 1, pl: 1 }}>
+          {children}
+        </Grid>
+      </TabPanel>
+    );
   } else {
     return (
-      <Grid item xs={wrapperType.sx} sx={{ p: 1 }}>
-        {description && (
-          <Grid item xs={12}>
-            <Typography variant="body2">{description}</Typography>
-          </Grid>
-        )}
+      <Grid item {...(size || { xs: 12 })} sx={{ pl: 1, mt: 1 }}>
         {children}
       </Grid>
     );
   }
 }
-
-/**
-  {type === 'object' && (
-        <>
-          <Divider />
-        </>
-      )}
-      {description && <Typography variant="body2">{description}</Typography>}
- */
 
 export function CustomWrapper(props: any) {
   const { property, children } = props;
@@ -172,4 +369,8 @@ export const CustomRegistry = {
   string: { component: CustomTextField },
   integer: { component: CustomTextField },
   selectors: { component: Selectors },
+  button: { component: SubmitButton },
+  enum: { component: CustomSelect },
+  removeButton: { component: RemoveButton },
+  addButton: { component: AddButton },
 } as any;

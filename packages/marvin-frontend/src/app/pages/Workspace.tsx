@@ -3,32 +3,7 @@ import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import Side from '../components/Side';
 import Config from './Config';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+import TabPanel from '../components/TabPanel';
 
 export default function Workspace({ workspace }: { workspace?: string }) {
   const [value, setValue] = React.useState(0);

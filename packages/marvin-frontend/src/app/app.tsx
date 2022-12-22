@@ -9,12 +9,13 @@ declare global {
 }
 import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { Button } from '@mui/material';
 import Workspaces from './pages/Workspaces';
 import Workspace from './pages/Workspace';
-const theme = createTheme();
+import theme from './theme';
 
 export function App() {
   const [loading, setLoading] = useState(true);
@@ -40,6 +41,7 @@ export function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Routes>
         <Route
           path="/"

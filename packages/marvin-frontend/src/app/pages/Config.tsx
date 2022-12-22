@@ -32,10 +32,8 @@ export default function Config() {
   };
 
   return config ? (
-    //
-    <>
-      <Typography variant="h6">{config.name}</Typography>
-      <Grid container spacing={2}>
+    <>      
+      <Grid container sx={{ pr: 1, mt: 4 }}>
         <SchemaForm
           schema={ConfigSchema}
           wrapper={CustomWrapper as any}
@@ -46,7 +44,6 @@ export default function Config() {
       </Grid>
     </>
   ) : (
-    // </Grid>
     <Typography>Loading...</Typography>
   );
 }

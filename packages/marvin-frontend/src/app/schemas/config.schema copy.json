@@ -1,0 +1,161 @@
+{
+  "$id": "https://example.com/person.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Person",
+  "description": "Person Information",
+  "required": [],
+  "properties": {
+    "rootUrl": {
+      "type": "string",
+      "title": "Root Url",
+      "description": "Application base URL"
+    },
+    "defaultTimeout": {
+      "type": "integer",
+      "title": "Default Timeout",
+      "description": "Default timeout to wait for network idle"
+    },
+    "urlReplacers": {
+      "type": "array",
+      "title": "URL Replacers",
+      "description": "Used to merge multiple URLs into one. Usually then dealing with paths that contain unique identifiers",
+      "items": { "$ref": "#/definitions/URLReplace" }
+    },
+    "aliases": { "$ref": "#/definitions/Aliases" }
+  },
+  "definitions": {
+    "URLReplace": {
+      "type": "object",
+      "title": "URL Replacer",
+      "description": "URL Replacer",
+      "anyOf": [
+        { "required": ["alias", "regex"] },
+        { "required": ["alias", "value"] },
+        { "required": ["alias", "value", "regex"] }
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "title": "Alias",
+          "description": "Alias"
+        },
+        "regex": {
+          "type": "string",
+          "title": "Regex",
+          "description": "Replace existing matches with alias"
+        },
+        "value": {
+          "type": "string",
+          "title": "Exact Match",
+          "description": "Replace all exact matches with alias"
+        }
+      }
+    },
+    "Aliases": {
+      "type": "object",
+      "title": "Aliases",
+      "description": "Aliases",
+      "properties": {
+        "info": {
+          "title": "Info Selectors",
+          "description": "Selectors to extract information from the page",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Alias" }
+        },
+        "action": {
+          "title": "Action Selectors",
+          "description": "Selectors to perform actions on the page",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Alias" }
+        },
+        "input": {
+          "title": "Input Selectors",
+          "description": "Selectors to input data into the page",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Alias" }
+        },
+        "iterators": {
+          "title": "Iterators",
+          "description": "Elements that repeat on the page",
+          "type": "array",
+          "items": { "$ref": "#/definitions/IdentifierAlias" }
+        }
+      }
+    },
+    "Alias": {
+      "type": "object",
+      "title": "Group Selectors",
+
+      "description": "Alias",
+      "required": ["name", "selectors"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Alias name"
+        },
+        "selectors": {
+          "type": "array",
+          "registryKey": "selectors",
+          "title": "Selectors",
+          "description": "CSS Selector",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "IdentifierAlias": {
+      "type": "object",
+      "title": "Alias",
+
+      "description": "Alias",
+      "required": ["name", "selectors"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Alias name"
+        },
+        "selectors": {
+          "type": "array",
+          "registryKey": "selectors",
+          "title": "Selectors",
+          "description": "CSS Selector",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "identifiers": {
+          "type": "array",
+          "title": "Identifiers",
+          "description": "Identifiers",
+          "items": { "$ref": "#/definitions/Identifier" }
+        }
+      }
+    },
+    "Identifier": {
+      "type": "object",
+      "title": "Identifier",
+      "description": "Identifier",
+      "required": ["name", "selector"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Identifier name"
+        },
+        "selector": {
+          "type": "string",
+          "title": "Selector",
+          "description": "CSS Selector"
+        }
+      }
+    }
+  }
+}
