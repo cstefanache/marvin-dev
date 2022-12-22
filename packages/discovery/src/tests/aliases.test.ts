@@ -7,14 +7,22 @@ describe('Test Discovery - Identify aliases', () => {
     const discovery = new Discovery({
       aliases: {
         info: [
-          { name: 'info', selectors: ['span','label', 'h3', 'h5'] },
-          { name: 'para', selectors: ['p']}
+          { name: 'info', selectors: ['span', 'label', 'h3', 'h5'] },
+          { name: 'para', selectors: ['p', 'legend'] },
+        ],
+        action: [{ name: 'customButton', selectors: ['button', 'fieldset'] }],
+        input: [
+          {
+            selectors: ['input'],
+          },
         ],
       },
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
       <body>
+        <input id="input1" type="text" name="name_input1"/>
+        <input id="input2" type="text" name="name_input2" />
       <div class="cls2">
          <label>Label1</label>
          <span>Port</span>
@@ -25,6 +33,11 @@ describe('Test Discovery - Identify aliases', () => {
             <p>Label2</p>
          </legend>
       </fieldset>
+      <h5>Second Title</h5>
+      <div class="g-1t62lt9">
+          <button class="button-clst g-1lig5nk" tabindex="-1" type="submit" id="add-button" disabled="">Add</button>
+          <button class="button-clst g-dbdtjz" tabindex="0" type="button" id="cancel-button">Cancel</button>
+      </div>
      </body>
             `;
     });
@@ -32,9 +45,21 @@ describe('Test Discovery - Identify aliases', () => {
       page
     );
 
-    const resultInput = discoveryResults.items?.info?.map(
+    const resultInfo = discoveryResults.items?.info?.map(
       (item: any) => item.locator
     );
-   // expect(resultInput).toEqual(['label', 'span', 'h3', 'p']);
+    expect(resultInfo).toEqual(['label', 'span', 'h3', 'h5', 'legend', 'p']);
+    const resultAction = discoveryResults.items?.actions?.map(
+      (item: any) => item.locator
+    );
+    expect(resultAction).toEqual([
+      'fieldset',
+      'button#add-button',
+      'button#cancel-button',
+    ]);
+    const resultInput = discoveryResults.items?.input?.map(
+      (item: any) => item.locator
+    );
+    expect(resultInput).toEqual(['input#input1', 'input#input2']);
   });
 });

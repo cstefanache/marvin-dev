@@ -13,10 +13,6 @@ const defaultAliases = {
       name: 'headers',
       selectors: ['h1', 'h2', 'h3', 'h4', 'h5',  'h6'],
     },
-    {
-      name: 'paragraph',
-      selectors: ['legend', 'p']
-    }
   ],
   action: [
     {
@@ -25,7 +21,7 @@ const defaultAliases = {
   ],
   input: [
     {
-      selectors: ['input'],
+      selectors: ['input', 'textarea'],
     },
   ],
   iterators: [
@@ -47,9 +43,24 @@ export default class Discovery {
 
   constructor(private readonly config: Config) {
     this.aliases = {
-      info: [...defaultAliases.info, ...(config.aliases?.info || [])],
-      action: [...defaultAliases.action, ...(config.aliases?.action || [])],
-      input: [...defaultAliases.input, ...(config.aliases?.input || [])],
+      info: [
+        ...this.mergeAndFilter(defaultAliases.info, config.aliases?.info || []),
+        ...(config.aliases?.info || []),
+      ],
+      action: [
+        ...this.mergeAndFilter(
+          defaultAliases.action,
+          config.aliases?.action || []
+        ),
+        ...(config.aliases?.action || []),
+      ],
+      input: [
+        ...this.mergeAndFilter(
+          defaultAliases.input,
+          config.aliases?.input || []
+        ),
+        ...(config.aliases?.input || []),
+      ],
       iterators: [
         ...defaultAliases.iterators,
         ...(config.aliases?.iterators || []),
@@ -95,23 +106,22 @@ export default class Discovery {
     });
   }
 
-  setSelectors(customSelectors: string[], defaultSelectors: string[]) {
-    let found: any;
-    for (const selector of customSelectors) {
-      found = defaultSelectors.findIndex(item => selector === item);
-      if (found && found >= 0) {
-        defaultSelectors.splice(found, 1);
-      }
-    }
-    console.log(defaultSelectors)
-  }
-
-  setAliases(customAliases: Alias[], defaultAliases: Alias[]) {
-    for (const customAlias of customAliases) {
-      for (const defaultAlias of defaultAliases) {
-        this.setSelectors(customAlias.selectors, defaultAlias.selectors);
-      }
-    }
+  mergeAndFilter(source: Alias[], custom: Alias[]) {
+    return source.reduce((memo: Alias[], item: Alias) => {
+      memo.push({
+        ...item,
+        selectors: item.selectors.filter((selector) => {
+          let filterOut = true;
+          custom.forEach((customItem) => {
+            if (customItem.selectors.indexOf(selector) !== -1) {
+              filterOut = false;
+            }
+          });
+          return filterOut;
+        }),
+      });
+      return memo;
+    }, []);
   }
 
   async isLocatorUnique(
@@ -162,8 +172,6 @@ export default class Discovery {
     let rootEl = parent || page;
     let excludeRules = this.config.optimizer?.exclude || [];
     let priorityRules = this.config.optimizer?.priority || [];
-
-    this.setAliases(this.config.aliases.info, defaultAliases.info)
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
