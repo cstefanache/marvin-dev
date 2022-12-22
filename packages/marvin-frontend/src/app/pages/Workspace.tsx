@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Side from '../components/Side';
 import Config from './Config';
 import TabPanel from '../components/TabPanel';
+import Operations from './Operations';
 
 export default function Workspace({ workspace }: { workspace?: string }) {
   const [value, setValue] = React.useState(0);
@@ -24,7 +25,10 @@ export default function Workspace({ workspace }: { workspace?: string }) {
         <Tab label="Flow" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        {<Config></Config>}
+        <Config />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Operations />
       </TabPanel>
     </Box>
   );

@@ -1,0 +1,238 @@
+{
+  "discovered": {
+    "http://localhost:4200/": {
+      "items": {
+        "info": [
+          {
+            "text": "Sign In",
+            "details": "Sign In",
+            "type": null,
+            "locator": "h2"
+          },
+          {
+            "text": "Marvin Sample App",
+            "details": "Marvin Sample App",
+            "type": null,
+            "locator": "h6"
+          },
+          {
+            "text": "List 2",
+            "details": "List 2",
+            "type": null,
+            "locator": "div.MuiGrid-container > div > div > div > div"
+          }
+        ],
+        "input": [
+          {
+            "text": "",
+            "details": "Enter username",
+            "type": "text",
+            "locator": "input[placeholder=\"Enter username\"]"
+          },
+          {
+            "text": "",
+            "details": "Enter password",
+            "type": "password",
+            "locator": "input[placeholder=\"Enter password\"]"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "checkbox",
+            "locator": "input[name=\"checkedB\"]"
+          }
+        ],
+        "actions": [
+          {
+            "text": "Sign in",
+            "locator": "button"
+          },
+          {
+            "text": "Sign Up",
+            "locator": "div.MuiPaper-root > p > a"
+          },
+          {
+            "text": "Sign Up",
+            "locator": "div.MuiPaper-root > p > a"
+          },
+          {
+            "text": "Marvin Sample App",
+            "locator": "a[href=\"/\"]"
+          },
+          {
+            "text": "Create New List",
+            "locator": "a[href=\"/newitem\"]"
+          },
+          {
+            "text": "Logout",
+            "locator": "button.MuiButton-textInherit"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671104352383\"]"
+          },
+          {
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div > div > div > button"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671104371008\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671160942840\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161174796\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161584465\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161659293\"]"
+          },
+          {
+            "text": "Open",
+            "locator": "a[href=\"/item/1671161788559\"]"
+          },
+          {
+            "text": "Sign in",
+            "locator": "button[tabindex=\"0\"]"
+          }
+        ],
+        "iterable": [
+          {
+            "text": "Card Iterator",
+            "locator": ".grid-card",
+            "identifiers": [
+              {
+                "text": "List 1",
+                "locator": "div.MuiTypography-root"
+              },
+              {
+                "text": "Open",
+                "locator": "a[tabindex=\"0\"]"
+              },
+              {
+                "text": "Delete",
+                "locator": "button[tabindex=\"0\"]"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "http://localhost:4200/item/:id": {
+      "items": {
+        "info": [
+          {
+            "text": "Marvin Sample App",
+            "details": "Marvin Sample App",
+            "type": null,
+            "locator": "h6"
+          },
+          {
+            "text": "Newly Created List",
+            "details": "Newly Created List",
+            "type": null,
+            "locator": "h1"
+          }
+        ],
+        "input": [],
+        "actions": [
+          {
+            "text": "Marvin Sample App",
+            "locator": "a[href=\"/\"]"
+          },
+          {
+            "text": "Create New List",
+            "locator": "a[tabindex=\"0\"]"
+          },
+          {
+            "text": "Logout",
+            "locator": "button"
+          }
+        ],
+        "iterable": [
+          {
+            "text": "List Iterator",
+            "locator": "ul, ol",
+            "identifiers": [
+              {
+                "text": "Item Test",
+                "locator": "li"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "http://localhost:4200/newitem": {
+      "items": {
+        "info": [
+          {
+            "text": "Marvin Sample App",
+            "details": "Marvin Sample App",
+            "type": null,
+            "locator": "h6"
+          }
+        ],
+        "input": [
+          {
+            "text": "",
+            "details": "Enter list name",
+            "type": "text",
+            "locator": "input[placeholder=\"Enter list name\"]"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "text",
+            "locator": "div.MuiBox-root > div > div > input"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "text",
+            "locator": "div.css-mifb2i > div > div > input"
+          }
+        ],
+        "actions": [
+          {
+            "text": "Marvin Sample App",
+            "locator": "div.MuiToolbar-root > a"
+          },
+          {
+            "text": "Create New List",
+            "locator": "a[href=\"/newitem\"]"
+          },
+          {
+            "text": "Logout",
+            "locator": "button.MuiButton-textInherit"
+          },
+          {
+            "text": "Add",
+            "locator": "button.MuiButton-contained"
+          },
+          {
+            "text": "Save",
+            "locator": "button.MuiButton-textPrimary"
+          },
+          {
+            "text": "Cancel",
+            "locator": "div.MuiCardActions-root > a"
+          },
+          {
+            "text": "",
+            "locator": "button.MuiIconButton-root"
+          }
+        ],
+        "iterable": []
+      }
+    }
+  }
+}

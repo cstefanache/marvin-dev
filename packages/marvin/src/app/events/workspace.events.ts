@@ -7,8 +7,9 @@ import { ipcMain, dialog } from 'electron';
 import { environment } from '../../environments/environment';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
+import * as puppeteer from 'puppeteer';
 
-
+import { Flow, Discovery, Runner, State } from '@marvin/discovery';
 
 const store = new Store();
 
@@ -20,6 +21,26 @@ export default class WorkspaceEvents {
   static bootstrapWorkspaceEvents(): Electron.IpcMain {
     return ipcMain;
   }
+}
+
+function getConfig() {
+  const workspace = store.get('lastWorkspace');
+
+  if (workspace && fs.existsSync(`${workspace}/config.json`)) {
+    return JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
+  } else {
+    return {};
+  }
+}
+
+function getDiscovered() {
+  const workspace = store.get('lastWorkspace');
+
+  if (workspace && fs.existsSync(`${workspace}/output.json`)) {
+    return JSON.parse(fs.readFileSync(`${workspace}/output.json`, 'utf8'));
+  }
+
+  return null;
 }
 
 ipcMain.handle('get-workspaces', (event) => {
@@ -48,13 +69,7 @@ ipcMain.handle('select-new-workspace-folder', async (event) => {
 });
 
 ipcMain.handle('get-config', () => {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/config.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
-  } else {
-    return {};
-  }
+  return getConfig();
 });
 
 ipcMain.handle('set-config', (event, config) => {
@@ -68,4 +83,31 @@ ipcMain.handle('set-config', (event, config) => {
   }
 
   return config;
+});
+
+ipcMain.handle('get-discovered', () => {
+  console.log('get-discovered')
+  return getDiscovered();
+});
+
+ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
+  const config = getConfig();
+  const browser = await puppeteer.launch({ headless: true });
+  const flow = new Flow(config, browser);
+  const page = await flow.navigateTo(config.rootUrl);
+  const state = new State(page);
+  // const state = undefined;
+
+  await page.setRequestInterception(true);
+
+  await page.waitForNetworkIdle({ timeout: config.defaultTimeout });
+
+  const runner = new Runner(config, flow, state);
+  await runner.run(page, sequence);
+
+  // log('Taking screenshot', 'yellow');
+  await flow.discover(page, true);
+  await flow.stateScreenshot(page, 'runstate');
+
+  flow.export();
 });
