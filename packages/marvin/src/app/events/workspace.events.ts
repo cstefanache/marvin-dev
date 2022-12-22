@@ -8,6 +8,8 @@ import { environment } from '../../environments/environment';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
 
+
+
 const store = new Store();
 
 if (!store.get('workspaces')) {
@@ -19,13 +21,6 @@ export default class WorkspaceEvents {
     return ipcMain;
   }
 }
-
-// Retrieve app version
-ipcMain.handle('get-app-version-v2', (event) => {
-  console.log(`Fetching application version... [v${environment.version}]`);
-
-  return `v. ${environment.version} <<<`;
-});
 
 ipcMain.handle('get-workspaces', (event) => {
   return store.get('workspaces');
