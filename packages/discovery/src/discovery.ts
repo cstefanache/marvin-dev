@@ -11,7 +11,7 @@ const defaultAliases = {
   info: [
     {
       name: 'headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5',  'h6'],
     },
   ],
   action: [
@@ -21,7 +21,7 @@ const defaultAliases = {
   ],
   input: [
     {
-      selectors: ['input'],
+      selectors: ['input', 'textarea'],
     },
   ],
   iterators: [
@@ -43,9 +43,24 @@ export default class Discovery {
 
   constructor(private readonly config: Config) {
     this.aliases = {
-      info: [...defaultAliases.info, ...(config.aliases?.info || [])],
-      action: [...defaultAliases.action, ...(config.aliases?.action || [])],
-      input: [...defaultAliases.input, ...(config.aliases?.input || [])],
+      info: [
+        ...this.mergeAndFilter(defaultAliases.info, config.aliases?.info || []),
+        ...(config.aliases?.info || []),
+      ],
+      action: [
+        ...this.mergeAndFilter(
+          defaultAliases.action,
+          config.aliases?.action || []
+        ),
+        ...(config.aliases?.action || []),
+      ],
+      input: [
+        ...this.mergeAndFilter(
+          defaultAliases.input,
+          config.aliases?.input || []
+        ),
+        ...(config.aliases?.input || []),
+      ],
       iterators: [
         ...defaultAliases.iterators,
         ...(config.aliases?.iterators || []),
@@ -82,13 +97,31 @@ export default class Discovery {
   }
 
   sortAttrByPriority(dataArray: string[][], priorityRules: string[]) {
-      dataArray.sort((a: string[], b: string[]) => {
-        const firstIndex = priorityRules.indexOf(a[0])
-        const secondIndex = priorityRules.indexOf(b[0])
-        return firstIndex !== -1 && secondIndex !== -1
+    dataArray.sort((a: string[], b: string[]) => {
+      const firstIndex = priorityRules.indexOf(a[0]);
+      const secondIndex = priorityRules.indexOf(b[0]);
+      return firstIndex !== -1 && secondIndex !== -1
         ? firstIndex - secondIndex
-        : secondIndex - firstIndex
-      })
+        : secondIndex - firstIndex;
+    });
+  }
+
+  mergeAndFilter(source: Alias[], custom: Alias[]) {
+    return source.reduce((memo: Alias[], item: Alias) => {
+      memo.push({
+        ...item,
+        selectors: item.selectors.filter((selector) => {
+          let filterOut = true;
+          custom.forEach((customItem) => {
+            if (customItem.selectors.indexOf(selector) !== -1) {
+              filterOut = false;
+            }
+          });
+          return filterOut;
+        }),
+      });
+      return memo;
+    }, []);
   }
 
   async isLocatorUnique(
@@ -171,8 +204,8 @@ export default class Discovery {
         attr[0] !== 'style'
     );
 
-    this.sortAttrByPriority(dataAttr, priorityRules)
-    
+    this.sortAttrByPriority(dataAttr, priorityRules);
+
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
