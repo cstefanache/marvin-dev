@@ -7,6 +7,7 @@ import {
   Output,
   PageDiscoveryResult,
   FlowModel,
+  ActionItem,
 } from './models/models';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';

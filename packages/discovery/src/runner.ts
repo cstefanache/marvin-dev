@@ -15,7 +15,11 @@ export default class Runner {
     private readonly state: State | undefined
   ) {}
 
-  public async run(page: Page, sequence: String[]) {
+  public async run(
+    page: Page,
+    sequence: String[],
+    sequenceCallback?: Function
+  ) {
     const { graph, actions } = this.flow.flow;
     let currentStep = graph;
     for (const step of sequence) {
@@ -28,7 +32,7 @@ export default class Runner {
         (item: ActionItem) => item.sequence_step === step
       );
       if (action) {
-        const { method: methodName, parameters } = action;
+        const { method: methodName, parameters, id } = action;
         const urlActions = actions[url];
         let method: any;
         console.log('------------------');
@@ -148,6 +152,10 @@ export default class Runner {
               this.state.reportOnPendingRequests();
             }
           }
+          if (sequenceCallback) {
+            sequenceCallback(action.id);
+          }
+          await this.flow.stateScreenshot(page, action.id);
         } else {
           throw new Error(`Method ${methodName} not found`);
         }
@@ -159,8 +167,6 @@ export default class Runner {
       } else {
         currentStep = [];
       }
-
-      await this.flow.stateScreenshot(page, hashCode(`${url}${action.method}`));
     }
 
     log(`Sequence ended on page: ${page.url()}`, 'green');

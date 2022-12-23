@@ -10,6 +10,7 @@ import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
 
 import { Flow, Discovery, Runner, State } from '@marvin/discovery';
+import App from '../app';
 
 const store = new Store();
 
@@ -121,10 +122,15 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   await page.waitForNetworkIdle({ timeout: config.defaultTimeout });
 
   const runner = new Runner(config, flow, state);
-  await runner.run(page, sequence);
+  await runner.run(page, sequence, (actionId: string) => {
+    App.mainWindow.webContents.send('action-finished', actionId);
+  });
+
+  App.mainWindow.webContents.send('run-completed')
+
 
   // // log('Taking screenshot', 'yellow');
-  await flow.discover(page, true);
+  // await flow.discover(page, true);
   // await flow.stateScreenshot(page, 'runstate');
 
   flow.export();

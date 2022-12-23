@@ -3,6 +3,7 @@
     {
       "sequence_step": "Login as user@marvinapp.io",
       "url": "http://localhost:4200/",
+      "id": "7ae2c7e1-9558-4fc9-843a-c61a3df28909",
       "method": "Login",
       "parameters": {
         "input[placeholder=\"Enter username\"]": "user@marvinapp.io",
@@ -12,11 +13,13 @@
         {
           "sequence_step": "Click on create new list",
           "url": "http://localhost:4200/",
+          "id": "93f18fd8-e08c-44f6-a652-b62eacbe1621",
           "method": "Click on create new list",
           "children": [
             {
               "sequence_step": "Add a new list with single item",
               "url": "http://localhost:4200/newitem",
+              "id": "18cad750-9922-4520-9a1d-6c9217accdb8",
               "method": "Set list name",
               "parameters": {
                 "input[placeholder=\"Enter list name\"]": "Newly Created List"
@@ -25,6 +28,7 @@
                 {
                   "sequence_step": "Add New Item",
                   "url": "http://localhost:4200/newitem",
+                  "id": "3ceb0efc-ff7e-47e4-b2d7-207a86253062",
                   "method": "Add Item",
                   "parameters": {
                     "div.MuiBox-root > div > div > input": "Item Test"
@@ -33,11 +37,13 @@
                     {
                       "sequence_step": "Save List",
                       "url": "http://localhost:4200/newitem",
+                      "id": "ec1bec47-d3cb-41a5-9a52-d32111ffc588",
                       "method": "Save List",
                       "children": [
                         {
                           "sequence_step": "Delete Newly Created List",
                           "url": "http://localhost:4200/",
+                          "id": "5130329e-7fcb-41ec-98d8-0b7e0bc97ff5",
                           "method": "Delete List Card",
                           "parameters": {
                             "Card Title": "Newly Created List"
@@ -46,6 +52,7 @@
                             {
                               "sequence_step": "Logout",
                               "url": "http://localhost:4200/",
+                              "id": "14d5f0bf-10df-4ef4-979d-c5807da72dba",
                               "method": "Logout"
                             }
                           ]
@@ -61,6 +68,7 @@
         {
           "sequence_step": "Delete Newly Created List",
           "url": "http://localhost:4200/",
+          "id": "b88bf927-5b52-45fe-bddb-0e7e52dd309e",
           "method": "Delete List Card",
           "parameters": {
             "Card Title": "Newly Created List"

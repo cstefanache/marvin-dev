@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SchemaForm } from '@ascentcore/react-schema-form';
+import { hashCode } from '@marvin/discovery';
 
 const flextree = require('d3-flextree').flextree;
 const d3 = require('d3');
@@ -79,11 +80,24 @@ export function FlowComponent() {
     const sequence: string[] = [];
     buildSequence(d, sequence);
 
+    const svg = d3.select(svgRef.current);
+    svg.selectAll('.node').attr('opacity', 0.2);
     window.electron.runDiscovery(sequence.reverse());
   };
 
+  
+  
+
   useEffect(() => {
     const svg = d3.select(svgRef.current);
+    window.ipcRender.receive('action-finished', (id: string) => {      
+      d3.select(`#action-${id}`).attr('opacity', 1);
+    })
+
+    window.ipcRender.receive('run-completed', (id: string) => {
+      svg.selectAll('.node').attr('opacity', 1);
+    })
+
     svg.selectAll('*').remove();
     const temp = svg.append('g');
     let a = 0;
@@ -142,6 +156,7 @@ export function FlowComponent() {
       .enter()
       .append('g')
       .attr('class', 'node')
+      .attr('id', (d: any) => `action-${d.data.id}`)
       .attr('transform', (d: any) => `translate(${d.x - d.xSize / 2} ${d.y})`);
 
     nodeEnter

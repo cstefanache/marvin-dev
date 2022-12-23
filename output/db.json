@@ -1,7 +1,12 @@
 {
   "user@marvinapp.io": {
     "password": "password123",
-    "sessions": [],
+    "sessions": [
+      "2235c0b6-c490-4ae9-8a28-10be190b18d9",
+      "7533c8bd-5393-426e-92c8-8948db0f01f0",
+      "8396613e-4f2b-4d54-afef-ded4d5b02603",
+      "bb02c33c-c082-439d-a8d7-ea9cbbdeb731"
+    ],
     "data": [
       {
         "key": 1671104352383,
