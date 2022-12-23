@@ -5,6 +5,7 @@ import Side from '../components/Side';
 import Config from './Config';
 import TabPanel from '../components/TabPanel';
 import Operations from './Operations';
+import FlowComponent from '../components/FlowGraph';
 
 export default function Workspace({ workspace }: { workspace?: string }) {
   const [value, setValue] = React.useState(0);
@@ -29,6 +30,9 @@ export default function Workspace({ workspace }: { workspace?: string }) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Operations />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <FlowComponent />
       </TabPanel>
     </Box>
   );

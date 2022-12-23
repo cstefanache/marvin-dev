@@ -36,7 +36,7 @@ const getAdornment = (property: any) => {
   const lowerName = property.title?.toLowerCase();
   if (lowerName === 'name') {
     return <AccountCircle />;
-  } else if (lowerName === 'selector') {
+  } else if (lowerName === 'selector' || lowerName === 'locator') {
     return <CodeIcon />;
   } else if (lowerName === 'root url') {
     return <HttpIcon />;
@@ -293,13 +293,7 @@ function Wrapper({
     );
   } else if (uiType === 'container') {
     return (
-      <Grid
-        container
-        sx={{
-          ml: 2,
-          pl: 2,
-        }}
-      >
+      <Grid item xs={12}>
         {description && type !== 'object' && (
           <Grid item xs={12}>
             <Typography variant="body2" sx={{ alignItems: 'flex-end' }}>
@@ -314,7 +308,9 @@ function Wrapper({
             </Typography>
           </Grid>
         )}
-        {children}
+        <Grid container sx={{pl: 2, mt: 1}}>
+          {children}
+        </Grid>
       </Grid>
     );
   } else if (uiType === 'tabs') {

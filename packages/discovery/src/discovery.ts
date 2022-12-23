@@ -44,6 +44,8 @@ export default class Discovery {
 
   constructor(private readonly config: Config) {
     this.aliases = {
+      urlReplacers: config.aliases?.urlReplacers || [],
+      optimizer: config.aliases?.optimizer,
       info: [...defaultAliases.info, ...(config.aliases?.info || [])],
       action: [...defaultAliases.action, ...(config.aliases?.action || [])],
       input: [...defaultAliases.input, ...(config.aliases?.input || [])],
@@ -128,7 +130,7 @@ export default class Discovery {
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
     let rootEl = parent || page;
-    let excludeRules = this.config.optimizer?.exclude || [];
+    let excludeRules = this.config.aliases.optimizer?.exclude || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();

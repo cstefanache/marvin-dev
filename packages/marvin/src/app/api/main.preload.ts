@@ -6,6 +6,10 @@ contextBridge.exposeInMainWorld('electron', {
   getConfig: () => ipcRenderer.invoke('get-config'),
   setConfig: (config: any) => ipcRenderer.invoke('set-config', config),
   getDiscovered: () => ipcRenderer.invoke('get-discovered'),
-  selectNewWorkspaceFolder: () => ipcRenderer.invoke('select-new-workspace-folder'),
+  getFlow: () => ipcRenderer.invoke('get-flow'),
+  runDiscovery: (sequence: any) =>
+    ipcRenderer.invoke('run-discovery', sequence),
+  selectNewWorkspaceFolder: () =>
+    ipcRenderer.invoke('select-new-workspace-folder'),
   platform: process.platform,
 });

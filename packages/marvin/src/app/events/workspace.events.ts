@@ -43,6 +43,16 @@ function getDiscovered() {
   return null;
 }
 
+function getFlow() {
+  const workspace = store.get('lastWorkspace');
+
+  if (workspace && fs.existsSync(`${workspace}/flow.json`)) {
+    return JSON.parse(fs.readFileSync(`${workspace}/flow.json`, 'utf8'));
+  }
+
+  return null;
+}
+
 ipcMain.handle('get-workspaces', (event) => {
   return store.get('workspaces');
 });
@@ -86,12 +96,20 @@ ipcMain.handle('set-config', (event, config) => {
 });
 
 ipcMain.handle('get-discovered', () => {
-  console.log('get-discovered')
   return getDiscovered();
+});
+
+ipcMain.handle('get-flow', () => {
+  return getFlow();
 });
 
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   const config = getConfig();
+  const workspace = store.get('lastWorkspace');
+  config.path = workspace;
+  if (!fs.existsSync(`${workspace}/screenshots`)) {
+    fs.mkdirSync(`${workspace}/screenshots`);
+  }
   const browser = await puppeteer.launch({ headless: true });
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);
@@ -105,9 +123,9 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   const runner = new Runner(config, flow, state);
   await runner.run(page, sequence);
 
-  // log('Taking screenshot', 'yellow');
+  // // log('Taking screenshot', 'yellow');
   await flow.discover(page, true);
-  await flow.stateScreenshot(page, 'runstate');
+  // await flow.stateScreenshot(page, 'runstate');
 
   flow.export();
 });

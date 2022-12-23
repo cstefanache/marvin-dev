@@ -7,17 +7,14 @@
       {
         "alias": ":id",
         "regex": "/[0-9]+"
-      },
-      {
-        "alias": ":name",
-        "regex": "/[a-zA-Z]+"
       }
     ],
     "info": [
       {
         "name": "Headers",
         "selectors": [
-          ".card-title"
+          ".card-title",
+          ".title"
         ]
       }
     ],

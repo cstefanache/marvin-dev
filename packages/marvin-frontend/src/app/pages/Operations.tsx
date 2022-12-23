@@ -4,8 +4,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   Divider,
   Grid,
+  IconButton,
   InputAdornment,
   List,
   ListItem,
@@ -26,13 +28,23 @@ import InfoIcon from '@mui/icons-material/Info';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ListIcon from '@mui/icons-material/List';
+import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/system';
+
+import MethodSchema from '../schemas/method.schema.json';
 
 export default function Operations() {
   const [output, setOutput] = useState<any>(undefined);
   const [loading, setLoading] = useState(true);
   const [urls, setUrls] = useState<string[]>([]);
   const [selectedUrl, setSelectedUrl] = useState<string>();
+  const [actions, setActions] = useState<any[]>([]);
+  const [data, setData] = useState<any | undefined>({
+    method: 'Login',
+    sequence: [],
+  });
+
+  const [dataKey, setDataKey] = useState(0);
 
   const [accordionStates, setAccordionStates] = useState<any>({
     info: true,
@@ -58,6 +70,19 @@ export default function Operations() {
     asyncFn();
   }, []);
 
+  useEffect(() => {
+    const asyncFn = async () => {
+      const flow = await window.electron.getFlow();
+
+      if (flow && flow.actions && selectedUrl) {
+        setActions(flow.actions[selectedUrl]);
+      } else {
+        setActions([]);
+      }
+    };
+    asyncFn();
+  }, [selectedUrl]);
+
   const handleChange = (event: any) => {
     setSelectedUrl(event.target.value);
   };
@@ -77,17 +102,35 @@ export default function Operations() {
   ) => {
     if (!output || !selectedUrl) return null;
     const list = output.discovered[selectedUrl]['items'][section];
+
+    const handleAdd = (item: any) => {
+      const { sequence } = data;
+      const newSequence = [
+        ...sequence,
+        {
+          type:
+            section === 'input'
+              ? 'fill'
+              : section === 'actions'
+              ? 'click'
+              : 'check',
+          locator: item.locator,
+        },
+      ];
+
+      setDataKey(Date.now());
+      setData({
+        ...data,
+        sequence: newSequence,
+      });
+    };
+
     return (
-      <Accordion
-        expanded={accordionStates[section]}
-        onClick={() => {
-          setAccordionStates({
-            ...accordionStates,
-            [section]: !accordionStates[section],
-          });
-        }}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Accordion expanded={accordionStates[section]}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          onClick={() => toggleAccordionState(section)}
+        >
           {icon && icon}
           <Typography sx={{ ml: 1 }}>
             {title} ({list.length})
@@ -97,7 +140,15 @@ export default function Operations() {
           <List>
             {list.map((item: any) => (
               <>
-                <ListItem>
+                <ListItemButton
+                  onClick={() => handleAdd(item)}
+                  sx={{
+                    pl: 1,
+                    pt: 0,
+                    pb: 0,
+                    borderBottom: '1px solid rgba(255,255,255,.4)',
+                  }}
+                >
                   <ListItemText
                     primary={
                       item.text +
@@ -106,20 +157,25 @@ export default function Operations() {
                     }
                     secondary={
                       <Typography
-                        sx={{ display: 'inline' }}
+                        sx={{
+                          display: 'inline',
+                          padding: '4px 10px',
+                          borderRadius: 2,
+                          fontSize: 12,
+                          backgroundColor: 'rgba(255,255,255,.15)',
+                        }}
                         component="span"
-                        variant="body2"
                         color="text.primary"
                       >
                         {item.locator}
                       </Typography>
                     }
                   />
-                </ListItem>
+                </ListItemButton>
                 {isIterable && (
-                  <List sx={{ pl: 4 }}>
+                  <List>
                     {item.identifiers.map((subItem: any) => (
-                      <ListItem>
+                      <ListItemButton>
                         <ListItemText
                           primary={
                             subItem.text +
@@ -137,7 +193,7 @@ export default function Operations() {
                             </Typography>
                           }
                         />
-                      </ListItem>
+                      </ListItemButton>
                     ))}
                   </List>
                 )}
@@ -157,7 +213,7 @@ export default function Operations() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              height: 'calc(100vh - 68px)',
+              height: 'calc(100vh - 86px)',
             }}
           >
             <Typography variant="body1">
@@ -228,9 +284,73 @@ export default function Operations() {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={8} sx={{ p: 1, height: '100%', overflowY: 'auto' }}>
-          <Typography variant="body1">Actions</Typography>
+
+        <Grid item xs={8} sx={{ p: 1 }}>
+          <Typography variant="body1">
+            Available Path Actions ({selectedUrl})
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{ float: 'right', mb: 1 }}
+            >
+              Add New
+            </Button>
+          </Typography>
           <Divider sx={{ mt: 1, mb: 1 }} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: 'calc(100vh - 126px)',
+              overflow: 'auto',
+            }}
+          >
+            {data && (
+              <Paper sx={{ mb: 1, p: 1 }}>
+                <SchemaForm
+                  key={dataKey}
+                  schema={MethodSchema}
+                  wrapper={CustomWrapper as any}
+                  config={{ registry: CustomRegistry }}
+                  data={data}
+                  onSubmit={(data) => {
+                    console.log(data);
+                  }}
+                />
+              </Paper>
+            )}
+            {actions &&
+              actions.map((action: any) => (
+                <Paper sx={{ mb: 1, p: 1 }} key={action.method}>
+                  {action.method}
+                  <Divider />
+                  <List>
+                    {action.sequence.map((item: any) => (
+                      <ListItem key={item.locator}>
+                        <ListItemText
+                          primary={item.type}
+                          secondary={
+                            <Typography
+                              sx={{
+                                display: 'inline',
+                                padding: '4px 10px',
+                                borderRadius: 2,
+                                fontSize: 12,
+                                backgroundColor: 'rgba(255,255,255,.15)',
+                              }}
+                              component="span"
+                              color="text.primary"
+                            >
+                              {item.locator}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Paper>
+              ))}
+          </Box>
         </Grid>
       </Grid>
     ) : (
