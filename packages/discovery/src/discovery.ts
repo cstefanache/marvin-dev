@@ -348,6 +348,9 @@ export default class Discovery {
           const identifiers: IdentifiableElement[] = [];
           if (iteratorSelector.identifiers) {
             for (const identifierSelector of iteratorSelector.identifiers) {
+              if (!identifierSelector.selector) {
+                continue
+              }
               const elements = await element.$$(identifierSelector.selector);
               for (const [index, childElement] of elements.entries()) {
                 const text = (await childElement.evaluate(
