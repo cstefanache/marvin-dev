@@ -111,8 +111,7 @@ export default class Runner {
                         locator = `${prefix !== '' ? prefix : ''}${
                             prefix !== '' && locator ? ' ' : ''
                         }${locator || ''}`;
-                        console.log(type, uid, locator);
-                        if (type === 'fill') {
+                        if (type === 'fill' && uid && parameters[uid]) {
                             log(
                                 `Filling ${locator} with ${parameters[uid]}`,
                                 'yellow'
@@ -132,7 +131,6 @@ export default class Runner {
                                         ),
                                     element
                                 );
-                                console.log(attributes);
                                 const text = await element.evaluate(el =>
                                     el.textContent?.trim()
                                 );
