@@ -15,6 +15,7 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
       },
     ],
     optimizer: {
+      priority: ['name', 'placeholder', 'role', 'type', 'href'],
       exclude: [
         {
           type: 'attribute',

@@ -1,4 +1,3 @@
-import { text } from 'body-parser';
 import { ElementHandle, Page } from 'puppeteer';
 import { Alias, Aliases, Config, Exclude } from './models/config';
 import {
@@ -12,7 +11,7 @@ const defaultAliases = {
   info: [
     {
       name: 'headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5',  'h6'],
     },
   ],
   action: [
@@ -22,7 +21,7 @@ const defaultAliases = {
   ],
   input: [
     {
-      selectors: ['input'],
+      selectors: ['input', 'textarea'],
     },
   ],
   iterators: [
@@ -46,9 +45,24 @@ export default class Discovery {
     this.aliases = {
       urlReplacers: config.aliases?.urlReplacers || [],
       optimizer: config.aliases?.optimizer,
-      info: [...defaultAliases.info, ...(config.aliases?.info || [])],
-      action: [...defaultAliases.action, ...(config.aliases?.action || [])],
-      input: [...defaultAliases.input, ...(config.aliases?.input || [])],
+      info: [
+        ...this.mergeAndFilter(defaultAliases.info, config.aliases?.info || []),
+        ...(config.aliases?.info || []),
+      ],
+      action: [
+        ...this.mergeAndFilter(
+          defaultAliases.action,
+          config.aliases?.action || []
+        ),
+        ...(config.aliases?.action || []),
+      ],
+      input: [
+        ...this.mergeAndFilter(
+          defaultAliases.input,
+          config.aliases?.input || []
+        ),
+        ...(config.aliases?.input || []),
+      ],
       iterators: [
         ...defaultAliases.iterators,
         ...(config.aliases?.iterators || []),
@@ -82,6 +96,34 @@ export default class Discovery {
       (rule) => rule.type === type && (!rule.name || rule.name === name)
     );
     return filter.find((rule) => this.matches(val, rule)) !== undefined;
+  }
+
+  sortAttrByPriority(dataArray: string[][], priorityRules: string[]) {
+    dataArray.sort((a: string[], b: string[]) => {
+      const firstIndex = priorityRules.indexOf(a[0]);
+      const secondIndex = priorityRules.indexOf(b[0]);
+      return firstIndex !== -1 && secondIndex !== -1
+        ? firstIndex - secondIndex
+        : secondIndex - firstIndex;
+    });
+  }
+
+  mergeAndFilter(source: Alias[], custom: Alias[]) {
+    return source.reduce((memo: Alias[], item: Alias) => {
+      memo.push({
+        ...item,
+        selectors: item.selectors.filter((selector) => {
+          let filterOut = true;
+          custom.forEach((customItem) => {
+            if (customItem.selectors.indexOf(selector) !== -1) {
+              filterOut = false;
+            }
+          });
+          return filterOut;
+        }),
+      });
+      return memo;
+    }, []);
   }
 
   async isLocatorUnique(
@@ -118,19 +160,20 @@ export default class Discovery {
     parent?: ElementHandle<Element>,
     ascendentLocator?: string
   ): Promise<string> {
-    const getDescententLocator = (locator: any) => 
-        locator +
-        (locator &&
-        locator.trim() !== '' &&
-        ascendentLocator &&
-        ascendentLocator.trim() !== ''
-          ? ' > '
-          : ' ') 
+    const getDescententLocator = (locator: any) =>
+      locator +
+      (locator &&
+      locator.trim() !== '' &&
+      ascendentLocator &&
+      ascendentLocator.trim() !== ''
+        ? ' > '
+        : ' ');
 
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
     let rootEl = parent || page;
     let excludeRules = this.config.aliases.optimizer?.exclude || [];
+    let priorityRules = this.config.aliases.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
@@ -162,6 +205,9 @@ export default class Discovery {
         attr[0] !== 'class' &&
         attr[0] !== 'style'
     );
+
+    this.sortAttrByPriority(dataAttr, priorityRules);
+
     let validDataAttr = false;
     if (dataAttr.length) {
       for (const attribute of dataAttr) {
@@ -220,10 +266,7 @@ export default class Discovery {
         );
 
         if (parentLocator.trim() !== '') {
-          return (
-            parentLocator.trim() + ' ' +
-            getDescententLocator(locator)
-          );
+          return parentLocator.trim() + ' ' + getDescententLocator(locator);
         }
       }
     }
@@ -307,6 +350,9 @@ export default class Discovery {
           const identifiers: IdentifiableElement[] = [];
           if (iteratorSelector.identifiers) {
             for (const identifierSelector of iteratorSelector.identifiers) {
+              if (!identifierSelector.selector) {
+                continue
+              }
               const elements = await element.$$(identifierSelector.selector);
               for (const [index, childElement] of elements.entries()) {
                 const text = (await childElement.evaluate(

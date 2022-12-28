@@ -6,8 +6,8 @@
       "id": "7ae2c7e1-9558-4fc9-843a-c61a3df28909",
       "method": "Login",
       "parameters": {
-        "input[placeholder=\"Enter username\"]": "user@marvinapp.io",
-        "input[placeholder=\"Enter password\"]": "password123"
+        "id1": "user@marvinapp.io",
+        "id2": "password123"
       },
       "children": [
         {
@@ -22,7 +22,7 @@
               "id": "18cad750-9922-4520-9a1d-6c9217accdb8",
               "method": "Set list name",
               "parameters": {
-                "input[placeholder=\"Enter list name\"]": "Newly Created List"
+                "id3": "Newly Created List"
               },
               "children": [
                 {
@@ -31,7 +31,7 @@
                   "id": "3ceb0efc-ff7e-47e4-b2d7-207a86253062",
                   "method": "Add Item",
                   "parameters": {
-                    "div.MuiBox-root > div > div > input": "Item Test"
+                    "id4": "Item Test"
                   },
                   "children": [
                     {
@@ -91,10 +91,12 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id1",
             "locator": "input[placeholder=\"Enter username\"]"
           },
           {
             "type": "fill",
+            "uid": "id2",
             "locator": "input[placeholder=\"Enter password\"]"
           },
           {
@@ -148,6 +150,7 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id3",
             "locator": "input[placeholder=\"Enter list name\"]"
           }
         ]
@@ -157,6 +160,7 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id4",
             "locator": "div.MuiBox-root > div > div > input"
           },
           {
