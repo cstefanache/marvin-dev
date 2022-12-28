@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import { hashCode } from '@marvin/discovery';
-import { Dialog } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  TextField,
+} from '@mui/material';
+import { CustomRegistry, CustomWrapper } from './CustomRegistry';
 
 const flextree = require('d3-flextree').flextree;
 const d3 = require('d3');
@@ -60,6 +67,40 @@ export function FlowComponent() {
   const [path, setPath] = useState<string | null>(null);
   const [hieararchy, setHierarchy] = React.useState<any>(null);
   const [imageId, setImageId] = React.useState<string | null>(null);
+  const [addFor, setAddFor] = React.useState<any | undefined>(undefined);
+  const [schema, setSchema] = React.useState<any>(undefined);
+  const [action, setAction] = React.useState<string | undefined>(undefined);
+  const [actions, setActions] = React.useState<any | undefined>(undefined);
+
+  const prepareActionForm = (action: string) => {
+    setAction(action);
+    const method = actions[addFor.url].filter(
+      (method: any) => method.method === action
+    )[0];
+    console.log(method);
+    if (method) {
+      const schema = {
+        type: 'object',
+        title: method.method,
+        properties: {
+          sequence_step: {
+            type: 'string',
+            title: 'Sequence Step',
+          },
+          parameters: {
+            type: 'object',
+            properties: method.sequence
+              .filter((s: any) => s.type === 'fill')
+              .reduce((memo: any, obj: any) => {
+                memo[obj.locator] = { type: 'string', title: obj.locator };
+                return memo;
+              }, {}),
+          },
+        },
+      };
+      setSchema(schema);
+    }
+  };
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -67,7 +108,7 @@ export function FlowComponent() {
 
       const path = await window.electron.getWorkspacePath();
       setPath(path);
-
+      setActions(flow.actions);
       setGraph(flow.graph);
     };
     asyncFn();
@@ -192,7 +233,6 @@ export function FlowComponent() {
       .attr('fill', '#1C9CEB')
       .attr('stroke', '#e2b862')
       .on('click', (e: any, d: any) => {
-        console.log('click', d.data);
         if (d.data && d.data.id) {
           setImageId(d.data.id);
         }
@@ -215,7 +255,11 @@ export function FlowComponent() {
       .attr('cy', (d: any) => d.ySize)
       .attr('r', 10)
       .attr('fill', '#1C9CEB')
-      .attr('stroke', '#e2b862');
+      .attr('stroke', '#e2b862')
+      .on('click', (e: any, d: any) => {
+        console.log(d.data);
+        setAddFor(d.data);
+      });
 
     nodeEnter
       .append('path')
@@ -240,20 +284,7 @@ export function FlowComponent() {
         (d: any) => `translate(${d.xSize / 2 - 10} ${d.ySize - 10})scale(0.8)`
       )
 
-      .attr('d', () => 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z')
-      .on('click', (e: any, d: any) => {
-        // setAddFor(d.data);
-      });
-
-    // nodeEnter
-    //   .append('rect')
-    //   .attr(
-    //     'transform',
-    //     (d: any) => `translate(${d.xSize - 18} ${d.ySize - 18})scale(0.8)`
-    //   )
-    //   .attr('width', 20)
-    //   .attr('height', 20)
-    //   .attr('fill', 'rgba(255,255,255,0.3)')
+      .attr('d', () => 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z');
 
     nodeEnter
       .append('text')
@@ -275,6 +306,34 @@ export function FlowComponent() {
       <Dialog open={imageId !== null} onClose={() => setImageId(null)}>
         {path && <img src={`file://${path}/screenshots/${imageId}.png`} />}
       </Dialog>
+      {addFor && (
+        <Dialog open={addFor} onClose={() => setAddFor(null)}>
+          <DialogTitle>Add another action</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Select Action"
+              fullWidth={true}
+              select
+              value={action}
+              onChange={(e) => prepareActionForm(e.target.value)}
+            >
+              {(actions[addFor.url] || []).map((action: any) => (
+                <MenuItem key={action.method} value={action.method}>
+                  {action.method}
+                </MenuItem>
+              ))}
+            </TextField>
+            {schema && (
+              <SchemaForm
+                schema={schema}
+                wrapper={CustomWrapper as any}
+                config={{ registry: CustomRegistry }}
+                onSubmit={() => {}}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
