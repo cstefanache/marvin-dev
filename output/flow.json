@@ -5,8 +5,8 @@
       "url": "http://localhost:4200/",
       "method": "Login",
       "parameters": {
-        "input[placeholder=\"Enter username\"]": "user@marvinapp.io",
-        "input[placeholder=\"Enter password\"]": "password123"
+        "id1": "user@marvinapp.io",
+        "id2": "password123"
       },
       "children": [
         {
@@ -19,7 +19,7 @@
               "url": "http://localhost:4200/newitem",
               "method": "Set list name",
               "parameters": {
-                "input[placeholder=\"Enter list name\"]": "Newly Created List"
+                "id3": "Newly Created List"
               },
               "children": [
                 {
@@ -27,7 +27,7 @@
                   "url": "http://localhost:4200/newitem",
                   "method": "Add Item",
                   "parameters": {
-                    "div.MuiBox-root > div > div > input": "Item Test"
+                    "id4": "Item Test"
                   },
                   "children": [
                     {
@@ -76,10 +76,12 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id1",
             "locator": "input[placeholder=\"Enter username\"]"
           },
           {
             "type": "fill",
+            "uid": "id2",
             "locator": "input[placeholder=\"Enter password\"]"
           },
           {
@@ -133,6 +135,7 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id3",
             "locator": "input[placeholder=\"Enter list name\"]"
           }
         ]
@@ -142,6 +145,7 @@
         "sequence": [
           {
             "type": "fill",
+            "uid": "id4",
             "locator": "div.MuiBox-root > div > div > input"
           },
           {

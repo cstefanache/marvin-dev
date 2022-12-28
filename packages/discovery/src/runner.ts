@@ -106,22 +106,20 @@ export default class Runner {
                             );
                         }
                     }
-
                     for (const sequenceItem of method.sequence) {
-                        let {type, locator} = sequenceItem;
+                        let {type, uid, locator} = sequenceItem;
                         locator = `${prefix !== '' ? prefix : ''}${
                             prefix !== '' && locator ? ' ' : ''
                         }${locator || ''}`;
-                        console.log(type, locator);
-                        if (type === 'fill') {
+                        if (type === 'fill' && uid && parameters[uid]) {
                             log(
-                                `Filling ${locator} with ${parameters[locator]}`,
+                                `Filling ${locator} with ${parameters[uid]}`,
                                 'yellow'
                             );
                             // await element.type(parameters[locator]);
                             // await page.$eval(locator, (e: any) => e.blur());
                             await page.focus(locator);
-                            await page.keyboard.type(parameters[locator]);
+                            await page.keyboard.type(parameters[uid]);
                         } else {
                             const element = await page.$(locator);
                             if (element) {
@@ -133,7 +131,6 @@ export default class Runner {
                                         ),
                                     element
                                 );
-                                console.log(attributes);
                                 const text = await element.evaluate(el =>
                                     el.textContent?.trim()
                                 );
