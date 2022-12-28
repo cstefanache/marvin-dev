@@ -53,17 +53,23 @@
                               "sequence_step": "Logout",
                               "url": "http://localhost:4200/",
                               "id": "14d5f0bf-10df-4ef4-979d-c5807da72dba",
-                              "method": "Logout"
+                              "method": "Logout",
+                              "exitUrl": "http://localhost:4200/"
                             }
-                          ]
+                          ],
+                          "exitUrl": "http://localhost:4200/"
                         }
-                      ]
+                      ],
+                      "exitUrl": "http://localhost:4200/newitem"
                     }
-                  ]
+                  ],
+                  "exitUrl": "http://localhost:4200/newitem"
                 }
-              ]
+              ],
+              "exitUrl": "http://localhost:4200/newitem"
             }
-          ]
+          ],
+          "exitUrl": "http://localhost:4200/"
         },
         {
           "sequence_step": "Delete Newly Created List",
@@ -74,7 +80,8 @@
             "Card Title": "Newly Created List"
           }
         }
-      ]
+      ],
+      "exitUrl": "http://localhost:4200/"
     }
   ],
   "actions": {

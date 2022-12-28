@@ -193,12 +193,6 @@
             "details": null,
             "type": "text",
             "locator": "div.MuiBox-root > div > div > input"
-          },
-          {
-            "text": "",
-            "details": null,
-            "type": "text",
-            "locator": "div.css-mifb2i > div > div > input"
           }
         ],
         "actions": [
@@ -225,10 +219,6 @@
           {
             "text": "Cancel",
             "locator": "div.MuiCardActions-root > a"
-          },
-          {
-            "text": "",
-            "locator": "button.MuiIconButton-root"
           }
         ],
         "iterable": []

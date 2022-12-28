@@ -38,6 +38,7 @@ export type ActionItem = {
     sequence_step: string;
     parameters: {[key: string]: string};
     children: ActionItem[];
+    exitUrl?: string;
 };
 
 export type Sequence = {

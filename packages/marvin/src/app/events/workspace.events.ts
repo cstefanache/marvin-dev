@@ -83,6 +83,13 @@ ipcMain.handle('get-config', () => {
   return getConfig();
 });
 
+ipcMain.handle('get-workspace-path', (id) => {
+  const workspace = store.get('lastWorkspace');
+  if (fs.existsSync(`${workspace}`)) {
+    return workspace
+  }
+});
+
 ipcMain.handle('set-config', (event, config) => {
   const workspace = store.get('lastWorkspace');
 
@@ -130,7 +137,8 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
 
 
   // // log('Taking screenshot', 'yellow');
-  // await flow.discover(page, true);
+  await flow.discover(page, true);
+  await flow.export();
   // await flow.stateScreenshot(page, 'runstate');
 
   flow.export();

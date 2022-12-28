@@ -67,6 +67,7 @@ export default class App {
       height: height,
       show: false,
       webPreferences: {
+        webSecurity: false,
         contextIsolation: true,
         backgroundThrottling: false,
         nodeIntegration: false,

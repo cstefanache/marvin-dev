@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import { hashCode } from '@marvin/discovery';
+import { Dialog } from '@mui/material';
 
 const flextree = require('d3-flextree').flextree;
 const d3 = require('d3');
@@ -56,11 +57,16 @@ export function FlowComponent() {
   const [svgHeight, setSvgHeight] = useState(0);
   const svgRef = React.useRef(null);
   const [graph, setGraph] = useState<any>(null);
+  const [path, setPath] = useState<string | null>(null);
   const [hieararchy, setHierarchy] = React.useState<any>(null);
+  const [imageId, setImageId] = React.useState<string | null>(null);
 
   useEffect(() => {
     const asyncFn = async () => {
       const flow = await window.electron.getFlow();
+
+      const path = await window.electron.getWorkspacePath();
+      setPath(path);
 
       setGraph(flow.graph);
     };
@@ -85,18 +91,15 @@ export function FlowComponent() {
     window.electron.runDiscovery(sequence.reverse());
   };
 
-  
-  
-
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-    window.ipcRender.receive('action-finished', (id: string) => {      
+    window.ipcRender.receive('action-finished', (id: string) => {
       d3.select(`#action-${id}`).attr('opacity', 1);
-    })
+    });
 
     window.ipcRender.receive('run-completed', (id: string) => {
       svg.selectAll('.node').attr('opacity', 1);
-    })
+    });
 
     svg.selectAll('*').remove();
     const temp = svg.append('g');
@@ -113,8 +116,7 @@ export function FlowComponent() {
           .call(wrap, maxCellSize);
         const boundingBox = text.node().getBBox();
         const { width, height } = boundingBox;
-        console.log(boundingBox);
-        return [width + cellPadding * 2, height + cellPadding * 2 + 20];
+        return [width + cellPadding * 2 + 30, height + cellPadding * 2 + 20];
       },
       spacing: (a: any, b: any) => 20,
     });
@@ -140,7 +142,7 @@ export function FlowComponent() {
 
     const { top, bottom, left, right } = extents;
 
-    const width = right - left + 2 * padding;
+    const width = right - left + 2 * padding + 60;
     const height = bottom - top + 2 * padding;
     const transX = width / 2;
     const g = svg
@@ -149,6 +151,20 @@ export function FlowComponent() {
 
     const nodes = tree.descendants();
     const links = tree.links();
+
+    var link = g.selectAll('path.link').data(links);
+
+    const linkEnter = link
+      .enter()
+      .append('path')
+      .attr('stroke', '#e2b862')
+      .attr('d', (d: any) => {
+        const { source, target } = d;
+
+        return `M${source.x} ${source.y + source.ySize} L${target.x} ${
+          target.y
+        }`;
+      });
 
     const node = g.selectAll('.node').data(nodes);
 
@@ -169,37 +185,75 @@ export function FlowComponent() {
       .attr('ry', 3);
 
     nodeEnter
-      .append('path')
-      .attr(
-        'transform',
-        (d: any) => `translate(${d.x} ${d.ySize - 20})scale(0.8)`
-      )
-      .attr('d', () => 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z')
+      .append('circle')
+      .attr('cx', (d: any) => d.xSize)
+      .attr('cy', 13)
+      .attr('r', 10)
+      .attr('fill', '#1C9CEB')
+      .attr('stroke', '#e2b862')
       .on('click', (e: any, d: any) => {
-        // setAddFor(d.data);
+        console.log('click', d.data);
+        if (d.data && d.data.id) {
+          setImageId(d.data.id);
+        }
       });
 
     nodeEnter
-      .append('rect')
-      .attr(
-        'transform',
-        (d: any) => `translate(${d.xSize - 18} ${d.ySize - 18})scale(0.8)`
-      )
-      .attr('width', 20)
-      .attr('height', 20)
-      .attr('fill', 'rgba(255,255,255,0.3)')
+      .append('circle')
+      .attr('cx', (d: any) => d.xSize)
+      .attr('cy', 35)
+      .attr('r', 10)
+      .attr('fill', '#1C9CEB')
+      .attr('stroke', '#e2b862')
       .on('click', (e: any, d: any) => {
         run(d);
       });
 
     nodeEnter
+      .append('circle')
+      .attr('cx', (d: any) => d.xSize / 2)
+      .attr('cy', (d: any) => d.ySize)
+      .attr('r', 10)
+      .attr('fill', '#1C9CEB')
+      .attr('stroke', '#e2b862');
+
+    nodeEnter
+      .append('path')
+      .attr('transform', (d: any) => `translate(${d.xSize - 7} 5)scale(0.6)`)
+      .attr(
+        'd',
+        () =>
+          'M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z'
+      )
+      .attr('pointer-events', 'none');
+
+    nodeEnter
+      .append('path')
+      .attr('transform', (d: any) => `translate(${d.xSize - 9} 25)scale(0.8)`)
+      .attr('d', () => 'M8 5v14l11-7z')
+      .attr('pointer-events', 'none');
+
+    nodeEnter
       .append('path')
       .attr(
         'transform',
-        (d: any) => `translate(${d.xSize - 20} ${d.ySize - 20})scale(0.8)`
+        (d: any) => `translate(${d.xSize / 2 - 10} ${d.ySize - 10})scale(0.8)`
       )
-      .attr('d', () => 'M8 5v14l11-7z')
-      .attr('pointer-events', 'none');
+
+      .attr('d', () => 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z')
+      .on('click', (e: any, d: any) => {
+        // setAddFor(d.data);
+      });
+
+    // nodeEnter
+    //   .append('rect')
+    //   .attr(
+    //     'transform',
+    //     (d: any) => `translate(${d.xSize - 18} ${d.ySize - 18})scale(0.8)`
+    //   )
+    //   .attr('width', 20)
+    //   .attr('height', 20)
+    //   .attr('fill', 'rgba(255,255,255,0.3)')
 
     nodeEnter
       .append('text')
@@ -211,28 +265,16 @@ export function FlowComponent() {
       .attr('alignment-baseline', 'hanging')
       .call(wrap, maxCellSize);
 
-    var link = g.selectAll('path.link').data(links);
-
-    const linkEnter = link
-      .enter()
-      .append('path')
-      .attr('stroke', '#e2b862')
-      .attr('d', (d: any) => {
-        const { source, target } = d;
-
-        return `M${source.x} ${source.y + source.ySize} L${target.x} ${
-          target.y
-        }`;
-      });
-
     setSvgWidth(width);
     setSvgHeight(height);
-    console.log(width, height);
   }, [graph]);
 
   return (
     <>
       <svg ref={svgRef} width={svgWidth} height={svgHeight}></svg>
+      <Dialog open={imageId !== null} onClose={() => setImageId(null)}>
+        {path && <img src={`file://${path}/screenshots/${imageId}.png`} />}
+      </Dialog>
     </>
   );
 }

@@ -6,7 +6,7 @@
     "urlReplacers": [
       {
         "alias": ":id",
-        "regex": "/[0-9]+"
+        "regex": ["/[0-9]+"]
       }
     ],
     "info": [
@@ -47,12 +47,12 @@
         {
           "type": "attribute",
           "name": "id",
-          "regex": ":[a-z0-9]+:"
+          "regex": [":[a-z0-9]+:"]
         },
         {
           "type": "attribute",
           "name": "id",
-          "regex": "mui-[0-9]+"
+          "regex": ["mui-[0-9]+"]
         }
       ]
     }

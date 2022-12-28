@@ -162,6 +162,7 @@ export default class Runner {
       } else {
         throw new Error(`Action ${step} not found in flow`);
       }
+      action.exitUrl = processUrl(url, this.config.aliases.urlReplacers);
       if (action.children) {
         currentStep = action.children;
       } else {
