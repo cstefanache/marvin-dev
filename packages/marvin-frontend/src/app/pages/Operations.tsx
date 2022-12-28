@@ -30,7 +30,7 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/system';
-
+import * as uuid from 'uuid';
 import MethodSchema from '../schemas/method.schema.json';
 
 export default function Operations() {
@@ -39,8 +39,9 @@ export default function Operations() {
   const [urls, setUrls] = useState<string[]>([]);
   const [selectedUrl, setSelectedUrl] = useState<string>();
   const [actions, setActions] = useState<any[]>([]);
+  const [flow, setFlow] = useState<any | undefined>(undefined);
   const [data, setData] = useState<any | undefined>({
-    method: 'Login',
+    method: undefined,
     sequence: [],
   });
 
@@ -52,6 +53,31 @@ export default function Operations() {
     actions: true,
     iterable: true,
   });
+
+  const submitAction = (data: any, err: any) => {
+    if (selectedUrl && err.length === 0) {
+      const newFlow = {
+        ...flow,
+        actions: {
+          ...flow.actions,
+          [selectedUrl]: [
+            ...(flow.actions[selectedUrl] || []),
+            {
+              ...data,
+              sequence: [
+                ...data.sequence.map((item: any) => ({
+                  ...item,
+                  uid: uuid.v4(),
+                })),
+              ],
+            },
+          ],
+        },
+      };
+      setFlow(newFlow);
+      window.electron.setFlow(newFlow);
+    }
+  };
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -72,10 +98,10 @@ export default function Operations() {
 
   useEffect(() => {
     const asyncFn = async () => {
-      const flow = await window.electron.getFlow();
-
-      if (flow && flow.actions && selectedUrl) {
-        setActions(flow.actions[selectedUrl]);
+      const newFlow = await window.electron.getFlow();
+      setFlow(newFlow);
+      if (newFlow && newFlow.actions && selectedUrl) {
+        setActions(newFlow.actions[selectedUrl]);
       } else {
         setActions([]);
       }
@@ -313,9 +339,7 @@ export default function Operations() {
                   wrapper={CustomWrapper as any}
                   config={{ registry: CustomRegistry }}
                   data={data}
-                  onSubmit={(data) => {
-                    console.log(data);
-                  }}
+                  onSubmit={submitAction}
                 />
               </Paper>
             )}

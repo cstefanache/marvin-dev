@@ -111,6 +111,17 @@ ipcMain.handle('get-flow', () => {
   return getFlow();
 });
 
+ipcMain.handle('set-flow', (event, flow) => {
+  const workspace = store.get('lastWorkspace');
+
+  if (workspace) {
+    fs.writeFileSync(
+      `${workspace}/flow.json`,
+      JSON.stringify(flow, undefined, 2)
+    );
+  }
+})
+
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   const config = getConfig();
   const workspace = store.get('lastWorkspace');

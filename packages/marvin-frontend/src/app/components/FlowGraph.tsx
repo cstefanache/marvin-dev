@@ -9,6 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { CustomRegistry, CustomWrapper } from './CustomRegistry';
+import * as uuid from 'uuid';
 
 const flextree = require('d3-flextree').flextree;
 const d3 = require('d3');
@@ -63,6 +64,7 @@ export function FlowComponent() {
   const [svgWidth, setSvgWidth] = useState(0);
   const [svgHeight, setSvgHeight] = useState(0);
   const svgRef = React.useRef(null);
+  const [config, setConfig] = useState<any>(null);
   const [graph, setGraph] = useState<any>(null);
   const [path, setPath] = useState<string | null>(null);
   const [hieararchy, setHierarchy] = React.useState<any>(null);
@@ -77,7 +79,6 @@ export function FlowComponent() {
     const method = actions[addFor.url].filter(
       (method: any) => method.method === action
     )[0];
-    console.log(method);
     if (method) {
       const schema = {
         type: 'object',
@@ -92,7 +93,7 @@ export function FlowComponent() {
             properties: method.sequence
               .filter((s: any) => s.type === 'fill')
               .reduce((memo: any, obj: any) => {
-                memo[obj.locator] = { type: 'string', title: obj.locator };
+                memo[obj.uid] = { type: 'string', title: obj.locator };
                 return memo;
               }, {}),
           },
@@ -105,8 +106,9 @@ export function FlowComponent() {
   useEffect(() => {
     const asyncFn = async () => {
       const flow = await window.electron.getFlow();
-
       const path = await window.electron.getWorkspacePath();
+      const config = await window.electron.getConfig();
+      setConfig(config);
       setPath(path);
       setActions(flow.actions);
       setGraph(flow.graph);
@@ -131,6 +133,22 @@ export function FlowComponent() {
     svg.selectAll('.node').attr('opacity', 0.2);
     window.electron.runDiscovery(sequence.reverse());
   };
+
+  const saveFlow = (data: any) => {
+    
+    addFor.children.push({
+      id: uuid.v4(),
+      ...data,
+      method: action,
+      url: addFor.exitUrl || addFor.url,
+      children: []
+    })
+    
+    window.electron.setFlow({
+      actions,
+      graph
+    });
+  }
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -161,11 +179,13 @@ export function FlowComponent() {
       },
       spacing: (a: any, b: any) => 20,
     });
+
     const hier = {
       sequence_step: 'root',
-      url: '/',
+      url: config ? config.rootUrl + '/' : '/',
       children: graph,
     };
+
     const tree = layout.hierarchy(hier);
 
     layout(tree);
@@ -256,9 +276,8 @@ export function FlowComponent() {
       .attr('r', 10)
       .attr('fill', '#1C9CEB')
       .attr('stroke', '#e2b862')
-      .on('click', (e: any, d: any) => {
-        console.log(d.data);
-        setAddFor(d.data);
+      .on('click', (e: any, d: any) => {        
+        setAddFor(d.data);        
       });
 
     nodeEnter
@@ -298,7 +317,7 @@ export function FlowComponent() {
 
     setSvgWidth(width);
     setSvgHeight(height);
-  }, [graph]);
+  }, [graph, config]);
 
   return (
     <>
@@ -328,7 +347,7 @@ export function FlowComponent() {
                 schema={schema}
                 wrapper={CustomWrapper as any}
                 config={{ registry: CustomRegistry }}
-                onSubmit={() => {}}
+                onSubmit={saveFlow}
               />
             )}
           </DialogContent>
