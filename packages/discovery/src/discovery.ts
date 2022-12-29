@@ -43,6 +43,8 @@ export default class Discovery {
 
   constructor(private readonly config: Config) {
     this.aliases = {
+      urlReplacers: config.aliases?.urlReplacers || [],
+      optimizer: config.aliases?.optimizer,
       info: [
         ...this.mergeAndFilter(defaultAliases.info, config.aliases?.info || []),
         ...(config.aliases?.info || []),
@@ -170,8 +172,8 @@ export default class Discovery {
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
     let rootEl = parent || page;
-    let excludeRules = this.config.optimizer?.exclude || [];
-    let priorityRules = this.config.optimizer?.priority || [];
+    let excludeRules = this.config.aliases.optimizer?.exclude || [];
+    let priorityRules = this.config.aliases.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();

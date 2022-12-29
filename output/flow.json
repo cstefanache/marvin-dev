@@ -1,74 +1,4 @@
 {
-  "graph": [
-    {
-      "sequence_step": "Login as user@marvinapp.io",
-      "url": "http://localhost:4200/",
-      "method": "Login",
-      "parameters": {
-        "id1": "user@marvinapp.io",
-        "id2": "password123"
-      },
-      "children": [
-        {
-          "sequence_step": "Click on create new list",
-          "url": "http://localhost:4200/",
-          "method": "Click on create new list",
-          "children": [
-            {
-              "sequence_step": "Add a new list with single item",
-              "url": "http://localhost:4200/newitem",
-              "method": "Set list name",
-              "parameters": {
-                "id3": "Newly Created List"
-              },
-              "children": [
-                {
-                  "sequence_step": "Add New Item",
-                  "url": "http://localhost:4200/newitem",
-                  "method": "Add Item",
-                  "parameters": {
-                    "id4": "Item Test"
-                  },
-                  "children": [
-                    {
-                      "sequence_step": "Save List",
-                      "url": "http://localhost:4200/newitem",
-                      "method": "Save List",
-                      "children": [
-                        {
-                          "sequence_step": "Delete Newly Created List",
-                          "url": "http://localhost:4200/",
-                          "method": "Delete List Card",
-                          "parameters": {
-                            "Card Title": "Newly Created List"
-                          },
-                          "children": [
-                            {
-                              "sequence_step": "Logout",
-                              "url": "http://localhost:4200/",
-                              "method": "Logout"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "sequence_step": "Delete Newly Created List",
-          "url": "http://localhost:4200/",
-          "method": "Delete List Card",
-          "parameters": {
-            "Card Title": "Newly Created List"
-          }
-        }
-      ]
-    }
-  ],
   "actions": {
     "http://localhost:4200/": [
       {
@@ -76,93 +6,65 @@
         "sequence": [
           {
             "type": "fill",
-            "uid": "id1",
-            "locator": "input[placeholder=\"Enter username\"]"
+            "locator": "input[placeholder=\"Enter username\"]",
+            "uid": "9968ad96-ad4f-4c4c-8458-0130fe50848c"
           },
           {
             "type": "fill",
-            "uid": "id2",
-            "locator": "input[placeholder=\"Enter password\"]"
+            "locator": "input[placeholder=\"Enter password\"]",
+            "uid": "51533f8a-00ed-4f77-bf08-d97b36b4279e"
           },
           {
             "type": "click",
-            "locator": "button[tabindex=\"0\"]"
+            "locator": "button",
+            "uid": "0368dc1d-986a-495c-91b1-d194ae1ab846"
           }
         ]
       },
       {
-        "method": "Click on list card",
-        "itemRoot": "Card Iterator",
+        "method": "Create new list",
         "sequence": [
           {
             "type": "click",
-            "locator": "a"
-          }
-        ]
-      },
-      {
-        "method": "Delete List Card",
-        "itemRoot": "Card Iterator",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "button"
-          }
-        ]
-      },
-      {
-        "method": "Click on create new list",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "a[href=\"/newitem\"]"
-          }
-        ]
-      },
-      {
-        "method": "Logout",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "button.MuiButton-textInherit"
-          }
-        ]
-      }
-    ],
-    "http://localhost:4200/newitem": [
-      {
-        "method": "Set list name",
-        "sequence": [
-          {
-            "type": "fill",
-            "uid": "id3",
-            "locator": "input[placeholder=\"Enter list name\"]"
-          }
-        ]
-      },
-      {
-        "method": "Add Item",
-        "sequence": [
-          {
-            "type": "fill",
-            "uid": "id4",
-            "locator": "div.MuiBox-root > div > div > input"
-          },
-          {
-            "type": "click",
-            "locator": "button.MuiButton-contained"
-          }
-        ]
-      },
-      {
-        "method": "Save List",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "button.MuiButton-textPrimary"
+            "locator": "a[href=\"/newitem\"]",
+            "uid": "8ddc2253-267f-44f8-bb0e-ed7b2612ca1e"
           }
         ]
       }
     ]
-  }
+  },
+  "graph": [
+    {
+      "id": "a2a1db60-0944-4195-9bbe-028558ab091e",
+      "sequence_step": "dsafdsf",
+      "parameters": {
+        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "sadf",
+        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "sdf"
+      },
+      "method": "Login",
+      "url": "http://localhost:4200/",
+      "children": []
+    },
+    {
+      "id": "a011e499-cf83-47ad-807f-bd7efe351703",
+      "sequence_step": "Login as user",
+      "parameters": {
+        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
+        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+      },
+      "method": "Login",
+      "url": "http://localhost:4200/",
+      "children": [
+        {
+          "id": "d659dd63-2440-41a1-946d-93d986affcf3",
+          "sequence_step": "Create new list",
+          "method": "Create new list",
+          "url": "http://localhost:4200/",
+          "children": [],
+          "exitUrl": "http://localhost:4200/"
+        }
+      ],
+      "exitUrl": "http://localhost:4200/"
+    }
+  ]
 }

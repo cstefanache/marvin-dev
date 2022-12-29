@@ -1,0 +1,87 @@
+{
+  "name": "marvin-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/marvin-frontend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/packages/marvin-frontend",
+        "index": "packages/marvin-frontend/src/index.html",
+        "baseHref": "/",
+        "main": "packages/marvin-frontend/src/main.tsx",
+        "polyfills": "packages/marvin-frontend/src/polyfills.ts",
+        "tsConfig": "packages/marvin-frontend/tsconfig.app.json",
+        "assets": [
+          "packages/marvin-frontend/src/favicon.ico",
+          "packages/marvin-frontend/src/assets"
+        ],
+        "styles": ["packages/marvin-frontend/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "packages/marvin-frontend/src/environments/environment.ts",
+              "with": "packages/marvin-frontend/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "marvin-frontend:build",
+        "hmr": true,
+        "port": 9080
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "marvin-frontend:build:development",
+          "port": 9080
+        },
+        "production": {
+          "buildTarget": "marvin-frontend:build:production",
+          "hmr": false,
+          "port": 9080
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/marvin-frontend/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/marvin-frontend/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

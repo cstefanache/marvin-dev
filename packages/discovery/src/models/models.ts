@@ -33,10 +33,12 @@ export type Output = {
 
 export type ActionItem = {
     url: string;
+    id: string;
     method: string;
     sequence_step: string;
     parameters: {[key: string]: string};
     children: ActionItem[];
+    exitUrl?: string;
 };
 
 export type Sequence = {

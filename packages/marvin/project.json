@@ -1,0 +1,66 @@
+{
+  "root": "packages/marvin",
+  "sourceRoot": "packages/marvin/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx-electron:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/marvin",
+        "main": "packages/marvin/src/main.ts",
+        "tsConfig": "packages/marvin/tsconfig.app.json",
+        "assets": ["packages/marvin/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "packages/marvin/src/environments/environment.ts",
+              "with": "packages/marvin/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "nx-electron:execute",
+      "options": {
+        "buildTarget": "marvin:build"
+      }
+    },
+    "package": {
+      "executor": "nx-electron:package",
+      "options": {
+        "name": "marvin",
+        "outputPath": "dist/packages",
+        "prepackageOnly": true
+      }
+    },
+    "make": {
+      "executor": "nx-electron:make",
+      "options": {
+        "name": "marvin",
+        "outputPath": "dist/executables"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/marvin/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/marvin"],
+      "options": {
+        "jestConfig": "packages/marvin/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

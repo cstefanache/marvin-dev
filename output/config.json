@@ -1,0 +1,60 @@
+{
+  "rootUrl": "http://localhost:4200",
+  "defaultTimeout": 1000,
+  "name": "Marvin Test App",
+  "aliases": {
+    "urlReplacers": [
+      {
+        "alias": ":id",
+        "regex": ["/[0-9]+"]
+      }
+    ],
+    "info": [
+      {
+        "name": "Headers",
+        "selectors": [
+          ".card-title",
+          ".title"
+        ]
+      }
+    ],
+    "iterators": [
+      {
+        "name": "Card Iterator",
+        "selectors": [
+          ".grid-card"
+        ],
+        "identifiers": [
+          {
+            "name": "Card Title",
+            "selector": ".MuiTypography-h5"
+          },
+          {
+            "name": "Open Button",
+            "selector": "a",
+            "divider": false
+          },
+          {
+            "name": "Delete Button",
+            "selector": "button",
+            "divider": false
+          }
+        ]
+      }
+    ],
+    "optimizer": {
+      "exclude": [
+        {
+          "type": "attribute",
+          "name": "id",
+          "regex": [":[a-z0-9]+:"]
+        },
+        {
+          "type": "attribute",
+          "name": "id",
+          "regex": ["mui-[0-9]+"]
+        }
+      ]
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {
   Output,
   PageDiscoveryResult,
   FlowModel,
+  ActionItem,
 } from './models/models';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
@@ -51,7 +52,7 @@ export default class Flow {
     overwrite = false
   ): Promise<PageDiscoveryResult> {
     let currentUrl = page.url();
-    currentUrl = processUrl(currentUrl, this.config.urlReplacers);
+    currentUrl = processUrl(currentUrl, this.config.aliases.urlReplacers);
     const discoveryResults: PageDiscoveryResult =
       await this.discovery.discoverPage(page);
     if (this.output.discovered[currentUrl] && !overwrite) {
@@ -114,7 +115,7 @@ export default class Flow {
    */
   public async stateScreenshot(page: Page, name = 'snapshot'): Promise<void> {
     await page.screenshot({
-      path: `${this.config.path}/${name}.png`,
+      path: `${this.config.path}/screenshots/${name}.png`,
     });
   }
 

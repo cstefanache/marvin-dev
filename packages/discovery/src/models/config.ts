@@ -3,8 +3,7 @@ import { exitCode } from 'process';
 export interface Config {
   path: string;
   defaultTimeout: number;
-  urlReplacers: Replacer[];
-  optimizer?: Optimizer;
+  
   output: string;
   rootUrl: string;
   waitFor: string;
@@ -15,6 +14,8 @@ export interface Config {
 }
 
 export type Aliases = {
+  urlReplacers: Replacer[];
+  optimizer?: Optimizer;
   action: Alias[];
   input: Alias[];
   info: Alias[];

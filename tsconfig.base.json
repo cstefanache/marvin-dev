@@ -17,11 +17,7 @@
     "paths": {
       "@marvin/discovery": ["packages/discovery/src/index.ts"]
     },
-    "types": [
-      "puppeteer",
-      "jest-environment-puppeteer",
-      "expect-puppeteer"
-    ]
+    "types": ["puppeteer", "jest-environment-puppeteer", "expect-puppeteer"]
   },
   "exclude": ["node_modules", "tmp"]
 }
