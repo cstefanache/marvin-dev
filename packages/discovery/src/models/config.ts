@@ -41,9 +41,10 @@ export type Exclude = {
 
 export type Alias = {
   name?: string;
+  uid?: string;
   skipOptimizer?: boolean;
   selectors: string[];
-  identifiers?: { name: string; skipOptimizer?: boolean; uid: string, selector: string }[];
+  identifiers?: { name: string; skipOptimizer?: boolean; uid?: string, selector: string }[];
 };
 
 export type Action = {
