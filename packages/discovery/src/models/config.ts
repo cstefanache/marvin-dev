@@ -43,7 +43,7 @@ export type Alias = {
   name?: string;
   skipOptimizer?: boolean;
   selectors: string[];
-  identifiers?: { name: string; skipOptimizer?: boolean; selector: string }[];
+  identifiers?: { name: string; skipOptimizer?: boolean; uid: string, selector: string }[];
 };
 
 export type Action = {

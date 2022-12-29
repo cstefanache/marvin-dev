@@ -76,7 +76,7 @@ export function FlowComponent() {
 
   const prepareActionForm = (action: string) => {
     setAction(action);
-    const method = actions[addFor.url].filter(
+    const method = actions[addFor.exitUrl || addFor.url].filter(
       (method: any) => method.method === action
     )[0];
     if (method) {
@@ -91,7 +91,7 @@ export function FlowComponent() {
           parameters: {
             type: 'object',
             properties: method.sequence
-              .filter((s: any) => s.type === 'fill')
+              .filter((s: any) => s.type === 'fill' || s.type === 'locate')
               .reduce((memo: any, obj: any) => {
                 memo[obj.uid] = { type: 'string', title: obj.locator };
                 return memo;
@@ -205,7 +205,7 @@ export function FlowComponent() {
 
     const width = right - left + 2 * padding + 60;
     const height = bottom - top + 2 * padding;
-    const transX = width / 2;
+    const transX = (width - 60) / 2;
     const g = svg
       .append('g')
       .attr('transform', `translate(${padding + transX} ${padding})`);
@@ -277,6 +277,7 @@ export function FlowComponent() {
       .attr('fill', '#1C9CEB')
       .attr('stroke', '#e2b862')
       .on('click', (e: any, d: any) => {        
+        console.log(d.data)
         setAddFor(d.data);        
       });
 
@@ -336,7 +337,7 @@ export function FlowComponent() {
               value={action}
               onChange={(e) => prepareActionForm(e.target.value)}
             >
-              {(actions[addFor.url] || []).map((action: any) => (
+              {(actions[addFor.exitUrl || addFor.url] || []).map((action: any) => (
                 <MenuItem key={action.method} value={action.method}>
                   {action.method}
                 </MenuItem>

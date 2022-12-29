@@ -43,6 +43,7 @@ export type ActionItem = {
 
 export type Sequence = {
     type: string;
+    uid: string;
     locator: string;
 };
 

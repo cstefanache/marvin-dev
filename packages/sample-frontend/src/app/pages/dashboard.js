@@ -27,7 +27,7 @@ const Dashboard = ({ user, reload }) => {
 
   return (
     <Grid container spacing={2}>
-      {user.data.map((item) => (
+      {user && user.data && user.data.map((item) => (
         <Grid className='grid-card' key={item.key} item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
