@@ -30,6 +30,54 @@
             "uid": "8ddc2253-267f-44f8-bb0e-ed7b2612ca1e"
           }
         ]
+      },
+      {
+        "method": "Delete Card",
+        "sequence": [
+          {
+            "type": "locate",
+            "locator": "div.MuiTypography-root",
+            "uid": "fe42f42c-2e3a-427f-84ca-676949e30549"
+          },
+          {
+            "type": "click",
+            "locator": "button",
+            "uid": "34f3351c-96fc-47d2-884a-b2458f1f183a"
+          }
+        ],
+        "itemRoot": "Card Iterator"
+      }
+    ],
+    "http://localhost:4200/newitem": [
+      {
+        "method": "Add new item",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "div.MuiBox-root > div > div > input",
+            "uid": "fdc358f1-3837-4fbd-be96-0a576ee9c9f7"
+          },
+          {
+            "type": "click",
+            "locator": "button.MuiButton-contained",
+            "uid": "b1870653-9e3d-498b-b9a7-f971a1cdc278"
+          }
+        ]
+      },
+      {
+        "method": "Set list name and save",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter list name\"]",
+            "uid": "d9708474-bb4d-49af-8c10-024b2254800c"
+          },
+          {
+            "type": "click",
+            "locator": "button.MuiButton-textPrimary",
+            "uid": "2322c687-4165-4767-8e66-78f3294ac786"
+          }
+        ]
       }
     ]
   },
@@ -59,6 +107,111 @@
           "id": "d659dd63-2440-41a1-946d-93d986affcf3",
           "sequence_step": "Create new list",
           "method": "Create new list",
+          "url": "http://localhost:4200/",
+          "children": [
+            {
+              "id": "13adc549-b198-4a97-a51c-cb183964ad0a",
+              "sequence_step": "Add \"a\" item",
+              "parameters": {
+                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a"
+              },
+              "method": "Add new item",
+              "url": "http://localhost:4200/newitem",
+              "children": [
+                {
+                  "id": "99ce1af3-8af2-4b87-b9db-981e946e8406",
+                  "sequence_step": "Add \"b\" item",
+                  "parameters": {
+                    "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "b"
+                  },
+                  "method": "Add new item",
+                  "url": "http://localhost:4200/newitem",
+                  "children": [
+                    {
+                      "id": "24f40788-b4e2-4496-9030-30810784cdbe",
+                      "sequence_step": "Add \"c\" item",
+                      "parameters": {
+                        "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "c"
+                      },
+                      "method": "Add new item",
+                      "url": "http://localhost:4200/newitem",
+                      "children": [
+                        {
+                          "id": "64bd86d2-a23b-46be-b058-c7bd08b92e87",
+                          "sequence_step": "Save List",
+                          "parameters": {
+                            "d9708474-bb4d-49af-8c10-024b2254800c": "New List"
+                          },
+                          "method": "Set list name and save",
+                          "url": "http://localhost:4200/newitem",
+                          "children": [
+                            {
+                              "id": "e32470fb-c0c2-4402-aa66-0ea265384728",
+                              "sequence_step": "Delete Newly Created List",
+                              "parameters": {
+                                "fe42f42c-2e3a-427f-84ca-676949e30549": "New List"
+                              },
+                              "method": "Delete Card",
+                              "url": "http://localhost:4200/",
+                              "children": [],
+                              "exitUrl": "http://localhost:4200/"
+                            }
+                          ],
+                          "exitUrl": "http://localhost:4200/"
+                        }
+                      ],
+                      "exitUrl": "http://localhost:4200/newitem"
+                    },
+                    {
+                      "id": "387ef10b-ed3c-49fc-a671-27f1f82029bc",
+                      "sequence_step": "Save Partial",
+                      "parameters": {
+                        "d9708474-bb4d-49af-8c10-024b2254800c": "Partial List"
+                      },
+                      "method": "Set list name and save",
+                      "url": "http://localhost:4200/newitem",
+                      "children": [
+                        {
+                          "id": "15900667-3869-4417-be38-c19fa2239c97",
+                          "sequence_step": "Delete Partial List",
+                          "parameters": {
+                            "fe42f42c-2e3a-427f-84ca-676949e30549": "Partial List"
+                          },
+                          "method": "Delete Card",
+                          "url": "http://localhost:4200/",
+                          "children": [],
+                          "exitUrl": "http://localhost:4200/"
+                        }
+                      ],
+                      "exitUrl": "http://localhost:4200/"
+                    }
+                  ],
+                  "exitUrl": "http://localhost:4200/newitem"
+                }
+              ],
+              "exitUrl": "http://localhost:4200/newitem"
+            }
+          ],
+          "exitUrl": "http://localhost:4200/newitem"
+        },
+        {
+          "id": "9df10867-4973-4e56-9100-66dfdd43cafe",
+          "sequence_step": "Delete New List",
+          "parameters": {
+            "fe42f42c-2e3a-427f-84ca-676949e30549": "New List"
+          },
+          "method": "Delete Card",
+          "url": "http://localhost:4200/",
+          "children": [],
+          "exitUrl": "http://localhost:4200/"
+        },
+        {
+          "id": "dc7eb24c-e051-441c-8d6c-f9c6b2feaabd",
+          "sequence_step": "Delete Partial List",
+          "parameters": {
+            "fe42f42c-2e3a-427f-84ca-676949e30549": "Partial List"
+          },
+          "method": "Delete Card",
           "url": "http://localhost:4200/",
           "children": [],
           "exitUrl": "http://localhost:4200/"

@@ -55,42 +55,41 @@ export default class Runner {
             );
 
             if (iteratorConfig && iteratorConfig.identifiers) {
-              const elements = await page.$$(
-                iteratorConfig.selectors.join(', ')
-              );
+              for (const selector of iteratorConfig.selectors) {
+                const elements = await page.$$(selector);
+                console.log('----------');
+                console.log(method);
+                console.log('>>>>>>>>>');
+                console.log(action);
 
-              if (elements && elements.length) {
-                for (const [index, element] of elements.entries()) {
-                  let isRoot = false;
-                  for (const identifier of iteratorConfig.identifiers) {
-                    const { name, selector } = identifier;
-                    const valueElement = selector
-                      ? await element.$(selector)
+                const locatorDef = method.sequence.find(
+                  (item: Sequence) => item.type === 'locate'
+                );
+
+                if (elements && elements.length) {
+                  for (const [index, element] of elements.entries()) {
+                    const valueElement = locatorDef
+                      ? await element.$(locatorDef.locator)
                       : element;
+
+                    const uid = locatorDef ? locatorDef.uid : 'root';
                     if (valueElement) {
                       const text = (await valueElement.evaluate(
                         (el) => el.textContent
                       )) as string;
                       console.log(
-                        `[${index}] ${name}: ${text} - ${parameters[name]}`
+                        `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
-                      if (text === parameters[name]) {
-                        console.log(text, parameters[name], 'isRoot = false');
-                        isRoot = true;
+                      if (text === parameters[uid]) {
+                        prefix = `${selector}:nth-of-type(${index + 1})`;
                         break;
                       }
-                    }
-                  }
-
-                  if (isRoot) {
-                    prefix = `${iteratorConfig.selectors[0]}:nth-of-type(${
-                      index + 1
-                    })`;
-                    break;
+                    }                
                   }
                 }
-              } else {
-                log(`No elements found for ${itemRoot}`, 'red');
+                if (prefix) {
+                  break;
+                }
               }
             } else {
               throw new Error(`Missing iterator config for ${itemRoot}`);
@@ -155,7 +154,9 @@ export default class Runner {
       } else {
         throw new Error(`Action ${step} not found in flow`);
       }
-      action.exitUrl = processUrl(url, this.config.aliases.urlReplacers);
+
+      const exitUrl = await page.url();
+      action.exitUrl = processUrl(exitUrl, this.config.aliases.urlReplacers);
       if (action.children) {
         currentStep = action.children;
       } else {
