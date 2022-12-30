@@ -6,12 +6,17 @@ import Config from './Config';
 import TabPanel from '../components/TabPanel';
 import Operations from './Operations';
 import FlowComponent from '../components/FlowGraph';
+import Workspaces from './Workspaces';
 
 export default function Workspace({ workspace }: { workspace?: string }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const selectWorkspace = (workspace: any) => {
+    console.log(workspace);
   };
 
   return (
@@ -21,17 +26,21 @@ export default function Workspace({ workspace }: { workspace?: string }) {
         onChange={handleChange}
         aria-label="basic tabs example"
       >
+        <Tab label="Workspace" />
         <Tab label="Config" />
         <Tab label="Operations" />
         <Tab label="Flow" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Config />
+        <Workspaces selectWorkspace={selectWorkspace} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Operations />
+        <Config />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <Operations />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <FlowComponent />
       </TabPanel>
     </Box>

@@ -141,7 +141,8 @@ export default class Discovery {
     }
 
     if (elements.length === 0) {
-      throw new Error(`Locator ${locator} is not valid.`);
+      log(`Locator ${locator} is not valid.`, 'red');
+      // throw new Error(`Locator ${locator} is not valid.`);
     }
 
     return elements.length === 1;
@@ -215,13 +216,13 @@ export default class Discovery {
         if (value) {
           validDataAttr = true;
           const isUnique = await this.isLocatorUnique(
-            locator + `[${[attribute[0]]}="${value}"]`,
+            locator + `[${[attribute[0]]}="${value.replace(/"/g, '\\"')}"]`,
             rootEl,
             false
           );
           if (isUnique) {
             return getDescententLocator(
-              locator + `[${[attribute[0]]}="${value}"]`
+              locator + `[${[attribute[0]]}="${value.replace(/"/g, '\\"')}"]`
             );
           }
         }

@@ -28,7 +28,11 @@ function getConfig() {
   const workspace = store.get('lastWorkspace');
 
   if (workspace && fs.existsSync(`${workspace}/config.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
+    const config = JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
+    if (!config.aliases) {
+      config.aliases = {}
+    }
+    return config
   } else {
     return {};
   }

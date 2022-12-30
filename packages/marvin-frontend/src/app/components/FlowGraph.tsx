@@ -110,8 +110,8 @@ export function FlowComponent() {
       const config = await window.electron.getConfig();
       setConfig(config);
       setPath(path);
-      setActions(flow.actions);
-      setGraph(flow.graph);
+      setActions(flow ? flow.actions : {});
+      setGraph(flow ? flow.graph : []);
     };
     asyncFn();
   }, []);
@@ -182,9 +182,11 @@ export function FlowComponent() {
 
     const hier = {
       sequence_step: 'root',
-      url: config ? config.rootUrl + '/' : '/',
+      url: config ? config.rootUrl : '/',
       children: graph,
     };
+
+    console.log(hier)
 
     const tree = layout.hierarchy(hier);
 
