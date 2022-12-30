@@ -8,22 +8,22 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
     path: 'output',
     defaultTimeout: 1000,
     rootUrl: 'http://localhost:4200/',
-    urlReplacers: [
-      {
-        regex: '/[0-9]+',
-        alias: '/:id',
-      },
-    ],
-    optimizer: {
-      priority: ['name', 'placeholder', 'role', 'type', 'href'],
-      exclude: [
+    aliases: {
+      urlReplacers: [
         {
-          type: 'attribute',
-          name: 'id',
+          regex: '/[0-9]+',
+          alias: '/:id',
         },
       ],
-    },
-    aliases: {
+      optimizer: {
+        priority: ['name', 'placeholder', 'role', 'type', 'href'],
+        exclude: [
+          {
+            type: 'attribute',
+            name: 'id',
+          },
+        ],
+      },
       info: [],
       iterators: [
         {
