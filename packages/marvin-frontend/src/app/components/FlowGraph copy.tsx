@@ -46,7 +46,7 @@
 // }
 
 // const getTitleFromNode = (node: any) => {
-//   return node.data.sequence_step;
+//   return node.data.sequenceStep;
 // };
 
 // // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -70,7 +70,7 @@
 //         type: 'object',
 //         title: method.method,
 //         properties: {
-//           sequence_step: {
+//           sequenceStep: {
 //             type: 'string',
 //             title: 'Sequence Step',
 //           },
@@ -113,7 +113,7 @@
 //       spacing: (a: any, b: any) => 20,
 //     });
 //     const hier = {
-//       sequence_step: config.name,
+//       sequenceStep: config.name,
 //       url: config.rootUrl + '/',
 //       children: flowModel.graph,
 //     };

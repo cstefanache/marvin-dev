@@ -84,7 +84,7 @@
   "graph": [
     {
       "id": "a2a1db60-0944-4195-9bbe-028558ab091e",
-      "sequence_step": "dsafdsf",
+      "sequenceStep": "dsafdsf",
       "parameters": {
         "9968ad96-ad4f-4c4c-8458-0130fe50848c": "sadf",
         "51533f8a-00ed-4f77-bf08-d97b36b4279e": "sdf"
@@ -95,7 +95,7 @@
     },
     {
       "id": "a011e499-cf83-47ad-807f-bd7efe351703",
-      "sequence_step": "Login as user",
+      "sequenceStep": "Login as user",
       "parameters": {
         "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
         "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
@@ -105,13 +105,13 @@
       "children": [
         {
           "id": "d659dd63-2440-41a1-946d-93d986affcf3",
-          "sequence_step": "Create new list",
+          "sequenceStep": "Create new list",
           "method": "Create new list",
           "url": "http://localhost:4200/",
           "children": [
             {
               "id": "13adc549-b198-4a97-a51c-cb183964ad0a",
-              "sequence_step": "Add \"a\" item",
+              "sequenceStep": "Add \"a\" item",
               "parameters": {
                 "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a"
               },
@@ -120,7 +120,7 @@
               "children": [
                 {
                   "id": "99ce1af3-8af2-4b87-b9db-981e946e8406",
-                  "sequence_step": "Add \"b\" item",
+                  "sequenceStep": "Add \"b\" item",
                   "parameters": {
                     "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "b"
                   },
@@ -129,7 +129,7 @@
                   "children": [
                     {
                       "id": "24f40788-b4e2-4496-9030-30810784cdbe",
-                      "sequence_step": "Add \"c\" item",
+                      "sequenceStep": "Add \"c\" item",
                       "parameters": {
                         "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "c"
                       },
@@ -138,7 +138,7 @@
                       "children": [
                         {
                           "id": "64bd86d2-a23b-46be-b058-c7bd08b92e87",
-                          "sequence_step": "Save List",
+                          "sequenceStep": "Save List",
                           "parameters": {
                             "d9708474-bb4d-49af-8c10-024b2254800c": "New List"
                           },
@@ -147,7 +147,7 @@
                           "children": [
                             {
                               "id": "e32470fb-c0c2-4402-aa66-0ea265384728",
-                              "sequence_step": "Delete Newly Created List",
+                              "sequenceStep": "Delete Newly Created List",
                               "parameters": {
                                 "fe42f42c-2e3a-427f-84ca-676949e30549": "New List"
                               },
@@ -164,7 +164,7 @@
                     },
                     {
                       "id": "387ef10b-ed3c-49fc-a671-27f1f82029bc",
-                      "sequence_step": "Save Partial",
+                      "sequenceStep": "Save Partial",
                       "parameters": {
                         "d9708474-bb4d-49af-8c10-024b2254800c": "Partial List"
                       },
@@ -173,7 +173,7 @@
                       "children": [
                         {
                           "id": "15900667-3869-4417-be38-c19fa2239c97",
-                          "sequence_step": "Delete Partial List",
+                          "sequenceStep": "Delete Partial List",
                           "parameters": {
                             "fe42f42c-2e3a-427f-84ca-676949e30549": "Partial List"
                           },
@@ -196,7 +196,7 @@
         },
         {
           "id": "9df10867-4973-4e56-9100-66dfdd43cafe",
-          "sequence_step": "Delete New List",
+          "sequenceStep": "Delete New List",
           "parameters": {
             "fe42f42c-2e3a-427f-84ca-676949e30549": "New List"
           },
@@ -207,7 +207,7 @@
         },
         {
           "id": "dc7eb24c-e051-441c-8d6c-f9c6b2feaabd",
-          "sequence_step": "Delete Partial List",
+          "sequenceStep": "Delete Partial List",
           "parameters": {
             "fe42f42c-2e3a-427f-84ca-676949e30549": "Partial List"
           },

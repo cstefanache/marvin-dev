@@ -4,71 +4,47 @@
       "items": {
         "info": [
           {
-            "text": "Marvin Sample App",
-            "details": "Marvin Sample App",
+            "text": "Sign In",
+            "details": "Sign In",
             "type": null,
-            "locator": "h6"
+            "locator": "h2"
           }
         ],
-        "input": [],
+        "input": [
+          {
+            "text": "",
+            "details": "Enter username",
+            "type": "text",
+            "locator": "input[placeholder=\"Enter username\"]"
+          },
+          {
+            "text": "",
+            "details": "Enter password",
+            "type": "password",
+            "locator": "input[placeholder=\"Enter password\"]"
+          },
+          {
+            "text": "",
+            "details": null,
+            "type": "checkbox",
+            "locator": "input[name=\"checkedB\"]"
+          }
+        ],
         "actions": [
           {
-            "text": "Marvin Sample App",
-            "locator": "a[href=\"/\"]"
+            "text": "Sign in",
+            "locator": "button"
           },
           {
-            "text": "Create New List",
-            "locator": "a[href=\"/newitem\"]"
+            "text": "Forgot password ?",
+            "locator": "div.MuiPaper-root > p > a"
           },
           {
-            "text": "Logout",
-            "locator": "button.MuiButton-textInherit"
-          },
-          {
-            "text": "Open",
-            "locator": "a[href=\"/item/1671104352383\"]"
-          },
-          {
-            "text": "Delete",
-            "locator": "div.MuiGrid-container > div > div > div > button"
-          },
-          {
-            "text": "Open",
-            "locator": "a[href=\"/item/1671104371008\"]"
-          },
-          {
-            "text": "Delete",
-            "locator": "div.MuiGrid-container > div > div > div > button"
-          },
-          {
-            "text": "Open",
-            "locator": "a[href=\"/item/1672312391496\"]"
-          },
-          {
-            "text": "Delete",
-            "locator": "div.MuiGrid-container > div > div > div > button"
+            "text": "Sign Up",
+            "locator": "div.MuiPaper-root > p > a"
           }
         ],
-        "iterable": [
-          {
-            "text": "Card Iterator",
-            "locator": ".grid-card",
-            "identifiers": [
-              {
-                "text": "List 1",
-                "locator": "div.MuiTypography-root"
-              },
-              {
-                "text": "Open",
-                "locator": "a"
-              },
-              {
-                "text": "Delete",
-                "locator": "button"
-              }
-            ]
-          }
-        ]
+        "iterable": []
       }
     },
     "http://localhost:4200/newitem": {

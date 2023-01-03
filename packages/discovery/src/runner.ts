@@ -25,7 +25,7 @@ export default class Runner {
       url = processUrl(url, this.config.aliases.urlReplacers);
       log(`Current path: ${url}`, 'yellow');
       let action = currentStep.find(
-        (item: ActionItem) => item.sequence_step === step
+        (item: ActionItem) => item.sequenceStep === step
       );
       if (action) {
         const { method: methodName, parameters } = action;
@@ -57,11 +57,6 @@ export default class Runner {
             if (iteratorConfig && iteratorConfig.identifiers) {
               for (const selector of iteratorConfig.selectors) {
                 const elements = await page.$$(selector);
-                console.log('----------');
-                console.log(method);
-                console.log('>>>>>>>>>');
-                console.log(action);
-
                 const locatorDef = method.sequence.find(
                   (item: Sequence) => item.type === 'locate'
                 );
