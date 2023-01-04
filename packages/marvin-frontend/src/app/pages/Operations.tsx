@@ -200,7 +200,7 @@ export default function Operations() {
                 </ListItemButton>
                 {isIterable && (
                   <List>
-                    {item.identifiers.map((subItem: any) => (
+                    {item.elements.map((subItem: any) => (
                       <ListItemButton onClick={() => {
                         handleAdd(subItem)}
                       }>
