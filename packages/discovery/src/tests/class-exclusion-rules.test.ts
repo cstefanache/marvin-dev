@@ -7,16 +7,16 @@ describe('Test Discovery - class exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls11'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls11'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -70,15 +70,15 @@ describe('Test Discovery - class exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'class',
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'class',
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
       },
     } as Config);
     await page.evaluate(() => {
@@ -130,17 +130,17 @@ describe('Test Discovery - class exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls11'],
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls11'],
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `

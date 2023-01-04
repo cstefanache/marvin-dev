@@ -6,10 +6,10 @@ describe('Test Discovery - attribute priority', () => {
   it('without exclusion', async () => {
     const discovery = new Discovery({
         aliases: {
-          info: [{ name: 'Legend', selectors: ['span', 'label'] }]
-        },
-        optimizer: {
-           priority: ['data', 'placeholder', 'type', 'id']
+          info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+          optimizer: {
+            priority: ['data', 'placeholder', 'type', 'id']
+         }
         }
       } as Config);
       await page.evaluate(() => {
@@ -33,15 +33,15 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['data', 'placeholder', 'type', 'id'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-        ],
+        optimizer: {
+          priority: ['data', 'placeholder', 'type', 'id'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+          ],
+        },
       },
     } as Config);
       await page.evaluate(() => {
@@ -65,17 +65,17 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['data', 'placeholder', 'type'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ["id1"]
-          },
-        ],
-      },
+        optimizer: {
+          priority: ['data', 'placeholder', 'type'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ["id1"]
+            },
+          ],
+        },
+      }
     } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `
@@ -98,15 +98,15 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['data', 'placeholder', 'type'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'data',
-          },
-        ],
+        optimizer: {
+          priority: ['data', 'placeholder', 'type'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'data',
+            },
+          ],
+        },
       },
     } as Config);
       await page.evaluate(() => {
@@ -129,17 +129,17 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['data', 'placeholder', 'type'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'data',
-            value: ['labelData']
-          },
-        ],
-      },
+        optimizer: {
+          priority: ['data', 'placeholder', 'type'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'data',
+              value: ['labelData']
+            },
+          ],
+        },
+      }
     } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `
@@ -162,20 +162,20 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['type', 'data', 'placeholder'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'role'
-          },
-          {
-            type: 'attribute',
-            name: 'id'
-          }
-        ],
-      },
+        optimizer: {
+          priority: ['type', 'data', 'placeholder'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'role'
+            },
+            {
+              type: 'attribute',
+              name: 'id'
+            }
+          ],
+        },
+      }
     } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `
@@ -198,21 +198,21 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['role', 'type', 'data', 'placeholder'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'role',
-            value: ['role1']
-          },
-          {
-            type: 'attribute',
-            name: 'id'
-          }
-        ],
-      },
+        optimizer: {
+          priority: ['role', 'type', 'data', 'placeholder'],
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'role',
+              value: ['role1']
+            },
+            {
+              type: 'attribute',
+              name: 'id'
+            }
+          ],
+        },
+      }
     } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `
@@ -235,45 +235,45 @@ describe('Test Discovery - attribute priority', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        priority: ['role', 'type', 'data', 'placeholder'],
-        exclude: [
-          {
-            type: 'tag',
-            value: ['input']
-          },
-          {
-            type: 'attribute',
-            name: 'role',
-            value: ['role1']
-          },
-          {
-            type: 'attribute',
-            name: 'type',
-            value: ['type3']
-          },
-          {
-            type: 'attribute',
-            name: 'placeholder',
-            value: ['yyy']
-          },
-          {
-            type: 'attribute',
-            name: 'data',
-            value: ['label3']
-          },
-          {
-            type: 'attribute',
-            name: 'id'
-          },
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls1']
-          }
-        ],
-      },
+        optimizer: {
+          priority: ['role', 'type', 'data', 'placeholder'],
+          exclude: [
+            {
+              type: 'tag',
+              value: ['input']
+            },
+            {
+              type: 'attribute',
+              name: 'role',
+              value: ['role1']
+            },
+            {
+              type: 'attribute',
+              name: 'type',
+              value: ['type3']
+            },
+            {
+              type: 'attribute',
+              name: 'placeholder',
+              value: ['yyy']
+            },
+            {
+              type: 'attribute',
+              name: 'data',
+              value: ['label3']
+            },
+            {
+              type: 'attribute',
+              name: 'id'
+            },
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls1']
+            }
+          ],
+        },
+      }
     } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `

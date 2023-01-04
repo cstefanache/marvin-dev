@@ -2,7 +2,6 @@ import Discovery from '../discovery';
 import { Config } from '../models/config';
 import { PageDiscoveryResult } from '../models/models';
 
-
 describe('Test Discovery - Iterators', () => {
     it('Only by name identifier', async () => {
       const discovery = new Discovery({
@@ -21,7 +20,7 @@ describe('Test Discovery - Iterators', () => {
             {
                 name: "Select Company By Name",
                 selectors: ["form > div"],
-                identifiers: [
+                elements: [
                     {
                         name: "Company Name"
                     }
@@ -84,7 +83,8 @@ describe('Test Discovery - Iterators', () => {
         {
           text: 'Select Company By Name',
           locator: 'form > div',
-          identifiers: []
+          identifier: undefined,
+          elements: []
         }
       ])
     });
@@ -106,7 +106,7 @@ describe('Test Discovery - Iterators', () => {
             {
                 name: "Select Company By Name",
                 selectors: ["form > div"],
-                identifiers: [
+                elements: [
                     {
                         name: "Company Name", selector: ".card button"
                     }
@@ -178,7 +178,8 @@ describe('Test Discovery - Iterators', () => {
         {
           text: 'Select Company By Name',
           locator: 'form > div',
-          identifiers: []
+          identifier: undefined,
+          elements: []
         }
       ])
     })
