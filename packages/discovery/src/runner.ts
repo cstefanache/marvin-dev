@@ -60,7 +60,7 @@ export default class Runner {
 
                 if (rootElements && rootElements.length) {
                   for (const [index, rootElem] of rootElements.entries()) {
-                    const iteratorIdentifierElem = iteratorDef
+                    const iteratorIdentifierElem = iteratorDef.identifier
                       ? await rootElem.$(iteratorDef.identifier)
                       : rootElem;
 
