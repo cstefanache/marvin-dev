@@ -24,20 +24,15 @@
         "selectors": [
           ".grid-card"
         ],
-        "identifiers": [
-          {
-            "name": "Card Title",
-            "selector": ".MuiTypography-h5"
-          },
+        "identifier": ".MuiTypography-h5",
+        "elements": [
           {
             "name": "Open Button",
-            "selector": "a",
-            "divider": false
+            "selector": "a"
           },
           {
             "name": "Delete Button",
-            "selector": "button",
-            "divider": false
+            "selector": "button"
           }
         ]
       }

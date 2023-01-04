@@ -35,17 +35,16 @@
         "method": "Delete Card",
         "sequence": [
           {
-            "type": "locate",
-            "locator": "div.MuiTypography-root",
-            "uid": "fe42f42c-2e3a-427f-84ca-676949e30549"
-          },
-          {
             "type": "click",
             "locator": "button",
             "uid": "34f3351c-96fc-47d2-884a-b2458f1f183a"
           }
         ],
-        "itemRoot": "Card Iterator"
+        "iterator": {
+          "name": "Card Iterator",
+          "identifier": "div.MuiTypography-root",
+          "uid": "fe42f42c-2e3a-427f-84ca-676949e30549"
+        }
       }
     ],
     "http://localhost:4200/newitem": [
@@ -84,14 +83,15 @@
   "graph": [
     {
       "id": "a2a1db60-0944-4195-9bbe-028558ab091e",
-      "sequenceStep": "dsafdsf",
+      "sequenceStep": "Login as sadf",
       "parameters": {
         "9968ad96-ad4f-4c4c-8458-0130fe50848c": "sadf",
         "51533f8a-00ed-4f77-bf08-d97b36b4279e": "sdf"
       },
       "method": "Login",
       "url": "http://localhost:4200/",
-      "children": []
+      "children": [],
+      "exitUrl": "http://localhost:4200/"
     },
     {
       "id": "a011e499-cf83-47ad-807f-bd7efe351703",

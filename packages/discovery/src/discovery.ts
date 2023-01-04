@@ -28,7 +28,7 @@ const defaultAliases = {
     {
       name: 'List Iterator',
       selectors: ['ul', 'ol'],
-      identifiers: [
+      elements: [
         {
           name: 'List Item',
           selector: 'li',
@@ -341,31 +341,32 @@ export default class Discovery {
 
     if (this.aliases.iterators && this.aliases.iterators.length) {
       log('Capturing iterators ...');
-      for (const iteratorSelector of this.aliases.iterators) {
-        const elements = await rootElement.$$(
-          iteratorSelector.selectors.join(', ')
+      for (const iteratorItem of this.aliases.iterators) {
+        const iteratorRootSelectors = await rootElement.$$(
+          iteratorItem.selectors.join(', ')
         );
-
-        if (elements.length) {
-          element = elements[0];
-          const identifiers: IdentifiableElement[] = [];
-          if (iteratorSelector.identifiers) {
-            for (const identifierSelector of iteratorSelector.identifiers) {
-              if (!identifierSelector.selector) {
+        
+        if (iteratorRootSelectors.length) {
+          element = iteratorRootSelectors[0];
+          const elements: IdentifiableElement[] = [];
+          if (iteratorItem.elements) {
+            for (const iteratorElement of iteratorItem.elements) {
+              if (!iteratorElement.selector) {
                 continue
               }
-              const elements = await element.$$(identifierSelector.selector);
-              for (const [index, childElement] of elements.entries()) {
+              const iteratorElements = await element.$$(iteratorElement.selector);
+              for (const [index, childElement] of iteratorElements.entries()) {
                 const text = (await childElement.evaluate(
                   (el) => el.textContent
                 )) as string;
-                identifiers.push({
+
+                elements.push({
                   text,
                   locator: await getLocatorForElement(
                     {
-                      name: identifierSelector.name,
-                      skipOptimizer: identifierSelector.skipOptimizer || false,
-                      selectors: [identifierSelector.selector],
+                      name: iteratorElement.name,
+                      skipOptimizer: iteratorElement.skipOptimizer || false,
+                      selectors: [iteratorElement.selector],
                     },
                     index,
                     childElement,
@@ -376,9 +377,10 @@ export default class Discovery {
             }
 
             iterable.push({
-              text: iteratorSelector.name,
-              locator: iteratorSelector.selectors.join(', '),
-              identifiers,
+              text: iteratorItem.name,
+              locator: iteratorItem.selectors.join(', '),
+              identifier: iteratorItem.identifier,
+              elements,
             });
           }
         }
