@@ -1,4 +1,5 @@
 import { exitCode } from 'process';
+import { ElementHandle } from 'puppeteer';
 
 export interface Config {
   path: string;
@@ -44,7 +45,8 @@ export type Alias = {
   uid?: string;
   skipOptimizer?: boolean;
   selectors: string[];
-  identifiers?: { name: string; skipOptimizer?: boolean; uid?: string, selector: string }[];
+  identifier?: ElementHandle<Element>;
+  elements?: { name: string; skipOptimizer?: boolean; uid?: string, selector: string }[];
 };
 
 export type Action = {

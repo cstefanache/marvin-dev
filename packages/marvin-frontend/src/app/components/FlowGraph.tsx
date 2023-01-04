@@ -56,7 +56,7 @@ function wrap(text: any, width: number) {
 }
 
 const getTitleFromNode = (node: any) => {
-  return node.data.sequence_step;
+  return node.data.sequenceStep;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -84,7 +84,7 @@ export function FlowComponent() {
         type: 'object',
         title: method.method,
         properties: {
-          sequence_step: {
+          sequenceStep: {
             type: 'string',
             title: 'Sequence Step',
           },
@@ -119,9 +119,9 @@ export function FlowComponent() {
   const run = (d: any) => {
     const buildSequence = (item: any, to: string[]) => {
       const { data, parent } = item;
-      const { sequence_step } = data;
+      const { sequenceStep } = data;
       if (parent) {
-        to.push(sequence_step);
+        to.push(sequenceStep);
         buildSequence(parent, to);
       }
     };
@@ -181,7 +181,7 @@ export function FlowComponent() {
     });
 
     const hier = {
-      sequence_step: 'root',
+      sequenceStep: 'root',
       url: config ? config.rootUrl : '/',
       children: graph,
     };

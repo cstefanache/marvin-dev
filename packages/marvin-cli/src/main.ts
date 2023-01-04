@@ -15,32 +15,54 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
           alias: '/:id',
         },
       ],
+      info: [
+        {
+          name: 'Headers',
+          selectors: ['.card-title', '.title'],
+        },
+      ],
       optimizer: {
         priority: ['name', 'placeholder', 'role', 'type', 'href'],
         exclude: [
           {
             type: 'attribute',
             name: 'id',
+            regex: [':[a-z0-9]+:'],
+          },
+          {
+            type: 'attribute',
+            name: 'id',
+            regex: ['mui-[0-9]+'],
           },
         ],
       },
-      info: [],
       iterators: [
         {
           name: 'Card Iterator',
           selectors: ['.grid-card'],
-          identifiers: [
+          identifier: '.MuiTypography-h5',
+          elements: [
             {
-              name: 'Card Title',
-              selector: '.MuiTypography-h5',
+              name: 'Open Button',
+              selector: 'a',
             },
-            { name: 'Open Button', selector: 'a' },
-            { name: 'Delete Button', selector: 'button' },
+            {
+              name: 'Delete Button',
+              selector: 'button',
+            },
           ],
         },
       ],
     },
-    sequence: [],
+    sequence: [
+      'Login as user',
+      'Create new list',
+      'Add "a" item',
+      'Add "b" item',
+      'Add "c" item',
+      'Save List',
+      'Delete Newly Created List',
+    ],
   } as any;
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);

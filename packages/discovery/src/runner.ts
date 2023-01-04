@@ -1,7 +1,7 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
 import { Aliases, Config, Sequence } from './models/config';
-import { ActionItem, Actions } from './models/models';
+import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
@@ -25,7 +25,7 @@ export default class Runner {
       url = processUrl(url, this.config.aliases.urlReplacers);
       log(`Current path: ${url}`, 'yellow');
       let action = currentStep.find(
-        (item: ActionItem) => item.sequence_step === step
+        (item: ActionItem) => item.sequenceStep === step
       );
       if (action) {
         const { method: methodName, parameters } = action;
@@ -43,45 +43,37 @@ export default class Runner {
         }
 
         if (method) {
-          let prefix = '';
-
-          if (method.itemRoot && this.config.aliases.iterators) {
-            const { itemRoot } = method;
+          let prefix = ''
+          if (method.iterator && this.config.aliases.iterators) {
+            const iteratorName = method.iterator.name;
             log(
               `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
             );
             const iteratorConfig = this.config.aliases.iterators.find(
-              (configIterator) => configIterator.name === itemRoot
+              (configIterator) => configIterator.name === iteratorName
             );
 
-            if (iteratorConfig && iteratorConfig.identifiers) {
-              for (const selector of iteratorConfig.selectors) {
-                const elements = await page.$$(selector);
-                console.log('----------');
-                console.log(method);
-                console.log('>>>>>>>>>');
-                console.log(action);
+            if (iteratorConfig && iteratorConfig.elements) {
+              for (const rootSelector of iteratorConfig.selectors) {
+                const rootElements = await page.$$(rootSelector);
+                const iteratorDef : IdentifiableIterator = method.iterator
 
-                const locatorDef = method.sequence.find(
-                  (item: Sequence) => item.type === 'locate'
-                );
+                if (rootElements && rootElements.length) {
+                  for (const [index, rootElem] of rootElements.entries()) {
+                    const iteratorIdentifierElem = iteratorDef.identifier
+                      ? await rootElem.$(iteratorDef.identifier)
+                      : rootElem;
 
-                if (elements && elements.length) {
-                  for (const [index, element] of elements.entries()) {
-                    const valueElement = locatorDef
-                      ? await element.$(locatorDef.locator)
-                      : element;
-
-                    const uid = locatorDef ? locatorDef.uid : 'root';
-                    if (valueElement) {
-                      const text = (await valueElement.evaluate(
+                    const uid = iteratorDef ? iteratorDef.uid : 'root';
+                    if (iteratorIdentifierElem) {
+                      const text = (await iteratorIdentifierElem.evaluate(
                         (el) => el.textContent
                       )) as string;
                       console.log(
                         `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
                       if (text === parameters[uid]) {
-                        prefix = `${selector}:nth-of-type(${index + 1})`;
+                        prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                         break;
                       }
                     }                
@@ -92,12 +84,12 @@ export default class Runner {
                 }
               }
             } else {
-              throw new Error(`Missing iterator config for ${itemRoot}`);
+              throw new Error(`Missing iterator config for ${iteratorName}`);
             }
 
             if (prefix === '') {
               throw new Error(
-                `No root element found for ${itemRoot} for parameters ${JSON.stringify(
+                `No root element found for ${iteratorName} for parameters ${JSON.stringify(
                   parameters
                 )}`
               );

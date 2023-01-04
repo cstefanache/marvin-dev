@@ -7,15 +7,15 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'name',
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'name',
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -65,18 +65,18 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'name',
-          },
-          {
-            type: 'attribute',
-            name: 'placeholder',
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'name',
+            },
+            {
+              type: 'attribute',
+              name: 'placeholder',
+            },
+          ],
+        },
       },
     } as Config);
     await page.evaluate(() => {
@@ -127,14 +127,14 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            value: ['false', 'xxx'],
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              value: ['false', 'xxx'],
+            },
+          ],
+        },
       },
     } as Config);
     await page.evaluate(() => {
@@ -192,15 +192,15 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            value: ['false', 'true'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              value: ['false', 'true'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -257,15 +257,15 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -322,15 +322,15 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            regex: ['mui-[0-9]{1,}', 'DepName'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              regex: ['mui-[0-9]{1,}', 'DepName'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -387,16 +387,16 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['DepName'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['DepName'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -453,16 +453,16 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['DepName', 'Identifier'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['DepName', 'Identifier'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -512,15 +512,15 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'placeholder',
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'placeholder',
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        }
       },
     } as Config);
     await page.evaluate(() => {
@@ -580,16 +580,16 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'placeholder',
-            regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'placeholder',
+              regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
+            },
+          ],
+        }
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -639,16 +639,16 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            value: ['mui-456'],
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              value: ['mui-456'],
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -698,16 +698,16 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            value: ['true', 'false'],
-            regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              value: ['true', 'false'],
+              regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
+            },
+          ],
+        }
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -757,17 +757,17 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'data-shrink',
-            value: ['true'],
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'data-shrink',
+              value: ['true'],
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -824,22 +824,22 @@ describe('Test Discovery - attribute exclusion rule', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'data-shrink',
-            value: ['true'],
-            regex: ['mui-[0-9]{1,}'],
-          },
-          {
-            type: 'attribute',
-            name: 'placeholder',
-            value: ['tab-456'],
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'data-shrink',
+              value: ['true'],
+              regex: ['mui-[0-9]{1,}'],
+            },
+            {
+              type: 'attribute',
+              name: 'placeholder',
+              value: ['tab-456'],
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
       },
     } as Config);
     await page.evaluate(() => {

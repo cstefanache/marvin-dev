@@ -5,18 +5,20 @@ import { PageDiscoveryResult } from '../models/models';
 describe('Test discovery - mixed exclusion rules', () => {
   it('exclusion - id and tag property', async () => {
     const discovery = new Discovery({
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['input'],
-          },
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-        ],
-      },
+      aliases: {
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['input'],
+            },
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -39,19 +41,19 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -100,20 +102,20 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['DepName'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['DepName'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -169,25 +171,25 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['DepName'],
-          },
-          {
-            type: 'attribute',
-            name: 'placeholder',
-            regex: ['mui-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['DepName'],
+            },
+            {
+              type: 'attribute',
+              name: 'placeholder',
+              regex: ['mui-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -240,20 +242,20 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls11'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls11'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -306,19 +308,19 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend'],
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend'],
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -364,20 +366,20 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend'],
-          },
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls11'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend'],
+            },
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls11'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -423,24 +425,24 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend'],
-          },
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ['depName'],
-          },
-          {
-            type: 'attribute',
-            name: 'class',
-            value: ['cls11'],
-          },
-        ],
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend'],
+            },
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ['depName'],
+            },
+            {
+              type: 'attribute',
+              name: 'class',
+              value: ['cls11'],
+            },
+          ],
+        },
       },
     } as Config);
     await page.evaluate(() => {
@@ -487,25 +489,25 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend'],
-          },
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ['depName'],
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['Legend'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend'],
+            },
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ['depName'],
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['Legend'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -554,25 +556,25 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['zzz'],
-          },
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ['yyy'],
-          },
-          {
-            type: 'attribute',
-            name: 'name',
-            value: ['zzz'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['zzz'],
+            },
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ['yyy'],
+            },
+            {
+              type: 'attribute',
+              name: 'name',
+              value: ['zzz'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `

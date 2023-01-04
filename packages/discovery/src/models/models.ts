@@ -6,7 +6,8 @@ export type IdentifiableElement = {
     details?: string | null;
     type?: string | null;
     el?: ElementHandle<Element>;
-    identifiers?: IdentifiableElement[];
+    identifier?: ElementHandle<Element>;
+    elements?: IdentifiableElement[];
 };
 
 export type DiscoveryResult = IdentifiableElement & {
@@ -35,7 +36,7 @@ export type ActionItem = {
     url: string;
     id: string;
     method: string;
-    sequence_step: string;
+    sequenceStep: string;
     parameters: {[key: string]: string};
     children: ActionItem[];
     exitUrl?: string;
@@ -47,9 +48,15 @@ export type Sequence = {
     locator: string;
 };
 
+export type IdentifiableIterator = {
+   name: string;
+   identifier: string;
+   uid: string
+}
+
 export type Actions = {
     method: string;
-    itemRoot: string;
+    iterator?: IdentifiableIterator;
     sequence: Sequence[];
 };
 

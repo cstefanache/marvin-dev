@@ -205,20 +205,27 @@
             "minLength": 1
           }
         },
-        "identifiers": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "uiType": "item",
+          "size": { "xs": 12},
+          "description": "CSS Selector"
+        },
+        "elements": {
           "type": "array",
           "uiType": "container",
           "size": { "xs": 12 },
-          "title": "Identifiers",
-          "description": "Identifiers",
+          "title": "Elements",
+          "description": "Elements",
           "items": { "$ref": "#/definitions/Identifier" }
         }
       }
     },
     "Identifier": {
       "type": "object",
-      "title": "Identifier",
-      "description": "Identifier",
+      "title": "Element",
+      "description": "Element",
       "required": ["name", "selector"],
       "uiType": "container",
       "properties": {

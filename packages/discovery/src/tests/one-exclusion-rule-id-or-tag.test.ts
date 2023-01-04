@@ -4,7 +4,7 @@ import { PageDiscoveryResult } from '../models/models';
 
 describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
   it('simple discovery test', async () => {
-    const discovery = new Discovery({} as Config);
+    const discovery = new Discovery({aliases: {}} as any);
     await page.evaluate(() => {
       document.body.innerHTML = `
                 <body>
@@ -27,14 +27,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
 
   it('exclusion - only tag - by value - only one value matches', async () => {
     const discovery = new Discovery({
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['input'],
-          },
-        ],
-      },
+      aliases: {
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['input'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -57,15 +59,15 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -99,14 +101,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
 
   it('exclusion - only id property - any value', async () => {
     const discovery = new Discovery({
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-          },
-        ],
-      },
+      aliases: {
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -129,16 +133,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ['mui-200'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ['mui-200'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -174,16 +178,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            value: ['mui-200', 'mui-60-label', 'add-button', 'xxxx'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              value: ['mui-200', 'mui-60-label', 'add-button', 'xxxx'],
+            },
+          ],
+        },
+      }
     } as Config);
 
     await page.evaluate(() => {
@@ -231,16 +235,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}'],
+            },
+          ],
+        },
+      }
     } as Config);
 
     await page.evaluate(() => {
@@ -298,21 +302,21 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: [
-              'mui-[0-9]{1,}',
-              'tab-[0-9]{1,}',
-              'add-button',
-              'xxx-[0-9]{1,}',
-            ],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              regex: [
+                'mui-[0-9]{1,}',
+                'tab-[0-9]{1,}',
+                'add-button',
+                'xxx-[0-9]{1,}',
+              ],
+            },
+          ],
+        },
+      }
     } as Config);
 
     await page.evaluate(() => {
@@ -363,17 +367,17 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: ['mui-[0-9]{1,}', 'xxx-[0-9]{1,}'],
-            value: ['tab-59-label', 'yyyy'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              regex: ['mui-[0-9]{1,}', 'xxx-[0-9]{1,}'],
+              value: ['tab-59-label', 'yyyy'],
+            },
+          ],
+        },
+      }
     } as Config);
 
     await page.evaluate(() => {
@@ -424,17 +428,17 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}', 'xxx-[0-9]{1,}'],
-            value: ['tab-add-button', 'tab-cancel-button', 'yyyy'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'attribute',
+              name: 'id',
+              regex: ['mui-[0-9]{1,}', 'tab-[0-9]{1,}', 'xxx-[0-9]{1,}'],
+              value: ['tab-add-button', 'tab-cancel-button', 'yyyy'],
+            },
+          ],
+        }
+      }
     } as Config);
 
     await page.evaluate(() => {
@@ -485,15 +489,15 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -528,16 +532,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
   it('exclusion - tag - multiple direct parents excluded - one child', async () => {
     const discovery = new Discovery({
       aliases: {
-        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -573,16 +577,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
   it('exclusion - tag - multiple direct parents excluded - multiple children under the same excluded parent', async () => {
     const discovery = new Discovery({
       aliases: {
-        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -623,16 +627,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
   it('exclusion - tag - multiple direct parents excluded - multiple children under different excluded parents', async () => {
     const discovery = new Discovery({
       aliases: {
-        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
@@ -677,16 +681,16 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
   it('exclusion - tag - multiple direct parents excluded - one child - multiple levels ', async () => {
     const discovery = new Discovery({
       aliases: {
-        info: [{ name: 'Legend', selectors: ['span', 'label'] }]
-      },
-      optimizer: {
-        exclude: [
-          {
-            type: 'tag',
-            value: ['legend', 'label', 'aside'],
-          },
-        ],
-      },
+        info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        optimizer: {
+          exclude: [
+            {
+              type: 'tag',
+              value: ['legend', 'label', 'aside'],
+            },
+          ],
+        },
+      }
     } as Config);
     await page.evaluate(() => {
       document.body.innerHTML = `
