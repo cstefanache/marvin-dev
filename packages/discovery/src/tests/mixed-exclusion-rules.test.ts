@@ -83,7 +83,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     );
     expect(resultInput).toEqual([
       'input[placeholder="DepName Placeholder"]',
-      'body > input',
+      'body > input:nth-of-type(2)',
     ]);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
@@ -206,7 +206,7 @@ describe('Test discovery - mixed exclusion rules', () => {
                <span>Identifier</span>
             </legend>
             </fieldset>
-            <input class="cls11" role="mui-7888" name="Identif" data-shrink="false" id="Identif">Identifier</label>
+            <input class="cls11" name="Identif" role="mui-7888" data-shrink="false" id="Identif">Identifier</label>
             <div class="g-1t62lt9">
                <button class="button-clst g-1lig5nk" type="submit" tabindex="-1" id="add-button" disabled="">Add</button>
                <button class="button-clst g-dbdtjz" type="button" tabindex="0" id="cancel-button">Cancel</button>
@@ -220,7 +220,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input[role="mui-7888"]']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input[name=\"Identif\"]']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
@@ -286,7 +286,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input[role="mui-7888"]']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input[role="mui-7888"]']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
@@ -407,7 +407,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input#Identif']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input#Identif']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
@@ -475,7 +475,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
-    expect(resultInfo).toEqual(['body > div > span', '[name="Legend"] > span']);
+    expect(resultInfo).toEqual(['body > div:nth-of-type(1) > span', '[name="Legend"] > span']);
     const resultActions = discoveryResults.items?.actions.map(
       (item: any) => item.locator
     );
