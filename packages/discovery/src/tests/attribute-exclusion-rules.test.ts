@@ -46,7 +46,7 @@ describe('Test Discovery - attribute exclusion rule', () => {
     );
     expect(resultInput).toEqual([
       'input[placeholder="DepName Placeholder"]',
-      'body > input',
+      'body > input:nth-of-type(2)',
     ]);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator

@@ -126,6 +126,10 @@ export default class Discovery {
     }, []);
   }
 
+  getNthOfTypeLocator(locator: string, index: Number) {
+    return `${locator}:nth-of-type(${index})`
+  }
+
   async isLocatorUnique(
     locator: string,
     parent: Page | ElementHandle,
@@ -265,14 +269,39 @@ export default class Discovery {
           undefined,
           locator
         );
-
         if (parentLocator.trim() !== '') {
+          const isUnique = await this.isLocatorUnique(
+            `${parentLocator.trim()} ${locator}`,
+            rootEl
+          );
+          if (!isUnique) {
+            let newLocator = `${parentLocator.trim()} ${locator}`;
+            const cleanLocator = newLocator.trim().endsWith('>')
+              ? newLocator
+                  .trim()
+                  .substr(0, newLocator.trim().length - 1)
+                  .trim()
+              : newLocator.trim();
+            const parents = await rootEl.$$(cleanLocator);
+            let index = 1;
+            for (const parent of parents) {
+              const isParent = await page.evaluate(
+                (e1, e2) => e1 === e2,
+                parent,
+                element
+              );
+              if (isParent) {
+                locator = this.getNthOfTypeLocator(locator, index);
+                break;
+              }
+              index++;
+            }
+          }
           return parentLocator.trim() + ' ' + getDescententLocator(locator);
         }
       }
     }
-
-    return getDescententLocator(locator);
+   return getDescententLocator(locator);
   }
 
   async discoverGroup(

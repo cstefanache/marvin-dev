@@ -48,7 +48,7 @@ describe('Test Discovery - class exclusion rule', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input.cls12']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input.cls12']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
@@ -111,7 +111,7 @@ describe('Test Discovery - class exclusion rule', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input.cls11']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input.cls11']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );
@@ -169,7 +169,7 @@ describe('Test Discovery - class exclusion rule', () => {
     const resultInput = discoveryResults.items?.input.map(
       (item: any) => item.locator
     );
-    expect(resultInput).toEqual(['body > input', 'input.cls12']);
+    expect(resultInput).toEqual(['body > input:nth-of-type(1)', 'input.cls12']);
     const resultInfo = discoveryResults.items?.info.map(
       (item: any) => item.locator
     );

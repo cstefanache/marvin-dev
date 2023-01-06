@@ -126,7 +126,7 @@ describe('Test Discovery - One Exclusion rule - ID or Tag', () => {
     const result = discoveryResults.items?.input?.map(
       (item: any) => item.locator
     );
-    expect(result).toEqual(['body > input', 'input[name="input2"]']);
+    expect(result).toEqual(['body > input:nth-of-type(1)', 'input[name="input2"]']);
   });
 
   it('exclusion - only id property - single value matches', async () => {
