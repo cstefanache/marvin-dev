@@ -1,4 +1,3 @@
-import { exitCode } from 'process';
 import { ElementHandle } from 'puppeteer';
 
 export interface Config {

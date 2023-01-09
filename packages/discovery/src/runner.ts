@@ -18,7 +18,7 @@ export default class Runner {
     sequence: String[],
     sequenceCallback?: Function
   ) {
-    const { graph, actions } = this.flow.flow;
+    const { graph, actions, store } = this.flow.flow;
     let currentStep = graph;
     for (const step of sequence) {
       let url = page.url();
@@ -104,8 +104,13 @@ export default class Runner {
               log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
               // await element.type(parameters[locator]);
               // await page.$eval(locator, (e: any) => e.blur());
-              await page.focus(locator);
-              await page.keyboard.type(parameters[uid]);
+              if (store && store[uid]) {
+                await page.focus(locator);
+                await page.keyboard.type(store[uid]);
+              } else {
+                await page.focus(locator);
+                await page.keyboard.type(parameters[uid]);
+              }
             } else {
               const element = await page.$(locator);
               if (element) {

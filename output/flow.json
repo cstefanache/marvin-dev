@@ -97,8 +97,8 @@
       "id": "a011e499-cf83-47ad-807f-bd7efe351703",
       "sequenceStep": "Login as user",
       "parameters": {
-        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
-        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "usernamePlaceholder",
+        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "passwordPlaceholder"
       },
       "method": "Login",
       "url": "http://localhost:4200/",
@@ -219,5 +219,9 @@
       ],
       "exitUrl": "http://localhost:4200/"
     }
-  ]
+  ],
+  "store": {
+    "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
+    "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+  }
 }
