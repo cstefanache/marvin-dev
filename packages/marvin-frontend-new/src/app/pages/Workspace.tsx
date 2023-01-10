@@ -6,7 +6,7 @@ import Config from './Config';
 import TabPanel from '../components/TabPanel';
 import Operations from './Operations';
 import FlowComponent from '../components/FlowGraph';
-import Workspaces from './Workspaces';
+import Workspaces from './Workspaces/Workspaces';
 
 export default function Workspace({ workspace }: { workspace?: string }) {
   const [value, setValue] = React.useState(0);
@@ -20,29 +20,30 @@ export default function Workspace({ workspace }: { workspace?: string }) {
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="basic tabs example"
-      >
-        <Tab label="Workspace" />
-        <Tab label="Config" />
-        <Tab label="Operations" />
-        <Tab label="Flow" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <Workspaces selectWorkspace={selectWorkspace} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Config />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Operations />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <FlowComponent />
-      </TabPanel>
-    </Box>
+    <div>Workspace</div>
   );
+    // <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    //   <Tabs
+    //     value={value}
+    //     onChange={handleChange}
+    //     aria-label="basic tabs example"
+    //   >
+    //     <Tab label="Workspace" />
+    //     <Tab label="Config" />
+    //     <Tab label="Operations" />
+    //     <Tab label="Flow" />
+    //   </Tabs>
+    //   <TabPanel value={value} index={0}>
+    //     <Workspaces selectWorkspace={selectWorkspace} />
+    //   </TabPanel>
+    //   <TabPanel value={value} index={1}>
+    //     <Config />
+    //   </TabPanel>
+    //   <TabPanel value={value} index={2}>
+    //     <Operations />
+    //   </TabPanel>
+    //   <TabPanel value={value} index={3}>
+    //     <FlowComponent />
+    //   </TabPanel>
+    // </Box>
 }

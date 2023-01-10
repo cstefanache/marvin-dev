@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Alignment,
   AnchorButton,
@@ -11,19 +11,19 @@ import "./HeaderStyles.scss";
 
 const Header = () => {
   return (
-    <Navbar className="bp4-dark" fixedToTop>
+    <Navbar className="bp4-dark nav-container" fixedToTop>
       <NavbarGroup align={Alignment.LEFT}>
         <NavbarHeading>Marvin</NavbarHeading>
-        <Link to="/workspaces" className="menu-link">
+        <NavLink to="/workspaces" className="menu-link">
           <AnchorButton className="bp4-button bp4-minimal button" icon="box" text="Workspaces" />
-        </Link>
+        </NavLink>
         <NavbarDivider />
-        <Link to="/configuration">
-         <AnchorButton className="bp4-button bp4-minimal" icon="wrench" text="Config" />
-        </Link>
-        <Link to="/">
-          <AnchorButton className="bp4-button bp4-minimal" icon="layout-hierarchy" text="Execution Workflow" />
-        </Link>
+        <NavLink to="/configuration" className="menu-link">
+         <AnchorButton className="bp4-button bp4-minimal button" icon="wrench" text="Config" />
+        </NavLink>
+        <NavLink to="/" className="menu-link">
+          <AnchorButton className="bp4-button bp4-minimal button" icon="layout-hierarchy" text="Execution Workflow" />
+        </NavLink>
     </NavbarGroup>
     </Navbar>
   );

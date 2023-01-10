@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import Header from './components/Header/Header';
-import Workspaces from './pages/Workspaces';
+import Workspaces from './pages/Workspaces/Workspaces';
 import Workspace from './pages/Workspace';
 import Config from './pages/Config';
 
@@ -28,7 +28,7 @@ export function App() {
     const asyncFn = async () => {
       const workspace = await window.electron.getWorkspace();
       if (!workspace) {
-        navigate('/select-project');
+        navigate('/workspaces');
       }
       setLoading(false);
       setWorkspace(workspace);
@@ -36,7 +36,7 @@ export function App() {
     asyncFn();
   }, [navigate]);
 
-  const selectWorkspace = (workspace: any) => {
+  const selectWorkspace = () => {
     console.log(workspace);
   };
 

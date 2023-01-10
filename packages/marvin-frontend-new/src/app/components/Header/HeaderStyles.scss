@@ -1,7 +1,28 @@
-.menu-link {
-  text-decoration: none;
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.nav-container {
+  box-shadow: 0px 2px 6px 0px #10161A66;
 }
 
-.button:active {
-    background: none;
+.menu-link {
+  text-decoration: none;
+
+  &.active {
+    text-decoration: underline;
+
+    &:focus {
+      outline: none;
+  
+    }
   }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.button {
+  &:focus {
+    outline: none;
+  }
+}

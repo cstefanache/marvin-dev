@@ -1,0 +1,63 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.container {
+  width: 100%;
+  height: calc(100vh - 50px);
+  padding-top: 48px;
+  padding-left: 36px;
+  background-color: $dark-gray2;
+
+  .input {
+    input[type="file"] {
+      border: none;
+    }
+    span {
+      box-shadow: none;
+      border-bottom: 1px solid #fff;
+      background-color: transparent;
+      color: #fff;
+      border-radius: 0;
+      padding-right: 100px;
+
+      &::after {
+        content: "Open folder";
+        background-color: transparent;
+        box-shadow: none;
+        color: #2B95D6;
+        min-width: 50px;
+        width: unset;
+      }
+
+      &:active {
+        &::after {
+          background-color: transparent;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    list-style-type: none;
+
+    li {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+
+      .item-text {
+        margin-left: 12px;
+        
+        p {
+          margin-bottom: 2px;
+        }
+        span {
+          color: #a6a6a6;
+        }
+      }
+    }
+  }
+}
