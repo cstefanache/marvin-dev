@@ -6,6 +6,12 @@ import { State } from './state';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
 
+const library = {
+  func: {
+    random: () => Math.random()
+  }
+}
+
 export default class Runner {
   constructor(
     private readonly config: Config,
@@ -72,7 +78,7 @@ export default class Runner {
                       console.log(
                         `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
-                      if (text === parameters[uid]) {
+                      if ((store && store[uid]) || text === parameters[uid]) {
                         prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                         break;
                       }
@@ -104,12 +110,11 @@ export default class Runner {
               log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
               // await element.type(parameters[locator]);
               // await page.$eval(locator, (e: any) => e.blur());
+              await page.focus(locator);
               if (store && store[uid]) {
-                await page.focus(locator);
-                await page.keyboard.type(store[uid]);
+                store[uid].includes("$") ? await page.keyboard.type(eval(store[uid])) : await page.keyboard.type(store[uid])
               } else {
-                await page.focus(locator);
-                await page.keyboard.type(parameters[uid]);
+                parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
               }
             } else {
               const element = await page.$(locator);
