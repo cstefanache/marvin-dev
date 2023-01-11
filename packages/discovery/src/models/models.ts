@@ -63,4 +63,5 @@ export type Actions = {
 export type FlowModel = {
     graph: ActionItem[];
     actions: {[key: string]: Actions[]};
+    store?: {[uid: string]: string}
 };

@@ -6,6 +6,12 @@ import { State } from './state';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
 
+const library = {
+  func: {
+    random: () => Math.random()
+  }
+}
+
 export default class Runner {
   constructor(
     private readonly config: Config,
@@ -18,7 +24,7 @@ export default class Runner {
     sequence: String[],
     sequenceCallback?: Function
   ) {
-    const { graph, actions } = this.flow.flow;
+    const { graph, actions, store } = this.flow.flow;
     let currentStep = graph;
     for (const step of sequence) {
       let url = page.url();
@@ -72,7 +78,7 @@ export default class Runner {
                       console.log(
                         `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
-                      if (text === parameters[uid]) {
+                      if ((store && store[uid]) || text === parameters[uid]) {
                         prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                         break;
                       }
@@ -105,7 +111,11 @@ export default class Runner {
               // await element.type(parameters[locator]);
               // await page.$eval(locator, (e: any) => e.blur());
               await page.focus(locator);
-              await page.keyboard.type(parameters[uid]);
+              if (store && store[uid]) {
+                store[uid].includes("$") ? await page.keyboard.type(eval(store[uid])) : await page.keyboard.type(store[uid])
+              } else {
+                parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
+              }
             } else {
               const element = await page.$(locator);
               if (element) {

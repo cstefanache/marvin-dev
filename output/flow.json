@@ -97,8 +97,8 @@
       "id": "a011e499-cf83-47ad-807f-bd7efe351703",
       "sequenceStep": "Login as user",
       "parameters": {
-        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
-        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "usernamePlaceholder",
+        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "passwordPlaceholder"
       },
       "method": "Login",
       "url": "http://localhost:4200/",
@@ -113,7 +113,7 @@
               "id": "13adc549-b198-4a97-a51c-cb183964ad0a",
               "sequenceStep": "Add \"a\" item",
               "parameters": {
-                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a"
+                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "`a-${library.func.random()}`"
               },
               "method": "Add new item",
               "url": "http://localhost:4200/newitem",
@@ -219,5 +219,11 @@
       ],
       "exitUrl": "http://localhost:4200/"
     }
-  ]
+  ],
+  "store": {
+    "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
+    "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123",
+    "d9708474-bb4d-49af-8c10-024b2254800c": "`New List-${library.func.random()}`",
+    "fe42f42c-2e3a-427f-84ca-676949e30549": "`${store['d9708474-bb4d-49af-8c10-024b2254800c']}`"
+  }
 }
