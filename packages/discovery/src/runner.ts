@@ -33,126 +33,132 @@ export default class Runner {
       let action = currentStep.find(
         (item: ActionItem) => item.sequenceStep === step
       );
+
+      let index = 1
+
       if (action) {
-        const { method: methodName, parameters } = action;
-        const urlActions = actions[url];
-        let method: any;
-        console.log('------------------');
-        if (urlActions) {
-          method = urlActions.find(
-            (item: Actions) => item.method === methodName
-          );
-        } else {
-          throw new Error(
-            `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
-          );
-        }
-
-        if (method) {
-          let prefix = ''
-          if (method.iterator && this.config.aliases.iterators) {
-            const iteratorName = method.iterator.name;
-            log(
-              `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
+        do {
+          const { method: methodName, parameters } = action;
+          const urlActions = actions[url];
+          let method: any;
+          console.log('------------------');
+          if (urlActions) {
+            method = urlActions.find(
+              (item: Actions) => item.method === methodName
             );
-            const iteratorConfig = this.config.aliases.iterators.find(
-              (configIterator) => configIterator.name === iteratorName
+          } else {
+            throw new Error(
+              `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
             );
-
-            if (iteratorConfig && iteratorConfig.elements) {
-              for (const rootSelector of iteratorConfig.selectors) {
-                const rootElements = await page.$$(rootSelector);
-                const iteratorDef : IdentifiableIterator = method.iterator
-
-                if (rootElements && rootElements.length) {
-                  for (const [index, rootElem] of rootElements.entries()) {
-                    const iteratorIdentifierElem = iteratorDef.identifier
-                      ? await rootElem.$(iteratorDef.identifier)
-                      : rootElem;
-
-                    const uid = iteratorDef ? iteratorDef.uid : 'root';
-                    if (iteratorIdentifierElem) {
-                      const text = (await iteratorIdentifierElem.evaluate(
-                        (el) => el.textContent
-                      )) as string;
-                      console.log(
-                        `[${index}] ${uid}: ${text} - ${parameters[uid]}`
-                      );
-                      if ((store && store[uid]) || text === parameters[uid]) {
-                        prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                        break;
-                      }
-                    }                
+          }
+  
+          if (method) {
+            let prefix = ''
+            if (method.iterator && this.config.aliases.iterators) {
+              const iteratorName = method.iterator.name;
+              log(
+                `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
+              );
+              const iteratorConfig = this.config.aliases.iterators.find(
+                (configIterator) => configIterator.name === iteratorName
+              );
+  
+              if (iteratorConfig && iteratorConfig.elements) {
+                for (const rootSelector of iteratorConfig.selectors) {
+                  const rootElements = await page.$$(rootSelector);
+                  const iteratorDef : IdentifiableIterator = method.iterator
+  
+                  if (rootElements && rootElements.length) {
+                    for (const [index, rootElem] of rootElements.entries()) {
+                      const iteratorIdentifierElem = iteratorDef.identifier
+                        ? await rootElem.$(iteratorDef.identifier)
+                        : rootElem;
+  
+                      const uid = iteratorDef ? iteratorDef.uid : 'root';
+                      if (iteratorIdentifierElem) {
+                        const text = (await iteratorIdentifierElem.evaluate(
+                          (el) => el.textContent
+                        )) as string;
+                        console.log(
+                          `[${index}] ${uid}: ${text} - ${parameters[uid]}`
+                        );
+                        if ((store && store[uid]) || text === parameters[uid]) {
+                          prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                          break;
+                        }
+                      }                
+                    }
+                  }
+                  if (prefix) {
+                    break;
                   }
                 }
-                if (prefix) {
-                  break;
+              } else {
+                throw new Error(`Missing iterator config for ${iteratorName}`);
+              }
+  
+              if (prefix === '') {
+                throw new Error(
+                  `No root element found for ${iteratorName} for parameters ${JSON.stringify(
+                    parameters
+                  )}`
+                );
+              }
+            }
+            for (const sequenceItem of method.sequence) {
+              let { type, uid, locator } = sequenceItem;
+              locator = `${prefix !== '' ? prefix : ''}${
+                prefix !== '' && locator ? ' ' : ''
+              }${locator || ''}`;
+              if (type === 'fill' && uid && parameters[uid]) {
+                log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
+                // await element.type(parameters[locator]);
+                // await page.$eval(locator, (e: any) => e.blur());
+                await page.focus(locator);
+                if (store && store[uid]) {
+                  store[uid].includes("$") ? await page.keyboard.type(eval(store[uid])) : await page.keyboard.type(store[uid])
+                } else {
+                  parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
+                }
+              } else {
+                const element = await page.$(locator);
+                if (element) {
+                  var attributes = await page.evaluate(
+                    (element) =>
+                      Array.from(element.attributes, ({ name, value }) => [
+                        name,
+                        value,
+                      ]),
+                    element
+                  );
+                  const text = await element.evaluate((el) =>
+                    el.textContent?.trim()
+                  );
+                  log(`Clicking on ${text}`, 'yellow');
+                  await element.click();
+                  log(`Clicked on ${text}`, 'yellow');
                 }
               }
-            } else {
-              throw new Error(`Missing iterator config for ${iteratorName}`);
             }
-
-            if (prefix === '') {
-              throw new Error(
-                `No root element found for ${iteratorName} for parameters ${JSON.stringify(
-                  parameters
-                )}`
-              );
-            }
-          }
-          for (const sequenceItem of method.sequence) {
-            let { type, uid, locator } = sequenceItem;
-            locator = `${prefix !== '' ? prefix : ''}${
-              prefix !== '' && locator ? ' ' : ''
-            }${locator || ''}`;
-            if (type === 'fill' && uid && parameters[uid]) {
-              log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
-              // await element.type(parameters[locator]);
-              // await page.$eval(locator, (e: any) => e.blur());
-              await page.focus(locator);
-              if (store && store[uid]) {
-                store[uid].includes("$") ? await page.keyboard.type(eval(store[uid])) : await page.keyboard.type(store[uid])
-              } else {
-                parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
-              }
-            } else {
-              const element = await page.$(locator);
-              if (element) {
-                var attributes = await page.evaluate(
-                  (element) =>
-                    Array.from(element.attributes, ({ name, value }) => [
-                      name,
-                      value,
-                    ]),
-                  element
-                );
-                const text = await element.evaluate((el) =>
-                  el.textContent?.trim()
-                );
-                log(`Clicking on ${text}`, 'yellow');
-                await element.click();
-                log(`Clicked on ${text}`, 'yellow');
+            try {
+              await page.waitForNetworkIdle({
+                timeout: this.config.defaultTimeout,
+              });
+            } catch (e) {
+              log('Network idle timeout. Runner will continue.', 'red');
+              if (this.state) {
+                this.state.reportOnPendingRequests();
               }
             }
-          }
-          try {
-            await page.waitForNetworkIdle({
-              timeout: this.config.defaultTimeout,
-            });
-          } catch (e) {
-            log('Network idle timeout. Runner will continue.', 'red');
-            if (this.state) {
-              this.state.reportOnPendingRequests();
+            if (sequenceCallback) {
+              sequenceCallback(action.id);
             }
+            await this.flow.stateScreenshot(page, action.id);
+          } else {
+            throw new Error(`Method ${methodName} not found`);
           }
-          if (sequenceCallback) {
-            sequenceCallback(action.id);
-          }
-          await this.flow.stateScreenshot(page, action.id);
-        } else {
-          throw new Error(`Method ${methodName} not found`);
-        }
+          index++
+        } while (index <= action.loop)
       } else {
         throw new Error(`Action ${step} not found in flow`);
       }
