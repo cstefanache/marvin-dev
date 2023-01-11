@@ -25,6 +25,7 @@ export default class Runner {
     sequenceCallback?: Function
   ) {
     const { graph, actions, store } = this.flow.flow;
+    let cloneStore = store ? JSON.parse(JSON.stringify(store)) : undefined
     let currentStep = graph;
     for (const step of sequence) {
       let url = page.url();
@@ -78,9 +79,30 @@ export default class Runner {
                       console.log(
                         `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
-                      if ((store && store[uid]) || text === parameters[uid]) {
-                        prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                        break;
+                      if (cloneStore && cloneStore[uid]) {
+                        if (cloneStore[uid].includes("$")) {
+                          if (text === eval(cloneStore[uid])) {
+                            prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                            break;
+                          }
+                        } else {
+                             if (text === cloneStore[uid]) {
+                              prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                              break;
+                             }
+                        }
+                      } else {
+                          if (parameters[uid].includes("$")) {
+                             if (text === eval(parameters[uid])) {
+                              prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                              break;
+                             }
+                          } else {
+                            if (text === parameters[uid]) {
+                              prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                              break;
+                            }
+                          }
                       }
                     }                
                   }
@@ -112,9 +134,16 @@ export default class Runner {
               // await page.$eval(locator, (e: any) => e.blur());
               await page.focus(locator);
               if (store && store[uid]) {
-                store[uid].includes("$") ? await page.keyboard.type(eval(store[uid])) : await page.keyboard.type(store[uid])
+                if (store[uid].includes("$")) {
+                  if (cloneStore && cloneStore[uid]) {
+                    cloneStore[uid] =  eval(store[uid])
+                    await page.keyboard.type(cloneStore[uid])
+                  }
+                } else {
+                  await page.keyboard.type(store[uid])
+                }
               } else {
-                parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
+                  parameters[uid].includes("$") ? await page.keyboard.type(eval(parameters[uid])) : await page.keyboard.type(parameters[uid])
               }
             } else {
               const element = await page.$(locator);
@@ -165,7 +194,6 @@ export default class Runner {
         currentStep = [];
       }
     }
-
     log(`Sequence ended on page: ${page.url()}`, 'green');
   }
 }
