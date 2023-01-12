@@ -126,11 +126,9 @@ export default class Runner {
               // await page.$eval(locator, (e: any) => e.blur());
               await page.focus(locator);
               if (store && store[uid]) {
-                if (store[uid].includes("$")) {
-                  if (cloneStore && cloneStore[uid]) {
+                if (store[uid].includes("$") && cloneStore && cloneStore[uid]) {
                     cloneStore[uid] =  eval(store[uid])
                     await page.keyboard.type(cloneStore[uid])
-                  }
                 } else {
                   await page.keyboard.type(store[uid])
                 }
