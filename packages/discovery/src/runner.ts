@@ -5,6 +5,7 @@ import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
+import { cloneDeep } from 'lodash';
 
 const library = {
   func: {
@@ -24,8 +25,8 @@ export default class Runner {
     sequence: String[],
     sequenceCallback?: Function
   ) {
-    const { graph, actions, store } = this.flow.flow;
-    let cloneStore = store ? JSON.parse(JSON.stringify(store)) : undefined
+    const { graph, actions, store, references } = this.flow.flow;
+    let cloneStore = store ? cloneDeep(store) : undefined
     let currentStep = graph;
     for (const step of sequence) {
       let url = page.url();
@@ -79,18 +80,9 @@ export default class Runner {
                       console.log(
                         `[${index}] ${uid}: ${text} - ${parameters[uid]}`
                       );
-                      if (cloneStore && cloneStore[uid]) {
-                        if (cloneStore[uid].includes("$")) {
-                          if (text === eval(cloneStore[uid])) {
-                            prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                            break;
-                          }
-                        } else {
-                             if (text === cloneStore[uid]) {
-                              prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                              break;
-                             }
-                        }
+                      if (references && references[uid] && text === eval(references[uid].replace('store', 'cloneStore'))) {
+                          prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                          break;
                       } else {
                           if (parameters[uid].includes("$")) {
                              if (text === eval(parameters[uid])) {

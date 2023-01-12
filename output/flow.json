@@ -223,7 +223,9 @@
   "store": {
     "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
     "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123",
-    "d9708474-bb4d-49af-8c10-024b2254800c": "`Store List-${library.func.random()}`",
-    "fe42f42c-2e3a-427f-84ca-676949e30549": "`${cloneStore['d9708474-bb4d-49af-8c10-024b2254800c']}`"
+    "d9708474-bb4d-49af-8c10-024b2254800c": "`New List-${library.func.random()}`"
+  },
+  "references": {
+    "fe42f42c-2e3a-427f-84ca-676949e30549": "`${store['d9708474-bb4d-49af-8c10-024b2254800c']}`"
   }
 }
