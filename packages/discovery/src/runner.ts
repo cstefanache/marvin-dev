@@ -34,10 +34,7 @@ export default class Runner {
         (item: ActionItem) => item.sequenceStep === step
       );
 
-      let index = 1
-
       if (action) {
-        do {
           const { method: methodName, parameters } = action;
           const urlActions = actions[url];
           let method: any;
@@ -51,7 +48,10 @@ export default class Runner {
               `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
             );
           }
-  
+
+
+          let index = 1
+          do {
           if (method) {
             let prefix = ''
             if (method.iterator && this.config.aliases.iterators) {
