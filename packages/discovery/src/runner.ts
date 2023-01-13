@@ -48,8 +48,7 @@ export default class Runner {
               `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
             );
           }
-
-
+          
           let index = 1
           do {
           if (method) {
