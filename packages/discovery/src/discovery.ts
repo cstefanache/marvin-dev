@@ -140,9 +140,9 @@ export default class Discovery {
     }
     const elements = await parent.$$(locator);
 
-    if (elements.length > 1 && shouldBe === true) {
-      log(`Locator ${locator} is not unique.`);
-    }
+    // if (elements.length > 1 && shouldBe === true) {
+    //   log(`Locator ${locator} is not unique.`);
+    // }
 
     if (elements.length === 0) {
       log(`Locator ${locator} is not valid.`, 'red');
