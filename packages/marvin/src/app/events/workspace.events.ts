@@ -4,12 +4,12 @@
  */
 
 import { ipcMain, dialog } from 'electron';
-import { environment } from '../../environments/environment';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as puppeteer from 'puppeteer';
 
-import { Flow, Discovery, Runner, State } from '@marvin/discovery';
+import { Flow, Runner, State } from '@marvin/discovery';
 import App from '../app';
 
 const store = new Store();
@@ -58,27 +58,29 @@ function getFlow() {
   return null;
 }
 
-ipcMain.handle('get-workspaces', (event) => {
+ipcMain.handle('get-workspaces', () => {
   return store.get('workspaces');
 });
 
-ipcMain.handle('get-workspace', (event) => {
+ipcMain.handle('get-workspace', () => {
   return store.get('lastWorkspace');
 });
 
-ipcMain.handle('select-new-workspace-folder', async (event) => {
+ipcMain.handle('select-new-workspace-folder', async () => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then((data) => {
+
     if (data.filePaths.length > 0) {
       const workspace = data.filePaths[0];
-      const workspaces = store.get('workspaces') as string[];
+      const workspaceName = path.dirname(workspace).split('/').pop().replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) => letter.toUpperCase());
+      const workspaces = store.get('workspaces') as {name: string, path: string}[];
 
-      if (workspaces.includes(workspace)) {
+      if (workspaces && workspaces.some(ws => ws.path === workspace)) {
         return;
       }
 
-      workspaces.push(workspace);
+      workspaces.push({ path: workspace, name: workspaceName });
       store.set('workspaces', workspaces);
-      store.set('lastWorkspace', workspace);
+      store.set('lastWorkspace', { path: workspace, name: workspaceName });
     }
   });
 });
@@ -90,7 +92,7 @@ ipcMain.handle('get-config', () => {
 ipcMain.handle('get-workspace-path', (id) => {
   const workspace = store.get('lastWorkspace');
   if (fs.existsSync(`${workspace}`)) {
-    return workspace
+    return workspace;
   }
 });
 
@@ -150,8 +152,6 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
 
   App.mainWindow.webContents.send('run-completed')
 
-
-  // // log('Taking screenshot', 'yellow');
   await flow.discover(page, true);
   await flow.export();
   // await flow.stateScreenshot(page, 'runstate');

@@ -8,7 +8,14 @@ import Operations from './Operations';
 import FlowComponent from '../components/FlowGraph';
 import Workspaces from './Workspaces/Workspaces';
 
-export default function Workspace({ workspace }: { workspace?: string }) {
+interface Props {
+  workspace: {
+    name: string;
+    path: string;
+  }
+}
+
+export default function Workspace({ workspace }: Props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

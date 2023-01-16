@@ -10,7 +10,7 @@ import {
 import "./HeaderStyles.scss";
 
 interface Props {
-  workspaceName: string;
+  workspaceName?: string;
 }
 
 const Header = ({ workspaceName }: Props) => {
@@ -19,7 +19,7 @@ const Header = ({ workspaceName }: Props) => {
       <NavbarGroup align={Alignment.LEFT}>
         <NavbarHeading>Marvin</NavbarHeading>
         <NavLink to="/workspaces" className="menu-link">
-          <AnchorButton className="bp4-button bp4-minimal button" icon="box" text={`Workspace (${workspaceName})`} />
+          <AnchorButton className="bp4-button bp4-minimal button" icon="box" text={`Workspace ${workspaceName ? (`${workspaceName}`) : ''}`} />
         </NavLink>
         <NavbarDivider />
         <NavLink to="/configuration" className="menu-link">

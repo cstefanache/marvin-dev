@@ -20,7 +20,7 @@
       padding-right: 100px;
 
       &::after {
-        content: "Open folder";
+        content: "Open folder...  \f1ba";
         background-color: transparent;
         box-shadow: none;
         color: #2B95D6;
@@ -58,6 +58,10 @@
         span {
           color: #a6a6a6;
         }
+      }
+
+      &:hover {
+        opacity: 0.8;
       }
     }
   }

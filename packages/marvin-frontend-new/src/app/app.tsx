@@ -19,8 +19,7 @@ import Config from './pages/Config';
 
 
 export function App() {
-  const [workspace, setWorkspace] = useState<string>();
-  const [workspaceName, setWorkspaceName] = useState<string>('');
+  const [workspace, setWorkspace] = useState<{name: string, path: string}>();
 
   const navigate = useNavigate();
 
@@ -32,19 +31,19 @@ export function App() {
         navigate('/workspaces');
       }
       setWorkspace(workspace);
-      const workspaceName =  workspace.substring(workspace.lastIndexOf('/') + 1);
-      setWorkspaceName(workspaceName.replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) => letter.toUpperCase()))
+
     };
     asyncFn();
   }, [navigate]);
 
   const selectWorkspace = () => {
     console.log(workspace);
+    if (workspace) navigate('/');
   };
 
   return (
     <>
-      <Header workspaceName={workspaceName}/>
+      <Header workspaceName={workspace?.name}/>
       <Routes>
         <Route
           path="/"

@@ -15,7 +15,6 @@ export default function Workspaces({
   useEffect(() => {
     const asyncFn = async () => {
       const workspaces = await window.electron.getWorkspaces();
-      console.log(workspaces)
       setWorkspaces(workspaces);
     };
     asyncFn();
@@ -32,15 +31,15 @@ export default function Workspaces({
 
       {workspaces && workspaces.length > 0 && 
         <ul className="list">
-          {workspaces.map((workspace: string) => {
-            const workspaceName = workspace.substring(workspace.lastIndexOf('/') + 1);
+          {workspaces.map((workspace: { path: string, name: string }) => {
+            const workspaceName = workspace.name;
 
             return (
-              <li key={workspace} onClick={selectWorkspaceFolder}>
+              <li key={workspace.path} onClick={selectWorkspaceFolder}>
                 <Icon icon="box"/>
                 <div className="item-text">
-                  <p>{workspaceName.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}</p>
-                  <span>{workspace}</span>
+                  <p>{workspaceName}</p>
+                  <span>{workspace.path}</span>
                 </div>
               </li>
             )}
