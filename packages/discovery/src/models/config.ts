@@ -1,12 +1,12 @@
 import { ElementHandle } from 'puppeteer';
 
 export interface Config {
-  path: string;
-  defaultTimeout: number;
-  
-  output: string;
+  name: string;
   rootUrl: string;
-  waitFor: string;
+  path: string;  
+  defaultTimeout: number;  
+  output: string;  
+  waitFor?: string;
   aliases: Aliases;
   actions: { [key: string]: Action[] };
   discover: string[][];

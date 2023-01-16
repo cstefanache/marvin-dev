@@ -111,8 +111,6 @@ export default class Workspace {
     }
   }
 
-  getOutput(): 
-
   isInitialized(): boolean {
     return this.config !== undefined;
   }
