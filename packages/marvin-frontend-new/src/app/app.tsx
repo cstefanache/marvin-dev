@@ -19,19 +19,21 @@ import Config from './pages/Config';
 
 
 export function App() {
-  const [loading, setLoading] = useState(true);
   const [workspace, setWorkspace] = useState<string>();
+  const [workspaceName, setWorkspaceName] = useState<string>('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const asyncFn = async () => {
       const workspace = await window.electron.getWorkspace();
+      console.log(workspace);
       if (!workspace) {
         navigate('/workspaces');
       }
-      setLoading(false);
       setWorkspace(workspace);
+      const workspaceName =  workspace.substring(workspace.lastIndexOf('/') + 1);
+      setWorkspaceName(workspaceName.replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) => letter.toUpperCase()))
     };
     asyncFn();
   }, [navigate]);
@@ -42,7 +44,7 @@ export function App() {
 
   return (
     <>
-      <Header />
+      <Header workspaceName={workspaceName}/>
       <Routes>
         <Route
           path="/"

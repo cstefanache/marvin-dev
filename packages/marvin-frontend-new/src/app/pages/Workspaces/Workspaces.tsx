@@ -36,7 +36,7 @@ export default function Workspaces({
             const workspaceName = workspace.substring(workspace.lastIndexOf('/') + 1);
 
             return (
-              <li key={workspace}>
+              <li key={workspace} onClick={selectWorkspaceFolder}>
                 <Icon icon="box"/>
                 <div className="item-text">
                   <p>{workspaceName.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}</p>

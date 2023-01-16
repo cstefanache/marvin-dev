@@ -9,13 +9,17 @@ import {
 } from "@blueprintjs/core";
 import "./HeaderStyles.scss";
 
-const Header = () => {
+interface Props {
+  workspaceName: string;
+}
+
+const Header = ({ workspaceName }: Props) => {
   return (
     <Navbar className="bp4-dark nav-container" fixedToTop>
       <NavbarGroup align={Alignment.LEFT}>
         <NavbarHeading>Marvin</NavbarHeading>
         <NavLink to="/workspaces" className="menu-link">
-          <AnchorButton className="bp4-button bp4-minimal button" icon="box" text="Workspaces" />
+          <AnchorButton className="bp4-button bp4-minimal button" icon="box" text={`Workspace (${workspaceName})`} />
         </NavLink>
         <NavbarDivider />
         <NavLink to="/configuration" className="menu-link">
