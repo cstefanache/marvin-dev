@@ -36,6 +36,7 @@ export type ActionItem = {
     url: string;
     id: string;
     loop: number,
+    methodLoop: number,
     method: string;
     sequenceStep: string;
     parameters: {[key: string]: string};
@@ -64,5 +65,4 @@ export type Actions = {
 export type FlowModel = {
     graph: ActionItem[];
     actions: {[key: string]: Actions[]};
-    store?: {[uid: string]: string}
 };
