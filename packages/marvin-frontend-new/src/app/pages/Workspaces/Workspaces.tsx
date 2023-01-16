@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { FileInput, Icon } from "@blueprintjs/core";
+import { FileInput, Icon, Callout } from "@blueprintjs/core";
 import "./WorkspacesStyles.scss";
 
 interface Props {
@@ -27,6 +27,7 @@ export default function Workspaces({
 
   return (
     <div className="container bp4-dark">
+      <div>
       <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} />
 
       {workspaces && workspaces.length > 0 && 
@@ -46,6 +47,18 @@ export default function Workspaces({
           )}
         </ul>
       }
+      </div>
+      <div>
+        <Callout title="Get started with Marvin" className="callout">
+          <p>Your working folder must contain the following congiguration JSON files:</p>
+          <ul>
+            <li><em>flow.json</em></li>
+            <li><em>output.json</em></li>
+            <li><em>config.json</em></li>
+          </ul>
+        </Callout>
+      </div>
+      
     </div>
   );
 }
