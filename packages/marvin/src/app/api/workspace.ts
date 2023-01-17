@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { Config, Models } from '@marvin/discovery';
 import getLog from './logging';
+import { Alias } from 'packages/discovery/src/models/config';
 
 const logger = getLog('marvin:workspace');
 
@@ -52,7 +53,6 @@ export default class Workspace {
   }
 
   async loadWorkspace(folder: string): Promise<void> {
-    
     if (fs.existsSync(folder)) {
       if (fs.existsSync(`${folder}/config.json`)) {
         logger.log(`Loading config from ${folder}/config.json`);
@@ -71,6 +71,8 @@ export default class Workspace {
             store: {},
           };
         }
+
+        this.syncOutput();
       } else {
         logger.error(`No config.json found in ${folder}`);
         throw new Error('No config.json found in workspace folder.');
@@ -92,13 +94,13 @@ export default class Workspace {
       logger.log(`Closing workspace ${this.config.name}`);
       this.config = undefined;
       this.flow = undefined;
+      this.output = undefined;
     }
   }
 
   store(): void {
     if (this.config) {
       logger.log(`Storing workspace ${this.config.name}`);
-
       fs.writeFileSync(
         `${this.config.path}/config.json`,
         JSON.stringify(this.config, null, 2)
@@ -107,6 +109,14 @@ export default class Workspace {
       fs.writeFileSync(
         `${this.config.path}/flow.json`,
         JSON.stringify(this.flow, null, 2)
+      );
+    }
+  }
+
+  syncOutput(): void {
+    if (this.folder && fs.existsSync(`${this.folder}/output.json`)) {
+      this.output = JSON.parse(
+        fs.readFileSync(`${this.folder}/output.json`, 'utf8')
       );
     }
   }
