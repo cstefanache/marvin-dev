@@ -13,11 +13,21 @@ const library = {
 };
 
 export default class Runner {
+  store: any;
   constructor(
     private readonly config: Config,
     private readonly flow: Flow,
     private readonly state: State | undefined
-  ) {}
+  ) {
+    this.store = { library };
+  }
+
+  private evaluateExpression(exp: string) {
+    // let evalFn = (exp: string) =>
+    //   new Function('store', `with(store) { return ${exp} }`);
+    // return evalFn(exp)(this.store);
+    return eval(`with(this.store) { return ${exp} }`)
+  }
 
   private async executeMethod(
     method: Actions,
@@ -79,27 +89,35 @@ export default class Runner {
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
-      if (type === 'fill' && uid && parameters[uid]) {
+      console.log(' >>>>>> ', locator);
+      if (type === 'store') {
+        const element = await page.$(locator);
+        if (element) {
+          const value = await page.evaluate(
+            (element: any) => element.getAttribute('value'),
+            element
+          );
+          const text = await element.evaluate((el: any) =>
+            el.textContent?.trim()
+          );
+          this.store[uid] = value || text;
+        }
+      } else if (type === 'fill' && uid && parameters[uid]) {
         log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
         await page.focus(locator);
-        await page.keyboard.type(parameters[uid]);
+        await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
         if (element) {
-          var attributes = await page.evaluate(
-            (element) =>
-              Array.from(element.attributes, ({ name, value }) => [
-                name,
-                value,
-              ]),
-            element
-          );
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text}`, 'yellow');
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
         }
       }
+
+      console.log('^^^^^^^ ');
+      console.log(this.store);
     }
   }
 
