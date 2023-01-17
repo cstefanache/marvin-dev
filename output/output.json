@@ -22,42 +22,10 @@
           },
           {
             "text": "Logout",
-            "locator": "button.MuiButton-textInherit"
-          },
-          {
-            "text": "Open",
-            "locator": "a[href=\"/item/1671104352383\"]"
-          },
-          {
-            "text": "Delete",
-            "locator": "div.MuiGrid-container > div:nth-of-type(1) > div > div:nth-of-type(2) > button"
-          },
-          {
-            "text": "Open",
-            "locator": "a[href=\"/item/1671104371008\"]"
-          },
-          {
-            "text": "Delete",
-            "locator": "div.MuiGrid-container > div:nth-of-type(2) > div > div:nth-of-type(2) > button"
+            "locator": "button"
           }
         ],
-        "iterable": [
-          {
-            "text": "Card Iterator",
-            "locator": ".grid-card",
-            "identifier": ".MuiTypography-h5",
-            "elements": [
-              {
-                "text": "Open",
-                "locator": "a"
-              },
-              {
-                "text": "Delete",
-                "locator": "button"
-              }
-            ]
-          }
-        ]
+        "iterable": []
       }
     },
     "http://localhost:4200/newitem": {

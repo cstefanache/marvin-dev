@@ -8,7 +8,7 @@ import { processUrl } from './utils/processes';
 
 const library = {
   func: {
-    random: () => Math.random(),
+    random: () => Math.floor(Math.random() * 1000000),
   },
 };
 
@@ -20,13 +20,11 @@ export default class Runner {
     private readonly state: State | undefined
   ) {
     this.store = { library };
+    global.store = this.store;
   }
 
   private evaluateExpression(exp: string) {
-    // let evalFn = (exp: string) =>
-    //   new Function('store', `with(store) { return ${exp} }`);
-    // return evalFn(exp)(this.store);
-    return eval(`with(this.store) { return ${exp} }`)
+    return eval("`"+exp+"`");
   }
 
   private async executeMethod(
@@ -60,8 +58,9 @@ export default class Runner {
                 const text = (await iteratorIdentifierElem.evaluate(
                   (el) => el.textContent
                 )) as string;
-                console.log(`[${index}] ${uid}: ${text} - ${parameters[uid]}`);
-                if (text === parameters[uid]) {
+                const resultEvaluation = this.evaluateExpression(parameters[uid]);
+                console.log(`[${index}] ${uid}: ${text} - ${resultEvaluation}`);
+                if (text === resultEvaluation) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                   break;
                 }
@@ -89,7 +88,6 @@ export default class Runner {
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
-      console.log(' >>>>>> ', locator);
       if (type === 'store') {
         const element = await page.$(locator);
         if (element) {
@@ -97,7 +95,7 @@ export default class Runner {
             (element: any) => element.getAttribute('value'),
             element
           );
-          const text = await element.evaluate((el: any) =>
+        const text = await element.evaluate((el: any) =>
             el.textContent?.trim()
           );
           this.store[uid] = value || text;
@@ -115,9 +113,6 @@ export default class Runner {
           log(`Clicked on ${text}`, 'yellow');
         }
       }
-
-      console.log('^^^^^^^ ');
-      console.log(this.store);
     }
   }
 

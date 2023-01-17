@@ -110,7 +110,7 @@
               "sequenceStep": "Add three items",
               "methodLoop": 3,
               "parameters": {
-                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "`a-${library.func.random()}`"
+                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a-${store.library.func.random()}"
               },
               "method": "Add new item",
               "url": "http://localhost:4200/newitem",
@@ -120,7 +120,7 @@
                   "id": "64bd86d2-a23b-46be-b058-c7bd08b92e87",
                   "sequenceStep": "Save List",
                   "parameters": {
-                    "d9708474-bb4d-49af-8c10-024b2254800c": "`New List-${library.func.random()}`"
+                    "d9708474-bb4d-49af-8c10-024b2254800c": "New List-${store.library.func.random()}"
                   },
                   "method": "Set list name and save",
                   "url": "http://localhost:4200/newitem",
@@ -130,7 +130,7 @@
                       "id": "e32470fb-c0c2-4402-aa66-0ea265384728",
                       "sequenceStep": "Delete Newly Created List",
                       "parameters": {
-                        "fe42f42c-2e3a-427f-84ca-676949e30549": "`${store['ListName']}`"
+                        "fe42f42c-2e3a-427f-84ca-676949e30549": "${store['ListName']}"
                       },
                       "method": "Delete Card",
                       "url": "http://localhost:4200/",
