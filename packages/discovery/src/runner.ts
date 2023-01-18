@@ -8,16 +8,24 @@ import { processUrl } from './utils/processes';
 
 const library = {
   func: {
-    random: () => Math.random(),
+    random: () => Math.floor(Math.random() * 1000000),
   },
 };
 
 export default class Runner {
+  store: any;
   constructor(
     private readonly config: Config,
     private readonly flow: Flow,
     private readonly state: State | undefined
-  ) {}
+  ) {
+    this.store = { library };
+    global.store = this.store;
+  }
+
+  private evaluateExpression(exp: string) {
+    return eval("`"+exp+"`");
+  }
 
   private async executeMethod(
     method: Actions,
@@ -50,8 +58,9 @@ export default class Runner {
                 const text = (await iteratorIdentifierElem.evaluate(
                   (el) => el.textContent
                 )) as string;
-                console.log(`[${index}] ${uid}: ${text} - ${parameters[uid]}`);
-                if (text === parameters[uid]) {
+                const resultEvaluation = this.evaluateExpression(parameters[uid]);
+                console.log(`[${index}] ${uid}: ${text} - ${resultEvaluation}`);
+                if (text === resultEvaluation) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                   break;
                 }
@@ -79,21 +88,25 @@ export default class Runner {
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
-      if (type === 'fill' && uid && parameters[uid]) {
+      if (type === 'store') {
+        const element = await page.$(locator);
+        if (element) {
+          const value = await page.evaluate(
+            (element: any) => element.getAttribute('value'),
+            element
+          );
+        const text = await element.evaluate((el: any) =>
+            el.textContent?.trim()
+          );
+          this.store[uid] = value || text;
+        }
+      } else if (type === 'fill' && uid && parameters[uid]) {
         log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
         await page.focus(locator);
-        await page.keyboard.type(parameters[uid]);
+        await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
         if (element) {
-          var attributes = await page.evaluate(
-            (element) =>
-              Array.from(element.attributes, ({ name, value }) => [
-                name,
-                value,
-              ]),
-            element
-          );
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text}`, 'yellow');
           await element.click();
