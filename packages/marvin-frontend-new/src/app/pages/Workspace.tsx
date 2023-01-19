@@ -1,56 +1,27 @@
-import { Box, Tabs, Tab, Button, Stack, Typography } from '@mui/material';
-import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import Side from '../components/Side';
-import Config from './Config';
-import TabPanel from '../components/TabPanel';
-import Operations from './Operations';
-import FlowComponent from '../components/FlowGraph';
-import Workspaces from './Workspaces/Workspaces';
+import { Graph } from '../components/Graph';
 
 interface Props {
   workspace: {
     name: string;
     path: string;
-  }
+  };
 }
 
 export default function Workspace({ workspace }: Props) {
-  const [value, setValue] = React.useState(0);
+  const [flow, setFlow] = React.useState(null);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const loadFlow = async () => {
+    const flow = await window.electron.getFlow();
+    setFlow(flow);
   };
 
-  const selectWorkspace = (workspace: any) => {
-    console.log(workspace);
-  };
+  useEffect(() => {
+    const asyncFn = async () => {
+      await loadFlow();
+    };
+    asyncFn();
+  }, []);
 
-  return (
-    <div>Workspace</div>
-  );
-    // <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-    //   <Tabs
-    //     value={value}
-    //     onChange={handleChange}
-    //     aria-label="basic tabs example"
-    //   >
-    //     <Tab label="Workspace" />
-    //     <Tab label="Config" />
-    //     <Tab label="Operations" />
-    //     <Tab label="Flow" />
-    //   </Tabs>
-    //   <TabPanel value={value} index={0}>
-    //     <Workspaces selectWorkspace={selectWorkspace} />
-    //   </TabPanel>
-    //   <TabPanel value={value} index={1}>
-    //     <Config />
-    //   </TabPanel>
-    //   <TabPanel value={value} index={2}>
-    //     <Operations />
-    //   </TabPanel>
-    //   <TabPanel value={value} index={3}>
-    //     <FlowComponent />
-    //   </TabPanel>
-    // </Box>
+  return !flow ? <h3>Loading</h3> : <Graph flow={flow} />;
 }
