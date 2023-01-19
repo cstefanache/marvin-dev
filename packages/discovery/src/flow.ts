@@ -52,7 +52,7 @@ export default class Flow {
     overwrite = false
   ): Promise<PageDiscoveryResult> {
     let currentUrl = page.url();
-    currentUrl = processUrl(currentUrl, this.config.aliases.urlReplacers || []);
+    currentUrl = processUrl(currentUrl, this.config.aliases.urlReplacers || [], this.config.rootUrl);
     const discoveryResults: PageDiscoveryResult =
       await this.discovery.discoverPage(page);
     if (this.output.discovered[currentUrl] && !overwrite) {

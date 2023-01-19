@@ -11,7 +11,7 @@ const defaultAliases = {
   info: [
     {
       name: 'headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5',  'h6'],
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
   ],
   action: [
@@ -127,7 +127,7 @@ export default class Discovery {
   }
 
   getNthOfTypeLocator(locator: string, index: Number) {
-    return `${locator}:nth-of-type(${index})`
+    return `${locator}:nth-of-type(${index})`;
   }
 
   async isLocatorUnique(
@@ -144,7 +144,7 @@ export default class Discovery {
     //   log(`Locator ${locator} is not unique.`);
     // }
 
-    if (elements.length === 0) {
+    if (elements && elements.length === 0) {
       log(`Locator ${locator} is not valid.`, 'red');
       // throw new Error(`Locator ${locator} is not valid.`);
     }
@@ -188,7 +188,12 @@ export default class Discovery {
       return getDescententLocator(locator);
     }
 
-    const id = await element.evaluate((el) => el.id);
+    let id = await element.evaluate((el) => el.id);
+
+    // if id is a number, it's not a valid id
+    if (!Number.isNaN(parseInt(id))) {
+      id = undefined;
+    }
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
       locator += `#${id}`;
       if (await this.isLocatorUnique(locator, rootEl, true)) {
@@ -301,14 +306,13 @@ export default class Discovery {
         }
       }
     }
-   return getDescententLocator(locator);
+    return getDescententLocator(locator);
   }
 
   async discoverGroup(
     element: ElementHandle<Element> | null,
     page: Page
   ): Promise<DiscoveryResult> {
-    log('Capturing inputs ...');
     const info: IdentifiableElement[] = [];
     const input: IdentifiableElement[] = [];
     const actions: IdentifiableElement[] = [];
@@ -325,6 +329,7 @@ export default class Discovery {
         ? `${actionSelector.selectors.join(', ')}:nth-of-type(${index + 1})`
         : (await this.getLocator(element, page, parent)).trim();
 
+    log('Capturing info aliases ...');
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
 
@@ -339,6 +344,7 @@ export default class Discovery {
       }
     }
 
+    log('Capturing input aliases ...');
     for (const inputSelector of this.aliases.input) {
       const elements = await rootElement.$$(inputSelector.selectors.join(', '));
       for (const [index, element] of elements.entries()) {
@@ -354,6 +360,7 @@ export default class Discovery {
       }
     }
 
+    log('Capturing action aliases ...');
     for (const actionSelector of this.aliases.action) {
       const elements = await rootElement.$$(
         actionSelector.selectors.join(', ')
@@ -368,22 +375,25 @@ export default class Discovery {
       }
     }
 
+    log('Capturing iterators ...');
     if (this.aliases.iterators && this.aliases.iterators.length) {
       log('Capturing iterators ...');
       for (const iteratorItem of this.aliases.iterators) {
         const iteratorRootSelectors = await rootElement.$$(
           iteratorItem.selectors.join(', ')
         );
-        
+
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {
               if (!iteratorElement.selector) {
-                continue
+                continue;
               }
-              const iteratorElements = await element.$$(iteratorElement.selector);
+              const iteratorElements = await element.$$(
+                iteratorElement.selector
+              );
               for (const [index, childElement] of iteratorElements.entries()) {
                 const text = (await childElement.evaluate(
                   (el) => el.textContent
@@ -404,14 +414,14 @@ export default class Discovery {
                 });
               }
             }
-
-            iterable.push({
-              text: iteratorItem.name,
-              locator: iteratorItem.selectors.join(', '),
-              identifier: iteratorItem.identifier,
-              elements,
-            });
           }
+
+          iterable.push({
+            text: iteratorItem.name,
+            locator: iteratorItem.selectors.join(', '),
+            identifier: iteratorItem.identifier,
+            elements,
+          });
         }
       }
     }

@@ -24,7 +24,7 @@ export default class Runner {
   }
 
   private evaluateExpression(exp: string) {
-    return eval("`"+exp+"`");
+    return eval('`' + exp + '`');
   }
 
   private async executeMethod(
@@ -41,8 +41,7 @@ export default class Runner {
       const iteratorConfig = this.config.aliases.iterators.find(
         (configIterator) => configIterator.name === iteratorName
       );
-
-      if (iteratorConfig && iteratorConfig.elements) {
+      if (iteratorConfig) {
         for (const rootSelector of iteratorConfig.selectors) {
           const rootElements = await page.$$(rootSelector);
           const iteratorDef: IdentifiableIterator = method.iterator;
@@ -58,8 +57,11 @@ export default class Runner {
                 const text = (await iteratorIdentifierElem.evaluate(
                   (el) => el.textContent
                 )) as string;
-                const resultEvaluation = this.evaluateExpression(parameters[uid]);
-                console.log(`[${index}] ${uid}: ${text} - ${resultEvaluation}`);
+                const resultEvaluation = this.evaluateExpression(
+                  parameters[uid]
+                );
+
+                console.log(`[${index}] ${uid}: |${text}|${resultEvaluation}|`);
                 if (text === resultEvaluation) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                   break;
@@ -95,7 +97,7 @@ export default class Runner {
             (element: any) => element.getAttribute('value'),
             element
           );
-        const text = await element.evaluate((el: any) =>
+          const text = await element.evaluate((el: any) =>
             el.textContent?.trim()
           );
           this.store[uid] = value || text;
@@ -109,6 +111,7 @@ export default class Runner {
         if (element) {
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text}`, 'yellow');
+          // await element.screenshot({ path: 'example.png' })
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
         }
@@ -124,8 +127,15 @@ export default class Runner {
   ) {
     const { actions } = this.flow.flow;
     const currentStepToExecute = steps[0];
-    let url = processUrl(page.url(), this.config.aliases.urlReplacers);
+    let url = processUrl(
+      page.url(),
+      this.config.aliases.urlReplacers,
+      this.config.rootUrl
+    );
     log(`Current path: ${url}`, 'yellow');
+    if (currentStep.length === 0) {
+      return;
+    }
     let action = currentStep.find(
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
