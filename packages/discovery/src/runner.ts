@@ -166,6 +166,7 @@ export default class Runner {
                 this.state.reportOnPendingRequests();
               }
             }
+            await this.flow.stateScreenshot(page, action.id);
             if (action.children && action.children.length && steps.length > 1) {
               await this.executeStep(
                 page,
@@ -176,9 +177,9 @@ export default class Runner {
             }
           }
           if (sequenceCallback) {
-            sequenceCallback(action.id);
+            await sequenceCallback(action.id);
           }
-          await this.flow.stateScreenshot(page, action.id);
+          
         } else {
           throw new Error(`Method ${methodName} not found`);
         }
