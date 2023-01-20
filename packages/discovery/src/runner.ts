@@ -167,6 +167,9 @@ export default class Runner {
               }
             }
             await this.flow.stateScreenshot(page, action.id);
+            if (sequenceCallback) {
+              await sequenceCallback(action.id);
+            }
             if (action.children && action.children.length && steps.length > 1) {
               await this.executeStep(
                 page,
@@ -176,10 +179,6 @@ export default class Runner {
               );
             }
           }
-          if (sequenceCallback) {
-            await sequenceCallback(action.id);
-          }
-          
         } else {
           throw new Error(`Method ${methodName} not found`);
         }

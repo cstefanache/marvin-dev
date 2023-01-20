@@ -11,11 +11,19 @@ import * as puppeteer from 'puppeteer';
 
 import { Flow, Runner, State } from '@marvin/discovery';
 import App from '../app';
+import Workspace from '../api/workspace';
 
 const store = new Store();
+let workpace: Workspace;
 
 if (!store.get('workspaces')) {
   store.set('workspaces', []);
+}
+
+const lastWorkspace: any = store.get('lastWorkspace');
+if (lastWorkspace) {
+  workpace = new Workspace();
+  workpace.initialize(lastWorkspace.path, lastWorkspace.name);
 }
 
 export default class WorkspaceEvents {
@@ -24,57 +32,47 @@ export default class WorkspaceEvents {
   }
 }
 
-function getConfig() {
+ipcMain.handle('get-workspace-path', (id) => {
   const workspace: any = store.get('lastWorkspace');
-  const { path } = workspace;
-  if (workspace && fs.existsSync(`${path}/config.json`)) {
-    const config = JSON.parse(fs.readFileSync(`${path}/config.json`, 'utf8'));
-    if (!config.aliases) {
-      config.aliases = {}
-    }
-    return config
-  } else {
-    return {};
+  
+  if (fs.existsSync(`${workspace.path}`)) {
+    return workspace.path;
   }
-}
-
-function getDiscovered() {
-  const workspace: any = store.get('lastWorkspace');
-  const { path } = workspace;
-  if (workspace && fs.existsSync(`${path}/output.json`)) {
-    return JSON.parse(fs.readFileSync(`${path}/output.json`, 'utf8'));
-  }
-
-  return null;
-}
-
-function getFlow() {
-  const workspace: any = store.get('lastWorkspace');
-  const { path } = workspace;
-  if (workspace && fs.existsSync(`${path}/flow.json`)) {
-    return JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
-  }
-
-  return null;
-}
-
-ipcMain.handle('get-workspaces', () => {
-  return store.get('workspaces');
 });
 
 ipcMain.handle('get-workspace', () => {
-  return store.get('lastWorkspace');
+  return lastWorkspace;
+});
+
+ipcMain.handle('get-flow', () => {
+  return workpace.getFlow();
+});
+
+ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
+  await workpace.run(sequence, (actionId: string) => {
+    console.log('sending back', actionId);
+    App.mainWindow.webContents.send('action-finished', actionId);
+  });
+  App.mainWindow.webContents.send('run-completed');
 });
 
 ipcMain.handle('select-new-workspace-folder', async () => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then((data) => {
-
     if (data.filePaths.length > 0) {
       const workspace = data.filePaths[0];
-      const workspaceName = path.dirname(workspace).split('/').pop().replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) => letter.toUpperCase());
-      const workspaces = store.get('workspaces') as {name: string, path: string}[];
+      const workspaceName = path
+        .dirname(workspace)
+        .split('/')
+        .pop()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
+          letter.toUpperCase()
+        );
+      const workspaces = store.get('workspaces') as {
+        name: string;
+        path: string;
+      }[];
 
-      if (workspaces && workspaces.some(ws => ws.path === workspace)) {
+      if (workspaces && workspaces.some((ws) => ws.path === workspace)) {
         return;
       }
 
@@ -83,78 +81,4 @@ ipcMain.handle('select-new-workspace-folder', async () => {
       store.set('lastWorkspace', { path: workspace, name: workspaceName });
     }
   });
-});
-
-ipcMain.handle('get-config', () => {
-  return getConfig();
-});
-
-ipcMain.handle('get-workspace-path', (id) => {
-  const workspace = store.get('lastWorkspace');
-  if (fs.existsSync(`${workspace}`)) {
-    return workspace;
-  }
-});
-
-ipcMain.handle('set-config', (event, config) => {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace) {
-    fs.writeFileSync(
-      `${workspace}/config.json`,
-      JSON.stringify(config, undefined, 2)
-    );
-  }
-
-  return config;
-});
-
-ipcMain.handle('get-discovered', () => {
-  return getDiscovered();
-});
-
-ipcMain.handle('get-flow', () => {
-  return getFlow();
-});
-
-ipcMain.handle('set-flow', (event, flow) => {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace) {
-    fs.writeFileSync(
-      `${workspace}/flow.json`,
-      JSON.stringify(flow, undefined, 2)
-    );
-  }
-})
-
-ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
-  const config = getConfig();
-  const workspace = store.get('lastWorkspace');
-  config.path = workspace;
-  if (!fs.existsSync(`${workspace}/screenshots`)) {
-    fs.mkdirSync(`${workspace}/screenshots`);
-  }
-  const browser = await puppeteer.launch({ headless: true });
-  const flow = new Flow(config, browser);
-  const page = await flow.navigateTo(config.rootUrl);
-  const state = new State(page);
-  // const state = undefined;
-
-  await page.setRequestInterception(true);
-
-  await page.waitForNetworkIdle({ timeout: config.defaultTimeout });
-
-  const runner = new Runner(config, flow, state);
-  await runner.run(page, sequence, (actionId: string) => {
-    App.mainWindow.webContents.send('action-finished', actionId);
-  });
-
-  App.mainWindow.webContents.send('run-completed')
-
-  await flow.discover(page, true);
-  await flow.export();
-  // await flow.stateScreenshot(page, 'runstate');
-
-  flow.export();
 });

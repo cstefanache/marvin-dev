@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import { Config, Models } from '@marvin/discovery';
+import * as puppeteer from 'puppeteer';
+import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
 import { Alias } from 'packages/discovery/src/models/config';
 
@@ -11,7 +12,7 @@ export default class Workspace {
   private flow: Models.FlowModel;
   private output: Models.Discovered;
 
-  async initialize(path: string, name: string, url: string) {
+  async initialize(path: string, name: string, url?: string) {
     if (fs.existsSync(path)) {
       logger.log(`Workspace folder already exists at ${path}`);
     } else {
@@ -68,7 +69,6 @@ export default class Workspace {
           this.flow = {
             actions: {},
             graph: [],
-            store: {},
           };
         }
 
@@ -87,6 +87,35 @@ export default class Workspace {
 
   getConfig(): Config {
     return this.config;
+  }
+
+  getFlow(): Models.FlowModel {
+    return this.flow;
+  }
+
+  async run(sequence: string[], callback:Function) {
+    console.log('-------- RUNNING ------');
+    console.log(sequence);
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [`--window-size=1920,2080`],
+      defaultViewport: {
+        width: 1920,
+        height: 2080,
+      },
+    });
+
+    const flow = new Flow(this.config, browser);
+    const page = await flow.navigateTo(this.config.rootUrl);
+    const state = new State(page);
+    await page.setRequestInterception(true);
+
+    await page.waitForNetworkIdle({ timeout: this.config.defaultTimeout });
+    callback(undefined)
+    const runner = new Runner(this.config, flow, state);
+    await runner.run(page, sequence, callback);
+    
   }
 
   close(): void {
