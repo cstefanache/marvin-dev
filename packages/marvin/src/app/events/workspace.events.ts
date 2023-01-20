@@ -25,10 +25,10 @@ export default class WorkspaceEvents {
 }
 
 function getConfig() {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/config.json`)) {
-    const config = JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
+  const workspace: any = store.get('lastWorkspace');
+  const { path } = workspace;
+  if (workspace && fs.existsSync(`${path}/config.json`)) {
+    const config = JSON.parse(fs.readFileSync(`${path}/config.json`, 'utf8'));
     if (!config.aliases) {
       config.aliases = {}
     }
@@ -39,20 +39,20 @@ function getConfig() {
 }
 
 function getDiscovered() {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/output.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/output.json`, 'utf8'));
+  const workspace: any = store.get('lastWorkspace');
+  const { path } = workspace;
+  if (workspace && fs.existsSync(`${path}/output.json`)) {
+    return JSON.parse(fs.readFileSync(`${path}/output.json`, 'utf8'));
   }
 
   return null;
 }
 
 function getFlow() {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/flow.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/flow.json`, 'utf8'));
+  const workspace: any = store.get('lastWorkspace');
+  const { path } = workspace;
+  if (workspace && fs.existsSync(`${path}/flow.json`)) {
+    return JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
   }
 
   return null;

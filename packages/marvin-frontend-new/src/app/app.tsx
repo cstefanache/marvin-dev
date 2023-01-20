@@ -7,6 +7,8 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     require: any;
   }
+
+  var store: any;
 }
 
 import { useEffect, useState } from 'react';
