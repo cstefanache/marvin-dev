@@ -52,7 +52,7 @@ export default class Flow {
     overwrite = false
   ): Promise<PageDiscoveryResult> {
     let currentUrl = page.url();
-    currentUrl = processUrl(currentUrl, this.config.aliases.urlReplacers || []);
+    currentUrl = processUrl(currentUrl, this.config.aliases.urlReplacers || [], this.config.rootUrl);
     const discoveryResults: PageDiscoveryResult =
       await this.discovery.discoverPage(page);
     if (this.output.discovered[currentUrl] && !overwrite) {
@@ -97,7 +97,7 @@ export default class Flow {
     const actions = this.config.actions[currentUrl];
     const { sequence } = actions[0];
 
-    for (const item of sequence) {
+    for (const item of sequence) {0
       const { type, locator, value } = item;
       log(`Executing ${type} on ${locator} ...`, 'blue');
       if (type === 'fill') {

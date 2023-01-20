@@ -57,9 +57,7 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
     sequence: [
       'Login as user',
       'Create new list',
-      'Add "a" item',
-      'Add "b" item',
-      'Add "c" item',
+      'Add three items',
       'Save List',
       'Delete Newly Created List',
     ],

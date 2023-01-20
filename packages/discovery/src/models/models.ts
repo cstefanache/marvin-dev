@@ -35,6 +35,8 @@ export type Output = {
 export type ActionItem = {
     url: string;
     id: string;
+    loop: number,
+    methodLoop: number,
     method: string;
     sequenceStep: string;
     parameters: {[key: string]: string};
