@@ -133,7 +133,14 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   if (!fs.existsSync(`${workspace}/screenshots`)) {
     fs.mkdirSync(`${workspace}/screenshots`);
   }
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [`--window-size=1920,2080`],
+    defaultViewport: {
+      width: 1920,
+      height: 2080,
+    },
+  });
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);
   const state = new State(page);
