@@ -7,9 +7,8 @@ import { ipcMain, dialog } from 'electron';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as puppeteer from 'puppeteer';
 
-import { Flow, Runner, State } from '@marvin/discovery';
+
 import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
@@ -79,6 +78,7 @@ ipcMain.handle('select-new-workspace-folder', async (data) => {
     console.log('>>>> ', data);
     if (data.filePaths.length > 0) {
       const workspace = data.filePaths[0];
+
       const workspaceName = path
         .dirname(workspace)
         .split('/')

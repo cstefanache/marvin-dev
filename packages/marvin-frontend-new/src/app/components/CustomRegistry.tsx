@@ -23,7 +23,9 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
 
-import React, { useEffect, useState } from 'react';
+import { RegistryKeys } from '@ascentcore/react-schema-form/dist/component-registry';
+
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 export interface CustomProps {
   property: any;
   value: any;
@@ -160,7 +162,7 @@ function Selectors(props: CustomProps) {
         value={addValue}
         size="small"
         variant="standard"
-        label="Add Selector"
+        label="Add Selectorssss"
         helperText="Press enter to add"
         onChange={(e) => setAddValue(e.target.value)}
         onKeyPress={(e) => {
@@ -356,6 +358,7 @@ function Wrapper({
 }
 
 export function CustomWrapper(props: any) {
+  console.log(props)
   const { property, children } = props;
 
   return <Wrapper property={property}>{children}</Wrapper>;

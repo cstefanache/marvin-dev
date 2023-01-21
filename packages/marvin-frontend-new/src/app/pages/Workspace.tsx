@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Workspace({ workspace }: Props) {
-  const [flow, setFlow] = React.useState(null);
+  const [flow, setFlow] = useState(null);
 
   const loadFlow = async () => {
     const flow = await window.electron.getFlow();

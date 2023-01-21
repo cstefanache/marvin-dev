@@ -1,6 +1,3 @@
-import { Box, Grid } from '@mui/material';
-import React from 'react';
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -8,7 +5,7 @@ interface TabPanelProps {
 }
 
 export default function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index } = props;
 
   return value === index ? <>{children}</> : null;
 }

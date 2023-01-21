@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('electron', {
   selectWorkspace: (workspace: any) => ipcRenderer.invoke('select-workspace', workspace),
   getLoggers: () => ipcRenderer.invoke('get-loggers'),
   getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
-});
+  // selectWorkspace: (workspace: { name: string, path: string }) => ipcRenderer.invoke('select-workspace', workspace),
+ });
 
 // White-listed channels.
 const ipc = {
