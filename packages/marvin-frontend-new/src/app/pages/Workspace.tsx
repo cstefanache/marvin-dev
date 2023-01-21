@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Console } from '../components/Console';
 import { Graph } from '../components/Graph';
 
 interface Props {
@@ -23,5 +24,10 @@ export default function Workspace({ workspace }: Props) {
     asyncFn();
   }, []);
 
-  return !flow ? <h3>Loading</h3> : <Graph flow={flow} />;
+  return (
+    <>
+      {!flow ? <h3>Loading</h3> : <Graph flow={flow} />}
+      <Console />
+    </>
+  );
 }

@@ -14,6 +14,9 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('run-discovery', sequence),
   selectNewWorkspaceFolder: () =>
     ipcRenderer.invoke('select-new-workspace-folder'),
+
+  getLoggers: () => ipcRenderer.invoke('get-loggers'),
+  getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
 });
 
 // White-listed channels.
@@ -22,10 +25,7 @@ const ipc = {
     // From render to main.
     send: [],
     // From main to render.
-    receive: [
-      'action-finished',
-      'run-completed'
-    ],
+    receive: ['action-finished', 'run-completed', 'log'],
     // From render to main and back again.
     sendReceive: [],
   },
@@ -49,6 +49,9 @@ contextBridge.exposeInMainWorld(
         // Deliberately strip event as it includes `sender`.
         ipcRenderer.on(channel, (event, ...args) => listener(...args));
       }
+    },
+    removeAllListeners: (channel) => {
+      ipcRenderer.removeAllListeners(channel);
     },
     // From render to main and back again.
     invoke: (channel, args) => {

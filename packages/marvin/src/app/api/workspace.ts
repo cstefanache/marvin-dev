@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
 import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
-import { Alias } from 'packages/discovery/src/models/config';
 
 const logger = getLog('marvin:workspace');
 
@@ -94,8 +93,8 @@ export default class Workspace {
   }
 
   async run(sequence: string[], callback:Function) {
-    console.log('-------- RUNNING ------');
-    console.log(sequence);
+
+    logger.log(`Running sequence ${sequence.join(',')}`)
 
     const browser = await puppeteer.launch({
       headless: true,
@@ -115,7 +114,9 @@ export default class Workspace {
     callback(undefined)
     const runner = new Runner(this.config, flow, state);
     await runner.run(page, sequence, callback);
-    
+    logger.log(`Finished running sequence. Discovering...`)
+    await flow.discover(page, true);    
+    logger.log(`Discovery finished.`)
   }
 
   close(): void {
