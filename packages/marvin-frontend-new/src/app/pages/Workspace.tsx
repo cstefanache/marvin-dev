@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Console } from '../components/Console/Console';
 import { Graph } from '../components/Graph/Graph';
 import { Drawer, PanelStack2 } from '@blueprintjs/core';
+import { AddMethod } from '../components/AddMethod/AddMethod';
 
 interface Props {
   workspace: {
@@ -9,7 +10,6 @@ interface Props {
     path: string;
   };
 }
-
 
 export default function Workspace({ workspace }: Props) {
   const [flow, setFlow] = React.useState(null);
@@ -34,7 +34,9 @@ export default function Workspace({ workspace }: Props) {
         <>
           <Graph flow={flow} />
           <Console />
-          {/* <Drawer isOpen={true} title="Add Method" /> */}
+          {/* <Drawer isOpen={true} title="Add Method">
+            <AddMethod />
+          </Drawer> */}
         </>
       )}
     </>

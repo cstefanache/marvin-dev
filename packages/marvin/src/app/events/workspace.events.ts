@@ -12,6 +12,9 @@ import * as puppeteer from 'puppeteer';
 import { Flow, Runner, State } from '@marvin/discovery';
 import App from '../app';
 import Workspace from '../api/workspace';
+import getLog from '../api/logging';
+
+const logger = getLog('marvin:workspace');
 
 const store = new Store();
 let workpace: Workspace;
@@ -34,10 +37,14 @@ export default class WorkspaceEvents {
 
 ipcMain.handle('get-workspace-path', (id) => {
   const workspace: any = store.get('lastWorkspace');
-  
+
   if (fs.existsSync(`${workspace.path}`)) {
     return workspace.path;
   }
+});
+
+ipcMain.handle('get-workspaces', () => {
+  return store.get('workspaces');
 });
 
 ipcMain.handle('get-workspace', () => {
@@ -60,8 +67,16 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   App.mainWindow.webContents.send('run-completed');
 });
 
-ipcMain.handle('select-new-workspace-folder', async () => {
+ipcMain.handle('select-workspace', async(event, data) => {
+  store.set('lastWorkspace', { path: data.path, name: data.name });
+  logger.log('Workspace selected '+ data.path);
+  workpace = new Workspace();
+  workpace.initialize(data.path, data.name);
+})
+
+ipcMain.handle('select-new-workspace-folder', async (data) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then((data) => {
+    console.log('>>>> ', data);
     if (data.filePaths.length > 0) {
       const workspace = data.filePaths[0];
       const workspaceName = path

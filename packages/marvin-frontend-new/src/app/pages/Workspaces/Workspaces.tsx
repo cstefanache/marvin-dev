@@ -25,18 +25,23 @@ export default function Workspaces({
     selectWorkspace();
   }
 
+  const selectExistingWorkspace = (workspace: any) => {
+    window.electron.selectWorkspace(workspace);
+    selectWorkspace();
+  }
+
   return (
     <div className="container">
       <div>
-      <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} />
-
+      {/* <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} /> */}
+      <span className="title" onClick={selectWorkspaceFolder}>Open Folder ...</span>
       {workspaces && workspaces.length > 0 && 
         <ul className="list">
           {workspaces.map((workspace: { path: string, name: string }) => {
             const workspaceName = workspace.name;
 
             return (
-              <li key={workspace.path} onClick={selectWorkspaceFolder}>
+              <li key={workspace.path} onClick={() => selectExistingWorkspace(workspace)}>
                 <Icon icon="box"/>
                 <div className="item-text">
                   <p>{workspaceName}</p>
