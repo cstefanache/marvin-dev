@@ -15,7 +15,7 @@ interface Props {
 
 const Header = ({ workspaceName }: Props) => {
   return (
-    <Navbar className="bp4-dark nav-container" fixedToTop>
+    <Navbar className="nav-container" fixedToTop>
       <NavbarGroup align={Alignment.LEFT}>
         <NavbarHeading>Marvin</NavbarHeading>
         <NavLink to="/workspaces" className="menu-link">

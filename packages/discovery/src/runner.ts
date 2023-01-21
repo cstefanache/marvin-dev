@@ -125,6 +125,9 @@ export default class Runner {
     steps: string[],
     sequenceCallback?: Function
   ) {
+    if (steps.length === 0) {
+      return;
+    }
     const { actions } = this.flow.flow;
     const currentStepToExecute = steps[0];
     let url = processUrl(

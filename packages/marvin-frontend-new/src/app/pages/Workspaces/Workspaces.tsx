@@ -26,7 +26,7 @@ export default function Workspaces({
   }
 
   return (
-    <div className="container bp4-dark">
+    <div className="container">
       <div>
       <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} />
 

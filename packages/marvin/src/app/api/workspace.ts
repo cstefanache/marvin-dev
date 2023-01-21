@@ -92,9 +92,8 @@ export default class Workspace {
     return this.flow;
   }
 
-  async run(sequence: string[], callback:Function) {
-
-    logger.log(`Running sequence ${sequence.join(',')}`)
+  async run(sequence: string[], callback: Function) {
+    logger.log(`Running sequence ${sequence.join(',')}`);
 
     const browser = await puppeteer.launch({
       headless: true,
@@ -109,14 +108,18 @@ export default class Workspace {
     const page = await flow.navigateTo(this.config.rootUrl);
     const state = new State(page);
     await page.setRequestInterception(true);
-
     await page.waitForNetworkIdle({ timeout: this.config.defaultTimeout });
-    callback(undefined)
+    await flow.stateScreenshot(page, 'root');
+
+    callback(undefined);
     const runner = new Runner(this.config, flow, state);
     await runner.run(page, sequence, callback);
-    logger.log(`Finished running sequence. Discovering...`)
-    await flow.discover(page, true);    
-    logger.log(`Discovery finished.`)
+
+    logger.log(`Finished running sequence. Discovering...`);
+    await flow.discover(page, true);
+    logger.log(`Discovery finished.`);
+    await flow.export();
+    logger.log('Export finished.');
   }
 
   close(): void {

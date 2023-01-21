@@ -35,6 +35,7 @@ export function wrap(text: any, width: number) {
       tspan = text
         .text(null)
         .append('tspan')
+        .attr('text-rendering', 'optimizeSpeed')
         .attr('x', x)
         .attr('y', y)
         .attr('dy', dy + 'em');
@@ -47,6 +48,7 @@ export function wrap(text: any, width: number) {
         line = [word];
         tspan = text
           .append('tspan')
+          .attr('text-rendering', 'optimizeSpeed')
           .attr('x', x)
           .attr('y', y)
           .attr('dy', ++lineNumber * lineHeight + dy + 'em')
@@ -134,9 +136,10 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'stroke-width': 2,
   });
 
-  const textNode = setAttrs(node.append('text'), {
+  setAttrs(node.append('text'), {
     font,
     'font-size': fontSize,
+    'text-rendering': 'optimizeSpeed',
     x: 20,
     y: 24,
     class: 'title',
@@ -148,6 +151,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
   setAttrs(node.append('text'), {
     font,
     'font-size': fontSize - 4,
+    'text-rendering': 'optimizeSpeed',
     x: 20,
     y: function () {
       return (
@@ -157,7 +161,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'text-anchor': 'left',
     'alignment-baseline': 'hanging',
   })
-    .text((d: any) => `<> ${d.data.method}`)
+    .text((d: any) => (d.data.method ? `<> ${d.data.method}` : ''))
     .call(wrap, maxCellSize);
 
   addSVGButton(

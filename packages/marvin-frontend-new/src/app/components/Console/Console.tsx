@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tab, Tabs } from '@blueprintjs/core';
-import { Log } from './Log';
+import { Log } from '../Log';
 import './ConsoleStyles.scss';
 
 export function Console() {

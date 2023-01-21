@@ -48,6 +48,10 @@ ipcMain.handle('get-flow', () => {
   return workpace.getFlow();
 });
 
+ipcMain.handle('get-config', () => {
+  return workpace.getConfig();
+});
+
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   await workpace.run(sequence, (actionId: string) => {
     console.log('sending back', actionId);

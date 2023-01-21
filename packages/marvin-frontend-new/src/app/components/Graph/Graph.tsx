@@ -16,7 +16,7 @@ import {
   minCellWidth,
   verticalSpacing,
   spacing,
-} from './Graph.utils';
+} from '../Graph/Graph.utils';
 
 export function Graph({ flow }: { flow: any }) {
   const [path, setPath] = useState(null);
@@ -43,10 +43,12 @@ export function Graph({ flow }: { flow: any }) {
     };
 
     const sequence: string[] = [];
+    console.log(sequence)
     buildSequence(d, sequence);
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('.node').attr('class', 'node disabled');
+    d3.select(`#action-root`).attr('class', 'node loading');
     ids.forEach((id) => {
       d3.select(`#action-${id}`).attr('class', 'node loading');
     });
@@ -67,13 +69,15 @@ export function Graph({ flow }: { flow: any }) {
   }, []);
 
   useEffect(() => {
+    console.log('Starting graph rendering');
     const { graph } = flow;
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
     const measureContainer = svg.append('g');
 
     window.ipcRender.receive('action-finished', (id: string) => {
-      d3.select(`#action-${id}`).attr('opacity', 1).attr('class', 'node');
+      const idToUpdate = id ? id : 'root';
+      d3.select(`#action-${idToUpdate}`).attr('opacity', 1).attr('class', 'node');
     });
 
     window.ipcRender.receive('run-completed', (id: string) => {
@@ -92,20 +96,21 @@ export function Graph({ flow }: { flow: any }) {
 
       const boundingBox = text.node().getBBox();
       const { width, height, y } = boundingBox;
-      return [width, height];
+      return [width, height, text];
     }
-
     const layout = flextree({
       children: (d: any) => d.children,
       nodeSize: (n: any) => {
-        const [titleWidth, titleHeight] = getMeasurementFor(
+        const [titleWidth, titleHeight, titleElement] = getMeasurementFor(
           n.data.sequenceStep,
           fontSize
         );
-        const [methodWidth, methodHeight] = getMeasurementFor(
+        const [methodWidth, methodHeight, methodElement] = getMeasurementFor(
           n.data.method,
           fontSize - 2
         );
+
+        Object.assign(n, { titleElement, methodElement });
 
         return [
           Math.max(
@@ -122,11 +127,14 @@ export function Graph({ flow }: { flow: any }) {
     });
 
     const hier = {
-      sequenceStep: 'root',
+      sequenceStep: 'App Entry',
       // url: config ? config.rootUrl : '/',
       url: '/',
+      id: 'root',
       children: graph,
     };
+
+    console.log('Building tree (2)');
     const tree = layout.hierarchy(hier);
     layout(tree);
 
@@ -160,8 +168,8 @@ export function Graph({ flow }: { flow: any }) {
     const nodes = tree.descendants();
     const links = tree.links();
 
-    var link = g.selectAll('path.link').data(links);
-
+    const link = g.selectAll('path.link').data(links);
+    console.log('Building links');
     const linkEnter = link
       .enter()
       .append('path')
@@ -185,6 +193,7 @@ export function Graph({ flow }: { flow: any }) {
             `;
       });
 
+    console.log('Building nodes');
     const node = g.selectAll('.node').data(nodes);
     const nodeEnter = node
       .enter()
@@ -193,6 +202,7 @@ export function Graph({ flow }: { flow: any }) {
       .attr('id', (d: any) => `action-${d.data.id}`)
       .attr('transform', (d: any) => `translate(${d.x - d.xSize / 2} ${d.y})`);
 
+    console.log('prepare graph node');
     prepareGraphNode(nodeEnter, {
       play: run,
       screenshot: (id: any) => {
@@ -200,6 +210,7 @@ export function Graph({ flow }: { flow: any }) {
         setImg(id);
       },
     });
+    console.log('done!');
   }, [flow]);
 
   return (
