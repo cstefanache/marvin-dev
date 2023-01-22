@@ -92,6 +92,10 @@ export default class Workspace {
     return this.flow;
   }
 
+  getMethodsForPath(path: string): any{
+    return this.flow.actions[path];
+  }
+
   async run(sequence: string[], callback: Function) {
     logger.log(`Running sequence ${sequence.join(',')}`);
 

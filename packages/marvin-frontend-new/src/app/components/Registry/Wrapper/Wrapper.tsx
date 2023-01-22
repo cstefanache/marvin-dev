@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Divider, Icon, Tabs, Tab, TabId } from '@blueprintjs/core';
 
 import { Property } from '../../../types/Types';
 import TabPanel from '../../TabPanel';
 import CustomTextField from '../CustomComponents/TextField/TextField';
 import CustomSelect from '../CustomComponents/Selectors/Select';
+import Selectors from '../CustomComponents/Selectors/Selectors';
 import './WrapperStyles.scss';
 
 import {
@@ -86,23 +87,20 @@ function AddButton({ property, value, onChange, children }: any) {
 
 
 type ConfigContextType = {
-  configTab: number;
-  setConfigTab: Function;
+  configTab: number
 };
 
-export const ConfigContext = React.createContext<ConfigContextType | null>(
-  null
-);
-const ConfigContextProvider: React.FC<React.ReactNode> = ({
-  children,
-}: any) => {
-  const [configTab, setConfigTab] = useState(0);
-  return (
-    <ConfigContext.Provider value={{ configTab, setConfigTab }}>
-      {children}
-    </ConfigContext.Provider>
-  );
-};
+export const ConfigContext = React.createContext<ConfigContextType>({configTab: 0});
+// const ConfigContextProvider: React.FC<React.ReactNode> = ({
+//   children,
+// }: any) => {
+//   const [configTab, setConfigTab] = useState<string|number>(0);
+//   return (
+//     <ConfigContext.Provider value={{ configTab, setConfigTab }}>
+//       {children}
+//     </ConfigContext.Provider>
+//   );
+// };
 
 
 
@@ -114,12 +112,7 @@ interface CustomWrapperProps {
 function Wrapper({ property, children }: CustomWrapperProps) {
   const { type, title, description, properties, size, uiType, uiIndex } = property;
 
-  const [configTab, setConfigTab] = useState<TabId>(0);
-
-  const handleTabChange = (newTabId: TabId) => {
-    setConfigTab(newTabId);
-  };
-
+  
   const renderWrapperElements = () => {
     switch (uiType) {
       case 'divider': 
@@ -145,6 +138,12 @@ function Wrapper({ property, children }: CustomWrapperProps) {
         </div>
         );
       case 'tabs':
+        const [configTab, setConfigTab] = useState<number>(0);
+
+        const handleTabChange = (newTabId: number) => {
+          setConfigTab(newTabId);
+        };
+
         return (
           <div className="wrapper-container">
               {/* <Tabs
@@ -157,21 +156,23 @@ function Wrapper({ property, children }: CustomWrapperProps) {
                   <Tab key={key} label={properties[key].title} />
                 ))}
               </Tabs> */}
-            <Tabs id="configTabs" onChange={(tabId) => handleTabChange(tabId)} selectedTabId={configTab}>
-              {Object.keys(properties).map((key, idx) => (
-                <Tab key={key} id={idx} title={properties[key].title} panel={<TabPanel value={configTab as number} index={idx} children={children}/>} />
-              ))}
-            </Tabs>
+              <ConfigContext.Provider value={{configTab}}>
+                <Tabs id="configTabs" onChange={(tabId: number) => handleTabChange(tabId)} selectedTabId={configTab}>
+                  {Object.keys(properties).map((key, idx) => (
+                    <Tab key={key} id={idx} title={properties[key].title} panel={<TabPanel value={configTab as number} index={idx} children={children}/>} />
+                  ))}
+                </Tabs>
+              </ConfigContext.Provider>
             {/* TODO: These children shouldn`t be inside a tab panel? */}
             {/* {children} */}
           </div>
         );
       case 'tab':
+
+        const {configTab: tab} = useContext(ConfigContext);
         return (
-          <TabPanel value={configTab as number} index={0}>
-            <div>
-              {children}
-            </div>
+          <TabPanel value={tab} index={uiIndex || 0}>
+            {children}
           </TabPanel>
         );
       default:

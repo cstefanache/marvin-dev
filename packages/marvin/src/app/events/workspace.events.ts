@@ -54,6 +54,10 @@ ipcMain.handle('get-flow', () => {
   return workpace.getFlow();
 });
 
+ipcMain.handle('get-methods-for-path', (_, path) => {
+  return workpace.getMethodsForPath(path);
+});
+
 ipcMain.handle('get-config', () => {
   return workpace.getConfig();
 });
@@ -66,12 +70,12 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   App.mainWindow.webContents.send('run-completed');
 });
 
-ipcMain.handle('select-workspace', async(event, data) => {
+ipcMain.handle('select-workspace', async (event, data) => {
   store.set('lastWorkspace', { path: data.path, name: data.name });
-  logger.log('Workspace selected '+ data.path);
+  logger.log('Workspace selected ' + data.path);
   workpace = new Workspace();
   workpace.initialize(data.path, data.name);
-})
+});
 
 ipcMain.handle('select-new-workspace-folder', async (data) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then((data) => {

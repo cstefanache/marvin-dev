@@ -18,7 +18,7 @@ import {
   spacing,
 } from '../Graph/Graph.utils';
 
-export function Graph({ flow }: { flow: any }) {
+export function Graph({ flow, openDrawer }: { flow: any, openDrawer: Function }) {
   const [path, setPath] = useState(null);
   const [imageId, setImg] = useState(null);
 
@@ -205,6 +205,9 @@ export function Graph({ flow }: { flow: any }) {
     console.log('prepare graph node');
     prepareGraphNode(nodeEnter, {
       play: run,
+      addMethod: (obj: any) => {
+        openDrawer('addMethod', 'Add Method', obj);
+      },
       screenshot: (id: any) => {
         console.log('setting image', id);
         setImg(id);

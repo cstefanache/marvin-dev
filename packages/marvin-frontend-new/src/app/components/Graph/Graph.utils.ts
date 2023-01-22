@@ -219,7 +219,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     (d: any) => `translate(${d.xSize / 2 + 25},${d.ySize})`,
     'Add next step',
     Plus,
-    () => {},
+    (d: any) => runEvents['addMethod'](d.data),
     '#68C1EE'
   );
 

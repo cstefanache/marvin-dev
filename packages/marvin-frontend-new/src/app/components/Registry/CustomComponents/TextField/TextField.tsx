@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup } from '@blueprintjs/core';
+import { FormGroup, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import { Property } from '../../../../types/Types';
 
@@ -20,9 +20,23 @@ export default function CustomTextField(props: Props) {
     }
   };
 
+  console.log(property);
   return (
     <FormGroup helperText={error} label={title} inline={false}>
-      {typeof value === 'string' && <InputGroup value={value} onChange={handleChange} leftIcon="filter" />}
+      {type === 'string' && (
+        <InputGroup
+          value={`${value}`}
+          onChange={handleChange}
+          leftIcon="filter"
+        />
+      )}
+      {type === 'integer' && (
+        <NumericInput
+          value={value}
+          onValueChange={onChange}
+          leftIcon="filter"
+        />
+      )}
     </FormGroup>
 
     // <TextField
@@ -35,20 +49,20 @@ export default function CustomTextField(props: Props) {
     //   size="small"
     //   type={type === 'integer' ? 'number' : 'text'}
     //   label={property.title}
-      // InputProps={{
-      //   startAdornment: (
-      //     <InputAdornment position="start">
-      //       {getAdornment(title)}
-      //     </InputAdornment>
-      //   ),
-      // }}
-      // helperText={
-      //   property.error
-      //     ? property.error[0].keyword
-      //     : property.description
-      //     ? property.description
-      //     : ''
-      // }
+    // InputProps={{
+    //   startAdornment: (
+    //     <InputAdornment position="start">
+    //       {getAdornment(title)}
+    //     </InputAdornment>
+    //   ),
+    // }}
+    // helperText={
+    //   property.error
+    //     ? property.error[0].keyword
+    //     : property.description
+    //     ? property.description
+    //     : ''
+    // }
     //   required={property.isRequired}
     // />
   );

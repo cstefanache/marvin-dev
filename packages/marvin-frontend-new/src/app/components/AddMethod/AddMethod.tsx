@@ -1,8 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './AddMethodStyles.scss';
-import { Button, PanelStack2 } from '@blueprintjs/core';
+import { Button, MenuItem, PanelStack2 } from '@blueprintjs/core';
+import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 
-const Panel1 = (props: any) => {
+const SelectMethod = (props: any) => {
+  const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
+  const [methods, setMethods] = useState<any>([]);
+  const { exitUrl, sequenceStep } = props;
+  useEffect(() => {
+    const asyncFn = async () => {
+      const methods = await window.electron.getMethodsForPath(exitUrl);
+      setMethods(methods);
+    };
+    asyncFn();
+  }, []);
+
   const openNewPanel = () => {
     props.openPanel({
       props: {},
@@ -10,10 +22,43 @@ const Panel1 = (props: any) => {
       title: `Panel 2`,
     });
   };
+
+  const filterMethod: ItemPredicate<any> = (query, method) => {
+    return method.method.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  };
+
+  const renderMethod: ItemRenderer<any> = (
+    method,
+    { handleClick, modifiers }
+  ) => {
+    if (!modifiers.matchesPredicate) {
+      return null;
+    }
+    return (
+      <MenuItem key={method.id} text={method.method} onClick={handleClick} />
+    );
+  };
+
   return (
-    <div className="docs-panel-stack-contents-example">
-      <h1>test</h1>
-      <Button onClick={openNewPanel} text="Open panel type 2" />
+    <div className="select-method-panel">
+      {selectedMethod && selectedMethod.method}
+      <p>Add method execution after: "{sequenceStep}"</p>
+      <Select2
+        fill={true}
+        items={methods}
+        itemPredicate={filterMethod}
+        onItemSelect={setSelectedMethod}
+        noResults={
+          <MenuItem
+            disabled={true}
+            text="No results."
+            roleStructure="listoption"
+          />
+        }
+        itemRenderer={renderMethod}
+      >
+        <Button fill={true} text={selectedMethod?.method}  rightIcon="double-caret-vertical"/>
+      </Select2>
     </div>
   );
 };
@@ -36,7 +81,7 @@ const Panel3 = (props: any) => {
   const openNewPanel = () => {
     props.openPanel({
       props: {},
-      renderPanel: Panel1,
+      renderPanel: SelectMethod,
       title: `Panel 1`,
     });
   };
@@ -47,18 +92,24 @@ const Panel3 = (props: any) => {
     </div>
   );
 };
-const initialPanel = {
-  props: {
-    panelNumber: 1,
-  },
-  renderPanel: Panel1,
-  title: 'Panel 1',
+
+const initialPanel = (props: any) => {
+  return {
+    props: {
+      panelNumber: 1,
+      ...props,
+    },
+    renderPanel: SelectMethod,
+    title: 'Select Method',
+  };
 };
 
-export function AddMethod() {
+export function AddMethod(props: any) {
   const [activePanelOnly, setActivePanelOnly] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
-  const [currentPanelStack, setCurrentPanelStack] = useState([initialPanel]);
+  const [currentPanelStack, setCurrentPanelStack] = useState([
+    initialPanel(props),
+  ]);
 
   const addToPanelStack = useCallback(
     (newPanel: any) => setCurrentPanelStack((stack) => [...stack, newPanel]),

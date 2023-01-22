@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('electron', {
   getDiscovered: () => ipcRenderer.invoke('get-discovered'),
   getFlow: () => ipcRenderer.invoke('get-flow'),
   setFlow: (flow: any) => ipcRenderer.invoke('set-flow', flow),
+  getMethodsForPath: (path: string) => ipcRenderer.invoke('get-methods-for-path', path),
   getWorkspacePath: () => ipcRenderer.invoke('get-workspace-path'),
   runDiscovery: (sequence: any) =>
     ipcRenderer.invoke('run-discovery', sequence),

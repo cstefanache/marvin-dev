@@ -14,8 +14,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CodeIcon from '@mui/icons-material/Code';
 
 interface Props {
-  value: number | string;
-  onChange: (value: string | number) => void;
+  value: any[];
+  onChange: (value: (string | number)[]) => void;
 }
 
 export default function Selectors(props: Props) {
