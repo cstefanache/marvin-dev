@@ -1,0 +1,33 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.btn-container {
+  display: flex;
+
+  &.right {
+    justify-content: flex-end;
+  }
+
+  &.left {
+    justify-content: flex-start;
+  }
+
+  .submit-button {
+    &.bp4-button {
+      background-color: #2B95D6;
+
+      &:hover {
+        background-color: #308dc7;
+      }
+    }
+  }
+
+  .add-button {
+    &.bp4-button {
+      background-color: $lime3;
+
+      &:hover {
+        background-color: $lime4;
+      }
+    }
+  }
+}

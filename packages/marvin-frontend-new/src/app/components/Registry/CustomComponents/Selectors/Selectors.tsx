@@ -1,29 +1,18 @@
 import { useState } from 'react';
 
-import {
-  TextField,
-  Typography,
-  Chip,
-  IconButton,
-  Paper,
-  Box,
-  Button,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { FormGroup, InputGroup, Icon, Button } from '@blueprintjs/core';
 
-import CodeIcon from '@mui/icons-material/Code';
+import './SelectorsStyles.scss';
 
 interface Props {
-  value: any[];
+  value: (string | number)[];
   onChange: (value: (string | number)[]) => void;
 }
 
-export default function Selectors(props: Props) {
-  const { value, onChange } = props;
-
+export default function Selectors({ value, onChange }: Props) {
   const [addValue, setAddValue] = useState('');
 
-  const handleDelete = (index: number) => () => {
+  const handleDelete = (index: number) => {
     const newValue = [...(value || [])];
     newValue.splice(index, 1);
     onChange(newValue);
@@ -38,53 +27,33 @@ export default function Selectors(props: Props) {
     }
   };
 
+  const addButton = <Button icon="add" minimal onClick={add} />;
+
+  const clearButton = (idx: number) => <Button icon="cross" minimal onClick={() => handleDelete(idx)} />;
+
   return (
-    <Paper sx={{ p: 1 }}>
-      <TextField
-        fullWidth={true}
-        value={addValue}
-        size="small"
-        variant="standard"
-        label="Add Selecto"
-        helperText="Press enter to add"
-        onChange={(e) => setAddValue(e.target.value)}
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') {
-            add();
-          }
-        }}
-        InputProps={{
-          startAdornment: (
-            <IconButton>
-              <CodeIcon />
-            </IconButton>
-          ),
-          endAdornment: (
-            <IconButton onClick={add}>
-              <AddIcon />
-            </IconButton>
-          ),
-        }}
-        sx={{
-          mb: 1,
-          '& .Mui-focused .MuiIconButton-root': { color: 'primary.main' },
-        }}
-      />
-      <Typography variant="body2" component="span">
-        Selectors:{' '}
-      </Typography>
-      {value &&
-        value.map((locator: string, index: number) => (
-          <Chip
-            size="small"
-            key={locator}
-            color="primary"
-            sx={{ mr: 1 }}
-            label={locator}
-            variant="filled"
-            onDelete={handleDelete(index)}
-          />
+    <>
+      <FormGroup helperText="Press Enter to add" label="Add Selector" inline={false}>
+        <InputGroup 
+          value={addValue} 
+          onChange={(e) => setAddValue(e.target.value)} 
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              add();
+            }
+          }}
+          leftElement={<Icon icon="code" />}
+          rightElement={addButton}
+        />
+      </FormGroup>
+      <div className="chips-container">
+        {value && value.length > 0 && value.map((locator, idx) => (
+          <span data-tag-index="1" className="bp4-tag selector-chip">
+            <span className="bp4-fill bp4-text-overflow-ellipsis">{locator}</span>
+            {clearButton(idx)}
+          </span>
         ))}
-    </Paper>
+      </div>
+    </>
   );
 }

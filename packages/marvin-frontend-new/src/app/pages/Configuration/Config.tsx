@@ -2,9 +2,8 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import ConfigSchema from '../../schemas/config.schema.json';
-import { CustomRegistry } from '../../components/Registry/Wrapper/Wrapper';
+import { CustomRegistry, CustomWrapper } from '../../components/Registry/Wrapper/Wrapper';
 import { JSONObject } from '../../types/Types';
-import { CustomWrapper } from '../../components/Registry/Wrapper/Wrapper';
 
 import './ConfigStyles.scss';
 

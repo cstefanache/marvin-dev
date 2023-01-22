@@ -1,37 +1,17 @@
 import React, { useContext, useState } from 'react';
-import { Divider, Icon, Tabs, Tab, TabId } from '@blueprintjs/core';
+import { Divider, Icon, Tabs, Tab } from '@blueprintjs/core';
 
 import { Property } from '../../../types/Types';
 import TabPanel from '../../TabPanel';
 import CustomTextField from '../CustomComponents/TextField/TextField';
 import CustomSelect from '../CustomComponents/Selectors/Select';
 import Selectors from '../CustomComponents/Selectors/Selectors';
+import SubmitButton from '../CustomComponents/Buttons/SubmitButton';
+import RemoveButton from '../CustomComponents/Buttons/RemoveButton';
+import AddButton from '../CustomComponents/Buttons/AddButton';
 import './WrapperStyles.scss';
 
-import {
-  TextField,
-  Typography,
-  Chip,
-  IconButton,
-  Paper,
-  Box,
-  Button,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-
-import CodeIcon from '@mui/icons-material/Code';
-
-
-
-export interface CustomProps {
-  property: any;
-  value: any;
-  enum: any[];
-  onChange: Function;
-}
-
-
-const getAdornment = (title?: string) => {
+export const getInputIcon = (title?: string) => {
   if (title) {
     const lowerName = title?.toLowerCase();
 
@@ -54,37 +34,6 @@ const getAdornment = (title?: string) => {
     }
   }
 };
-
-function SubmitButton({ property, value, onChange, children }: any) {
-  return (
-    <Box sx={{ m: 2, textAlign: 'right' }}>
-      <Button variant="contained" onClick={onChange}>
-        {value ? value : children}
-      </Button>
-    </Box>
-  );
-}
-
-function RemoveButton({ property, value, onChange, children }: any) {
-  return (
-    <Box sx={{ m: 2, textAlign: 'right' }}>
-      <Button variant="contained" color="error" onClick={onChange}>
-        {value ? value : children}
-      </Button>
-    </Box>
-  );
-}
-
-function AddButton({ property, value, onChange, children }: any) {
-  return (
-    <Box sx={{ m: 2, textAlign: 'left' }}>
-      <Button variant="contained" color="secondary" onClick={onChange}>
-        {value ? value : children}
-      </Button>
-    </Box>
-  );
-}
-
 
 type ConfigContextType = {
   configTab: number
@@ -110,7 +59,7 @@ interface CustomWrapperProps {
 }
 
 function Wrapper({ property, children }: CustomWrapperProps) {
-  const { type, title, description, properties, size, uiType, uiIndex } = property;
+  const { type, title, description, properties, uiType, uiIndex } = property;
 
   
   const renderWrapperElements = () => {
@@ -122,13 +71,13 @@ function Wrapper({ property, children }: CustomWrapperProps) {
           <div className="wrapper-container">
             {description && type !== 'object' && (
               <div className="wrapper-description">
-                <p>{getAdornment(title)} {description}</p>
+                <p>{getInputIcon(title)} {description}</p>
               </div>
             )}
             {type === 'object' && (
               <div className="wrapper-container">
                 <div className="wrapper-title">
-                  <p>{getAdornment(title)} {title}</p>
+                  <p>{getInputIcon(title)} {title}</p>
                 </div>
               </div>
             )}

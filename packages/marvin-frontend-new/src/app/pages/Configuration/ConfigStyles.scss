@@ -3,9 +3,7 @@
 .config-container {
   display: block;
   width: 100%;
-  height: calc(100vh - 50px);
-  padding-top: 48px;
-  padding-left: 36px;
-  padding-right: 36px;
+  padding: 48px 36px 36px;
+  margin-bottom: 36px;
   background-color: $dark-gray2;
 }

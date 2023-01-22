@@ -20,7 +20,7 @@ import {
   TextField,
 } from '@mui/material';
 import { SchemaForm } from '@ascentcore/react-schema-form';
-import { CustomWrapper, CustomRegistry } from '../components/CustomRegistry';
+import { CustomWrapper, CustomRegistry } from '../components/Registry/Wrapper/Wrapper';
 import { ReactNode, useEffect, useState } from 'react';
 import HttpIcon from '@mui/icons-material/Http';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

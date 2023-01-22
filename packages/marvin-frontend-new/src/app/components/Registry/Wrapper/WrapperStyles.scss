@@ -8,11 +8,7 @@
 
 .wrapper-container {
   width: 100%;
-  border-radius: 4px;
-  border: 1px solid;
-  border-color: $gray3;
-  padding: 12px;
-  margin-top: 8px;
+  padding: 0px 12px;
 
   & .wrapper-container {
     padding-left: 0;

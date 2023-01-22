@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, Menu, MenuItem } from '@blueprintjs/core';
+import { FormGroup, InputGroup, NumericInput, Menu, MenuItem } from '@blueprintjs/core';
 import { Property } from '../../../../types/Types';
 
 import './SelectStyles.scss';
@@ -26,7 +26,20 @@ export default function CustomSelect(props: Props) {
   return (
     <>
       <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>
-        {typeof value === 'string' && <InputGroup value={value} onChange={handleChange} leftIcon="filter" />}
+        {type === 'string' && (
+          <InputGroup 
+            value={`${value}`} 
+            onChange={handleChange} 
+            leftIcon="filter"
+          />
+        )}
+        {type === 'integer' && (
+          <NumericInput
+            value={value}
+            onValueChange={onChange}
+            leftIcon="filter"
+          />
+        )}
       </FormGroup>
       <Menu>
         {list.map((item: string) => (

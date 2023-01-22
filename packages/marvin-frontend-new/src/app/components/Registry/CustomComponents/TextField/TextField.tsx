@@ -1,6 +1,7 @@
 import { FormGroup, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import { Property } from '../../../../types/Types';
+import { getInputIcon } from '../../Wrapper/Wrapper';
 
 interface Props {
   property: Property;
@@ -10,7 +11,7 @@ interface Props {
 
 export default function CustomTextField(props: Props) {
   const { property, value, onChange } = props;
-  const { type, title, error } = property;
+  const { type, title, error, isRequired } = property;
 
   const handleChange = (event: any) => {
     if (type === 'integer') {
@@ -20,50 +21,22 @@ export default function CustomTextField(props: Props) {
     }
   };
 
-  console.log(property);
   return (
-    <FormGroup helperText={error} label={title} inline={false}>
+    <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>
       {type === 'string' && (
         <InputGroup
           value={`${value}`}
           onChange={handleChange}
-          leftIcon="filter"
+          leftElement={getInputIcon(title)}
         />
       )}
       {type === 'integer' && (
         <NumericInput
           value={value}
           onValueChange={onChange}
-          leftIcon="filter"
+          leftElement={getInputIcon(title)}
         />
       )}
     </FormGroup>
-
-    // <TextField
-    //   fullWidth={true}
-    //   margin="none"
-    //   value={value || ''}
-    //   onChange={handleChange}
-    //   error={!!property.error}
-    //   variant="filled"
-    //   size="small"
-    //   type={type === 'integer' ? 'number' : 'text'}
-    //   label={property.title}
-    // InputProps={{
-    //   startAdornment: (
-    //     <InputAdornment position="start">
-    //       {getAdornment(title)}
-    //     </InputAdornment>
-    //   ),
-    // }}
-    // helperText={
-    //   property.error
-    //     ? property.error[0].keyword
-    //     : property.description
-    //     ? property.description
-    //     : ''
-    // }
-    //   required={property.isRequired}
-    // />
   );
 }

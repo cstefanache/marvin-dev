@@ -1,0 +1,28 @@
+.chips-container {
+  display: flex;
+  gap: 8px;
+
+  .selector-chip {
+    &.bp4-tag {
+      background-color: #2B95D6;
+      border-radius: 16px;
+  
+      span {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+  
+      button {
+        &.bp4-button.bp4-minimal {
+          border-radius: 50%;
+          padding: 5px;
+          
+          &:hover {
+            background-color: #308dc7;
+          }
+        }
+      }
+    }
+  }
+}
+
