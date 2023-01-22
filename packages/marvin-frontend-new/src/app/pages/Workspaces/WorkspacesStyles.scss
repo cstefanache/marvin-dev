@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 1200px;
   height: calc(100vh - 50px);
   padding-top: 48px;
   padding-left: 36px;
@@ -15,17 +16,23 @@
   }
 
   .input {
-    input[type="file"] {
-      border: none;
-    }
-    span {
-      box-shadow: none;
-      border-bottom: 1px solid #fff;
-      background-color: transparent;
-      color: $gray5;
-      border-radius: 0;
-      padding-right: 100px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #fff;
+    background-color: transparent;
+    color: $gray5;
+    margin-bottom: 32px;
+    padding-bottom: 4px;
 
+    span {
+      display: inline-block;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      
       &::after {
         content: "Open folder...  \f1ba";
         background-color: transparent;
@@ -40,6 +47,10 @@
           background-color: transparent;
           box-shadow: none;
         }
+      }
+
+      &:focus {
+        outline: none;
       }
     }
   }

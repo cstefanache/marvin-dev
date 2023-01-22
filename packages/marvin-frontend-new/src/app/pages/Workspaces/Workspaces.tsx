@@ -34,9 +34,13 @@ export default function Workspaces({
     <div className="container">
       <div>
       {/* <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} /> */}
-      <span className="title" onClick={selectWorkspaceFolder}>Open Folder ...</span>
-      {workspaces && workspaces.length > 0 && 
+      <div className="input">
+        <span>Workspace</span>
+        <button onClick={selectWorkspaceFolder}></button>
+      </div>
+      {workspaces && workspaces.length > 0 &&
         <ul className="list">
+          <p>Recent:</p>
           {workspaces.map((workspace: { path: string, name: string }) => {
             const workspaceName = workspace.name;
 

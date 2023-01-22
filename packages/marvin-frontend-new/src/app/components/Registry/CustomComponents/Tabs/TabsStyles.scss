@@ -1,0 +1,22 @@
+.tabs-container {
+  margin-top: 32px;
+
+  & .bp4-tab[aria-selected=true] {
+    color: #2B95D6;
+  }
+
+  & .bp4-tab:not([aria-disabled=true]):hover  {
+    color: #2B95D6;
+  }
+
+  & .bp4-tab-indicator  {
+    background-color: #2B95D6;
+  }
+  & .bp4-tab {
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

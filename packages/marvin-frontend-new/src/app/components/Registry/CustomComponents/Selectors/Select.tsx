@@ -21,8 +21,6 @@ export default function CustomSelect(props: Props) {
     }
   };
 
-  console.log(list);
-
   return (
     <>
       <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>

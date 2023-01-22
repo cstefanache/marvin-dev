@@ -22,6 +22,7 @@ export interface Property {
   title: string;
   type: string;
   uiType: string;
+  readOnly: boolean;
   uiIndex?: number;
   properties?: any;
   enum?: any;
