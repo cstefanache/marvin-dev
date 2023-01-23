@@ -58,6 +58,10 @@ ipcMain.handle('get-methods-for-path', (_, path) => {
   return workpace.getMethodsForPath(path);
 });
 
+ipcMain.handle('get-discovered-for-path', (_, path) => {
+  return workpace.getDiscoveredForPath(path);
+});
+
 ipcMain.handle('get-config', () => {
   return workpace.getConfig();
 });

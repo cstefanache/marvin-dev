@@ -4,14 +4,15 @@ import { Divider, Icon } from '@blueprintjs/core';
 import { Property } from '../../../types/Types';
 import TabPanel from '../CustomComponents/Tabs/TabPanel';
 import Tabs from '../CustomComponents/Tabs/Tabs';
-import CustomTextField, { CustomTextFieldWrapper } from '../CustomComponents/TextField/TextField';
+import CustomTextField, {
+  CustomTextFieldWrapper,
+} from '../CustomComponents/TextField/TextField';
 import CustomSelect from '../CustomComponents/Selectors/Select';
 import Selectors from '../CustomComponents/Selectors/Selectors';
 import SubmitButton from '../CustomComponents/Buttons/SubmitButton';
 import RemoveButton from '../CustomComponents/Buttons/RemoveButton';
 import AddButton from '../CustomComponents/Buttons/AddButton';
 import './WrapperStyles.scss';
-
 
 export const getInputIcon = (title?: string) => {
   if (title) {
@@ -37,7 +38,6 @@ export const getInputIcon = (title?: string) => {
   }
 };
 
-
 interface CustomWrapperProps {
   property: Property;
   children: JSX.Element | JSX.Element[];
@@ -45,30 +45,39 @@ interface CustomWrapperProps {
 
 function Wrapper({ property, children }: CustomWrapperProps) {
   const { type, title, description, properties, uiType, uiIndex } = property;
-  
+  if (property.type === 'object') {
+    property.uiType = 'container';
+  }
   const renderWrapperElements = () => {
     switch (uiType) {
-      case 'divider': 
-        return <Divider className="divider" />
+      case 'divider':
+        return <Divider className="divider" />;
       case 'container':
         return (
           <div className="wrapper-container">
             {description && type !== 'object' && (
               <div className="wrapper-description">
-                <p>{getInputIcon(title)} {description}</p>
+                <p>
+                  {getInputIcon(title)} {description}
+                </p>
               </div>
             )}
             {type === 'object' && (
               <div className="wrapper-container">
                 <div className="wrapper-title">
-                  <p>{getInputIcon(title)} {title}</p>
+                  <p>
+                    {getInputIcon(title)} {title}
+                  </p>
+                  {description && (
+                    <blockquote className="bp4-blockquote">
+                      {description}
+                    </blockquote>
+                  )}
                 </div>
               </div>
             )}
-            <div className="wrapper-container">
-              {children}
-            </div>
-        </div>
+            <div className="wrapper-container">{children}</div>
+          </div>
         );
       case 'tabs':
         return (
@@ -79,19 +88,15 @@ function Wrapper({ property, children }: CustomWrapperProps) {
           </div>
         );
       case 'tab':
-        return (
-          <TabPanel index={uiIndex || 0}>
-            {children}
-          </TabPanel>
-        );
+        return <TabPanel index={uiIndex || 0}>{children}</TabPanel>;
       default:
         // TODO: check how to use the size property with Blueprint
-        // return (<Grid item {...(size || { xs: 12 })} sx={{ pl: 1, mt: 1 }}>{children}</Grid>);    
-        return (<div className="wrapper-container">{children}</div>);      
+        // return (<Grid item {...(size || { xs: 12 })} sx={{ pl: 1, mt: 1 }}>{children}</Grid>);
+        return <div className="wrapper-container">{children}</div>;
     }
-  }
+  };
 
-  return (<>{renderWrapperElements()}</>);
+  return <>{renderWrapperElements()}</>;
 }
 
 export function CustomWrapper({ property, children }: CustomWrapperProps) {

@@ -1,67 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './AddMethodStyles.scss';
-import { Button, MenuItem, PanelStack2 } from '@blueprintjs/core';
+import { Button, Divider, MenuItem, PanelStack2 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
+import { SchemaForm } from '@ascentcore/react-schema-form';
+import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
+import SelectMethod from './SelectMethod';
 
-const SelectMethod = (props: any) => {
-  const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
-  const [methods, setMethods] = useState<any>([]);
-  const { exitUrl, sequenceStep } = props;
-  useEffect(() => {
-    const asyncFn = async () => {
-      const methods = await window.electron.getMethodsForPath(exitUrl);
-      setMethods(methods);
-    };
-    asyncFn();
-  }, []);
-
-  const openNewPanel = () => {
-    props.openPanel({
-      props: {},
-      renderPanel: Panel2,
-      title: `Panel 2`,
-    });
-  };
-
-  const filterMethod: ItemPredicate<any> = (query, method) => {
-    return method.method.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-  };
-
-  const renderMethod: ItemRenderer<any> = (
-    method,
-    { handleClick, modifiers }
-  ) => {
-    if (!modifiers.matchesPredicate) {
-      return null;
-    }
-    return (
-      <MenuItem key={method.id} text={method.method} onClick={handleClick} />
-    );
-  };
-
-  return (
-    <div className="select-method-panel">
-      {selectedMethod && selectedMethod.method}
-      <p>Add method execution after: "{sequenceStep}"</p>
-      <Select2
-        fill={true}
-        items={methods}
-        itemPredicate={filterMethod}
-        onItemSelect={setSelectedMethod}
-        noResults={
-          <MenuItem
-            disabled={true}
-            text="No results."
-            roleStructure="listoption"
-          />
-        }
-        itemRenderer={renderMethod}
-      >
-        <Button fill={true} text={selectedMethod?.method}  rightIcon="double-caret-vertical"/>
-      </Select2>
-    </div>
-  );
-};
 const Panel2 = (props: any) => {
   const openNewPanel = () => {
     props.openPanel({

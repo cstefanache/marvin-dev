@@ -1,0 +1,149 @@
+{
+  "actions": {
+    "http://localhost:4200/": [
+      {
+        "method": "Login",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter username\"]",
+            "uid": "9968ad96-ad4f-4c4c-8458-0130fe50848c"
+          },
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter password\"]",
+            "uid": "51533f8a-00ed-4f77-bf08-d97b36b4279e"
+          },
+          {
+            "type": "click",
+            "locator": "button",
+            "uid": "0368dc1d-986a-495c-91b1-d194ae1ab846"
+          }
+        ]
+      },
+      {
+        "method": "Create new list",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a[href=\"/newitem\"]",
+            "uid": "8ddc2253-267f-44f8-bb0e-ed7b2612ca1e"
+          }
+        ]
+      },
+      {
+        "method": "Delete Card",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "button",
+            "uid": "34f3351c-96fc-47d2-884a-b2458f1f183a"
+          }
+        ],
+        "iterator": {
+          "name": "Card Iterator",
+          "identifier": "div.MuiTypography-root",
+          "uid": "fe42f42c-2e3a-427f-84ca-676949e30549"
+        }
+      }
+    ],
+    "http://localhost:4200/newitem": [
+      {
+        "method": "Add new item",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "div.MuiBox-root > div > div > input",
+            "uid": "fdc358f1-3837-4fbd-be96-0a576ee9c9f7"
+          },
+          {
+            "type": "click",
+            "locator": "button.MuiButton-contained",
+            "uid": "b1870653-9e3d-498b-b9a7-f971a1cdc278"
+          }
+        ]
+      },
+      {
+        "method": "Set list name and save",
+        "sequence": [
+          {
+            "type": "fill",
+            "locator": "input[placeholder=\"Enter list name\"]",
+            "uid": "d9708474-bb4d-49af-8c10-024b2254800c"
+          },
+          {
+            "type": "store",
+            "uid": "ListName",
+            "locator": "input[placeholder=\"Enter list name\"]"
+          },
+          {
+            "type": "click",
+            "locator": "button.MuiButton-textPrimary",
+            "uid": "2322c687-4165-4767-8e66-78f3294ac786"
+          }
+        ]
+      }
+    ]
+  },
+  "graph": [
+    {
+      "id": "a011e499-cf83-47ad-807f-bd7efe351703",
+      "sequenceStep": "Login as user",
+      "parameters": {
+        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
+        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+      },
+      "method": "Login",
+      "url": "http://localhost:4200/",
+      "exitUrl": "http://localhost:4200/",
+      "children": [
+        {
+          "id": "d659dd63-2440-41a1-946d-93d986affcf3",
+          "sequenceStep": "Create new list",
+          "method": "Create new list",
+          "loop": 3,
+          "url": "http://localhost:4200/",
+          "exitUrl": "http://localhost:4200/newitem",
+          "children": [
+            {
+              "id": "13adc549-b198-4a97-a51c-cb183964ad0a",
+              "sequenceStep": "Add three items",
+              "methodLoop": 3,
+              "parameters": {
+                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a-${store.library.func.random()}"
+              },
+              "method": "Add new item",
+              "url": "http://localhost:4200/newitem",
+              "exitUrl": "http://localhost:4200/newitem",
+              "children": [
+                {
+                  "id": "64bd86d2-a23b-46be-b058-c7bd08b92e87",
+                  "sequenceStep": "Save List",
+                  "parameters": {
+                    "d9708474-bb4d-49af-8c10-024b2254800c": "New List-${store.library.func.random()}"
+                  },
+                  "method": "Set list name and save",
+                  "url": "http://localhost:4200/newitem",
+                  "exitUrl": "http://localhost:4200/",
+                  "children": [
+                    {
+                      "id": "e32470fb-c0c2-4402-aa66-0ea265384728",
+                      "sequenceStep": "Delete Newly Created List",
+                      "parameters": {
+                        "fe42f42c-2e3a-427f-84ca-676949e30549": "${store['ListName']}"
+                      },
+                      "method": "Delete Card",
+                      "url": "http://localhost:4200/",
+                      "exitUrl": "http://localhost:4200/",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

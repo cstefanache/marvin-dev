@@ -28,7 +28,7 @@ export default function CustomTextField(props: Props) {
       (<FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>
         {type === 'string' && (
           <InputGroup
-            value={`${value}`}
+            value={value ? `${value}` : undefined}
             onChange={handleChange}
             leftElement={getInputIcon(title)}
           />

@@ -16,4 +16,40 @@
         width: 100%;
         height: 100%;
     }
+
+    .bp4-divider {
+        margin: 20px 0;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .sequence-item {
+        position: relative;
+        margin-bottom: 10px;
+        padding: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding-left: 40px;
+
+        .number {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            background-color: yellow;
+            color: black;
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .locator {
+            color: rgba(200, 200, 200, 1);
+            font-size: 0.8rem;
+        }
+    }
 }

@@ -26,16 +26,16 @@ export default function Workspace({ workspace }: Props) {
   useEffect(() => {
     const asyncFn = async () => {
       await loadFlow();
-      // openDrawer('addMethod', 'Add Method', {
-      //   id: '1-3',
-      //   method: 'Select a ranking category',
-      //   sequenceStep: 'Select Top Leadership Schools category',
-      //   url: '',
-      //   exitUrl: '',
-      //   parameters: {
-      //     'ranking-card-identifier-uid': 'Top Leadership Schools',
-      //   },
-      // });
+      openDrawer('addMethod', 'Add Method', {
+        id: '1-3',
+        method: 'Select a ranking category',
+        sequenceStep: 'Select Top Leadership Schools category',
+        url: '',
+        exitUrl: '',
+        parameters: {
+          'ranking-card-identifier-uid': 'Top Leadership Schools',
+        },
+      });
     };
     asyncFn();
   }, []);
@@ -55,9 +55,13 @@ export default function Workspace({ workspace }: Props) {
         <h3>Loading</h3>
       ) : (
         <>
-          <Graph flow={flow} openDrawer={openDrawer} />
+          {/* <Graph flow={flow} openDrawer={openDrawer} /> */}
           <Console />
-          <Drawer isOpen={drawerElement !== null} title="Add Method">
+          <Drawer
+            isOpen={drawerElement !== null}
+            title="Add Method"
+            onClose={() => setDrawerElement(null)}
+          >
             {drawerElement}
           </Drawer>
         </>

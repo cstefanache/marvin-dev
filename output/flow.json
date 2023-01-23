@@ -1,85 +1,226 @@
 {
   "actions": {
-    "http://localhost:4200/": [
+    "": [
       {
-        "method": "Login",
-        "sequence": [
-          {
-            "type": "fill",
-            "locator": "input[placeholder=\"Enter username\"]",
-            "uid": "9968ad96-ad4f-4c4c-8458-0130fe50848c"
-          },
-          {
-            "type": "fill",
-            "locator": "input[placeholder=\"Enter password\"]",
-            "uid": "51533f8a-00ed-4f77-bf08-d97b36b4279e"
-          },
-          {
-            "type": "click",
-            "locator": "button",
-            "uid": "0368dc1d-986a-495c-91b1-d194ae1ab846"
-          }
-        ]
-      },
-      {
-        "method": "Create new list",
+        "method": "Select a ranking category",
         "sequence": [
           {
             "type": "click",
-            "locator": "a[href=\"/newitem\"]",
-            "uid": "8ddc2253-267f-44f8-bb0e-ed7b2612ca1e"
-          }
-        ]
-      },
-      {
-        "method": "Delete Card",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "button",
-            "uid": "34f3351c-96fc-47d2-884a-b2458f1f183a"
+            "locator": ".button",
+            "uid": "ranking-card-uid"
           }
         ],
         "iterator": {
-          "name": "Card Iterator",
-          "identifier": "div.MuiTypography-root",
-          "uid": "fe42f42c-2e3a-427f-84ca-676949e30549"
+          "name": "Ranking Category Card Iterator",
+          "identifier": "h1",
+          "uid": "ranking-card-identifier-uid"
+        }
+      },
+      {
+        "method": "Go to Career Guides",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "div[data-cy=\"navBar\"] > a:nth-of-type(3)",
+            "uid": "career-guides-uid"
+          }
+        ]
+      }
+    ],
+    "business/": [
+      {
+        "method": "Select a ranking",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": ".rank-summary-description a",
+            "uid": "ranking-summary-card-uid"
+          }
+        ],
+        "iterator": {
+          "name": "Rank Summary Card Iterator",
+          "identifier": "h3",
+          "uid": "ranking-summary-card-identifier-uid"
         }
       }
     ],
-    "http://localhost:4200/newitem": [
+    "careers/": [
       {
-        "method": "Add new item",
+        "method": "Click an Article",
         "sequence": [
           {
-            "type": "fill",
-            "locator": "div.MuiBox-root > div > div > input",
-            "uid": "fdc358f1-3837-4fbd-be96-0a576ee9c9f7"
-          },
+            "type": "click",
+            "locator": "h4",
+            "uid": "article-card-uid"
+          }
+        ],
+        "iterator": {
+          "name": "Article Iterator",
+          "identifier": "h4",
+          "uid": "article-card-iterator-uid"
+        }
+      }
+    ],
+    "business/best-online-mba-programs/": [
+      {
+        "method": "Click on Sort By dropdown",
+        "sequence": [
           {
             "type": "click",
-            "locator": "button.MuiButton-contained",
-            "uid": "b1870653-9e3d-498b-b9a7-f971a1cdc278"
+            "locator": "span.select-box--arrow-down",
+            "uid": "select-sort-by-dropdow-btn-uid"
           }
         ]
       },
       {
-        "method": "Set list name and save",
+        "method": "Expand FAQ section",
         "sequence": [
           {
-            "type": "fill",
-            "locator": "input[placeholder=\"Enter list name\"]",
-            "uid": "d9708474-bb4d-49af-8c10-024b2254800c"
-          },
-          {
-            "type": "store",
-            "uid": "ListName",
-            "locator": "input[placeholder=\"Enter list name\"]"
-          },
+            "type": "click",
+            "locator": "span[data-cy=\"faq-sign\"]",
+            "uid": "faq-expand-uid"
+          }
+        ]
+      },
+      {
+        "method": "Click on a FAQ article",
+        "sequence": [
           {
             "type": "click",
-            "locator": "button.MuiButton-textPrimary",
-            "uid": "2322c687-4165-4767-8e66-78f3294ac786"
+            "locator": "a",
+            "uid": "faq-article-uid"
+          }
+        ],
+        "iterator": {
+          "name": "FAQ Article Iterator",
+          "identifier": "a",
+          "uid": "faq-article-identifier-uid"
+        }
+      },
+      {
+        "method": "Sort",
+        "sequence": [
+          {
+            "type": "click",
+            "uid": "sort-uid"
+          }
+        ],
+        "iterator": {
+          "name": "Sort Option Iterator",
+          "uid": "sort-uid"
+        }
+      }
+    ],
+    "business/best-online-mba-programs/#sort=alphabetical": [
+      {
+        "method": "Select GMAT",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "span",
+            "uid": "gmat-uid"
+          }
+        ],
+        "iterator": {
+          "name": "GMAT Iterator",
+          "identifier": "span",
+          "uid": "gmat-identifier-uid"
+        }
+      }
+    ],
+    "leadership/": [
+      {
+        "method": "Select a ranking",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": ".rank-summary-description a",
+            "uid": "ranking-summary-card-uid"
+          }
+        ],
+        "iterator": {
+          "name": "Rank Summary Card Iterator",
+          "identifier": "h3",
+          "uid": "ranking-summary-card-identifier-uid"
+        }
+      }
+    ],
+    "articles/{articleName}/": [
+      {
+        "method": "Go back to Articles",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a.simple-link",
+            "uid": "article-breadcrumbs-uid"
+          }
+        ]
+      }
+    ],
+    "articles/": [
+      {
+        "method": "Read More Hero Article",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a.link-medium",
+            "uid": "read-more-hero-article-uid"
+          }
+        ]
+      }
+    ],
+    "leadership/best-online-doctor-education-programs/": [
+      {
+        "method": "Expand FAQ section",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "span[data-cy=\"faq-sign\"]",
+            "uid": "faq-expand-uid"
+          }
+        ]
+      },
+      {
+        "method": "Click on a FAQ article",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "a",
+            "uid": "faq-article-uid"
+          }
+        ],
+        "iterator": {
+          "name": "FAQ Article Iterator",
+          "identifier": "a",
+          "uid": "faq-article-identifier-uid"
+        }
+      }
+    ],
+    "business/best-online-mba-programs/#sort=alphabetical&gmat=flexible": [
+      {
+        "method": "Select MBA Card",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "h2",
+            "uid": "mba-card-uid"
+          }
+        ],
+        "iterator": {
+          "name": "MBA Card Iterator",
+          "identifier": "h2",
+          "uid": "mba-card-identifier-uid"
+        }
+      }
+    ],
+    "business/ashland-university/": [
+      {
+        "method": "Click Full Ranking button",
+        "sequence": [
+          {
+            "type": "click",
+            "locator": "[data-cy=\"programDetails\"] > a",
+            "uid": "see-full-ranking-uid"
           }
         ]
       }
@@ -87,61 +228,246 @@
   },
   "graph": [
     {
-      "id": "a011e499-cf83-47ad-807f-bd7efe351703",
-      "sequenceStep": "Login as user",
+      "id": "1",
+      "sequenceStep": "Select Top Business Schools category",
+      "method": "Select a ranking category",
+      "url": "",
+      "exitUrl": "business/",
       "parameters": {
-        "9968ad96-ad4f-4c4c-8458-0130fe50848c": "user@marvinapp.io",
-        "51533f8a-00ed-4f77-bf08-d97b36b4279e": "password123"
+        "ranking-card-identifier-uid": "Top Business Schools"
       },
-      "method": "Login",
-      "url": "http://localhost:4200/",
-      "exitUrl": "http://localhost:4200/",
       "children": [
         {
-          "id": "d659dd63-2440-41a1-946d-93d986affcf3",
-          "sequenceStep": "Create new list",
-          "method": "Create new list",
-          "loop": 3,
-          "url": "http://localhost:4200/",
-          "exitUrl": "http://localhost:4200/newitem",
+          "id": "2",
+          "sequenceStep": "Select Best Online MBA Programs in 2022 ranking",
+          "method": "Select a ranking",
+          "url": "business/",
+          "exitUrl": "business/best-online-mba-programs/",
+          "parameters": {
+            "ranking-summary-card-identifier-uid": "Best Online MBA Programs in 2022"
+          },
           "children": [
             {
-              "id": "13adc549-b198-4a97-a51c-cb183964ad0a",
-              "sequenceStep": "Add three items",
-              "methodLoop": 3,
-              "parameters": {
-                "fdc358f1-3837-4fbd-be96-0a576ee9c9f7": "a-${store.library.func.random()}"
-              },
-              "method": "Add new item",
-              "url": "http://localhost:4200/newitem",
-              "exitUrl": "http://localhost:4200/newitem",
+              "id": "3",
+              "sequenceStep": "Expand FAQ section",
+              "method": "Expand FAQ section",
+              "url": "business/best-online-mba-programs/",
+              "exitUrl": "business/best-online-mba-programs/",
               "children": [
                 {
-                  "id": "64bd86d2-a23b-46be-b058-c7bd08b92e87",
-                  "sequenceStep": "Save List",
+                  "id": "4",
+                  "sequenceStep": "Click on the Methodology FAQ article",
+                  "method": "Click on a FAQ article",
+                  "url": "business/best-online-mba-programs/",
+                  "exitUrl": "articles/methodology-for-fortunes-online-mba-ranking/",
                   "parameters": {
-                    "d9708474-bb4d-49af-8c10-024b2254800c": "New List-${store.library.func.random()}"
+                    "faq-article-identifier-uid": "Methodology for Fortune’s online MBA ranking"
                   },
-                  "method": "Set list name and save",
-                  "url": "http://localhost:4200/newitem",
-                  "exitUrl": "http://localhost:4200/",
                   "children": [
                     {
-                      "id": "e32470fb-c0c2-4402-aa66-0ea265384728",
-                      "sequenceStep": "Delete Newly Created List",
-                      "parameters": {
-                        "fe42f42c-2e3a-427f-84ca-676949e30549": "${store['ListName']}"
-                      },
-                      "method": "Delete Card",
-                      "url": "http://localhost:4200/",
-                      "exitUrl": "http://localhost:4200/",
-                      "children": []
+                      "id": "5",
+                      "sequenceStep": "Go back to Articles",
+                      "method": "Go back to Articles",
+                      "url": "articles/methodology-for-fortunes-online-mba-ranking/",
+                      "exitUrl": "articles/",
+                      "children": [
+                        {
+                          "id": "6",
+                          "method": "Read More Hero Article",
+                          "sequenceStep": "Read More Hero Article",
+                          "url": "articles/",
+                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "4-2",
+                  "method": "Click on a FAQ article",
+                  "sequenceStep": "Click on traditional MBA FAQ article",
+                  "url": "business/best-online-mba-programs/",
+                  "exitUrl": "articles/online-mba-versus-traditional-mba/",
+                  "parameters": {
+                    "faq-article-identifier-uid": "Online MBA versus traditional MBA: Here are the major differences"
+                  },
+                  "children": [
+                    {
+                      "id": "4-3",
+                      "sequenceStep": "Go back to Articles",
+                      "method": "Go back to Articles",
+                      "url": "articles/online-mba-versus-traditional-mba/",
+                      "exitUrl": "articles/",
+                      "children": [
+                        {
+                          "id": "4-4",
+                          "method": "Read More Hero Article",
+                          "sequenceStep": "Read More Hero Article",
+                          "url": "articles/",
+                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
+                        }
+                      ]
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "1-3",
+      "method": "Select a ranking category",
+      "sequenceStep": "Select Top Leadership Schools category",
+      "url": "",
+      "exitUrl": "leadership/",
+      "parameters": {
+        "ranking-card-identifier-uid": "Top Leadership Schools"
+      },
+      "children": [
+        {
+          "id": "2-3",
+          "method": "Select a ranking",
+          "sequenceStep": "Select EdD ranking",
+          "url": "leadership/",
+          "exitUrl": "leadership/best-online-doctor-education-programs/",
+          "parameters": {
+            "ranking-summary-card-identifier-uid": "Best Online Doctorate in Education (EdD) Programs in 2022"
+          },
+          "children": [
+            {
+              "id": "3-3",
+              "method": "Expand FAQ section",
+              "sequenceStep": "Expand FAQ section",
+              "url": "leadership/best-online-doctor-education-programs/",
+              "exitUrl": "leadership/best-online-doctor-education-programs/",
+              "children": [
+                {
+                  "id": "3-4",
+                  "method": "Click on a FAQ article",
+                  "sequenceStep": "Click on the Methodology FAQ article",
+                  "url": "leadership/best-online-doctor-education-programs/",
+                  "exitUrl": "articles/methodology-for-fortunes-ranking-of-online-doctorate-of-education-in-organizational-leadership-ed-d-programs/",
+                  "parameters": {
+                    "faq-article-identifier-uid": "Methodology for Fortune’s ranking of online doctorate of education in organizational leadership (Ed.D.) programs"
+                  },
+                  "children": [
+                    {
+                      "id": "3-5",
+                      "method": "Go back to Articles",
+                      "sequenceStep": "Go back to Articles",
+                      "url": "articles/methodology-for-fortunes-ranking-of-online-doctorate-of-education-in-organizational-leadership-ed-d-programs/",
+                      "exitUrl": "articles/",
+                      "children": [
+                        {
+                          "id": "3-6",
+                          "method": "Read More Hero Article",
+                          "sequenceStep": "Read More Hero Article",
+                          "url": "articles/",
+                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4-1",
+      "method": "Select a ranking category",
+      "sequenceStep": "Select Top Business Schools category - Sort by flow",
+      "url": "",
+      "exitUrl": "business/",
+      "parameters": {
+        "ranking-card-identifier-uid": "Top Business Schools"
+      },
+      "children": [
+        {
+          "id": "4-2",
+          "method": "Select a ranking",
+          "sequenceStep": "Select Best Online MBA Programs in 2022 ranking - Sort by flow",
+          "url": "business/",
+          "exitUrl": "business/best-online-mba-programs/",
+          "parameters": {
+            "ranking-summary-card-identifier-uid": "Best Online MBA Programs in 2022"
+          },
+          "children": [
+            {
+              "id": "4-3",
+              "method": "Click on Sort By dropdown",
+              "sequenceStep": "Click on Sort By dropdown",
+              "url": "business/best-online-mba-programs/",
+              "exitUrl": "business/best-online-mba-programs/",
+              "children": [
+                {
+                  "id": "4-4-1",
+                  "method": "Sort",
+                  "sequenceStep": "Sort by A-Z",
+                  "url": "business/best-online-mba-programs/",
+                  "exitUrl": "business/best-online-mba-programs/",
+                  "parameters": {
+                    "sort-uid": "A - Z"
+                  },
+                  "children": [
+                    {
+                      "id": "4-5",
+                      "method": "Select GMAT",
+                      "sequenceStep": "Select Flexible GMAT",
+                      "url": "business/best-online-mba-programs/",
+                      "exitUrl": "business/best-online-mba-programs/",
+                      "parameters": {
+                        "gmat-identifier-uid": "Flexible"
+                      },
+                      "children": [
+                        {
+                          "id": "4-6",
+                          "method": "Select MBA Card",
+                          "sequenceStep": "Select Ashland University card",
+                          "url": "business/best-online-mba-programs/",
+                          "exitUrl": "business/ashland-university/",
+                          "parameters": {
+                            "mba-card-identifier-uid": "49. Ashland University"
+                          },
+                          "children": [
+                            {
+                              "method": "Click Full Ranking button",
+                              "sequenceStep": "Click Full Ranking button",
+                              "url": "business/ashland-university/",
+                              "exitUrl": "business/best-online-mba-programs/"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5-1",
+      "method": "Go to Career Guides",
+      "sequenceStep": "Go to Career Guides",
+      "url": "",
+      "exitUrl": "careers/",
+      "children": [
+        {
+          "id": "5-2",
+          "method": "Click an Article",
+          "sequenceStep": "Click How to become an entrepreneur article",
+          "url": "careers/",
+          "exitUrl": "careers/how-to-become-an-entrepreneur/",
+          "parameters": {
+            "article-card-iterator-uid": "How to become an entrepreneur"
+          }
         }
       ]
     }
