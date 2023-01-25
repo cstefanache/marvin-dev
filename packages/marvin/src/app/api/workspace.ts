@@ -140,6 +140,11 @@ export default class Workspace {
     }
   }
 
+  saveMethodForUrl(url: string, method: any): void {
+    this.flow.actions[url].push(method);
+    this.store();
+  }
+
   store(): void {
     if (this.config) {
       logger.log(`Storing workspace ${this.config.name}`);

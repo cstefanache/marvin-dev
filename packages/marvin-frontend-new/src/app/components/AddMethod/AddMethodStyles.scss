@@ -48,7 +48,17 @@
         }
 
         .locator {
-            color: rgba(200, 200, 200, 1);
+            color: rgba(220, 220, 220, 1);
+            padding: 2px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            background-color: #000;
+        }
+
+        .discovered-text {
+            color: rgba(220, 220, 220, 1);
+            padding: 2px;
             font-size: 0.8rem;
         }
     }

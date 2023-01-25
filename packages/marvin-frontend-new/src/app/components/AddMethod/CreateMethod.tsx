@@ -1,16 +1,39 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './AddMethodStyles.scss';
-import { Button, Divider, MenuItem, PanelStack2 } from '@blueprintjs/core';
+import {
+  Button,
+  Divider,
+  InputGroup,
+  MenuItem,
+  PanelStack2,
+} from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import * as uuid from 'uuid';
 
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
+import { EditableSelectionBox } from '../Common/EditableSelectionBox';
+
+const getItem = (item: any) => {
+  switch (item.from) {
+    case 'info':
+      return 'info-sign';
+    case 'actions':
+      return 'hand-up';
+    case 'input':
+      return 'text-highlight';
+    case 'iterable':
+      return 'comparison';
+    default:
+      return 'help';
+  }
+};
 
 export interface Discovered {
   text: string;
   locator: string;
   details?: string;
+  from: string;
 }
 
 export interface DiscoveredItem extends Discovered {
@@ -41,12 +64,14 @@ const renderItem: ItemRenderer<DiscoveredItem> = (
   if (!modifiers.matchesPredicate) {
     return null;
   }
+
   return (
     <MenuItem
       active={modifiers.active}
       disabled={modifiers.disabled}
       key={item.locator}
       label={item.text.toString()}
+      icon={getItem(item)}
       onClick={handleClick}
       onFocus={handleFocus}
       roleStructure="listoption"
@@ -83,12 +108,10 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
-  const { exitUrl, sequenceStep } = props;
-
-  const [schema, setSchema] = React.useState<any>();
-  const [data, setData] = useState<any>(null);
+  const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
+  const [methodName, setMethodName] = useState<string>('');
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -113,28 +136,74 @@ const CreateMethod = (props: any) => {
     asyncFn();
   }, []);
 
+  async function doSave() {
+    const saveObject = {
+      method: methodName,
+      sequence,
+    };
+    await window.electron.saveMethodForUrl(exitUrl, saveObject);
+    props.closePanel();
+  }
+
   const selectItem = (item: any) => {
+    let type = 'click';
+
+    switch (item.from) {
+      case 'info':
+        type = 'check';
+        break;
+      case 'actions':
+        type = 'click';
+        break;
+      case 'input':
+        type = 'type';
+        break;
+      default:
+        type = 'unkown';
+    }
+
     setSequence([
       ...sequence,
       {
         uid: uuid.v4(),
         locator: item.locator,
-        type: 'click', //TODO refactor
+        details: `${item.text || ''} ${item.details || ''}`,
+        type,
       },
     ]);
   };
 
   return (
     <div>
+      <InputGroup
+        value={methodName}
+        placeholder="Method name"
+        onChange={(event: any) => setMethodName(event.target.value)}
+      />
       {sequence.map((step: any, index: number) => {
         return (
           <div className="sequence-item">
-            <span className="number">{index+1}</span>
+            <span className="number">{index + 1}</span>
+            <EditableSelectionBox
+              value={step.type}
+              onSelect={(value: any) => {
+                step.type = value;
+
+                setSequence([...sequence]);
+              }}
+              options={['check', 'click', 'fill', 'store']}
+            />
             <p className="locator">{step.locator}</p>
+            <p className="discovered-text">
+              Content at discovery time: <i>{step.details}</i>
+            </p>
           </div>
         );
       })}
       {items && <DiscoveredSelect items={items} onSelect={selectItem} />}
+      <Button icon="floppy-disk" intent="success" onClick={doSave}>
+        Save
+      </Button>
     </div>
   );
 };

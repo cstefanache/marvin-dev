@@ -12,6 +12,7 @@ const SelectMethod = (props: any) => {
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
   const { exitUrl, sequenceStep } = props;
+
   useEffect(() => {
     const asyncFn = async () => {
       const methods = await window.electron.getMethodsForPath(exitUrl);
@@ -22,7 +23,7 @@ const SelectMethod = (props: any) => {
 
   const openNewPanel = () => {
     props.openPanel({
-      props: {exitUrl, openPanel: props.openPanel},
+      props: { exitUrl },
       renderPanel: CreateMethod,
       title: `Create New Method`,
     });

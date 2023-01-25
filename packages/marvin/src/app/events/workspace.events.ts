@@ -8,7 +8,6 @@ import * as Store from 'electron-store';
 import * as fs from 'fs';
 import * as path from 'path';
 
-
 import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
@@ -56,6 +55,10 @@ ipcMain.handle('get-flow', () => {
 
 ipcMain.handle('get-methods-for-path', (_, path) => {
   return workpace.getMethodsForPath(path);
+});
+
+ipcMain.handle('save-method-for-url', (_, url, method) => {
+  return workpace.saveMethodForUrl(url, method);
 });
 
 ipcMain.handle('get-discovered-for-path', (_, path) => {
