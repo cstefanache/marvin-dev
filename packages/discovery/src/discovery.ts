@@ -188,7 +188,7 @@ export default class Discovery {
       return getDescententLocator(locator);
     }
 
-    let id = await element.evaluate((el) => el.id);
+    let id: any = await element.evaluate((el) => el.id);
 
     // if id is a number, it's not a valid id
     if (!Number.isNaN(parseInt(id))) {
