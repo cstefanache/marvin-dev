@@ -195,9 +195,14 @@ export default class Discovery {
       id = undefined;
     }
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
-      locator += `#${id}`;
-      if (await this.isLocatorUnique(locator, rootEl, true)) {
-        return getDescententLocator(locator);
+      const prevLocator = locator;
+      try {
+        locator += `#${id}`;
+        if (await this.isLocatorUnique(locator, rootEl, true)) {
+          return getDescententLocator(locator);
+        }
+      } catch (error) {
+        locator = prevLocator;
       }
     }
 

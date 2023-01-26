@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
+import * as uuid from 'uuid';
 import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
 
@@ -92,11 +93,11 @@ export default class Workspace {
     return this.flow;
   }
 
-  getMethodsForPath(path: string): any{
+  getMethodsForPath(path: string): any {
     return this.flow.actions[path];
   }
 
-  getDiscoveredForPath(path: string): any{
+  getDiscoveredForPath(path: string): any {
     this.syncOutput();
     return this.output.discovered[path];
   }
@@ -129,6 +130,7 @@ export default class Workspace {
     logger.log(`Discovery finished.`);
     await flow.export();
     logger.log('Export finished.');
+    this.flow = flow.flow;
   }
 
   close(): void {
@@ -140,7 +142,39 @@ export default class Workspace {
     }
   }
 
+  addBranch(id: string, branch: any): void {
+    const searchInChildren = (children: any[]) => {
+      for (const child of children) {
+        console.log(child.id, id);
+        if (child.id === id) {
+          return child;
+        }
+        if (child.children) {
+          const result = searchInChildren(child.children);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    };
+
+    let flowElement;
+    if (id === 'root') {
+      flowElement = {children: this.flow.graph};
+    } else {
+      flowElement = searchInChildren(this.flow.graph);
+    }
+    console.log(flowElement);
+    if (flowElement) {
+      flowElement.children.push({ id: uuid.v4(), ...branch, children: [] });
+    }
+    this.store();
+  }
+
   saveMethodForUrl(url: string, method: any): void {
+    if (!this.flow.actions[url]) {
+      this.flow.actions[url] = [];
+    }
     this.flow.actions[url].push(method);
     this.store();
   }

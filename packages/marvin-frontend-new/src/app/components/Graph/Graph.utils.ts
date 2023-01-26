@@ -75,12 +75,14 @@ export function addSVGButton(
   title: string,
   icon: any,
   func: Function,
+  attrs: any = {},
   bgCol = cellBgCol
 ) {
   const button = node.append('g');
   setAttrs(button, {
     transform: locateFn,
     class: 'button',
+    ...attrs,
   }).on('click', (e: any, d: any) => func(d));
 
   const circle = setAttrs(button.append('circle'), {
@@ -170,16 +172,17 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'Screenshot',
     Camera,
     (d: any) => {
-      console.log(d);
       runEvents['screenshot'](d.data.id);
-    }
+    },
+    { opacity: (d: any) => (d.data.exitUrl !== undefined ? 1 : 0) }
   );
   addSVGButton(
     node,
     (d: any) => `translate(0,45)`,
     'Discovered Elements',
     Comparison,
-    () => {}
+    () => {},
+    { opacity: (d: any) => (d.data.exitUrl !== undefined ? 1 : 0) }
   );
   addSVGButton(
     node,
@@ -187,6 +190,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'Edit',
     Edit,
     () => {},
+    {},
     '#46B044'
   );
   addSVGButton(
@@ -202,6 +206,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'Delete',
     Trash,
     () => {},
+    {},
     '#FB6565'
   );
 
@@ -211,6 +216,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'Execute up to this step',
     Play,
     (d: any) => runEvents['play'](d),
+    {},
     '#68C1EE'
   );
 
@@ -220,6 +226,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     'Add next step',
     Plus,
     (d: any) => runEvents['addMethod'](d.data),
+    { opacity: (d: any) => (d.data.exitUrl !== undefined ? 1 : 0) },
     '#68C1EE'
   );
 

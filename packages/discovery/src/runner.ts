@@ -143,6 +143,8 @@ export default class Runner {
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
 
+    action.url = url;
+
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
       const { method: methodName, loop, methodLoop, parameters } = action;
@@ -173,6 +175,14 @@ export default class Runner {
             if (sequenceCallback) {
               await sequenceCallback(action.id);
             }
+            let url = processUrl(
+              page.url(),
+              this.config.aliases.urlReplacers,
+              this.config.rootUrl
+            );
+            action.exitUrl = url;
+            console.log(action)
+
             if (action.children && action.children.length && steps.length > 1) {
               await this.executeStep(
                 page,

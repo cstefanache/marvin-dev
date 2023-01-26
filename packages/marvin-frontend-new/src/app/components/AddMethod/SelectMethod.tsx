@@ -5,18 +5,21 @@ import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
 import CreateMethod from './CreateMethod';
-
 const SelectMethod = (props: any) => {
   const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
   const [schema, setSchema] = React.useState<any>();
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
-  const { exitUrl, sequenceStep } = props;
+  console.log(props)
+  const {
+    parent: { exitUrl, sequenceStep },
+    save,
+  } = props;
 
   useEffect(() => {
     const asyncFn = async () => {
       const methods = await window.electron.getMethodsForPath(exitUrl);
-      setMethods(methods);
+      setMethods(methods || []);
     };
     asyncFn();
   }, []);
@@ -30,6 +33,7 @@ const SelectMethod = (props: any) => {
   };
 
   useEffect(() => {
+    console.log('Selected method', selectedMethod)
     if (selectedMethod) {
       setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
       const method = selectedMethod;
@@ -54,7 +58,7 @@ const SelectMethod = (props: any) => {
                   description: iterator.locator,
                 },
               }),
-              ...method.sequence
+              ...(method.sequence || [])
                 .filter((s: any) => s.type === 'fill')
                 .reduce((memo: any, obj: any) => {
                   memo[obj.uid] = { type: 'string', title: obj.locator };
@@ -70,6 +74,7 @@ const SelectMethod = (props: any) => {
   }, [selectedMethod]);
 
   const filterMethod: ItemPredicate<any> = (query, method) => {
+    console.log(query, method)
     return method.method.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
@@ -85,9 +90,11 @@ const SelectMethod = (props: any) => {
     );
   };
 
+
   return (
     <div className="select-method-panel">
       {selectedMethod && selectedMethod.method}
+      <pre>Url: {exitUrl}</pre>
       <p>Add method execution after: "{sequenceStep}"</p>
       <Select2
         fill={true}
@@ -125,7 +132,7 @@ const SelectMethod = (props: any) => {
             data={data}
             wrapper={CustomWrapper as any}
             config={{ registry: CustomRegistry }}
-            onSubmit={(data) => console.log(data)}
+            onSubmit={data => save({method: selectedMethod.method, ...data}, props.parent)}
           />
         </>
       )}

@@ -18,10 +18,11 @@ const initialPanel = (props: any) => {
 };
 
 export function AddMethod(props: any) {
+
   const [activePanelOnly, setActivePanelOnly] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
   const [currentPanelStack, setCurrentPanelStack] = useState([
-    initialPanel(props),
+    initialPanel({ ...props }),
   ]);
 
   const addToPanelStack = useCallback(

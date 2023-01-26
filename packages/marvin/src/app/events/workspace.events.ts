@@ -61,6 +61,10 @@ ipcMain.handle('save-method-for-url', (_, url, method) => {
   return workpace.saveMethodForUrl(url, method);
 });
 
+ipcMain.handle('add-branch', (_, id, data) => { 
+  return workpace.addBranch(id, data);
+})
+
 ipcMain.handle('get-discovered-for-path', (_, path) => {
   return workpace.getDiscoveredForPath(path);
 });

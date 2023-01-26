@@ -130,6 +130,7 @@ export function Graph({ flow, openDrawer }: { flow: any, openDrawer: Function })
       sequenceStep: 'App Entry',
       // url: config ? config.rootUrl : '/',
       url: '/',
+      exitUrl: '',
       id: 'root',
       children: graph,
     };

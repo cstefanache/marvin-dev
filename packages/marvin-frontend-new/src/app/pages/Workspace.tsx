@@ -13,6 +13,7 @@ interface Props {
 
 export default function Workspace({ workspace }: Props) {
   const [flow, setFlow] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   const [drawerElement, setDrawerElement] = React.useState<null | JSX.Element>(
     null
   );
@@ -21,41 +22,42 @@ export default function Workspace({ workspace }: Props) {
   const loadFlow = async () => {
     const flow = await window.electron.getFlow();
     setFlow(flow);
+    setLoading(false);
   };
 
   useEffect(() => {
     const asyncFn = async () => {
       await loadFlow();
-      openDrawer('addMethod', 'Add Method', {
-        id: '1-3',
-        method: 'Select a ranking category',
-        sequenceStep: 'Select Top Leadership Schools category',
-        url: '',
-        exitUrl: '',
-        parameters: {
-          'ranking-card-identifier-uid': 'Top Leadership Schools',
-        },
-      });
     };
     asyncFn();
   }, []);
+
+  const save = async (data: any, parentObject: any) => {
+    console.log(data, parentObject);
+    const { id } = parentObject;
+    setLoading(true)
+    await window.electron.addBranch(id, data)
+    setDrawerElement(null);
+    loadFlow();
+  };
 
   const openDrawer = (type: string, title: string, props: any) => {
     setDrawerTitle(title);
     switch (type) {
       case 'addMethod':
-        setDrawerElement(<AddMethod {...props} />);
+        const properties = { ...{ parent: props }, save };
+        setDrawerElement(<AddMethod {...properties} />);
         break;
     }
   };
 
   return (
     <>
-      {!flow ? (
+      {!flow || loading ? (
         <h3>Loading</h3>
       ) : (
         <>
-          {/* <Graph flow={flow} openDrawer={openDrawer} /> */}
+          <Graph flow={flow} openDrawer={openDrawer} />
           <Console />
           <Drawer
             isOpen={drawerElement !== null}
