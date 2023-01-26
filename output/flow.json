@@ -1,6 +1,6 @@
 {
   "actions": {
-    "http://localhost:4200/": [
+    "": [
       {
         "method": "Login",
         "sequence": [
@@ -47,7 +47,7 @@
         }
       }
     ],
-    "http://localhost:4200/newitem": [
+    "newitem": [
       {
         "method": "Add new item",
         "sequence": [

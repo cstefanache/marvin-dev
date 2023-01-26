@@ -6,6 +6,8 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     require: any;
   }
+  
+  var store: any
 }
 import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
