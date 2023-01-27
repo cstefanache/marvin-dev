@@ -3,7 +3,7 @@ import * as puppeteer from 'puppeteer';
 import * as uuid from 'uuid';
 import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
-
+import App from '../app';
 const logger = getLog('marvin:workspace');
 
 function debounce(func, timeout = 300) {
@@ -62,25 +62,27 @@ export default class Workspace {
       );
     }
 
+    if (!fs.existsSync(`${path}/flow.json`)) {
+      this.flow = {
+        actions: {},
+        graph: [],
+      };
+      fs.writeFileSync(`${path}/flow.json`, JSON.stringify(this.flow, null, 2));
+    }
+
     logger.log('Watching config file for changes...');
-    fs.watchFile(
-      `${path}/config.json`,
-      debounce((curr, prev) => {
-        logger.log('Config file changed. Reloading...');
-        this.config = JSON.parse(
-          fs.readFileSync(`${path}/config.json`, 'utf8')
-        );
-      })
-    );
+    fs.watchFile(`${path}/config.json`, (curr, prev) => {
+      logger.log('Config file changed. Reloading...');
+      this.config = JSON.parse(fs.readFileSync(`${path}/config.json`, 'utf8'));
+      App.mainWindow.webContents.send('config-updated', this.config);
+    });
 
     logger.log('Watching flow file for changes...');
-    fs.watchFile(
-      `${path}/flow.json`,
-      debounce((curr, prev) => {
-        logger.log('Flow file changed. Reloading...');
-        this.flow = JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
-      }, 1000)
-    );
+    fs.watchFile(`${path}/flow.json`, (curr, prev) => {
+      logger.log('Flow file changed. Reloading...');
+      this.flow = JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
+      App.mainWindow.webContents.send('flow-updated', this.flow);
+    });
   }
 
   async loadWorkspace(folder: string): Promise<void> {
@@ -111,12 +113,18 @@ export default class Workspace {
       logger.error(`No workspace folder found at ${folder}`);
       throw new Error('No workspace folder found.');
     }
-
-    this.folder = folder;
   }
 
   getConfig(): Config {
     return this.config;
+  }
+
+  setConfig(config: Config) {
+    this.config = config;
+    fs.writeFileSync(
+      `${this.config.path}/config.json`,
+      JSON.stringify(config, null, 2)
+    );
   }
 
   getFlow(): Models.FlowModel {
@@ -128,12 +136,10 @@ export default class Workspace {
   }
 
   getDiscoveredForPath(path: string): any {
-    this.syncOutput();
     return this.output.discovered[path];
   }
 
   getDiscoveredPaths(): string[] {
-    this.syncOutput();
     return Object.keys(this.output.discovered);
   }
 
@@ -172,7 +178,9 @@ export default class Workspace {
       console.log(exitUrl);
       this.config.exitUrl = flow.getUrl(exitUrl);
       this.store();
+      
     }
+    this.syncOutput();
   }
 
   close(): void {
@@ -237,9 +245,9 @@ export default class Workspace {
   }
 
   syncOutput(): void {
-    if (this.folder && fs.existsSync(`${this.folder}/output.json`)) {
+    if (fs.existsSync(`${this.config.path}/output.json`)) {
       this.output = JSON.parse(
-        fs.readFileSync(`${this.folder}/output.json`, 'utf8')
+        fs.readFileSync(`${this.config.path}/output.json`, 'utf8')
       );
     }
   }

@@ -181,7 +181,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     (d: any) => `translate(0,45)`,
     'Discovered Elements',
     Comparison,
-    () => {},
+    (d: any) => runEvents['showDiscovered'](d.data.exitUrl),
     { opacity: (d: any) => (d.data.exitUrl !== undefined ? 1 : 0) }
   );
   addSVGButton(

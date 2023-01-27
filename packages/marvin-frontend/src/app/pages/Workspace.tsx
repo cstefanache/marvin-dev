@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Console } from '../components/Console/Console';
 import { Graph } from '../components/Graph/Graph';
-import { Drawer, PanelStack2 } from '@blueprintjs/core';
+import { Callout, Drawer, Icon, PanelStack2, Tag } from '@blueprintjs/core';
 import { AddMethod } from '../components/AddMethod/AddMethod';
-
+import { getIcon } from '../utils';
+import './workspace.scss';
 interface Props {
   workspace: {
     name: string;
@@ -15,6 +16,11 @@ export default function Workspace({ workspace }: Props) {
   const [flow, setFlow] = React.useState(null);
   const [config, setConfig] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [discoveredElements, setDiscoveredElements] = React.useState<
+    any | null
+  >(null);
+  const [exitUrl, setExitUrl] = React.useState<string | null>(null);
+  const [flowKey, setFlowKey] = React.useState(Math.random());
   const [drawerElement, setDrawerElement] = React.useState<null | JSX.Element>(
     null
   );
@@ -33,15 +39,81 @@ export default function Workspace({ workspace }: Props) {
       await loadFlow();
     };
     asyncFn();
+
+    window.ipcRender.receive('config-updated', (config: any) => {
+      console.log('new config', config);
+      setConfig(config);
+      setFlowKey(Math.random());
+    });
+
+    window.ipcRender.receive('flow-updated', (flow: any) => {
+      setFlow(flow);
+      setFlowKey(Math.random());
+    });
   }, []);
 
   const save = async (data: any, parentObject: any) => {
     console.log(data, parentObject);
     const { id } = parentObject;
-    setLoading(true)
-    await window.electron.addBranch(id, data)
+    setLoading(true);
+    await window.electron.addBranch(id, data);
     setDrawerElement(null);
     loadFlow();
+  };
+
+  const runDiscovery = async (sequence: any[]) => {
+    window.electron.runDiscovery(sequence);
+  };
+
+  const showDiscoveredElements = async (exitUrl: string) => {
+    setExitUrl(exitUrl);
+    const discovered = await window.electron.getDiscoveredForPath(exitUrl);
+    if (discovered && discovered.items) {
+      const {
+        items: { info, input, actions, iterable },
+      } = discovered;
+      let items = [
+        ...info.map((item: any) => ({ ...item, from: 'info' })),
+        ...input.map((item: any) => ({ ...item, from: 'input' })),
+        ...actions.map((item: any) => ({ ...item, from: 'actions' })),
+        // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
+        ...iterable.reduce((memo: any[], item: any) => {
+          const { identifier, iteratorName, elements } = item;
+          console.log(item);
+          elements.forEach((element: any) => {
+            memo.push({
+              from: 'iterable',
+              text: element.text,
+              locator: element.locator,
+              details: iteratorName,
+              iterator: {
+                name: iteratorName,
+                identifier,
+              },
+            });
+          });
+
+          if (!elements.length) {
+            memo.push({
+              from: 'iterable',
+              locator: item.locator,
+              details: iteratorName,
+              iterator: {
+                name: iteratorName,
+              },
+            });
+
+            console.log(memo);
+          }
+          return memo;
+        }, []),
+      ].filter(
+        (value, index, self) =>
+          index === self.findIndex((t) => t.locator === value.locator)
+      );
+
+      setDiscoveredElements(items);
+    }
   };
 
   const openDrawer = (type: string, title: string, props: any) => {
@@ -60,7 +132,14 @@ export default function Workspace({ workspace }: Props) {
         <h3>Loading</h3>
       ) : (
         <>
-          <Graph flow={flow} config={config} openDrawer={openDrawer} />
+          <Graph
+            key={flowKey}
+            flow={flow}
+            config={config}
+            openDrawer={openDrawer}
+            runDiscovery={runDiscovery}
+            showDiscoveredElements={showDiscoveredElements}
+          />
           <Console />
           <Drawer
             isOpen={drawerElement !== null}
@@ -68,6 +147,28 @@ export default function Workspace({ workspace }: Props) {
             onClose={() => setDrawerElement(null)}
           >
             {drawerElement}
+          </Drawer>
+          <Drawer
+            isOpen={discoveredElements !== null}
+            title={`Discovered Elements for path ${exitUrl}`}
+            onClose={() => setDiscoveredElements(null)}
+          >
+            {discoveredElements && (
+              <div style={{ overflow: 'auto' }}>
+                {discoveredElements.map((item: any) => (
+                  <Callout
+                    key={item.locator}
+                    icon={getIcon(item)}
+                    className="mt-2"
+                  >
+                    {item.text} | {item.details}
+                    <div>
+                      <Tag minimal={true}>{item.locator}</Tag>
+                    </div>
+                  </Callout>
+                ))}
+              </div>
+            )}
           </Drawer>
         </>
       )}

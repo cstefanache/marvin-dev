@@ -3,14 +3,17 @@ import './AddMethodStyles.scss';
 import { Button, Divider, MenuItem, PanelStack2 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { SchemaForm } from '@ascentcore/react-schema-form';
-import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
+import {
+  CustomRegistry, CustomWrapper, SelectMethodCustomWrapper,
+} from '../Registry/Wrapper/Wrapper';
 import CreateMethod from './CreateMethod';
+
 const SelectMethod = (props: any) => {
   const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
   const [schema, setSchema] = React.useState<any>();
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
-  console.log(props)
+  console.log(props);
   const {
     parent: { exitUrl, sequenceStep },
     save,
@@ -58,15 +61,20 @@ const SelectMethod = (props: any) => {
                 },
               }),
               ...(method.sequence || [])
-                .filter((s: any) => s.type === 'fill')
+                // .filter((s: any) => s.type === 'fill')
                 .reduce((memo: any, obj: any) => {
-                  memo[obj.uid] = { type: 'string', title: obj.locator };
+                  memo[obj.uid] = {
+                    type: 'string',
+                    title: obj.locator,
+                    inputType: obj.type
+                  };
                   return memo;
                 }, {}),
             },
           },
         },
       };
+      console.log(schema);
 
       setSchema(schema);
     }
@@ -127,7 +135,7 @@ const SelectMethod = (props: any) => {
           <SchemaForm
             schema={schema}
             data={data}
-            wrapper={CustomWrapper as any}
+            wrapper={SelectMethodCustomWrapper as any}
             config={{ registry: CustomRegistry }}
             onSubmit={(data) =>
               save({ method: selectedMethod.method, ...data }, props.parent)

@@ -18,9 +18,22 @@ import {
   spacing,
 } from './Graph.utils';
 
-export function Graph({ config, flow, openDrawer }: { config: any, flow: any, openDrawer: Function }) {
+export function Graph({
+  config,
+  flow,
+  openDrawer,
+  runDiscovery,
+  showDiscoveredElements,
+}: {
+  config: any;
+  flow: any;
+  openDrawer: Function;
+  runDiscovery: Function;
+  showDiscoveredElements: Function;
+}) {
   const [path, setPath] = useState(null);
   const [imageId, setImg] = useState(null);
+  const [refresh, setRefresh] = useState(Math.random());
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -51,7 +64,7 @@ export function Graph({ config, flow, openDrawer }: { config: any, flow: any, op
     ids.forEach((id) => {
       d3.select(`#action-${id}`).attr('class', 'node loading');
     });
-    window.electron.runDiscovery(sequence.reverse());
+    runDiscovery(sequence.reverse());
   };
 
   const svgRef = useRef(null);
@@ -76,7 +89,9 @@ export function Graph({ config, flow, openDrawer }: { config: any, flow: any, op
 
     window.ipcRender.receive('action-finished', (id: string) => {
       const idToUpdate = id ? id : 'root';
-      d3.select(`#action-${idToUpdate}`).attr('opacity', 1).attr('class', 'node');
+      d3.select(`#action-${idToUpdate}`)
+        .attr('opacity', 1)
+        .attr('class', 'node');
     });
 
     window.ipcRender.receive('run-completed', (id: string) => {
@@ -202,7 +217,6 @@ export function Graph({ config, flow, openDrawer }: { config: any, flow: any, op
       .attr('id', (d: any) => `action-${d.data.id}`)
       .attr('transform', (d: any) => `translate(${d.x - d.xSize / 2} ${d.y})`);
 
-    console.log('prepare graph node');
     prepareGraphNode(nodeEnter, {
       play: run,
       addMethod: (obj: any) => {
@@ -212,6 +226,7 @@ export function Graph({ config, flow, openDrawer }: { config: any, flow: any, op
         console.log('setting image', id);
         setImg(id);
       },
+      showDiscovered: showDiscoveredElements
     });
     console.log('done!');
   }, [flow]);

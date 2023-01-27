@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Divider, Icon } from '@blueprintjs/core';
+import { Divider, Icon, Tag } from '@blueprintjs/core';
 
 import { Property } from '../../../types/Types';
 import TabPanel from '../CustomComponents/Tabs/TabPanel';
@@ -103,8 +103,21 @@ export function CustomWrapper({ property, children }: CustomWrapperProps) {
   return <Wrapper property={property}>{children}</Wrapper>;
 }
 
+export function SelectMethodCustomWrapper({
+  property,
+  children,
+}: CustomWrapperProps) {
+  const { inputType, title } = property as any;
+
+  if (inputType === undefined || inputType === 'fill') {
+    return <Wrapper property={property}>{children}</Wrapper>;
+  } else {
+    return <div>{inputType} <Tag minimal={true}>{title}</Tag></div>;
+  }
+}
+
 export const CustomRegistry = {
-  string: { component: CustomTextField, wrapper: CustomTextFieldWrapper },
+  string: { component: CustomTextField },
   integer: { component: CustomTextField },
   selectors: { component: Selectors },
   button: { component: SubmitButton },

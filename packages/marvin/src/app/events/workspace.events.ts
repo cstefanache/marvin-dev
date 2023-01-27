@@ -21,7 +21,7 @@ if (!store.get('workspaces')) {
   store.set('workspaces', []);
 }
 
-const lastWorkspace: any = store.get('lastWorkspace');
+let lastWorkspace: any = store.get('lastWorkspace');
 if (lastWorkspace) {
   workspace = new Workspace();
   workspace.initialize(lastWorkspace.path, lastWorkspace.name);
@@ -61,9 +61,9 @@ ipcMain.handle('save-method-for-url', (_, url, method) => {
   return workspace.saveMethodForUrl(url, method);
 });
 
-ipcMain.handle('add-branch', (_, id, data) => { 
+ipcMain.handle('add-branch', (_, id, data) => {
   return workspace.addBranch(id, data);
-})
+});
 
 ipcMain.handle('get-discovered-for-path', (_, path) => {
   return workspace.getDiscoveredForPath(path);
@@ -71,6 +71,10 @@ ipcMain.handle('get-discovered-for-path', (_, path) => {
 
 ipcMain.handle('get-config', () => {
   return workspace.getConfig();
+});
+
+ipcMain.handle('set-config', (_, data) => {
+  workspace.setConfig(data);
 });
 
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
@@ -82,8 +86,8 @@ ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
 });
 
 ipcMain.handle('get-discovered-paths', () => {
-  return workspace.getDiscoveredPaths()
-})
+  return workspace.getDiscoveredPaths();
+});
 
 ipcMain.handle('select-workspace', async (event, data) => {
   store.set('lastWorkspace', { path: data.path, name: data.name });
@@ -93,33 +97,40 @@ ipcMain.handle('select-workspace', async (event, data) => {
 });
 
 ipcMain.handle('select-new-workspace-folder', async (data) => {
-  dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory'],  }).then((data) => {
-    if (data.filePaths.length > 0) {
-      const workspace = data.filePaths[0];
+  dialog
+    .showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })
+    .then((data) => {
+      if (data.filePaths.length > 0) {
+        const workspacePath = data.filePaths[0];
 
-      const workspaceName = path
-        .dirname(workspace)
-        .split('/')
-        .pop()
-        .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
-          letter.toUpperCase()
-        );
-      const workspaces = store.get('workspaces') as {
-        name: string;
-        path: string;
-      }[];
+        const workspaceName = workspacePath
+          .split('/')
+          .pop()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
+            letter.toUpperCase()
+          );
 
-      if (workspaces && workspaces.some((ws) => ws.path === workspace)) {
-        return;
+        console.log(data);
+        const workspaces = store.get('workspaces') as {
+          name: string;
+          path: string;
+        }[];
+
+        if (workspaces && workspaces.some((ws) => ws.path === workspacePath)) {
+          return;
+        }
+
+        if (!fs.existsSync(`${workspacePath}/screenshots`)) {
+          fs.mkdirSync(`${workspacePath}/screenshots`);
+        }
+
+        workspace = new Workspace();
+        workspace.initialize(workspacePath, workspaceName);
+
+        lastWorkspace = { path: workspacePath, name: workspaceName };
+        workspaces.push(lastWorkspace);
+        store.set('workspaces', workspaces);
+        store.set('lastWorkspace', lastWorkspace);
       }
-
-      if (!fs.existsSync(`${workspace}/screenshots`)) {
-        fs.mkdirSync(`${workspace}/screenshots`);
-      }
-
-      workspaces.push({ path: workspace, name: workspaceName });
-      store.set('workspaces', workspaces);
-      store.set('lastWorkspace', { path: workspace, name: workspaceName });
-    }
-  });
+    });
 });

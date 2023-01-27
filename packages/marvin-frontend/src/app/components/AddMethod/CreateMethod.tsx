@@ -14,20 +14,7 @@ import { SchemaForm } from '@ascentcore/react-schema-form';
 import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
 import { EditableSelectionBox } from '../Common/EditableSelectionBox';
 
-const getItem = (item: any) => {
-  switch (item.from) {
-    case 'info':
-      return 'info-sign';
-    case 'actions':
-      return 'hand-up';
-    case 'input':
-      return 'text-highlight';
-    case 'iterable':
-      return 'comparison';
-    default:
-      return 'help';
-  }
-};
+import { getIcon } from '../../utils';
 
 export interface Discovered {
   text: string;
@@ -72,7 +59,7 @@ const renderItem: ItemRenderer<DiscoveredItem> = (
       disabled={modifiers.disabled}
       key={item.locator}
       label={(item.text || item.iteratorName || 'untitled').toString()}
-      icon={getItem(item)}
+      icon={getIcon(item)}
       onClick={handleClick}
       onFocus={handleFocus}
       roleStructure="listoption"

@@ -11,7 +11,6 @@ import './ConfigStyles.scss';
 export default function Config() {
   const [config, setConfig] = useState<JSONObject | undefined>();
   const [tab, setTab] = useState(0);
-  console.log('de cate ori intru aici');
   const contextValue = useMemo(
     () => ({ tab, setTab }),
     [tab]
@@ -20,7 +19,6 @@ export default function Config() {
   useEffect(() => {
     const asyncFn = async () => {
       const config = await window.electron.getConfig();
-      console.log(config)
       setConfig(config);
     };
     asyncFn();

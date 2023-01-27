@@ -31,7 +31,7 @@ const ipc = {
     // From render to main.
     send: [],
     // From main to render.
-    receive: ['action-finished', 'run-completed', 'log'],
+    receive: ['action-finished', 'run-completed', 'log', 'config-updated', 'flow-updated'],
     // From render to main and back again.
     sendReceive: [],
   },
