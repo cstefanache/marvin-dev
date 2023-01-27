@@ -34,6 +34,7 @@ export interface Discovered {
   locator: string;
   details?: string;
   from: string;
+  iteratorName?: string;
 }
 
 export interface DiscoveredItem extends Discovered {
@@ -70,7 +71,7 @@ const renderItem: ItemRenderer<DiscoveredItem> = (
       active={modifiers.active}
       disabled={modifiers.disabled}
       key={item.locator}
-      label={item.text.toString()}
+      label={(item.text || item.iteratorName || 'untitled').toString()}
       icon={getItem(item)}
       onClick={handleClick}
       onFocus={handleFocus}
@@ -110,6 +111,7 @@ const DiscoveredSelect = (props: any) => {
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
+  const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
 
@@ -124,7 +126,37 @@ const CreateMethod = (props: any) => {
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
-          ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
+          // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
+          ...iterable.reduce((memo: any[], item: any) => {
+            const { identifier, iteratorName, elements } = item;
+            console.log(item);
+            elements.forEach((element: any) => {
+              memo.push({
+                from: 'iterable',
+                text: element.text,
+                locator: element.locator,
+                details: iteratorName,
+                iterator: {
+                  name: iteratorName,
+                  identifier,
+                },
+              });
+            });
+
+            if (!elements.length) {
+              memo.push({
+                from: 'iterable',
+                locator: item.locator,
+                details: iteratorName,
+                iterator: {
+                  name: iteratorName,
+                },
+              });
+
+              console.log(memo);
+            }
+            return memo;
+          }, []),
         ].filter(
           (value, index, self) =>
             index === self.findIndex((t) => t.locator === value.locator)
@@ -137,16 +169,25 @@ const CreateMethod = (props: any) => {
   }, []);
 
   async function doSave() {
-    const saveObject = {
+    const saveObject: any = {
       method: methodName,
       sequence,
     };
+    if (iterator) {
+      saveObject['iterator'] = iterator;
+    }
     await window.electron.saveMethodForUrl(exitUrl, saveObject);
     props.closePanel();
   }
 
   const selectItem = (item: any) => {
     let type = 'click';
+
+    const { iterator } = item;
+
+    if (item.iterator) {
+      setIterator({ ...iterator, uid: uuid.v4() });
+    }
 
     switch (item.from) {
       case 'info':
@@ -180,6 +221,12 @@ const CreateMethod = (props: any) => {
         placeholder="Method name"
         onChange={(event: any) => setMethodName(event.target.value)}
       />
+      {iterator && (
+        <div>
+          <p>Iterator: {iterator.name}</p>
+          <p>Identifier: {iterator.identifier}</p>
+        </div>
+      )}
       {sequence.map((step: any, index: number) => {
         return (
           <div className="sequence-item">

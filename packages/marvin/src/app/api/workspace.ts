@@ -6,6 +6,16 @@ import getLog from './logging';
 
 const logger = getLog('marvin:workspace');
 
+function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
+}
+
 export default class Workspace {
   private folder: string;
   private config: Config;
@@ -51,6 +61,26 @@ export default class Workspace {
         JSON.stringify(this.config, null, 2)
       );
     }
+
+    logger.log('Watching config file for changes...');
+    fs.watchFile(
+      `${path}/config.json`,
+      debounce((curr, prev) => {
+        logger.log('Config file changed. Reloading...');
+        this.config = JSON.parse(
+          fs.readFileSync(`${path}/config.json`, 'utf8')
+        );
+      })
+    );
+
+    logger.log('Watching flow file for changes...');
+    fs.watchFile(
+      `${path}/flow.json`,
+      debounce((curr, prev) => {
+        logger.log('Flow file changed. Reloading...');
+        this.flow = JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
+      }, 1000)
+    );
   }
 
   async loadWorkspace(folder: string): Promise<void> {
@@ -139,7 +169,7 @@ export default class Workspace {
 
     if (sequence.length === 0) {
       const exitUrl = await page.url();
-      console.log(exitUrl)
+      console.log(exitUrl);
       this.config.exitUrl = flow.getUrl(exitUrl);
       this.store();
     }

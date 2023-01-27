@@ -6,6 +6,7 @@ import {
   PageDiscoveryResult,
 } from './models/models';
 import { log } from './utils/logger';
+import * as uuid from 'uuid';
 
 const defaultAliases = {
   info: [
@@ -422,9 +423,9 @@ export default class Discovery {
           }
 
           iterable.push({
-            text: iteratorItem.name,
             locator: iteratorItem.selectors.join(', '),
             identifier: iteratorItem.identifier,
+            iteratorName: iteratorItem.name,
             elements,
           });
         }
