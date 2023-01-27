@@ -143,10 +143,9 @@ export default class Runner {
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
 
-    action.url = url;
-
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
+      action.url = url;
       const { method: methodName, loop, methodLoop, parameters } = action;
       const urlActions = actions[url];
       if (urlActions) {
