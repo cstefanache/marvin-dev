@@ -8,7 +8,7 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
-import { CustomRegistry, CustomWrapper } from '../components/Registry/Wrapper/Wrapper';
+import { CustomRegistry, CustomWrapper } from './Registry/Wrapper/Wrapper';
 import * as uuid from 'uuid';
 
 const flextree = require('d3-flextree').flextree;

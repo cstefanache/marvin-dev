@@ -16,7 +16,7 @@ import {
   minCellWidth,
   verticalSpacing,
   spacing,
-} from '../Graph/Graph.utils';
+} from './Graph.utils';
 
 export function Graph({ config, flow, openDrawer }: { config: any, flow: any, openDrawer: Function }) {
   const [path, setPath] = useState(null);

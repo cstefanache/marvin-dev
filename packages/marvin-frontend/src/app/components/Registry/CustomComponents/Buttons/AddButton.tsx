@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 
-import '../Buttons/ButtonStyles.scss';
+import './ButtonStyles.scss';
 
 interface Props {
   value: string;
