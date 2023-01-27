@@ -33,7 +33,6 @@ const SelectMethod = (props: any) => {
   };
 
   useEffect(() => {
-    console.log('Selected method', selectedMethod)
     if (selectedMethod) {
       setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
       const method = selectedMethod;
@@ -74,7 +73,6 @@ const SelectMethod = (props: any) => {
   }, [selectedMethod]);
 
   const filterMethod: ItemPredicate<any> = (query, method) => {
-    console.log(query, method)
     return method.method.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
@@ -89,7 +87,6 @@ const SelectMethod = (props: any) => {
       <MenuItem key={method.id} text={method.method} onClick={handleClick} />
     );
   };
-
 
   return (
     <div className="select-method-panel">
@@ -132,7 +129,9 @@ const SelectMethod = (props: any) => {
             data={data}
             wrapper={CustomWrapper as any}
             config={{ registry: CustomRegistry }}
-            onSubmit={data => save({method: selectedMethod.method, ...data}, props.parent)}
+            onSubmit={(data) =>
+              save({ method: selectedMethod.method, ...data }, props.parent)
+            }
           />
         </>
       )}

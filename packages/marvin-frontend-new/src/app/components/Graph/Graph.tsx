@@ -18,7 +18,7 @@ import {
   spacing,
 } from '../Graph/Graph.utils';
 
-export function Graph({ flow, openDrawer }: { flow: any, openDrawer: Function }) {
+export function Graph({ config, flow, openDrawer }: { config: any, flow: any, openDrawer: Function }) {
   const [path, setPath] = useState(null);
   const [imageId, setImg] = useState(null);
 
@@ -43,7 +43,6 @@ export function Graph({ flow, openDrawer }: { flow: any, openDrawer: Function })
     };
 
     const sequence: string[] = [];
-    console.log(sequence)
     buildSequence(d, sequence);
 
     const svg = d3.select(svgRef.current);
@@ -130,7 +129,7 @@ export function Graph({ flow, openDrawer }: { flow: any, openDrawer: Function })
       sequenceStep: 'App Entry',
       // url: config ? config.rootUrl : '/',
       url: '/',
-      exitUrl: '',
+      exitUrl: config ? config.exitUrl : '',
       id: 'root',
       children: graph,
     };

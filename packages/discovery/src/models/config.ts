@@ -3,6 +3,7 @@ import { ElementHandle } from 'puppeteer';
 export interface Config {
   name: string;
   rootUrl: string;
+  exitUrl?: string;
   path: string;  
   defaultTimeout: number;  
   output: string;  

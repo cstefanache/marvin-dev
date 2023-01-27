@@ -102,6 +102,11 @@ export default class Workspace {
     return this.output.discovered[path];
   }
 
+  getDiscoveredPaths(): string[] {
+    this.syncOutput();
+    return Object.keys(this.output.discovered);
+  }
+
   async run(sequence: string[], callback: Function) {
     logger.log(`Running sequence ${sequence.join(',')}`);
 
@@ -131,6 +136,13 @@ export default class Workspace {
     await flow.export();
     logger.log('Export finished.');
     this.flow = flow.flow;
+
+    if (sequence.length === 0) {
+      const exitUrl = await page.url();
+      console.log(exitUrl)
+      this.config.exitUrl = flow.getUrl(exitUrl);
+      this.store();
+    }
   }
 
   close(): void {
@@ -160,7 +172,7 @@ export default class Workspace {
 
     let flowElement;
     if (id === 'root') {
-      flowElement = {children: this.flow.graph};
+      flowElement = { children: this.flow.graph };
     } else {
       flowElement = searchInChildren(this.flow.graph);
     }

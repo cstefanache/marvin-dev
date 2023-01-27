@@ -110,8 +110,8 @@ export default class Runner {
         const element = await page.$(locator);
         if (element) {
           const text = await element.evaluate((el) => el.textContent?.trim());
-          log(`Clicking on ${text}`, 'yellow');
-          // await element.screenshot({ path: 'example.png' })
+          log(`Clicking on ${text} (${locator})`, 'yellow');
+          await element.screenshot({ path: 'example.png' })
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
         }

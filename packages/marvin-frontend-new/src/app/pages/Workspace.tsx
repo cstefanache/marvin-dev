@@ -13,6 +13,7 @@ interface Props {
 
 export default function Workspace({ workspace }: Props) {
   const [flow, setFlow] = React.useState(null);
+  const [config, setConfig] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [drawerElement, setDrawerElement] = React.useState<null | JSX.Element>(
     null
@@ -21,7 +22,9 @@ export default function Workspace({ workspace }: Props) {
 
   const loadFlow = async () => {
     const flow = await window.electron.getFlow();
+    const config = await window.electron.getConfig();
     setFlow(flow);
+    setConfig(config);
     setLoading(false);
   };
 
@@ -53,11 +56,11 @@ export default function Workspace({ workspace }: Props) {
 
   return (
     <>
-      {!flow || loading ? (
+      {!flow || !config || loading ? (
         <h3>Loading</h3>
       ) : (
         <>
-          <Graph flow={flow} openDrawer={openDrawer} />
+          <Graph flow={flow} config={config} openDrawer={openDrawer} />
           <Console />
           <Drawer
             isOpen={drawerElement !== null}

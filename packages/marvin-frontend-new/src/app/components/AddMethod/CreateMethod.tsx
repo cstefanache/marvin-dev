@@ -156,7 +156,7 @@ const CreateMethod = (props: any) => {
         type = 'click';
         break;
       case 'input':
-        type = 'type';
+        type = 'fill';
         break;
       default:
         type = 'unkown';
