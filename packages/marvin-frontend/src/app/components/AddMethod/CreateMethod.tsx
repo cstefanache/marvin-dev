@@ -3,6 +3,7 @@ import './AddMethodStyles.scss';
 import {
   Button,
   Divider,
+  Icon,
   InputGroup,
   MenuItem,
   PanelStack2,
@@ -85,6 +86,7 @@ const DiscoveredSelect = (props: any) => {
       }
       fill={true}
       onItemSelect={onSelect}
+      popoverProps={{ matchTargetWidth: true, minimal: true }}
     >
       <Button
         fill={true}
@@ -202,7 +204,7 @@ const CreateMethod = (props: any) => {
   };
 
   return (
-    <div>
+    <div className="create-container">
       <InputGroup
         value={methodName}
         placeholder="Method name"
@@ -214,27 +216,56 @@ const CreateMethod = (props: any) => {
           <p>Identifier: {iterator.identifier}</p>
         </div>
       )}
-      {sequence.map((step: any, index: number) => {
-        return (
-          <div className="sequence-item">
-            <span className="number">{index + 1}</span>
-            <EditableSelectionBox
-              value={step.type}
-              onSelect={(value: any) => {
-                step.type = value;
+      <h4>Sequence:</h4>
+      <div className="sequence-container">
+        {sequence.map((step: any, index: number) => {
+          return (
+            <div className="sequence-item">
+              <span className="number">
+                {index !== 0 && <Icon icon="chevron-up" onClick={() => {
+                  const newSequence = [...sequence];
+                  const temp = newSequence[index];
+                  newSequence[index] = newSequence[index - 1];
+                  newSequence[index - 1] = temp;
+                  setSequence(newSequence);
+                }} />}
+                <Icon
+                  icon="trash"
+                  onClick={() => {
+                    const newSequence = sequence.filter(
+                      (item: any) => item.uid !== step.uid
+                    );
+                    setSequence(newSequence);
+                  }}
+                />
+                {index !== sequence.length - 1 && (
+                  <Icon icon="chevron-down" onClick={() => {
+                    const newSequence = [...sequence];
+                    const temp = newSequence[index];
+                    newSequence[index] = newSequence[index + 1];
+                    newSequence[index + 1] = temp;
+                    setSequence(newSequence);
+                  }} />
+                )}
+              </span>
+              <EditableSelectionBox
+                value={step.type}
+                onSelect={(value: any) => {
+                  step.type = value;
 
-                setSequence([...sequence]);
-              }}
-              options={['check', 'click', 'fill', 'store']}
-            />
-            <p className="locator">{step.locator}</p>
-            <p className="discovered-text">
-              Content at discovery time: <i>{step.details}</i>
-            </p>
-          </div>
-        );
-      })}
-      {items && <DiscoveredSelect items={items} onSelect={selectItem} />}
+                  setSequence([...sequence]);
+                }}
+                options={['check', 'click', 'fill', 'store']}
+              />
+              <p className="locator">{step.locator}</p>
+              <p className="discovered-text">
+                Content at discovery time: <i>{step.details}</i>
+              </p>
+            </div>
+          );
+        })}
+        {items && <DiscoveredSelect items={items} onSelect={selectItem} />}
+      </div>
       <Button icon="floppy-disk" intent="success" onClick={doSave}>
         Save
       </Button>

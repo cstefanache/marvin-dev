@@ -19,16 +19,15 @@ import Workspaces from './pages/Workspaces/Workspaces';
 import Workspace from './pages/Workspace';
 import Config from './pages/Configuration/Config';
 
-
 export function App() {
-  const [workspace, setWorkspace] = useState<{name: string, path: string}>();
+  const [workspace, setWorkspace] = useState<{ name: string; path: string }>();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const asyncFn = async () => {
       const workspace = await window.electron.getWorkspace();
-      console.log(workspace)
+      console.log(workspace);
       if (!workspace) {
         navigate('/workspaces');
       }
@@ -43,7 +42,7 @@ export function App() {
 
   return (
     <>
-      <Header workspaceName={workspace?.name}/>
+      <Header workspaceName={workspace?.name} />
       <Routes>
         <Route
           path="/"

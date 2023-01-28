@@ -17,6 +17,7 @@ const logger = getLog('marvin:workspace');
 const store = new Store();
 let workspace: Workspace;
 
+
 if (!store.get('workspaces')) {
   store.set('workspaces', []);
 }

@@ -85,11 +85,12 @@ export default class Runner {
         );
       }
     }
-    for (const sequenceItem of method.sequence) {
+    for (const sequenceItem of method.sequence) {      
       let { type, uid, locator } = sequenceItem;
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
+      log(`Executing sequence: [${type}]: ${locator}`)
       if (type === 'store') {
         const element = await page.$(locator);
         if (element) {

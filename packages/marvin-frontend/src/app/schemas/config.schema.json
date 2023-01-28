@@ -18,8 +18,7 @@
       "size": { "xs": 12, "sm": 6 },
       "uiType": "item",
       "title": "Root Url",
-      "description": "Application base URL",
-      "readOnly": true
+      "description": "Application base URL"
     },
     "defaultTimeout": {
       "type": "integer",

@@ -25,7 +25,19 @@
         text-align: center;
     }
 
+    .create-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding-bottom: 10px;
+    }
+
+    .sequence-container {
+        margin-bottom: 20px;
+    }
+
     .sequence-item {
+       
         position: relative;
         margin-bottom: 10px;
         padding: 4px;
@@ -38,13 +50,16 @@
             left: 0;
             bottom: 0;
             width: 30px;
-            background-color: yellow;
+            background-color: #d1d1d1;
             color: black;
             display: flex;
+            flex-direction: column;
             align-items: center;
             flex-wrap: nowrap;
             align-content: center;
             justify-content: center;
+            gap: 10px;
+           
         }
 
         .locator {
@@ -61,5 +76,9 @@
             padding: 2px;
             font-size: 0.8rem;
         }
+    }
+
+    .bp4-intent-success {
+        margin-top: 10px;
     }
 }

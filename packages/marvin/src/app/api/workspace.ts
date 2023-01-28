@@ -77,12 +77,12 @@ export default class Workspace {
       App.mainWindow.webContents.send('config-updated', this.config);
     });
 
-    logger.log('Watching flow file for changes...');
-    fs.watchFile(`${path}/flow.json`, (curr, prev) => {
-      logger.log('Flow file changed. Reloading...');
-      this.flow = JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
-      App.mainWindow.webContents.send('flow-updated', this.flow);
-    });
+    // logger.log('Watching flow file for changes...');
+    // fs.watchFile(`${path}/flow.json`, (curr, prev) => {
+    //   logger.log('Flow file changed. Reloading...');
+    //   this.flow = JSON.parse(fs.readFileSync(`${path}/flow.json`, 'utf8'));
+    //   App.mainWindow.webContents.send('flow-updated', this.flow);
+    // });
   }
 
   async loadWorkspace(folder: string): Promise<void> {
@@ -181,6 +181,7 @@ export default class Workspace {
       
     }
     this.syncOutput();
+    App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
   close(): void {

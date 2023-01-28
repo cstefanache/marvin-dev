@@ -4,7 +4,9 @@ import { Button, Divider, MenuItem, PanelStack2 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import {
-  CustomRegistry, CustomWrapper, SelectMethodCustomWrapper,
+  CustomRegistry,
+  CustomWrapper,
+  SelectMethodCustomWrapper,
 } from '../Registry/Wrapper/Wrapper';
 import CreateMethod from './CreateMethod';
 
@@ -66,7 +68,7 @@ const SelectMethod = (props: any) => {
                   memo[obj.uid] = {
                     type: 'string',
                     title: obj.locator,
-                    inputType: obj.type
+                    inputType: obj.type,
                   };
                   return memo;
                 }, {}),
@@ -98,7 +100,6 @@ const SelectMethod = (props: any) => {
 
   return (
     <div className="select-method-panel">
-      {selectedMethod && selectedMethod.method}
       <pre>Url: {exitUrl}</pre>
       <p>Add method execution after: "{sequenceStep}"</p>
       <Select2
@@ -114,20 +115,25 @@ const SelectMethod = (props: any) => {
           />
         }
         itemRenderer={renderMethod}
+        popoverProps={{ matchTargetWidth: true, minimal: true }}
       >
         <Button
           fill={true}
-          text={selectedMethod?.method}
+          alignText="left"
+          text={selectedMethod?.method || 'Select a method'}
           rightIcon="double-caret-vertical"
         />
       </Select2>
-
-      <p className="text-center"> - or -</p>
-      <div className="text-center">
-        <Button className="bp4-intent-primary" onClick={openNewPanel}>
-          Create a new method
-        </Button>
-      </div>
+      {!schema && (
+        <>
+          <p className="text-center"> - or -</p>
+          <div className="text-center">
+            <Button className="bp4-intent-primary" onClick={openNewPanel}>
+              Create a new method
+            </Button>
+          </div>
+        </>
+      )}
 
       {schema && (
         <>
