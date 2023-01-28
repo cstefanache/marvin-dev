@@ -189,7 +189,7 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     (d: any) => `translate(0,80)`,
     'Edit',
     Edit,
-    () => {},
+    (d: any) => runEvents['editMethod'](d.parent?.data, d.data),
     {},
     '#46B044'
   );
@@ -205,7 +205,9 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     (d: any) => `translate(${d.xSize},80)`,
     'Delete',
     Trash,
-    () => {},
+    (d: any) => {
+      runEvents['cutBranch'](d.data.id);
+    },
     {},
     '#FB6565'
   );

@@ -78,6 +78,14 @@ ipcMain.handle('set-config', (_, data) => {
   workspace.setConfig(data);
 });
 
+ipcMain.handle('cut-branch', (_, id) => {
+  workspace.cutBranch(id);
+});
+
+ipcMain.handle('update-branch', (_, data) => {
+  workspace.updateBranch(data);
+});
+
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
   await workspace.run(sequence, (actionId: string) => {
     console.log('sending back', actionId);

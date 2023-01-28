@@ -186,7 +186,7 @@ const CreateMethod = (props: any) => {
         type = 'click';
         break;
       case 'input':
-        type = 'fill';
+        type = 'clearAndFill';
         break;
       default:
         type = 'unkown';
@@ -255,7 +255,7 @@ const CreateMethod = (props: any) => {
 
                   setSequence([...sequence]);
                 }}
-                options={['check', 'click', 'fill', 'store']}
+                options={['check', 'click', 'clearAndFill', 'fill', 'store']}
               />
               <p className="locator">{step.locator}</p>
               <p className="discovered-text">

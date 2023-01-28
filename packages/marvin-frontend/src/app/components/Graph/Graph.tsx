@@ -60,6 +60,7 @@ export function Graph({
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('.node').attr('class', 'node disabled');
+    svg.selectAll('.node .button').attr('opacity', 0);
     d3.select(`#action-root`).attr('class', 'node loading');
     ids.forEach((id) => {
       d3.select(`#action-${id}`).attr('class', 'node loading');
@@ -96,6 +97,7 @@ export function Graph({
 
     window.ipcRender.receive('run-completed', (id: string) => {
       svg.selectAll('.node').attr('opacity', 1).attr('class', 'node');
+      svg.selectAll('.node .button').attr('opacity', 1);
     });
 
     function getMeasurementFor(textContent: string, fontSize: number) {
@@ -222,11 +224,17 @@ export function Graph({
       addMethod: (obj: any) => {
         openDrawer('addMethod', 'Add Method', obj);
       },
+      editMethod: (obj: any, data: any) => {
+        openDrawer('addMethod', 'Edit Method', obj, data);
+      },
       screenshot: (id: any) => {
         console.log('setting image', id);
         setImg(id);
       },
-      showDiscovered: showDiscoveredElements
+      cutBranch: (id: any) => {
+        window.electron.cutBranch(id);
+      },
+      showDiscovered: showDiscoveredElements,
     });
     console.log('done!');
   }, [flow]);

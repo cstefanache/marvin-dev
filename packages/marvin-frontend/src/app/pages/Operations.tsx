@@ -136,7 +136,7 @@ export default function Operations() {
         {
           type:
             section === 'input'
-              ? 'fill'
+              ? 'clearAndFill'
               : section === 'actions'
               ? 'click'
               : 'check',

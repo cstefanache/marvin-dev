@@ -85,12 +85,12 @@ export default class Runner {
         );
       }
     }
-    for (const sequenceItem of method.sequence) {      
+    for (const sequenceItem of method.sequence) {
       let { type, uid, locator } = sequenceItem;
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
-      log(`Executing sequence: [${type}]: ${locator}`)
+      log(`Executing sequence: [${type}]: ${locator}`);
       if (type === 'store') {
         const element = await page.$(locator);
         if (element) {
@@ -101,18 +101,30 @@ export default class Runner {
           const text = await element.evaluate((el: any) =>
             el.textContent?.trim()
           );
-          this.store[uid] = value || text;
+          const key = parameters[uid];
+          this.store[key] = value || text;
+          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
         }
-      } else if (type === 'fill' && uid && parameters[uid]) {
+      } else if (
+        (type === 'fill' || type === 'clearAndFill') &&
+        uid &&
+        parameters[uid]
+      ) {
         log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
         await page.focus(locator);
+        if (type === 'clearAndFill') {
+          await page.evaluate(
+            (locator) => ((document.querySelector(locator) as any).value = ''),
+            locator
+          );
+        }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
         if (element) {
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text} (${locator})`, 'yellow');
-          await element.screenshot({ path: 'example.png' })
+          await element.screenshot({ path: 'example.png' });
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
         }
@@ -181,7 +193,7 @@ export default class Runner {
               this.config.rootUrl
             );
             action.exitUrl = url;
-            console.log(action)
+            console.log(action);
 
             if (action.children && action.children.length && steps.length > 1) {
               await this.executeStep(

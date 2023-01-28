@@ -26,4 +26,5 @@ export interface Property {
   uiIndex?: number;
   properties?: any;
   enum?: any;
+  inputType?: string;
 }

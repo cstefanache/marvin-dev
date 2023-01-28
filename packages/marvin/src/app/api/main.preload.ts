@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld('electron', {
   saveMethodForUrl: (path: string, method: any) => ipcRenderer.invoke('save-method-for-url', path, method),
   getWorkspacePath: () => ipcRenderer.invoke('get-workspace-path'),
   addBranch: (id: string, data: any) => ipcRenderer.invoke('add-branch', id, data),
+  updateBranch: (data: any) => ipcRenderer.invoke('update-branch', data),
+  cutBranch: (id: string) => ipcRenderer.invoke('cut-branch', id),
   runDiscovery: (sequence: any) =>
     ipcRenderer.invoke('run-discovery', sequence),
   selectNewWorkspaceFolder: () =>

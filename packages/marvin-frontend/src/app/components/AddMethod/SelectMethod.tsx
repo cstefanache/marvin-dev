@@ -15,18 +15,25 @@ const SelectMethod = (props: any) => {
   const [schema, setSchema] = React.useState<any>();
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
-  console.log(props);
-  const {
-    parent: { exitUrl, sequenceStep },
-    save,
-  } = props;
+  const { parent, save, data: propData } = props;
+  const { exitUrl, sequenceStep } = parent || {};
+  const { method } = propData || {};
 
   useEffect(() => {
     const asyncFn = async () => {
       const methods = await window.electron.getMethodsForPath(exitUrl);
       setMethods(methods || []);
+
+      if (method) {
+        const selectedMethod = methods.find((m: any) => m.method === method);
+        setData(propData);
+        setSelectedMethod(selectedMethod);
+        console.log(selectedMethod)
+      }
     };
-    asyncFn();
+    if (exitUrl) {
+      asyncFn();
+    }
   }, []);
 
   const openNewPanel = () => {
@@ -39,7 +46,9 @@ const SelectMethod = (props: any) => {
 
   useEffect(() => {
     if (selectedMethod) {
-      setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
+      if (!propData) {
+        setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
+      }
       const method = selectedMethod;
       const { iterator } = method;
       const schema = {
@@ -76,9 +85,9 @@ const SelectMethod = (props: any) => {
           },
         },
       };
-      console.log(schema);
-
       setSchema(schema);
+      console.log(schema);
+      console.log(data);
     }
   }, [selectedMethod]);
 
@@ -100,51 +109,64 @@ const SelectMethod = (props: any) => {
 
   return (
     <div className="select-method-panel">
-      <pre>Url: {exitUrl}</pre>
-      <p>Add method execution after: "{sequenceStep}"</p>
-      <Select2
-        fill={true}
-        items={methods}
-        itemPredicate={filterMethod}
-        onItemSelect={setSelectedMethod}
-        noResults={
-          <MenuItem
-            disabled={true}
-            text="No results."
-            roleStructure="listoption"
-          />
-        }
-        itemRenderer={renderMethod}
-        popoverProps={{ matchTargetWidth: true, minimal: true }}
-      >
-        <Button
-          fill={true}
-          alignText="left"
-          text={selectedMethod?.method || 'Select a method'}
-          rightIcon="double-caret-vertical"
-        />
-      </Select2>
-      {!schema && (
+      {!propData && (
         <>
-          <p className="text-center"> - or -</p>
-          <div className="text-center">
-            <Button className="bp4-intent-primary" onClick={openNewPanel}>
-              Create a new method
-            </Button>
-          </div>
+          <pre>Url: {exitUrl}</pre>
+          <p>Add method execution after: "{sequenceStep}"</p>
+          <Select2
+            fill={true}
+            items={methods}
+            itemPredicate={filterMethod}
+            onItemSelect={setSelectedMethod}
+            noResults={
+              <MenuItem
+                disabled={true}
+                text="No results."
+                roleStructure="listoption"
+              />
+            }
+            itemRenderer={renderMethod}
+            popoverProps={{ matchTargetWidth: true, minimal: true }}
+          >
+            <Button
+              fill={true}
+              alignText="left"
+              text={selectedMethod?.method || 'Select a method'}
+              rightIcon="double-caret-vertical"
+            />
+          </Select2>
+          {!schema && (
+            <>
+              <p className="text-center"> - or -</p>
+              <div className="text-center">
+                <Button className="bp4-intent-primary" onClick={openNewPanel}>
+                  Create a new method
+                </Button>
+              </div>
+            </>
+          )}
         </>
       )}
 
       {schema && (
         <>
-          <Divider />
+          {!propData && <Divider />}
           <SchemaForm
             schema={schema}
             data={data}
             wrapper={SelectMethodCustomWrapper as any}
             config={{ registry: CustomRegistry }}
-            onSubmit={(data) =>
-              save({ method: selectedMethod.method, ...data }, props.parent)
+            onSubmit={
+              (data) => {
+                if (data.id) {
+                  delete data.children
+                  save(data)
+                } else {
+                  save({ method: selectedMethod.method, ...data }, props.parent);
+                }
+                
+              }
+              // save({ method: selectedMethod.method, ...data }, props.parent)
             }
           />
         </>

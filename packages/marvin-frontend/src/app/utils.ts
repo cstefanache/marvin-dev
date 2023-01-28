@@ -12,3 +12,17 @@ export const getIcon = (item: any) => {
       return 'help';
   }
 };
+
+export const getActionIcon = (action: any) => {
+  switch (action) {
+    case 'fill':
+    case 'clearAndFill':
+      return 'text-highlight';
+    case 'click':
+      return 'hand-up';
+    case 'store':
+      return 'bookmark';
+    default:
+      return 'help';
+  }
+};

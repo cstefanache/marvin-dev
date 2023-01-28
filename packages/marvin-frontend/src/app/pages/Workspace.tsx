@@ -53,10 +53,13 @@ export default function Workspace({ workspace }: Props) {
   }, []);
 
   const save = async (data: any, parentObject: any) => {
-    console.log(data, parentObject);
-    const { id } = parentObject;
     setLoading(true);
-    await window.electron.addBranch(id, data);
+    if (data.id) {
+      await window.electron.updateBranch(data);
+    } else {
+      const { id } = parentObject;
+      await window.electron.addBranch(id, data);
+    }
     setDrawerElement(null);
     loadFlow();
   };
@@ -116,12 +119,12 @@ export default function Workspace({ workspace }: Props) {
     }
   };
 
-  const openDrawer = (type: string, title: string, props: any) => {
+  const openDrawer = (type: string, title: string, props: any, data?: any) => {
     setDrawerTitle(title);
     switch (type) {
       case 'addMethod':
-        const properties = { ...{ parent: props }, save };
-        setDrawerElement(<AddMethod {...properties} />);
+        const properties = { ...{ parent: props, title }, save };
+        setDrawerElement(<AddMethod {...properties} data={data} />);
         break;
     }
   };

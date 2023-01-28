@@ -7,13 +7,14 @@ import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
 import SelectMethod from './SelectMethod';
 
 const initialPanel = (props: any) => {
+  console.log(props)
   return {
     props: {
       panelNumber: 1,
       ...props,
     },
     renderPanel: SelectMethod,
-    title: 'Select Method',
+    title: props.title,
   };
 };
 

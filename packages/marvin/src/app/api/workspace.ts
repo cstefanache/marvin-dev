@@ -178,7 +178,6 @@ export default class Workspace {
       console.log(exitUrl);
       this.config.exitUrl = flow.getUrl(exitUrl);
       this.store();
-      
     }
     this.syncOutput();
     App.mainWindow.webContents.send('flow-updated', this.flow);
@@ -228,6 +227,50 @@ export default class Workspace {
     }
     this.flow.actions[url].push(method);
     this.store();
+  }
+
+  cutBranch(id: string): void {
+    const searchInChildren = (children: any[]) => {
+      let index = 0;
+      for (const child of children) {
+        if (child.id === id) {
+          children.splice(index, 1);
+          return;
+        }
+        if (child.children) {
+          const result = searchInChildren(child.children);
+          if (result) {
+            return result;
+          }
+        }
+        index++;
+      }
+    };
+    searchInChildren(this.flow.graph);
+    this.store();
+    App.mainWindow.webContents.send('flow-updated', this.flow);
+  }
+
+  updateBranch(data: any) {
+    const searchInChildren = (children: any[]) => {
+      let index = 0;
+      for (const child of children) {
+        if (child.id === data.id) {
+          children[index] = { ...child, ...data };
+          return;
+        }
+        if (child.children) {
+          const result = searchInChildren(child.children);
+          if (result) {
+            return result;
+          }
+        }
+        index++;
+      }
+    };
+    searchInChildren(this.flow.graph);
+    this.store();
+    App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
   store(): void {

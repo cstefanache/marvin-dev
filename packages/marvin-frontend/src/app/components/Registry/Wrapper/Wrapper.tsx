@@ -12,10 +12,13 @@ import Selectors from '../CustomComponents/Selectors/Selectors';
 import SubmitButton from '../CustomComponents/Buttons/SubmitButton';
 import RemoveButton from '../CustomComponents/Buttons/RemoveButton';
 import AddButton from '../CustomComponents/Buttons/AddButton';
+import { getActionIcon } from '../../../utils';
 import './WrapperStyles.scss';
 
-export const getInputIcon = (title?: string) => {
-  if (title) {
+export const getInputIcon = (title?: string, inputType?: string) => {
+  if (inputType) {
+    return <Icon icon={getActionIcon(inputType)} />;
+  } else if (title) {
     const lowerName = title?.toLowerCase();
 
     if (lowerName === 'name') {
@@ -44,7 +47,9 @@ interface CustomWrapperProps {
 }
 
 function Wrapper({ property, children }: CustomWrapperProps) {
-  const { type, title, description, properties, uiType, uiIndex } = property;
+  const { type, title, description, properties, uiType, uiIndex, inputType } =
+    property;
+  console.log(property);
   if (property.type === 'object') {
     property.uiType = 'container';
   }
@@ -58,7 +63,7 @@ function Wrapper({ property, children }: CustomWrapperProps) {
             {description && type !== 'object' && (
               <div className="wrapper-description">
                 <p>
-                  {getInputIcon(title)} {description}
+                  {getInputIcon(title, inputType)} {description}
                 </p>
               </div>
             )}
@@ -66,7 +71,7 @@ function Wrapper({ property, children }: CustomWrapperProps) {
               <div className="wrapper-container">
                 <div className="wrapper-title">
                   <p>
-                    {getInputIcon(title)} {title}
+                    {getInputIcon(title, inputType)} {title}
                   </p>
                   {description && (
                     <blockquote className="bp4-blockquote">
@@ -109,10 +114,40 @@ export function SelectMethodCustomWrapper({
 }: CustomWrapperProps) {
   const { inputType, title } = property as any;
 
-  if (inputType === undefined || inputType === 'fill') {
-    return <Wrapper property={property}>{children}</Wrapper>;
+  if (
+    inputType === undefined ||
+    inputType === 'fill' ||
+    inputType === 'clearAndFill' ||
+    inputType === 'store'
+  ) {
+    return (
+      <div
+        style={
+          inputType !== undefined
+            ? { paddingLeft: 5, borderLeft: '4px solid #FFF' }
+            : {}
+        }
+      >
+        {/* {inputType && <Icon icon={getActionIcon(inputType)} />} */}
+        <Wrapper property={property}>{children}</Wrapper>
+      </div>
+    );
   } else {
-    return <div>{inputType} <Tag minimal={true}>{title}</Tag></div>;
+    return (
+      <div
+        style={{
+          marginBottom: 15,
+          paddingLeft: 5,
+          borderLeft: '4px solid #FFF',
+        }}
+      >
+        <Icon icon={getActionIcon(inputType)} />
+        <span style={{ margin: '0 5px', display: 'inline-block' }}>
+          [{inputType}]
+        </span>{' '}
+        <Tag minimal={true}>{title}</Tag>
+      </div>
+    );
   }
 }
 

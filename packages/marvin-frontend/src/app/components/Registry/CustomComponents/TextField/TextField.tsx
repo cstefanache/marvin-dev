@@ -13,7 +13,7 @@ interface Props {
 
 export default function CustomTextField(props: Props) {
   const { property, value, onChange } = props;
-  const { type, title, error, isRequired, readOnly } = property;
+  const { type, title, error, isRequired, readOnly, inputType } = property;
 
   const handleChange = (event: any) => {
     if (type === 'integer') {
@@ -30,14 +30,14 @@ export default function CustomTextField(props: Props) {
           <InputGroup
             value={value ? `${value}` : undefined}
             onChange={handleChange}
-            leftElement={getInputIcon(title)}
+            leftElement={getInputIcon(title, inputType)}
           />
         )}
         {type === 'integer' && (
           <NumericInput
             value={value}
             onValueChange={onChange}
-            leftElement={getInputIcon(title)}
+            leftElement={getInputIcon(title, inputType)}
           />
         )}
       </FormGroup>);
