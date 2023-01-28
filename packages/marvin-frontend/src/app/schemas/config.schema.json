@@ -89,6 +89,27 @@
               "items": { "$ref": "#/definitions/Exclude" }
             }
           }
+        },
+        "store": {
+          "title": "Store",
+          "uiType": "tab",
+          "uiIndex": 6, 
+          "description": "Runtime initial store",
+          "type": "array",
+          "properties": {
+            "key": {
+              "type": "string",
+              "title": "Key",
+              "size": { "xs": 12, "sm": 6 },
+              "description": "Store key"
+            },
+            "value": {
+              "type": "string",
+              "title": "Value",
+              "size": { "xs": 12, "sm": 6 },
+              "description": "Store value"
+            }
+          }
         }
       }
     }

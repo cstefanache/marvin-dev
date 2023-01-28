@@ -4,15 +4,20 @@ export interface Config {
   name: string;
   rootUrl: string;
   exitUrl?: string;
-  path: string;  
-  defaultTimeout: number;  
-  output: string;  
+  path: string;
+  defaultTimeout: number;
+  output: string;
   waitFor?: string;
   aliases: Aliases;
   actions: { [key: string]: Action[] };
   discover: string[][];
   sequence: string[];
 }
+
+export type KeyValuePair = {
+  key: string;
+  value: string;
+};
 
 export type Aliases = {
   urlReplacers: Replacer[];
@@ -21,6 +26,7 @@ export type Aliases = {
   input: Alias[];
   info: Alias[];
   iterators?: Alias[];
+  store: KeyValuePair[];
 };
 
 export type Replacer = {
@@ -30,7 +36,7 @@ export type Replacer = {
 
 export type Optimizer = {
   exclude: Exclude[];
-  priority: string[]
+  priority: string[];
 };
 
 export type Exclude = {
@@ -46,7 +52,12 @@ export type Alias = {
   skipOptimizer?: boolean;
   selectors: string[];
   identifier?: ElementHandle<Element>;
-  elements?: { name: string; skipOptimizer?: boolean; uid?: string, selector: string }[];
+  elements?: {
+    name: string;
+    skipOptimizer?: boolean;
+    uid?: string;
+    selector: string;
+  }[];
 };
 
 export type Action = {

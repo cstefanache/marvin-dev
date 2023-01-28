@@ -1,6 +1,12 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import { Action, Aliases, Config, Sequence } from './models/config';
+import {
+  Action,
+  Aliases,
+  Config,
+  Sequence,
+  KeyValuePair,
+} from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -8,7 +14,7 @@ import { processUrl } from './utils/processes';
 
 const library = {
   func: {
-    random: () => Math.floor(Math.random() * 1000000),
+    random: (decimals = 1000000) => Math.floor(Math.random() * decimals),
   },
 };
 
@@ -110,7 +116,7 @@ export default class Runner {
         uid &&
         parameters[uid]
       ) {
-        log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
+        log(`Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`, 'yellow');
         await page.focus(locator);
         if (type === 'clearAndFill') {
           await page.evaluate(
@@ -223,6 +229,17 @@ export default class Runner {
     sequenceCallback?: Function
   ) {
     const { graph } = this.flow.flow;
+    if (this.config.aliases.store) {
+      this.store = {
+        ...this.config.aliases.store.reduce((memo: any, item: KeyValuePair) => {
+          memo[item.key] = item.value;
+          return memo;
+        }, {}),
+        library,
+      };
+      global.store = this.store;
+    }
+
     await this.executeStep(page, graph, sequence, sequenceCallback);
     log('Finished sequence execution', 'blue');
   }
