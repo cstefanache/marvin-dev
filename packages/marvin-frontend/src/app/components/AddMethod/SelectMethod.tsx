@@ -19,21 +19,23 @@ const SelectMethod = (props: any) => {
   const { exitUrl, sequenceStep } = parent || {};
   const { method } = propData || {};
 
+  console.log(props);
+
   useEffect(() => {
     const asyncFn = async () => {
-      const methods = await window.electron.getMethodsForPath(exitUrl);
-      setMethods(methods || []);
+      if (exitUrl !== undefined) {
+        const methods = await window.electron.getMethodsForPath(exitUrl);
+        setMethods(methods || []);
+      }
 
       if (method) {
         const selectedMethod = methods.find((m: any) => m.method === method);
         setData(propData);
         setSelectedMethod(selectedMethod);
-        console.log(selectedMethod)
+        console.log(selectedMethod);
       }
     };
-    if (exitUrl) {
-      asyncFn();
-    }
+    asyncFn();
   }, []);
 
   const openNewPanel = () => {
@@ -159,12 +161,14 @@ const SelectMethod = (props: any) => {
             onSubmit={
               (data) => {
                 if (data.id) {
-                  delete data.children
-                  save(data)
+                  delete data.children;
+                  save(data);
                 } else {
-                  save({ method: selectedMethod.method, ...data }, props.parent);
+                  save(
+                    { method: selectedMethod.method, ...data },
+                    props.parent
+                  );
                 }
-                
               }
               // save({ method: selectedMethod.method, ...data }, props.parent)
             }
