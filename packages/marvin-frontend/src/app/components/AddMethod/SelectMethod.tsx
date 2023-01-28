@@ -19,14 +19,10 @@ const SelectMethod = (props: any) => {
   const { exitUrl, sequenceStep } = parent || {};
   const { method } = propData || {};
 
-  console.log(props);
-
   useEffect(() => {
     const asyncFn = async () => {
-      if (exitUrl !== undefined) {
-        const methods = await window.electron.getMethodsForPath(exitUrl);
-        setMethods(methods || []);
-      }
+      const methods = await window.electron.getMethodsForPath(exitUrl);
+      setMethods(methods || []);
 
       if (method) {
         const selectedMethod = methods.find((m: any) => m.method === method);
