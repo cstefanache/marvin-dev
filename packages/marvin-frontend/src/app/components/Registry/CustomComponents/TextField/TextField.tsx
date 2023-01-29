@@ -25,7 +25,7 @@ export default function CustomTextField(props: Props) {
 
   return readOnly ? 
       (<p className="disabled-text"><strong>{title}:</strong> {value}</p>) : 
-      (<FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>
+      (<FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"} className="form-group">
         {type === 'string' && (
           <InputGroup
             value={value ? `${value}` : undefined}

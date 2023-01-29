@@ -33,7 +33,7 @@ export default function Selectors({ value, onChange }: Props) {
 
   return (
     <>
-      <FormGroup helperText="Press Enter to add" label="Add Selector" inline={false}>
+      <FormGroup helperText="Press Enter to add" label="Add Selector" inline={false} className="form-group">
         <InputGroup 
           value={addValue} 
           onChange={(e) => setAddValue(e.target.value)} 

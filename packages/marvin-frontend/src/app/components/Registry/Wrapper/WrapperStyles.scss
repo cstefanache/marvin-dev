@@ -1,7 +1,7 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .divider {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   border: 1px solid;
   border-color: $gray3;
 }
@@ -9,7 +9,7 @@
 .wrapper-container {
   width: 100%;
   max-width: 700px;
-  padding: 0px 12px;
+  padding: 0px 2px;
 
   & .wrapper-container {
     padding-left: 0;

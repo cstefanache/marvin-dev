@@ -1,8 +1,6 @@
 import { FormGroup, InputGroup, NumericInput, Menu, MenuItem } from '@blueprintjs/core';
 import { Property } from '../../../../types/Types';
 
-import './SelectStyles.scss';
-
 interface Props {
   property: Property;
   value: number | string;
@@ -23,7 +21,7 @@ export default function CustomSelect(props: Props) {
 
   return (
     <>
-      <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"}>
+      <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"} className="form-group">
         {type === 'string' && (
           <InputGroup 
             value={`${value}`} 

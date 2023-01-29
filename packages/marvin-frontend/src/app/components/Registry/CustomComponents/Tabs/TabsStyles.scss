@@ -1,5 +1,5 @@
 .tabs-container {
-  margin-top: 32px;
+  margin-top: 18px;
 
   & .bp4-tab[aria-selected=true] {
     color: #2B95D6;
@@ -18,5 +18,9 @@
     &:focus {
       outline: none;
     }
+  }
+
+  .bp4-tab-panel {
+    margin-top: 16px;
   }
 }
