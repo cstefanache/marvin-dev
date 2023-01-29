@@ -3,14 +3,13 @@ import { Button } from '@blueprintjs/core';
 import './ButtonStyles.scss';
 
 interface Props {
-  value: string;
   onChange: () => void;
   children?: JSX.Element | JSX.Element[];
 }
-export default function RemoveButton({ value, onChange, children }: Props) {
+export default function RemoveButton({ onChange, children }: Props) {
   return (
     <div className="btn-container right">
-      <Button intent="danger" text={value} onClick={onChange}>
+      <Button onClick={onChange} icon="trash">
         {children}
       </Button>
     </div>
