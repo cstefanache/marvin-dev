@@ -47,43 +47,10 @@ interface CustomWrapperProps {
 }
 
 function Wrapper({ property, children }: CustomWrapperProps) {
-  const { type, title, description, properties, uiType, uiIndex, inputType } =
-    property;
-  console.log(property);
-  if (property.type === 'object') {
-    property.uiType = 'container';
-  }
+  const { className, properties, uiType, uiIndex, description } = property;
+
   const renderWrapperElements = () => {
     switch (uiType) {
-      case 'divider':
-        return <Divider className="divider" />;
-      case 'container':
-        return (
-          <div className="wrapper-container">
-            {description && type !== 'object' && (
-              <div className="wrapper-description">
-                <p>
-                  {getInputIcon(title, inputType)} {description}
-                </p>
-              </div>
-            )}
-            {type === 'object' && (
-              <div className="wrapper-container">
-                <div className="wrapper-title">
-                  <p>
-                    {getInputIcon(title, inputType)} {title}
-                  </p>
-                  {description && (
-                    <blockquote className="bp4-blockquote">
-                      {description}
-                    </blockquote>
-                  )}
-                </div>
-              </div>
-            )}
-            <div className="wrapper-container">{children}</div>
-          </div>
-        );
       case 'tabs':
         return (
           <div className="wrapper-container">
@@ -93,11 +60,22 @@ function Wrapper({ property, children }: CustomWrapperProps) {
           </div>
         );
       case 'tab':
-        return <TabPanel index={uiIndex || 0}>{children}</TabPanel>;
+        return (
+          <TabPanel index={uiIndex || 0} data-wrapper-for={property.title}>
+            {children}
+          </TabPanel>
+        );
       default:
         // TODO: check how to use the size property with Blueprint
         // return (<Grid item {...(size || { xs: 12 })} sx={{ pl: 1, mt: 1 }}>{children}</Grid>);
-        return <div className="wrapper-container">{children}</div>;
+        return (
+          <div
+            className={`wrapper-container ${className}`}
+            data-wrapper-for={property.title}
+          >
+            {children}
+          </div>
+        );
     }
   };
 

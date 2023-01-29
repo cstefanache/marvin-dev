@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { FormGroup, InputGroup, Icon, Button } from '@blueprintjs/core';
+import { FormGroup, InputGroup, Icon, Button, Tag } from '@blueprintjs/core';
 
 import './SelectorsStyles.scss';
 
@@ -48,10 +48,11 @@ export default function Selectors({ value, onChange }: Props) {
       </FormGroup>
       <div className="chips-container">
         {value && value.length > 0 && value.map((locator, idx) => (
-          <span data-tag-index="1" className="bp4-tag selector-chip">
-            <span className="bp4-fill bp4-text-overflow-ellipsis">{locator}</span>
-            {clearButton(idx)}
-          </span>
+          <Tag key={idx} onRemove={() => handleDelete(idx)} intent="primary">{locator}</Tag>
+          // <span data-tag-index="1" className="bp4-tag">
+          //   <span className="bp4-fill bp4-text-overflow-ellipsis">{locator}</span>
+          //   {clearButton(idx)}
+          // </span>
         ))}
       </div>
     </>

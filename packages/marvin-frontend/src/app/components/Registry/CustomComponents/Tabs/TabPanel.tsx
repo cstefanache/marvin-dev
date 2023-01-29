@@ -10,6 +10,5 @@ interface TabPanelProps {
 export default function TabPanel(props: TabPanelProps) {
   const { children, index } = props;
   const { tab } = useContext(TabContext);
-
   return tab === index ? <>{children}</> : null;
 }

@@ -15,6 +15,7 @@ export interface Property {
   contentMediaType: string;
   description: string;
   error: boolean;
+  className: string;
   isRequired?: boolean;
   path: string;
   registryKey: string

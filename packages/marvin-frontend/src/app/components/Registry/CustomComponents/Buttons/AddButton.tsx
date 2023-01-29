@@ -10,7 +10,7 @@ interface Props {
 export default function AddButton({ value, onChange, children }: Props) {
   return (
     <div className="btn-container left">
-      <Button  text={value} onClick={onChange} className="add-button">
+      <Button  text={value} onClick={onChange}  icon="add">
         {children}
       </Button>
     </div>

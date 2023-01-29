@@ -6,15 +6,81 @@
   border-color: $gray3;
 }
 
-.wrapper-container {
-  width: 100%;
-  max-width: 700px;
-  padding: 0px 2px;
+.ra-schema-form {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  flex-grow: 1;
 
-  & .wrapper-container {
-    padding-left: 0;
-    padding-right: 0;
+  .ra-add-button {
+    width: 100%;
   }
+
+  .form-group,
+  .bp4-control-group {
+    width: 100%;
+  }
+
+  & > .ra-schema-form {
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 2px;
+    background-color: rgba(255,255,255,.02);
+    margin-left: -70px;
+    padding: 10px 10px 10px 80px;
+    width: calc(100% - 40px);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .ra-add-button {
+    margin: 10px 0;
+  }
+
+
+  .ra-remove-button {
+    width: 30px;
+    justify-content: center;
+    padding-top: 50px;
+    padding-right: 25px;
+    transition: all 200ms;
+
+    .bp4-icon {
+      cursor: pointer;
+      &:hover {
+        color: rgba(255, 0, 0, 1);
+      }
+    }
+  }
+
+  [data-wrapper-for="Selectors"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  [data-wrapper-for="Elements"] {
+    width: 100%;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+  }
+
+  [data-wrapper-for="Element"] {
+    flex-direction: row;
+    width: calc(100% - 40px);
+  }
+
+
+  [data-wrapper-for="Identifier"] {
+    min-width: 500px;
+  }
+  
+}
+
+.wrapper-container {
+  display: flex;
+  padding-right: 10px;
+  flex-grow: 1;
+
   .wrapper-description {
     display: flex;
     align-items: flex-end;
