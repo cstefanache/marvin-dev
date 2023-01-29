@@ -27,7 +27,6 @@ export default class Workspace {
       logger.log(`Workspace folder already exists at ${path}`);
     } else {
       fs.mkdirSync(path);
-      fs.mkdirSync(`${path}/output`);
     }
 
     if (fs.existsSync(`${path}/config.json`)) {
@@ -50,6 +49,7 @@ export default class Workspace {
           input: [],
           info: [],
           iterators: [],
+          store: []
         },
         actions: {},
         discover: [],
