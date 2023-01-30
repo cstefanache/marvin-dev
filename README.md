@@ -46,13 +46,13 @@ OR
 
 ### Config tab
 
-Fill the rootURL of the application for which you want to write automation tests:
+Fill in the rootURL of the application for which you want to write automation tests:
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215423279-5945ec08-cc12-40e2-9095-3b5ebeb728f7.png">
 
 #### Config tab - URL Replacers section
 
-You have possibility to replace in the application URLs the resource ids or resources names with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin provides us the posibility to define replacer rules (regex or exact match) for application URLs, when resources are included in the path URL.
+You have the possibility to replace the resources in the application with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin allow you to define replacer rules (regex or exact match) for application URLs, when resources are included in the path URL.
 
 `Eg: An URL in the application under test could be: `https://localhost:4200/articles/2423453254354356465` for the Article details page. We want to refer the Article details page for any article from the application. In this case we want to have something like this: `https://localhost:4200/articles/{articleId}`. `
 
@@ -82,7 +82,7 @@ You have the possibility to extend the default input selectors that are configur
 
 #### Config tab - Iterators section
 
-You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) a specific item from the list that has the desired text on it - defined in `identifier`.
+You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) a specific item from the list that has the desired text on it - defined in `identifier` element.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426748-9d273f41-a90c-476d-9a97-720de1f55fca.png">
 
@@ -95,34 +95,33 @@ Also you have the possibility to exclude some tag / id / attribute / class, by d
 
 #### Config tab - Store section
 
-You have the possibility to define some run parameters (eg: username and password)
+You have the possibility to define run parameters (eg: username and password) that are used in automation tests.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215430155-0a1b78c9-6d49-43ca-9bd7-7625a1cd76eb.png">
 
 ### Execution workflow tab
 
-You have the possibility to define methods for each page from the application, to execute them with different parameters and to run the entire flow or a partial flow. At each step from the flow all the elements from the current page are automatically discovered and after the step execution a screenshot is taken to see the current step execution. 
+You have the possibility to define methods for each page from the application, to execute them with different parameters and to run the entire flow or a partial flow. At each step from the flow, all the elements from the current page are automatically discovered and after step execution is finished, a screenshot is taken to see the current step execution result. 
 
 #### Add a new step in the graph
 
-Clicking on '+' sign, a side panel is displayed where the user has the possibility to create a new method or select an existing method.
+Clicking on the '+' sign, a side panel is displayed where the user can create a new method or select an existing one.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215433069-58b45421-d774-4e6a-83bb-1034a3e31507.png">
 
-
  A. **Create new method**
 
-Clicking on 'Create a new method' button, another side panel is displayed where you are able to select all the needed elements.
+Clicking on the 'Create a new method' button, a side panel is displayed where you can select all the needed elements.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434519-c71274cc-b8cf-4c1e-ae21-16eec177135e.png">
 
  B. **Select an existing method**
-
-Clicking on 'select method' dropdown a list of existing methods for the current page is displayed.
+ 
+Clicking on the 'Select method' dropdown a list of existing methods for the current page is displayed.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434660-76947671-1471-41c8-ab43-d09b1e0083fe.png">
 
-Selecting a method from the list, you will be able to define values for the method paramaters (in case the selected method has 'fillAndClear' elements)
+Selecting a method from the list, you will be able to define values for the method parameters (in case the selected method has 'fillAndClear' elements).
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434781-4df280eb-1108-4119-9619-1170db16f05d.png">
 
@@ -144,7 +143,7 @@ The execution is highlighted:
 
 #### View locators list
 
-After running a step from the graph, the view locators list button is available. Clicking on it will display a sidepanel where are displayed all the locators identified for the current page of the application under test.
+After running a step from the graph, the view locators list button is available. Clicking on it a side panelis displayed, where all discovered locators are listed.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437332-4bc6e370-0293-40ad-978c-e145b2c1b25b.png">
 
@@ -152,7 +151,7 @@ After running a step from the graph, the view locators list button is available.
 
 #### View screenshot
 
-After running a step from the graph, the view screenshot button is available. Clicking on it will display a screenshot of the actual step execution on the current page.
+After running a step from the graph, the view screenshot button is available. Clicking on it a screenshot of the actual step execution result is displayed.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437504-877c9535-b30c-44a6-a8c7-d383e4e396e9.png">
 
@@ -160,7 +159,7 @@ After running a step from the graph, the view screenshot button is available. Cl
 
 #### Delete a step from the graph
 
-Clicking on 'Delete icon' for a step from the graph will delete that step from the graph
+Clicking on 'Delete icon' for a step from the graph will remove that step execution from the graph.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215438039-e014b3c3-cb1b-459d-878a-223670cd2971.png">
 
