@@ -46,21 +46,21 @@ OR
 
 ### Config tab
 
-Fill in the rootURL of the application for which you want to write automation tests:
+Fill in the rootURL of the application under test:
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215423279-5945ec08-cc12-40e2-9095-3b5ebeb728f7.png">
 
 #### Config tab - URL Replacers section
 
-You have the possibility to replace the resources in the application with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin allow you to define replacer rules (regex or exact match) for application URLs, when resources are included in the path URL.
+You have the possibility to replace the application resources with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin allows you to define replacer rules (regex or exact match) for application URLs.
 
-`Eg: An URL in the application under test could be: `https://localhost:4200/articles/2423453254354356465` for the Article details page. We want to refer the Article details page for any article from the application. In this case we want to have something like this: `https://localhost:4200/articles/{articleId}`. `
+`Eg: An URL in the application under test could be: `https://localhost:4200/articles/2423453254354356465` -> for the Article details page. We want to refer the Article details page for any article from the application. In this case we want to have something like this: `https://localhost:4200/articles/{articleId}`. `
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215424951-959598db-4a12-4888-85a4-a4588d0d7a8b.png">
 
 #### Config tab - Info Selectors section
 
-You have the possibility to extend the default info selectors that are configured by default in the code. 
+You have the possibility to extend the default info selectors that are configured in the source code. 
 
 `Eg: span, p are not included in the default info selectors`
 
@@ -68,7 +68,7 @@ You have the possibility to extend the default info selectors that are configure
 
 #### Config tab - Action Selectors section
 
-You have the possibility to extend the default action selectors that are configured by default in the code. 
+You have the possibility to extend the default action selectors that are configured in the source code. 
 
 `Eg: .button is not included in the default action selectors.`
 
@@ -76,13 +76,13 @@ You have the possibility to extend the default action selectors that are configu
 
 #### Config tab - Input Selectors section
 
-You have the possibility to extend the default input selectors that are configured by default in the code. 
+You have the possibility to extend the default input selectors that are configured in the source code. 
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426501-9289ebb4-e379-48fe-a7da-32d404e07be1.png">
 
 #### Config tab - Iterators section
 
-You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) a specific item from the list that has the desired text on it - defined in `identifier` element.
+You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426748-9d273f41-a90c-476d-9a97-720de1f55fca.png">
 
@@ -95,13 +95,13 @@ Also you have the possibility to exclude some tag / id / attribute / class, by d
 
 #### Config tab - Store section
 
-You have the possibility to define run parameters (eg: username and password) that are used in automation tests.
+You have the possibility to define run parameters (eg: username and password) for the application under test, to use them in the execution flows.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215430155-0a1b78c9-6d49-43ca-9bd7-7625a1cd76eb.png">
 
 ### Execution workflow tab
 
-You have the possibility to define methods for each page from the application, to execute them with different parameters and to run the entire flow or a partial flow. At each step from the flow, all the elements from the current page are automatically discovered and after step execution is finished, a screenshot is taken to see the current step execution result. 
+You have the possibility to define methods for each page from the application under test, to execute them with different parameters and to run the entire flow or a partial flow. At each step from the flow, all the elements from the current page are automatically discovered and when step execution is completed, a screenshot is taken to see the current result. 
 
 #### Add a new step in the graph
 
