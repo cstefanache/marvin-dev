@@ -1,6 +1,6 @@
 {
   "discovered": {
-    "leadership/": {
+    "": {
       "items": {
         "info": [
           {
@@ -207,372 +207,62 @@
             "locator": "div[data-cy=\"navBar\"] > a:nth-of-type(2)"
           },
           {
-            "text": "Career Guides",
-            "locator": "div[data-cy=\"navBar\"] > a:nth-of-type(3)"
+            "text": "Logout",
+            "locator": "button.MuiButton-textInherit"
           },
           {
-            "text": "Fortune.com",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(1) > a"
+            "text": "Open",
+            "locator": "a[href=\"/item/1674636201481\"]"
           },
           {
-            "text": "Fortune Live Media",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(2) > a"
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div:nth-of-type(1) > div > div:nth-of-type(2) > button"
           },
           {
-            "text": "Fortune Connect",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(3) > a"
+            "text": "Open",
+            "locator": "a[href=\"/item/1674637888814\"]"
           },
           {
-            "text": "Fortune Well",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(4) > a"
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div:nth-of-type(2) > div > div:nth-of-type(2) > button"
           },
           {
-            "text": "Fortune Crypto",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(5) > a"
+            "text": "Open",
+            "locator": "a[href=\"/item/1674637891131\"]"
           },
           {
-            "text": "Fortune Recommends",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(6) > a"
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div:nth-of-type(3) > div > div:nth-of-type(2) > button"
           },
           {
-            "text": "Articles",
-            "locator": "div#hamburger-menu > a:nth-of-type(1)"
+            "text": "Open",
+            "locator": "a[href=\"/item/1674637893414\"]"
           },
           {
-            "text": "Career Guides",
-            "locator": "div#hamburger-menu > a:nth-of-type(2)"
-          },
-          {
-            "text": "Fortune.com",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(1) > a"
-          },
-          {
-            "text": "Fortune Live Media",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "Fortune Connect",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(3) > a"
-          },
-          {
-            "text": "Fortune Well",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(4) > a"
-          },
-          {
-            "text": "Fortune Crypto",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(5) > a"
-          },
-          {
-            "text": "Fortune Recommends",
-            "locator": "div#dropdown-MORE-nested > div:nth-of-type(2) > div:nth-of-type(6) > a"
-          },
-          {
-            "text": "Top Business Schools",
-            "locator": "ul > li:nth-of-type(1) > a"
-          },
-          {
-            "text": "Articles",
-            "locator": "a[href=\"/business/articles/\"]"
-          },
-          {
-            "text": "READ MORE",
-            "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "SEE VANDERBILT UNIVERSITY PROFILE",
-            "locator": "a[href=\"/leadership/vanderbilt-university/\"]"
-          },
-          {
-            "text": "SEE DREXEL UNIVERSITY PROFILE",
-            "locator": "a[href=\"/leadership/drexel-university/\"]"
-          },
-          {
-            "text": "SEE TREVECCA NAZARENE UNIVERSITY PROFILE",
-            "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(5) > a"
-          },
-          {
-            "text": "See Full Best Online Doctorate in Education (EdD) Programs in 2022",
-            "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > a"
-          },
-          {
-            "text": "READ MORE",
-            "locator": "div.m-t-8 > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "SEE TREVECCA NAZARENE UNIVERSITY PROFILE",
-            "locator": "div.m-t-8 > div:nth-of-type(3) > a"
-          },
-          {
-            "text": "SEE ABILENE CHRISTIAN UNIVERSITY PROFILE",
-            "locator": "a[href=\"/leadership/abilene-christian-university/\"]"
-          },
-          {
-            "text": "SEE SPALDING UNIVERSITY PROFILE",
-            "locator": "a[href=\"/leadership/spalding-university/\"]"
-          },
-          {
-            "text": "See Full Most Affordable Online Doctorate in Education (EdD) Programs in 2022",
-            "locator": "div.m-t-8 > a"
-          },
-          {
-            "text": "<picture><source type=\"image/webp\" srcSet=\"/static/01bd19048e127d4af7a4b9b7474bde8e/27bb4/Unknown.webp 580w\" sizes=\"(min-width: 580px) 580px, 100vw\"/><img width=\"750\" height=\"750\" data-main-image=\"\" style=\"object-fit:cover;opacity:1\" sizes=\"(min-width: 580px) 580px, 100vw\" decoding=\"async\" loading=\"lazy\" src=\"/static/01bd19048e127d4af7a4b9b7474bde8e/b62c6/Unknown.jpg\" srcSet=\"/static/01bd19048e127d4af7a4b9b7474bde8e/b62c6/Unknown.jpg 580w\" alt=\"alt\"/></picture>More cybersecurity training and better hiring practices could help narrow the talent gap, CISO saysBY Sydney LakeJanuary 06, 2023",
-            "locator": "a[href=\"/articles/more-cybersecurity-training-and-better-hiring-practices-could-help-narrow-the-talent-gap-ciso-says\"]"
-          },
-          {
-            "text": "<picture><source type=\"image/webp\" srcSet=\"/static/d267e107a30b8ed60b3db87f7d016d0d/c5e11/FINAL-EDITS-0007.webp 750w\" sizes=\"(min-width: 750px) 750px, 100vw\"/><img width=\"750\" height=\"500\" data-main-image=\"\" style=\"object-fit:cover;opacity:1\" sizes=\"(min-width: 750px) 750px, 100vw\" decoding=\"async\" loading=\"lazy\" src=\"/static/d267e107a30b8ed60b3db87f7d016d0d/92368/FINAL-EDITS-0007.jpg\" srcSet=\"/static/d267e107a30b8ed60b3db87f7d016d0d/92368/FINAL-EDITS-0007.jpg 750w\" alt=\"alt\"/></picture>How an Ed.D. program helped a seasoned consultant gain confidence—and advance her careerBY Kenneth PartridgeJanuary 05, 2023",
-            "locator": "a[href=\"/articles/how-an-ed-d-program-helped-a-seasoned-consultant-gain-confidence-and-advance-her-career\"]"
-          },
-          {
-            "text": "<picture><source type=\"image/webp\" srcSet=\"/static/7483d56dd851ddc8f3cd2434b3724728/c5e11/eugenio-zuccarelli-1054.webp 750w\" sizes=\"(min-width: 750px) 750px, 100vw\"/><img width=\"750\" height=\"500\" data-main-image=\"\" style=\"object-fit:cover;opacity:1\" sizes=\"(min-width: 750px) 750px, 100vw\" decoding=\"async\" loading=\"lazy\" src=\"/static/7483d56dd851ddc8f3cd2434b3724728/92368/eugenio-zuccarelli-1054.jpg\" srcSet=\"/static/7483d56dd851ddc8f3cd2434b3724728/92368/eugenio-zuccarelli-1054.jpg 750w\" alt=\"alt\"/></picture>How to become a data science leader, according to a manager at CVS HealthBY Meghan MalasJanuary 04, 2023",
-            "locator": "a[href=\"/articles/how-to-become-a-data-science-leader-according-to-a-manager-at-cvs-health\"]"
-          },
-          {
-            "text": "<picture><source type=\"image/webp\" srcSet=\"/static/95f2e68aaf55b050e03a4a16fd16380c/c5e11/GettyImages-1442239973.webp 750w\" sizes=\"(min-width: 750px) 750px, 100vw\"/><img width=\"750\" height=\"500\" data-main-image=\"\" style=\"object-fit:cover;opacity:1\" sizes=\"(min-width: 750px) 750px, 100vw\" decoding=\"async\" loading=\"lazy\" src=\"/static/95f2e68aaf55b050e03a4a16fd16380c/92368/GettyImages-1442239973.jpg\" srcSet=\"/static/95f2e68aaf55b050e03a4a16fd16380c/92368/GettyImages-1442239973.jpg 750w\" alt=\"alt\"/></picture>A fast-growing segment of psychology is landing grads jobs in Corporate AmericaBY Sam BeckerDecember 29, 2022",
-            "locator": "a[href=\"/articles/a-fast-growing-segment-of-psychology-is-landing-grads-jobs-in-corporate-america\"]"
-          },
-          {
-            "text": "Best Online MBA Programs in 2022",
-            "locator": "a[href=\"/business/best-online-mba-programs/\"]"
-          },
-          {
-            "text": "Best MBA Programs in 2022",
-            "locator": "a[href=\"/business/best-mba-programs/\"]"
-          },
-          {
-            "text": "Best Executive MBA Programs in 2022-23",
-            "locator": "a[href=\"/business/best-executive-mba-programs/\"]"
-          },
-          {
-            "text": "Best Part-Time MBA Programs in 2022-23",
-            "locator": "a[href=\"/business/best-parttime-mba-programs/\"]"
-          },
-          {
-            "text": "25 Most Affordable Online MBAs in 2022",
-            "locator": "a[href=\"/business/most-affordable-online-mba-programs/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Business Analytics Programs in 2022",
-            "locator": "a[href=\"/business/best-online-masters-in-business-analytics/\"]"
-          },
-          {
-            "text": "Programs reupload",
-            "locator": "a[href=\"/information-technology/programs-reupload/\"]"
-          },
-          {
-            "text": "API School",
-            "locator": "a[href=\"/information-technology/api-school/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Data Science Programs in 2022",
-            "locator": "a[href=\"/information-technology/best-online-masters-in-data-science/\"]"
-          },
-          {
-            "text": "Properties Types",
-            "locator": "a[href=\"/information-technology/properties-types/\"]"
-          },
-          {
-            "text": "API Ranking",
-            "locator": "a[href=\"/information-technology/api-ranking/\"]"
-          },
-          {
-            "text": "API Programs",
-            "locator": "a[href=\"/information-technology/api-programs/\"]"
-          },
-          {
-            "text": "Most Affordable Master’s in Data Science in 2022",
-            "locator": "a[href=\"/information-technology/most-affordable-masters-in-data-science/\"]"
-          },
-          {
-            "text": "Programs Updated",
-            "locator": "a[href=\"/information-technology/programs-updated/\"]"
-          },
-          {
-            "text": "Programs Properties",
-            "locator": "a[href=\"/information-technology/programs-properties/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Cybersecurity Degrees in 2022",
-            "locator": "a[href=\"/information-technology/best-online-masters-in-cybersecurity/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Computer Science Degrees in 2022",
-            "locator": "a[href=\"/information-technology/best-online-masters-in-computer-science/\"]"
-          },
-          {
-            "text": "Best Master’s in Data Science Programs in 2022",
-            "locator": "a[href=\"/information-technology/best-masters-in-data-science/\"]"
-          },
-          {
-            "text": "Most Affordable Online Master’s in Data Science Programs in 2022",
-            "locator": "a[href=\"/information-technology/most-affordable-online-masters-in-data-science/\"]"
-          },
-          {
-            "text": "Most Affordable Online Master’s in Cybersecurity Degrees in 2022",
-            "locator": "a[href=\"/information-technology/most-affordable-online-masters-in-cybersecurity/\"]"
-          },
-          {
-            "text": "Best Online MSN Nurse Practitioner Programs in 2022",
-            "locator": "a[href=\"/health/best-online-msn-nurse-practitioner-programs/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Nursing (MSN) Programs in 2022",
-            "locator": "a[href=\"/health/best-online-masters-in-nursing/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Public Health (MPH) Programs in 2022",
-            "locator": "a[href=\"/health/best-online-masters-in-public-health-programs/\"]"
-          },
-          {
-            "text": "Most Affordable Online MSN Nurse Practitioner Programs in 2022",
-            "locator": "a[href=\"/health/most-affordable-online-msn-nurse-practitioner-programs/\"]"
-          },
-          {
-            "text": "Best Online Master’s in Psychology Programs in 2022",
-            "locator": "a[href=\"/health/best-online-masters-in-psychology-degree-programs/\"]"
-          },
-          {
-            "text": "Best Online Doctorate in Education (EdD) Programs in 2022",
-            "locator": "div.ranking-sections > div:nth-of-type(4) > div > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "Most Affordable Online Doctorate in Education (EdD) Programs in 2022",
-            "locator": "div.ranking-sections > div:nth-of-type(4) > div > div:nth-of-type(3) > a"
-          },
-          {
-            "text": "Best Data Science and Analytics Bootcamps in 2023",
-            "locator": "a[href=\"/bootcamps/best-data-science-and-analytics-bootcamps/\"]"
-          },
-          {
-            "text": "Best Cybersecurity Bootcamps in 2023",
-            "locator": "a[href=\"/bootcamps/best-cybersecurity-bootcamps/\"]"
-          },
-          {
-            "text": "Behavioral Advertising Notice",
-            "locator": "div.static-sections > div:nth-of-type(1) > div > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "About Us",
-            "locator": "div.static-sections > div:nth-of-type(1) > div > div:nth-of-type(3) > a"
-          },
-          {
-            "text": "Terms and Conditions",
-            "locator": "div.static-sections > div:nth-of-type(1) > div > div:nth-of-type(4) > a"
-          },
-          {
-            "text": "Contact Us",
-            "locator": "div.static-sections > div:nth-of-type(2) > div > div:nth-of-type(2) > a"
-          },
-          {
-            "text": "Privacy Policy",
-            "locator": "div.static-sections > div:nth-of-type(2) > div > div:nth-of-type(3) > a"
-          },
-          {
-            "text": "Terms of Use",
-            "locator": "div.static-sections > div:nth-of-type(2) > div > div:nth-of-type(4) > a"
-          },
-          {
-            "text": "EU Customer Service",
-            "locator": "a[href=\"https://fortune.com/\"]"
-          },
-          {
-            "text": "Advertising",
-            "locator": "a[href=\"https://fortunemediakit.com/\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[href=\"https://www.facebook.com/FortuneMagazine/\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[href=\"https://twitter.com/FortuneMagazine\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[href=\"https://www.linkedin.com/company/fortune-magazine\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[href=\"https://www.instagram.com/fortunemag/\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[href=\"https://www.pinterest.com/fortunemagazine/\"]"
-          },
-          {
-            "text": "Terms of Use",
-            "locator": "span.text > div:nth-of-type(1) > a:nth-of-type(1)"
-          },
-          {
-            "text": "Privacy Policy",
-            "locator": "span.text > div:nth-of-type(1) > a:nth-of-type(2)"
-          },
-          {
-            "text": "CA Notice at Collection and Privacy Notice",
-            "locator": "a[href=\"https://fortune.com/california-privacy-policy/#notice\"]"
-          },
-          {
-            "text": "Do Not Sell/Share My Personal Information",
-            "locator": "a[href=\"https://submit-irm.trustarc.com/services/validation/156c4fed-e974-444a-8352-55333c91c0e6\"]"
-          },
-          {
-            "text": "Ad Choices",
-            "locator": "span.text > div:nth-of-type(1) > a:nth-of-type(5)"
-          },
-          {
-            "text": "Terms & Conditions",
-            "locator": "a[href=\"https://www.intercontinentalexchange.com/terms-of-use\"]"
-          },
-          {
-            "text": "Interactive Data Managed Solutions",
-            "locator": "a[href=\"https://www.interactivedata.com/idms\"]"
+            "text": "Delete",
+            "locator": "div.MuiGrid-container > div:nth-of-type(4) > div > div:nth-of-type(2) > button"
           }
         ],
         "iterable": [
           {
-            "text": "List Iterator",
-            "locator": "ul, ol",
+            "text": "Card Iterator",
+            "locator": ".grid-card",
+            "identifier": ".MuiTypography-h5",
             "elements": [
               {
-                "text": "Top Business Schools",
-                "locator": "ul > li:nth-of-type(1)"
+                "text": "Open",
+                "locator": "a"
               },
               {
-                "text": "Articles",
-                "locator": "ul > li:nth-of-type(2)"
-              }
-            ]
-          },
-          {
-            "text": "Rank Summary Card Iterator",
-            "locator": "[data-cy='rankSummary']",
-            "identifier": "h3",
-            "elements": [
-              {
-                "text": "Today’s leaders are faced with new challenges—and one way to elevate leadership skills and find improved ways to run an organization is to enroll in a degree program. That’s why Fortune compiled a list of the top online doctorate of education (Ed.D.) in organizational leadership degree programs. In total, we ranked eight Ed.D. in organizational leadership programs in 2022.\n ",
-                "locator": "p[data-cy=\"rankDescription\"]"
-              },
-              {
-                "text": "Vanderbilt University doesn’t require applicants to submit a GRE score to qualify for admission into its online Ed.D. degree program in leadership and learning in organizations, but applicants are encouraged to submit either GMAT or GRE scores. Prospective students don’t need to have a master’s degree before they begin the program, but holding one is preferred for admission. Last year, students accepted into this program had an average undergraduate GPA of 3.4. International applicants are required to submit TOEFL or IELTS scores, and the program has a one-year retention rate of 96%. Three letters of recommendation are required for the 84 credit-hour program.\n",
-                "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(3) > p"
-              },
-              {
-                "text": "Drexel University doesn’t require applicants to submit a GRE score to qualify for admission into its online Ed.D. degree program in leadership, but applicants must have a master’s degree. Last year, students accepted into this program had an average undergraduate GPA of 3.38. International applicants are required to submit TOEFL scores, and the program has a one-year retention rate of 98%. Three letters of recommendation are required for the 60 credit-hour program.\n",
-                "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(4) > p"
-              },
-              {
-                "text": "Trevecca Nazarene University doesn’t require applicants to submit a GRE score to qualify for admission into its online Ed.D. degree program in leadership, but applicants must have a master’s degree. Last year, students accepted into this program had an average undergraduate GPA of 3.68. International applicants are not required to submit TOEFL scores. Two letters of recommendation are required for the 60 credit-hour program.\n",
-                "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(5) > p"
-              },
-              {
-                "text": "READ MORE",
-                "locator": "[data-cy=\"columnGrid\"] > div:nth-of-type(1) > div:nth-of-type(2) > a"
+                "text": "Delete",
+                "locator": "button"
               }
             ]
           }
         ]
       }
     },
-    "": {
+    "newitem": {
       "items": {
         "info": [
           {
@@ -1336,14 +1026,14 @@
           {
             "text": "",
             "details": null,
-            "type": "range",
-            "locator": "input[data-cy=\"rightValue\"]"
+            "type": "text",
+            "locator": "div.css-mifb2i > div > div > input"
           }
         ],
         "actions": [
           {
-            "text": "",
-            "locator": "a[href=\"/\"]"
+            "text": "Marvin Sample App",
+            "locator": "div.MuiToolbar-root > a:nth-of-type(1)"
           },
           {
             "text": "Articles",
@@ -1358,8 +1048,44 @@
             "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(1) > a"
           },
           {
-            "text": "Fortune Live Media",
-            "locator": "div#dropdown-MORE- > div:nth-of-type(2) > div:nth-of-type(2) > a"
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(3) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(4) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(5) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(6) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(7) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(8) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(9) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(10) > button"
+          },
+          {
+            "text": "",
+            "locator": "div.MuiCardContent-root > div:nth-of-type(11) > button"
+          },
+          {
+            "text": "Save",
+            "locator": "button.MuiButton-textPrimary"
           },
           {
             "text": "Fortune Connect",
