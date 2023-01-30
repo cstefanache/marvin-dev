@@ -42,7 +42,7 @@ OR
 
 - to open an existing project select a folder where you already have the generated files (output.json, config.json or flow.json)
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215416714-f85ac3f1-ffa4-481e-be82-70b7ec281ede.png">
+<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215472668-02778139-7870-48ac-a0d2-d4110218ad0f.png">
 
 ### Config tab
 
