@@ -56,17 +56,6 @@ export default function Workspaces({
           )}</ul>
         }
       </div>
-      <div>
-        <Callout title="Get started with Marvin" className="callout">
-          <p>Your working folder must contain the following configuration JSON files:</p>
-          <ul>
-            <li><em>flow.json</em></li>
-            <li><em>output.json</em></li>
-            <li><em>config.json</em></li>
-          </ul>
-        </Callout>
-      </div>
-      
     </div>
   );
 }
