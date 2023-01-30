@@ -50,7 +50,7 @@ Fill the rootURL of the application for which you want to write automation tests
 
 <img width="1765" alt="image" src="https://user-images.githubusercontent.com/15820565/215423279-5945ec08-cc12-40e2-9095-3b5ebeb728f7.png">
 
-### Config tab - URL Replacers section
+#### Config tab - URL Replacers section
 
 You have possibility to replace in the application URLs the resource ids or resources names with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin provides us the posibility to define replacer rules (regex or exact match) for application URLs, when resources are included in the path URL.
 
@@ -58,7 +58,7 @@ You have possibility to replace in the application URLs the resource ids or reso
 
 <img width="1758" alt="image" src="https://user-images.githubusercontent.com/15820565/215424951-959598db-4a12-4888-85a4-a4588d0d7a8b.png">
 
-### Config tab - Info Selectors section
+#### Config tab - Info Selectors section
 
 You have the possibility to extend the default info selectors that are configured by default in the code. 
 
@@ -66,7 +66,7 @@ You have the possibility to extend the default info selectors that are configure
 
 <img width="1775" alt="image" src="https://user-images.githubusercontent.com/15820565/215425852-901cc9c0-6914-401d-baee-f99762ef83e1.png">
 
-### Config tab - Action Selectors section
+#### Config tab - Action Selectors section
 
 You have the possibility to extend the default action selectors that are configured by default in the code. 
 
@@ -74,131 +74,35 @@ You have the possibility to extend the default action selectors that are configu
 
 <img width="1779" alt="image" src="https://user-images.githubusercontent.com/15820565/215425931-b2cf060a-ed41-474a-ac6f-17cbfb8b32f4.png">
 
-### Config tab - Input Selectors section
+#### Config tab - Input Selectors section
 
 You have the possibility to extend the default input selectors that are configured by default in the code. 
 
 <img width="904" alt="image" src="https://user-images.githubusercontent.com/15820565/215426501-9289ebb4-e379-48fe-a7da-32d404e07be1.png">
 
-### Config tab - Iterators section
+#### Config tab - Iterators section
 
 You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) a specific item from the list that has the desired text on it - defined in `identifier`.
 
 <img width="1768" alt="image" src="https://user-images.githubusercontent.com/15820565/215426748-9d273f41-a90c-476d-9a97-720de1f55fca.png">
 
 
-### Config tab - Optimizer section
+#### Config tab - Optimizer section
 
-You have the possibility to 
+You have the possibility to change the default priority that is used to determine an unique locator for each element from the current page. The default order for defining an unique locator is: tag, id, attribute, class.
 
-## Config
+Also you have the possibility to exclude some tag / id / attribute / class, by defining a regex and/or an exact value.
 
-Format:
+#### Config tab - Store section
 
-```
-{
-    "path": "basic",
-    "rootUrl": "",
-    "defaultTimeout": 10000,
-    "aliases": {
-        "info": [ ... ],
-        "input": [ ... ],
-        "action": [ ... ],
-        "iterators": [ ... ]
-    },
-    "urlReplacers": [ ... ],
-    "optimizer": {
-        "exclude": [ ... ]
-    },
-    "sequence": [ ... ],
-}
-```
+You have the possibility to define some run parameters (eg: username and password)
 
-`path` - the local folder where the output will be generated
+<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215430155-0a1b78c9-6d49-43ca-9bd7-7625a1cd76eb.png">
 
-`rootUrl` - the root URL from which the discovery will start
 
-`defaultTimeout` - the default waiting time before proceeding with actions if the network does not turn to idle. Usually the case when polling is used in pages
 
-`aliases` - the list of custom identifiable items in the page. By default Marvin is initialized with a list of discoverable elements such as `<h[1-6]>`, `<p>` for info, `<input ...` for inputs, `<a ...`, `<button ...` for action but most applications come with custom complex classes that require definition
 
--   `info` - discoverable elements that display information.
--   `input` - elements that support keyboard typing
--   `action` - clickable elements
--   `iterators` - TBD
 
-Example:
 
-```
-"aliases": {
-    "info": [
-        {
-            "name": "Alert",
-            "selectors": [".alert", ".MuiAlert-message"]
-        },
-        {
-            "name": "Form error",
-            "selectors": ["form .error"]
-        }
-    ],
-    "action": [
-        {
-            "name": "Card Header",
-            "selectors": [".card .card-title h1"]
-        }
-    ],
-}
-```
 
-`optimizer` - TBD
 
-`urlReplacers` - used when the identifiable pages reference a specific resource (e.g. `/user/4/profile`) and the output should merge all discovered elements under the same url.
-
-if no urlReplacers are present the generated discovered output will result:
-
-```
-{
-    ...
-    "/user/4/profile": {
-        ...
-    },
-    "/user/6/profile": {
-        ....
-    }
-}
-```
-
-To merge the discovered outputs to be merged under a single object a config entry can be added:
-
-```
-"urlReplacers": [
-    {
-        "regex": "\/user\/\d\/profile",
-        "alias": "{userIdId}"
-    }
-],
-```
-
-the generated output will be:
-
-```
-{
-    ...
-    "/user/{userId}/profile": {
-        ...
-    }
-}
-```
-
-Replacer samples:
-
--   **UUID** - uuid format replaced with `{resourceId}`
-
-```
-    {
-        "regex": "({){0,1}[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(}){0,1}",
-        "alias": "{resourceId}"
-    }
-```
-
-`sequence` - This is just for development purpose. will be removed in the future
