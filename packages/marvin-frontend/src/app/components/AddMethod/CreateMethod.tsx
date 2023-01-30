@@ -36,7 +36,11 @@ const filterItems: ItemPredicate<DiscoveredItem> = (
   exactMatch
 ) => {
   const normalizedTitle =
-    (item.text || '').toLowerCase() + ' ' + (item.details || '').toLowerCase();
+    (item.text || '').toLowerCase() +
+    ' ' +
+    (item.details || '').toLowerCase() +
+    ' ' +
+    (item.locator || '').toLowerCase();
   const normalizedQuery = query.toLowerCase();
 
   if (exactMatch) {
@@ -222,13 +226,18 @@ const CreateMethod = (props: any) => {
           return (
             <div className="sequence-item">
               <span className="number">
-                {index !== 0 && <Icon icon="chevron-up" onClick={() => {
-                  const newSequence = [...sequence];
-                  const temp = newSequence[index];
-                  newSequence[index] = newSequence[index - 1];
-                  newSequence[index - 1] = temp;
-                  setSequence(newSequence);
-                }} />}
+                {index !== 0 && (
+                  <Icon
+                    icon="chevron-up"
+                    onClick={() => {
+                      const newSequence = [...sequence];
+                      const temp = newSequence[index];
+                      newSequence[index] = newSequence[index - 1];
+                      newSequence[index - 1] = temp;
+                      setSequence(newSequence);
+                    }}
+                  />
+                )}
                 <Icon
                   icon="trash"
                   onClick={() => {
@@ -239,13 +248,16 @@ const CreateMethod = (props: any) => {
                   }}
                 />
                 {index !== sequence.length - 1 && (
-                  <Icon icon="chevron-down" onClick={() => {
-                    const newSequence = [...sequence];
-                    const temp = newSequence[index];
-                    newSequence[index] = newSequence[index + 1];
-                    newSequence[index + 1] = temp;
-                    setSequence(newSequence);
-                  }} />
+                  <Icon
+                    icon="chevron-down"
+                    onClick={() => {
+                      const newSequence = [...sequence];
+                      const temp = newSequence[index];
+                      newSequence[index] = newSequence[index + 1];
+                      newSequence[index + 1] = temp;
+                      setSequence(newSequence);
+                    }}
+                  />
                 )}
               </span>
               <EditableSelectionBox

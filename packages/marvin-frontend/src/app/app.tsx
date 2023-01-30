@@ -27,7 +27,6 @@ export function App() {
   useEffect(() => {
     const asyncFn = async () => {
       const workspace = await window.electron.getWorkspace();
-      console.log(workspace);
       if (!workspace) {
         navigate('/workspaces');
       }
@@ -36,8 +35,11 @@ export function App() {
     asyncFn();
   }, [navigate]);
 
-  const selectWorkspace = () => {
-    if (workspace) navigate('/');
+  const selectWorkspace = async (fromNew: boolean = false) => {
+    const workspace = await window.electron.getWorkspace();
+    console.log(workspace)
+    setWorkspace(workspace);
+    navigate(fromNew ? '/configuration' : '/');
   };
 
   return (

@@ -166,6 +166,41 @@ export function prepareGraphNode(node: any, runEvents: any = {}) {
     .text((d: any) => (d.data.method ? `<> ${d.data.method}` : ''))
     .call(wrap, maxCellSize);
 
+  setAttrs(node.append('path'), {
+    transform: (d: any) => `translate(18, ${d.ySize - 26})scale(0.6)`,
+    d: `M9.5,4c0.4,0,0.8-0.1,1.1-0.3C12,4.5,12.9,6,13,7.6l0,0c0,0.5,0.5,0.9,1,0.9
+    c0.6,0,1-0.4,1-1c0-0.1,0-0.1,0-0.2c-0.2-2.4-1.5-4.4-3.5-5.5c-0.1-1-0.9-1.8-2-1.8s-2,0.9-2,2S8.4,4,9.5,4L9.5,4z M4,8.5
+    c0-0.7-0.4-1.3-0.9-1.7c0.3-1.4,1.2-2.6,2.5-3.3c0.3-0.1,0.6-0.4,0.6-0.9s-0.4-1-1-1c-0.2,0-0.3,0-0.5,0.1c-1.9,1-3.2,2.8-3.6,5
+    C0.4,7.1,0,7.8,0,8.5c0,1.1,0.9,2,2,2S4,9.6,4,8.5L4,8.5z M12.8,9.7c-1.1,0-2,0.9-2,2c0,0.1,0,0.2,0,0.3C10,12.6,9,12.9,8,12.9
+    c-1.2,0-2.3-0.4-3.2-1.1c-0.2-0.2-0.4-0.3-0.7-0.3c-0.6,0-1,0.4-1,1c0,0.3,0.1,0.6,0.3,0.8l0,0C4.6,14.4,6.2,15,8,15
+    c1.5,0,3-0.5,4.1-1.3c0.2,0.1,0.5,0.1,0.7,0.1c1.1,0,2-0.9,2-2S13.9,9.7,12.8,9.7L12.8,9.7z`,
+  });
+
+  setAttrs(node.append('path'), {
+    transform: (d: any) => `translate(43, ${d.ySize - 25})scale(0.5)`,
+    d: `M10,5 C10,5.55 10.45,6 11,6 L15,6 C15.55,6 16,5.55 16,5 L16,1 C16,0.45 15.55,0 15,0 C14.45,0 14,0.45 14,1 L14,2.74 C12.54,1.07 10.4,0 8,0 C3.58,0 0,3.58 0,8 C0,12.06 3.02,15.4 6.94,15.92 C6.96,15.92 6.98,15.93 7,15.93 C7.33,15.97 7.66,16 8,16 C12.42,16 16,12.42 16,8 C16,7.45 15.55,7 15,7 C14.45,7 14,7.45 14,8 C14,11.31 11.31,14 8,14 C7.29,14 6.63,13.85 6,13.62 L6,13.63 C3.67,12.81 2,10.61 2,8 C2,4.69 4.69,2 8,2 C9.77,2 11.36,2.78 12.46,4 L11,4 C10.45,4 10,4.45 10,5 Z`,
+  });
+
+  setAttrs(node.append('text'), {
+    font,
+    'font-size': fontSize - 4,
+    'text-rendering': 'optimizeSpeed',
+    x: 30,
+    y: (d: any) => d.ySize - 25,
+    'text-anchor': 'left',
+    'alignment-baseline': 'hanging',
+  }).text((d: any) => d.data.loop || 1);
+
+  setAttrs(node.append('text'), {
+    font,
+    'font-size': fontSize - 4,
+    'text-rendering': 'optimizeSpeed',
+    x: 55,
+    y: (d: any) => d.ySize - 25,
+    'text-anchor': 'left',
+    'alignment-baseline': 'hanging',
+  }).text((d: any) => d.data.methodLoop || 1);
+
   addSVGButton(
     node,
     (d: any) => `translate(0,20)`,

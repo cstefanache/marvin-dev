@@ -81,6 +81,18 @@ const SelectMethod = (props: any) => {
                 }, {}),
             },
           },
+          loop: {
+            type: 'integer',
+            title: 'Sequence Execution Loop',
+            default: 1,
+            description: 'Number of times to loop this step',
+          },
+          methodLoop: {
+            type: 'integer',
+            title: 'Method Loop',
+            default: 1,
+            description: 'Number of times to loop this method',
+          },
         },
       };
       setSchema(schema);

@@ -17,7 +17,6 @@ const logger = getLog('marvin:workspace');
 const store = new Store();
 let workspace: Workspace;
 
-
 if (!store.get('workspaces')) {
   store.set('workspaces', []);
 }
@@ -99,47 +98,51 @@ ipcMain.handle('get-discovered-paths', () => {
 });
 
 ipcMain.handle('select-workspace', async (event, data) => {
-  store.set('lastWorkspace', { path: data.path, name: data.name });
+  lastWorkspace = { path: data.path, name: data.name };
+  store.set('lastWorkspace', lastWorkspace);
   logger.log('Workspace selected ' + data.path);
   workspace = new Workspace();
   workspace.initialize(data.path, data.name);
 });
 
 ipcMain.handle('select-new-workspace-folder', async (data) => {
-  dialog
-    .showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })
-    .then((data) => {
-      if (data.filePaths.length > 0) {
-        const workspacePath = data.filePaths[0];
+  const promise = dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+  });
 
-        const workspaceName = workspacePath
-          .split('/')
-          .pop()
-          .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
-            letter.toUpperCase()
-          );
+  promise.then((data) => {
+    if (data.filePaths.length > 0) {
+      const workspacePath = data.filePaths[0];
 
-        console.log(data);
-        const workspaces = store.get('workspaces') as {
-          name: string;
-          path: string;
-        }[];
+      const workspaceName = workspacePath
+        .split('/')
+        .pop()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
+          letter.toUpperCase()
+        );
 
-        if (workspaces && workspaces.some((ws) => ws.path === workspacePath)) {
-          return;
-        }
+      console.log(data);
+      const workspaces = store.get('workspaces') as {
+        name: string;
+        path: string;
+      }[];
 
-        if (!fs.existsSync(`${workspacePath}/screenshots`)) {
-          fs.mkdirSync(`${workspacePath}/screenshots`);
-        }
-
-        workspace = new Workspace();
-        workspace.initialize(workspacePath, workspaceName);
-
-        lastWorkspace = { path: workspacePath, name: workspaceName };
-        workspaces.push(lastWorkspace);
-        store.set('workspaces', workspaces);
-        store.set('lastWorkspace', lastWorkspace);
+      if (workspaces && workspaces.some((ws) => ws.path === workspacePath)) {
+        return;
       }
-    });
+
+      if (!fs.existsSync(`${workspacePath}/screenshots`)) {
+        fs.mkdirSync(`${workspacePath}/screenshots`);
+      }
+
+      workspace = new Workspace();
+      workspace.initialize(workspacePath, workspaceName);
+
+      lastWorkspace = { path: workspacePath, name: workspaceName };
+      workspaces.push(lastWorkspace);
+      store.set('workspaces', workspaces);
+      store.set('lastWorkspace', lastWorkspace);
+    }
+  });
+  return promise;
 });
