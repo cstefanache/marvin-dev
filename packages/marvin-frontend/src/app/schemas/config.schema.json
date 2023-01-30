@@ -10,7 +10,8 @@
       "type": "string",
       "size": { "xs": 12 },
       "uiType": "item",
-      "title": "Name"
+      "title": "Name",
+      "readOnly": true
     },
     "rootUrl": {
       "type": "string",
@@ -86,6 +87,27 @@
               "size": { "xs": 12 },
               "uiType": "container",
               "items": { "$ref": "#/definitions/Exclude" }
+            }
+          }
+        },
+        "store": {
+          "title": "Store",
+          "uiType": "tab",
+          "uiIndex": 6, 
+          "description": "Runtime initial store",
+          "type": "array",
+          "properties": {
+            "key": {
+              "type": "string",
+              "title": "Key",
+              "size": { "xs": 12, "sm": 6 },
+              "description": "Store key"
+            },
+            "value": {
+              "type": "string",
+              "title": "Value",
+              "size": { "xs": 12, "sm": 6 },
+              "description": "Store value"
             }
           }
         }
@@ -229,10 +251,12 @@
       "required": ["name", "selector"],
       "uiType": "container",
       "properties": {
-        "divider": {
-          "type": "boolean",
-          "registyKey": "divider",
-          "uiType": "divider"
+        "selector": {
+          "type": "string",
+          "title": "Selector",
+          "uiType": "item",
+          "size": { "xs": 12, "sm": 6 },
+          "description": "CSS Selector"
         },
         "name": {
           "type": "string",
@@ -240,13 +264,6 @@
           "uiType": "item",
           "size": { "xs": 12, "sm": 6 },
           "description": "Identifier name"
-        },
-        "selector": {
-          "type": "string",
-          "title": "Selector",
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 6 },
-          "description": "CSS Selector"
         }
       }
     }

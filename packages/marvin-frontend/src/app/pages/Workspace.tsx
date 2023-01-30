@@ -1,48 +1,180 @@
-import { Box, Tabs, Tab, Button, Stack, Typography } from '@mui/material';
-import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import Side from '../components/Side';
-import Config from './Config';
-import TabPanel from '../components/TabPanel';
-import Operations from './Operations';
-import FlowComponent from '../components/FlowGraph';
-import Workspaces from './Workspaces';
+import { Console } from '../components/Console/Console';
+import { Graph } from '../components/Graph/Graph';
+import { Callout, Drawer, Icon, PanelStack2, Tag } from '@blueprintjs/core';
+import { AddMethod } from '../components/AddMethod/AddMethod';
+import { getIcon } from '../utils';
+import './workspace.scss';
+interface Props {
+  workspace: {
+    name: string;
+    path: string;
+  };
+}
 
-export default function Workspace({ workspace }: { workspace?: string }) {
-  const [value, setValue] = React.useState(0);
+export default function Workspace({ workspace }: Props) {
+  const [flow, setFlow] = React.useState(null);
+  const [config, setConfig] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [discoveredElements, setDiscoveredElements] = React.useState<
+    any | null
+  >(null);
+  const [exitUrl, setExitUrl] = React.useState<string | null>(null);
+  const [flowKey, setFlowKey] = React.useState(Math.random());
+  const [drawerElement, setDrawerElement] = React.useState<null | JSX.Element>(
+    null
+  );
+  const [drawerTitle, setDrawerTitle] = React.useState<null | string>(null);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const loadFlow = async () => {
+    const flow = await window.electron.getFlow();
+    const config = await window.electron.getConfig();
+    setFlow(flow);
+    setConfig(config);
+    setLoading(false);
   };
 
-  const selectWorkspace = (workspace: any) => {
-    console.log(workspace);
+  useEffect(() => {
+    const asyncFn = async () => {
+      await loadFlow();
+    };
+    asyncFn();
+
+    window.ipcRender.receive('config-updated', (config: any) => {
+      console.log('new config', config);
+      setConfig(config);
+      setFlowKey(Math.random());
+    });
+
+    window.ipcRender.receive('flow-updated', (flow: any) => {
+      setFlow(flow);
+      setFlowKey(Math.random());
+    });
+  }, []);
+
+  const save = async (data: any, parentObject: any) => {
+    setLoading(true);
+    if (data.id) {
+      await window.electron.updateBranch(data);
+    } else {
+      const { id } = parentObject;
+      await window.electron.addBranch(id, data);
+    }
+    setDrawerElement(null);
+    loadFlow();
+  };
+
+  const runDiscovery = async (sequence: any[]) => {
+    window.electron.runDiscovery(sequence);
+  };
+
+  const showDiscoveredElements = async (exitUrl: string) => {
+    setExitUrl(exitUrl);
+    const discovered = await window.electron.getDiscoveredForPath(exitUrl);
+    if (discovered && discovered.items) {
+      const {
+        items: { info, input, actions, iterable },
+      } = discovered;
+      let items = [
+        ...info.map((item: any) => ({ ...item, from: 'info' })),
+        ...input.map((item: any) => ({ ...item, from: 'input' })),
+        ...actions.map((item: any) => ({ ...item, from: 'actions' })),
+        // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
+        ...iterable.reduce((memo: any[], item: any) => {
+          const { identifier, iteratorName, elements } = item;
+          console.log(item);
+          elements.forEach((element: any) => {
+            memo.push({
+              from: 'iterable',
+              text: element.text,
+              locator: element.locator,
+              details: iteratorName,
+              iterator: {
+                name: iteratorName,
+                identifier,
+              },
+            });
+          });
+
+          if (!elements.length) {
+            memo.push({
+              from: 'iterable',
+              locator: item.locator,
+              details: iteratorName,
+              iterator: {
+                name: iteratorName,
+              },
+            });
+
+            console.log(memo);
+          }
+          return memo;
+        }, []),
+      ].filter(
+        (value, index, self) =>
+          index === self.findIndex((t) => t.locator === value.locator)
+      );
+
+      setDiscoveredElements(items);
+    }
+  };
+
+  const openDrawer = (type: string, title: string, props: any, data?: any) => {
+    setDrawerTitle(title);
+    switch (type) {
+      case 'addMethod':
+        const properties = { ...{ parent: props, title }, save };
+        setDrawerElement(<AddMethod {...properties} data={data} />);
+        break;
+    }
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="basic tabs example"
-      >
-        <Tab label="Workspace" />
-        <Tab label="Config" />
-        <Tab label="Operations" />
-        <Tab label="Flow" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <Workspaces selectWorkspace={selectWorkspace} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Config />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Operations />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <FlowComponent />
-      </TabPanel>
-    </Box>
+    <>
+      {!flow || !config || loading ? (
+        <h3>Loading</h3>
+      ) : (
+        <>
+          <Graph
+            key={flowKey}
+            flow={flow}
+            config={config}
+            openDrawer={openDrawer}
+            runDiscovery={runDiscovery}
+            showDiscoveredElements={showDiscoveredElements}
+          />
+          <Console />
+          <Drawer
+            isOpen={drawerElement !== null}
+            title="Add Method"
+            onClose={() => setDrawerElement(null)}
+          >
+            {drawerElement}
+          </Drawer>
+          <Drawer
+            isOpen={discoveredElements !== null}
+            title={`Discovered Elements for path ${exitUrl}`}
+            onClose={() => setDiscoveredElements(null)}
+          >
+            {discoveredElements && (
+              <div style={{ overflow: 'auto' }}>
+                {discoveredElements.map((item: any) => (
+                  <Callout
+                    key={item.locator}
+                    icon={getIcon(item)}
+                    className="mt-2"
+                  >
+                    {item.text} | {item.details}
+                    <div>
+                      <Tag minimal={true}>{item.locator}</Tag>
+                    </div>
+                  </Callout>
+                ))}
+              </div>
+            )}
+          </Drawer>
+        </>
+      )}
+    </>
   );
 }

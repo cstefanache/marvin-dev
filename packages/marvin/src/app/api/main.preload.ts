@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+
 contextBridge.exposeInMainWorld('electron', {
   getAppVersion: () => ipcRenderer.invoke('get-app-version-v2'),
   getWorkspaces: () => ipcRenderer.invoke('get-workspaces'),
@@ -8,12 +9,23 @@ contextBridge.exposeInMainWorld('electron', {
   getDiscovered: () => ipcRenderer.invoke('get-discovered'),
   getFlow: () => ipcRenderer.invoke('get-flow'),
   setFlow: (flow: any) => ipcRenderer.invoke('set-flow', flow),
+  getMethodsForPath: (path: string) => ipcRenderer.invoke('get-methods-for-path', path),
+  getDiscoveredPaths: (path: string) => ipcRenderer.invoke('get-discovered-paths', path),
+  getDiscoveredForPath: (path: string) => ipcRenderer.invoke('get-discovered-for-path', path),
+  saveMethodForUrl: (path: string, method: any) => ipcRenderer.invoke('save-method-for-url', path, method),
   getWorkspacePath: () => ipcRenderer.invoke('get-workspace-path'),
+  addBranch: (id: string, data: any) => ipcRenderer.invoke('add-branch', id, data),
+  updateBranch: (data: any) => ipcRenderer.invoke('update-branch', data),
+  cutBranch: (id: string) => ipcRenderer.invoke('cut-branch', id),
   runDiscovery: (sequence: any) =>
     ipcRenderer.invoke('run-discovery', sequence),
   selectNewWorkspaceFolder: () =>
     ipcRenderer.invoke('select-new-workspace-folder'),
-});
+  selectWorkspace: (workspace: any) => ipcRenderer.invoke('select-workspace', workspace),
+  getLoggers: () => ipcRenderer.invoke('get-loggers'),
+  getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
+  // selectWorkspace: (workspace: { name: string, path: string }) => ipcRenderer.invoke('select-workspace', workspace),
+ });
 
 // White-listed channels.
 const ipc = {
@@ -21,10 +33,7 @@ const ipc = {
     // From render to main.
     send: [],
     // From main to render.
-    receive: [
-      'action-finished',
-      'run-completed'
-    ],
+    receive: ['action-finished', 'run-completed', 'log', 'config-updated', 'flow-updated'],
     // From render to main and back again.
     sendReceive: [],
   },
@@ -36,22 +45,25 @@ contextBridge.exposeInMainWorld(
   {
     // From render to main.
     send: (channel, args) => {
-      let validChannels = ipc.render.send;
+      const validChannels = ipc.render.send;
       if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, args);
       }
     },
     // From main to render.
     receive: (channel, listener) => {
-      let validChannels = ipc.render.receive;
+      const validChannels = ipc.render.receive;
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`.
         ipcRenderer.on(channel, (event, ...args) => listener(...args));
       }
     },
+    removeAllListeners: (channel) => {
+      ipcRenderer.removeAllListeners(channel);
+    },
     // From render to main and back again.
     invoke: (channel, args) => {
-      let validChannels = ipc.render.sendReceive;
+      const validChannels = ipc.render.sendReceive;
       if (validChannels.includes(channel)) {
         return ipcRenderer.invoke(channel, args);
       }

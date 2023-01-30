@@ -1,0 +1,13 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.config-container {
+  display: block;
+  width: 100%;
+  padding: 48px 36px 36px;
+  margin-bottom: 36px;
+  background-color: #2F343C;
+
+  & .disabled-text-container::last-of-type {
+    background-color: red;
+  }
+}

@@ -1,10 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 /* Your styles goes here. */
+
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+@import "~@blueprintjs/select/lib/css/blueprint-select.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
 body {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  padding-top: $pt-navbar-height;
+  margin: 0;
+  background-color: #2F343C;
 }
 
-.ra-schema-form {
-    display: contents;
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.bp4-popover2-content {
+  background: #2f343c;
 }

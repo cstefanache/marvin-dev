@@ -1,0 +1,59 @@
+import * as colors from 'colors';
+import { registerLogger } from 'packages/discovery/src/utils/logger';
+import App from '../app';
+
+export class Logger {
+  private consoleLogFn: Function;
+  private logs: string[] = [];
+
+  constructor(private section: string, color: string) {
+    this.consoleLogFn = (colors as any)[color];
+    this.log(`Logger initialized for ${section}`)
+  }
+
+  public log(message: string): void {
+    console.log(this.consoleLogFn(`[ ${this.section} ] ${message}`));
+    if (App.mainWindow) {
+      App.mainWindow.webContents.send('log', this.section, message);
+    }
+    this.logs.push(message);
+  }
+
+  public error(message: string): void {
+    (colors as any)['red'](`[ ${this.section} ] ${message}`);
+    this.logs.push(message);
+  }
+
+  public getLogs(count = 100): string[] {
+    return this.logs.slice(-count);
+  }
+}
+
+const logs: { [key: string]: Logger } = {};
+
+const marvinLogger = new Logger('marvin:discovery', 'yellow');
+logs['marvin:discovery'] = marvinLogger;
+registerLogger(marvinLogger);
+
+export default function getLog(section: string, color = 'grey'): Logger {
+  let log = logs[section];
+  if (!log) {
+    if (App.mainWindow) {
+      App.mainWindow.webContents.send('log-section', section);
+    }
+    log = new Logger(section, color);
+    logs[section] = log;
+  }
+
+  return log;
+}
+
+export function getRegisteredLogs(): string[] {
+  return Object.keys(logs);
+}
+
+export function getLogs(section: string, count = 100): string[] {
+  if (section) {
+    return logs[section].getLogs(count);
+  }
+}

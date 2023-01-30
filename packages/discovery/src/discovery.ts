@@ -6,6 +6,7 @@ import {
   PageDiscoveryResult,
 } from './models/models';
 import { log } from './utils/logger';
+import * as uuid from 'uuid';
 
 const defaultAliases = {
   info: [
@@ -195,9 +196,14 @@ export default class Discovery {
       id = undefined;
     }
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
-      locator += `#${id}`;
-      if (await this.isLocatorUnique(locator, rootEl, true)) {
-        return getDescententLocator(locator);
+      const prevLocator = locator;
+      try {
+        locator += `#${id}`;
+        if (await this.isLocatorUnique(locator, rootEl, true)) {
+          return getDescententLocator(locator);
+        }
+      } catch (error) {
+        locator = prevLocator;
       }
     }
 
@@ -382,9 +388,15 @@ export default class Discovery {
         const iteratorRootSelectors = await rootElement.$$(
           iteratorItem.selectors.join(', ')
         );
-
+        log(
+          `Elements found for for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
+        );
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
+          console.log('>>>>>>>', iteratorItem.selectors)
+          console.log((await element.evaluate(
+            (el) => el.textContent
+          )) as string);
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {
@@ -393,6 +405,9 @@ export default class Discovery {
               }
               const iteratorElements = await element.$$(
                 iteratorElement.selector
+              );
+              log(
+                `Searching for ${iteratorElement.name} with selector ${iteratorElement.selector}. Found: ${iteratorElements.length}`
               );
               for (const [index, childElement] of iteratorElements.entries()) {
                 const text = (await childElement.evaluate(
@@ -417,9 +432,9 @@ export default class Discovery {
           }
 
           iterable.push({
-            text: iteratorItem.name,
             locator: iteratorItem.selectors.join(', '),
             identifier: iteratorItem.identifier,
+            iteratorName: iteratorItem.name,
             elements,
           });
         }

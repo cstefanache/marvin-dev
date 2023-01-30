@@ -1,0 +1,17 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.disabled-text {
+  color: $gray5;
+  padding: 0;
+}
+
+.disabled-text-container + .disabled-text-container:not(.wrapper-container) {
+  margin-bottom: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid;
+  border-color: $gray3;
+}
+
+.form-group {
+  margin-bottom: 8px;
+}

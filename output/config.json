@@ -1,55 +1,128 @@
 {
-  "rootUrl": "http://localhost:4200",
-  "defaultTimeout": 1000,
-  "name": "Marvin Test App",
+  "path": "output",
+  "name": "Fortune Education",
+  "defaultTimeout": 10000,
+  "rootUrl": "http://ec2-3-85-34-78.compute-1.amazonaws.com:8002/",
   "aliases": {
     "urlReplacers": [
       {
-        "alias": ":id",
-        "regex": ["/[0-9]+"]
+        "regex": "(?<=articles/)[A-Za-z0-9-]+",
+        "alias": "{articleName}"
+      },
+      {
+        "regex": "(?<=careers/)[A-Za-z0-9-]+",
+        "alias": "{articleName}"
+      }
+    ],
+    "action": [
+      {
+        "selectors": [
+          ".button"
+        ]
       }
     ],
     "info": [
       {
-        "name": "Headers",
+        "name": "Sections",
         "selectors": [
-          ".card-title",
-          ".title"
-        ]
-      }
-    ],
-    "iterators": [
-      {
-        "name": "Card Iterator",
-        "selectors": [
-          ".grid-card"
-        ],
-        "identifier": ".MuiTypography-h5",
-        "elements": [
-          {
-            "name": "Open Button",
-            "selector": "a"
-          },
-          {
-            "name": "Delete Button",
-            "selector": "button"
-          }
+          "span",
+          "p"
         ]
       }
     ],
     "optimizer": {
+      "priority": [
+        "data-cy"
+      ],
       "exclude": [
         {
-          "type": "attribute",
-          "name": "id",
-          "regex": [":[a-z0-9]+:"]
+          "type": "tag",
+          "value": [
+            "section"
+          ]
         },
         {
           "type": "attribute",
           "name": "id",
-          "regex": ["mui-[0-9]+"]
+          "value": [
+            "Best Online MBA Programs in 2022"
+          ]
         }
       ]
-    }
+    },
+    "iterators": [
+      {
+        "name": "Ranking Category Card Iterator",
+        "selectors": [
+          ".ranking-category-card"
+        ],
+        "identifier": "h1",
+        "elements": [
+          {
+            "name": "title",
+            "selector": "h1"
+          },
+          {
+            "name": "description",
+            "selector": ".description"
+          },
+          {
+            "name": "ranking button",
+            "selector": ".button"
+          }
+        ]
+      },
+      {
+        "name": "Rank Summary Card Iterator",
+        "selectors": [
+          "[data-cy='rankSummary']"
+        ],
+        "identifier": "h3",
+        "elements": [
+          {
+            "name": "Description",
+            "selector": "p"
+          },
+          {
+            "name": "Read More button",
+            "selector": ".rank-summary-description a"
+          }
+        ]
+      },
+      {
+        "name": "FAQ Article Iterator",
+        "selectors": [
+          "[data-cy='faq-link-section']"
+        ],
+        "identifier": "a"
+      },
+      {
+        "name": "Sort Option Iterator",
+        "selectors": [
+          ".option"
+        ]
+      },
+      {
+        "name": "GMAT Iterator",
+        "selectors": [
+          ".radio-container"
+        ],
+        "identifier": "span"
+      },
+      {
+        "name": "MBA Card Iterator",
+        "selectors": [
+          "[data-cy='mbaCard']"
+        ],
+        "identifier": "h2"
+      },
+      {
+        "name": "Article Iterator",
+        "selectors": [
+          ".article-wrapper"
+        ],
+        "identifier": "h4"
+      }
+    ]
   }
 }

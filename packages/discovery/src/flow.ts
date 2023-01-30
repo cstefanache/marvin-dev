@@ -42,6 +42,10 @@ export default class Flow {
     }
   }
 
+  public getUrl(url: string): string {
+    return processUrl(url, this.config.aliases.urlReplacers || [], this.config.rootUrl);
+  }
+
   /**
    * Discover elements in the current page and merge them in the output
    * @param page Puppeteer page object

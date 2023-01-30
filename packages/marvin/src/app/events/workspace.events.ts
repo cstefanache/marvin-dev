@@ -4,18 +4,28 @@
  */
 
 import { ipcMain, dialog } from 'electron';
-import { environment } from '../../environments/environment';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
-import * as puppeteer from 'puppeteer';
+import * as path from 'path';
 
-import { Flow, Discovery, Runner, State } from '@marvin/discovery';
 import App from '../app';
+import Workspace from '../api/workspace';
+import getLog from '../api/logging';
+
+const logger = getLog('marvin:workspace');
 
 const store = new Store();
+let workspace: Workspace;
+
 
 if (!store.get('workspaces')) {
   store.set('workspaces', []);
+}
+
+let lastWorkspace: any = store.get('lastWorkspace');
+if (lastWorkspace) {
+  workspace = new Workspace();
+  workspace.initialize(lastWorkspace.path, lastWorkspace.name);
 }
 
 export default class WorkspaceEvents {
@@ -24,144 +34,112 @@ export default class WorkspaceEvents {
   }
 }
 
-function getConfig() {
-  const workspace = store.get('lastWorkspace');
+ipcMain.handle('get-workspace-path', (id) => {
+  const workspace: any = store.get('lastWorkspace');
 
-  if (workspace && fs.existsSync(`${workspace}/config.json`)) {
-    const config = JSON.parse(fs.readFileSync(`${workspace}/config.json`, 'utf8'));
-    if (!config.aliases) {
-      config.aliases = {}
-    }
-    return config
-  } else {
-    return {};
+  if (fs.existsSync(`${workspace.path}`)) {
+    return workspace.path;
   }
-}
+});
 
-function getDiscovered() {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/output.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/output.json`, 'utf8'));
-  }
-
-  return null;
-}
-
-function getFlow() {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace && fs.existsSync(`${workspace}/flow.json`)) {
-    return JSON.parse(fs.readFileSync(`${workspace}/flow.json`, 'utf8'));
-  }
-
-  return null;
-}
-
-ipcMain.handle('get-workspaces', (event) => {
+ipcMain.handle('get-workspaces', () => {
   return store.get('workspaces');
 });
 
-ipcMain.handle('get-workspace', (event) => {
-  return store.get('lastWorkspace');
-});
-
-ipcMain.handle('select-new-workspace-folder', async (event) => {
-  dialog.showOpenDialog({ properties: ['openDirectory'] }).then((data) => {
-    if (data.filePaths.length > 0) {
-      const workspace = data.filePaths[0];
-      const workspaces = store.get('workspaces') as string[];
-
-      if (workspaces.includes(workspace)) {
-        return;
-      }
-
-      workspaces.push(workspace);
-      store.set('workspaces', workspaces);
-      store.set('lastWorkspace', workspace);
-    }
-  });
-});
-
-ipcMain.handle('get-config', () => {
-  return getConfig();
-});
-
-ipcMain.handle('get-workspace-path', (id) => {
-  const workspace = store.get('lastWorkspace');
-  if (fs.existsSync(`${workspace}`)) {
-    return workspace
-  }
-});
-
-ipcMain.handle('set-config', (event, config) => {
-  const workspace = store.get('lastWorkspace');
-
-  if (workspace) {
-    fs.writeFileSync(
-      `${workspace}/config.json`,
-      JSON.stringify(config, undefined, 2)
-    );
-  }
-
-  return config;
-});
-
-ipcMain.handle('get-discovered', () => {
-  return getDiscovered();
+ipcMain.handle('get-workspace', () => {
+  return lastWorkspace;
 });
 
 ipcMain.handle('get-flow', () => {
-  return getFlow();
+  return workspace.getFlow();
 });
 
-ipcMain.handle('set-flow', (event, flow) => {
-  const workspace = store.get('lastWorkspace');
+ipcMain.handle('get-methods-for-path', (_, path) => {
+  return workspace.getMethodsForPath(path);
+});
 
-  if (workspace) {
-    fs.writeFileSync(
-      `${workspace}/flow.json`,
-      JSON.stringify(flow, undefined, 2)
-    );
-  }
-})
+ipcMain.handle('save-method-for-url', (_, url, method) => {
+  return workspace.saveMethodForUrl(url, method);
+});
+
+ipcMain.handle('add-branch', (_, id, data) => {
+  return workspace.addBranch(id, data);
+});
+
+ipcMain.handle('get-discovered-for-path', (_, path) => {
+  return workspace.getDiscoveredForPath(path);
+});
+
+ipcMain.handle('get-config', () => {
+  return workspace.getConfig();
+});
+
+ipcMain.handle('set-config', (_, data) => {
+  workspace.setConfig(data);
+});
+
+ipcMain.handle('cut-branch', (_, id) => {
+  workspace.cutBranch(id);
+});
+
+ipcMain.handle('update-branch', (_, data) => {
+  workspace.updateBranch(data);
+});
 
 ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
-  const config = getConfig();
-  const workspace = store.get('lastWorkspace');
-  config.path = workspace;
-  if (!fs.existsSync(`${workspace}/screenshots`)) {
-    fs.mkdirSync(`${workspace}/screenshots`);
-  }
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [`--window-size=1920,2080`],
-    defaultViewport: {
-      width: 1920,
-      height: 2080,
-    },
-  });
-  const flow = new Flow(config, browser);
-  const page = await flow.navigateTo(config.rootUrl);
-  const state = new State(page);
-  // const state = undefined;
-
-  await page.setRequestInterception(true);
-
-  await page.waitForNetworkIdle({ timeout: config.defaultTimeout });
-
-  const runner = new Runner(config, flow, state);
-  await runner.run(page, sequence, (actionId: string) => {
+  await workspace.run(sequence, (actionId: string) => {
+    console.log('sending back', actionId);
     App.mainWindow.webContents.send('action-finished', actionId);
   });
+  App.mainWindow.webContents.send('run-completed');
+});
 
-  App.mainWindow.webContents.send('run-completed')
+ipcMain.handle('get-discovered-paths', () => {
+  return workspace.getDiscoveredPaths();
+});
 
+ipcMain.handle('select-workspace', async (event, data) => {
+  store.set('lastWorkspace', { path: data.path, name: data.name });
+  logger.log('Workspace selected ' + data.path);
+  workspace = new Workspace();
+  workspace.initialize(data.path, data.name);
+});
 
-  // // log('Taking screenshot', 'yellow');
-  await flow.discover(page, true);
-  await flow.export();
-  // await flow.stateScreenshot(page, 'runstate');
+ipcMain.handle('select-new-workspace-folder', async (data) => {
+  dialog
+    .showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })
+    .then((data) => {
+      if (data.filePaths.length > 0) {
+        const workspacePath = data.filePaths[0];
 
-  flow.export();
+        const workspaceName = workspacePath
+          .split('/')
+          .pop()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter: string) =>
+            letter.toUpperCase()
+          );
+
+        console.log(data);
+        const workspaces = store.get('workspaces') as {
+          name: string;
+          path: string;
+        }[];
+
+        if (workspaces && workspaces.some((ws) => ws.path === workspacePath)) {
+          return;
+        }
+
+        if (!fs.existsSync(`${workspacePath}/screenshots`)) {
+          fs.mkdirSync(`${workspacePath}/screenshots`);
+        }
+
+        workspace = new Workspace();
+        workspace.initialize(workspacePath, workspaceName);
+
+        lastWorkspace = { path: workspacePath, name: workspaceName };
+        workspaces.push(lastWorkspace);
+        store.set('workspaces', workspaces);
+        store.set('lastWorkspace', lastWorkspace);
+      }
+    });
 });

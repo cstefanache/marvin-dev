@@ -1,0 +1,94 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  height: calc(100vh - 50px);
+  padding-top: 48px;
+  padding-left: 36px;
+  padding-right: 36px;
+  background-color: #2F343C;
+
+  & > div {
+    width: 40%;
+  }
+
+  .input {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #fff;
+    background-color: transparent;
+    color: $gray5;
+    margin-bottom: 32px;
+    padding-bottom: 4px;
+
+    span {
+      display: inline-block;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      
+      &::after {
+        content: "Open folder...  \f1ba";
+        background-color: transparent;
+        box-shadow: none;
+        color: #2B95D6;
+        min-width: 50px;
+        width: unset;
+      }
+
+      &:active {
+        &::after {
+          background-color: transparent;
+          box-shadow: none;
+        }
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    list-style-type: none;
+
+    li {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .item-text {
+        margin-left: 12px;
+        
+        p {
+          margin-bottom: 2px;
+        }
+        span {
+          color: #a6a6a6;
+        }
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .callout {
+    ul {
+      margin: 0;
+      padding: 12px;
+      padding-top: 0px;
+    }
+  }
+}

@@ -3,7 +3,14 @@ import * as puppeteer from 'puppeteer';
 import { Flow, Discovery, Runner, State } from '@marvin/discovery';
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [`--window-size=1920,2080`],
+    defaultViewport: {
+      width: 1920,
+      height: 2080,
+    },
+  });
   const config = {
     path: 'output',
     defaultTimeout: 1000,

@@ -1,6 +1,12 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import { Action, Aliases, Config, Sequence } from './models/config';
+import {
+  Action,
+  Aliases,
+  Config,
+  Sequence,
+  KeyValuePair,
+} from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -8,7 +14,7 @@ import { processUrl } from './utils/processes';
 
 const library = {
   func: {
-    random: () => Math.floor(Math.random() * 1000000),
+    random: (decimals = 1000000) => Math.floor(Math.random() * decimals),
   },
 };
 
@@ -90,6 +96,7 @@ export default class Runner {
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
+      log(`Executing sequence: [${type}]: ${locator}`);
       if (type === 'store') {
         const element = await page.$(locator);
         if (element) {
@@ -100,18 +107,30 @@ export default class Runner {
           const text = await element.evaluate((el: any) =>
             el.textContent?.trim()
           );
-          this.store[uid] = value || text;
+          const key = parameters[uid];
+          this.store[key] = value || text;
+          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
         }
-      } else if (type === 'fill' && uid && parameters[uid]) {
-        log(`Filling ${locator} with ${parameters[uid]}`, 'yellow');
+      } else if (
+        (type === 'fill' || type === 'clearAndFill') &&
+        uid &&
+        parameters[uid]
+      ) {
+        log(`Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`, 'yellow');
         await page.focus(locator);
+        if (type === 'clearAndFill') {
+          await page.evaluate(
+            (locator) => ((document.querySelector(locator) as any).value = ''),
+            locator
+          );
+        }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
         if (element) {
           const text = await element.evaluate((el) => el.textContent?.trim());
-          log(`Clicking on ${text}`, 'yellow');
-          // await element.screenshot({ path: 'example.png' })
+          log(`Clicking on ${text} (${locator})`, 'yellow');
+          await element.screenshot({ path: 'example.png' });
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
         }
@@ -125,6 +144,9 @@ export default class Runner {
     steps: string[],
     sequenceCallback?: Function
   ) {
+    if (steps.length === 0) {
+      return;
+    }
     const { actions } = this.flow.flow;
     const currentStepToExecute = steps[0];
     let url = processUrl(
@@ -142,6 +164,7 @@ export default class Runner {
 
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
+      action.url = url;
       const { method: methodName, loop, methodLoop, parameters } = action;
       const urlActions = actions[url];
       if (urlActions) {
@@ -167,6 +190,17 @@ export default class Runner {
               }
             }
             await this.flow.stateScreenshot(page, action.id);
+            if (sequenceCallback) {
+              await sequenceCallback(action.id);
+            }
+            let url = processUrl(
+              page.url(),
+              this.config.aliases.urlReplacers,
+              this.config.rootUrl
+            );
+            action.exitUrl = url;
+            console.log(action);
+
             if (action.children && action.children.length && steps.length > 1) {
               await this.executeStep(
                 page,
@@ -176,10 +210,6 @@ export default class Runner {
               );
             }
           }
-          if (sequenceCallback) {
-            await sequenceCallback(action.id);
-          }
-          
         } else {
           throw new Error(`Method ${methodName} not found`);
         }
@@ -199,6 +229,17 @@ export default class Runner {
     sequenceCallback?: Function
   ) {
     const { graph } = this.flow.flow;
+    if (this.config.aliases.store) {
+      this.store = {
+        ...this.config.aliases.store.reduce((memo: any, item: KeyValuePair) => {
+          memo[item.key] = item.value;
+          return memo;
+        }, {}),
+        library,
+      };
+      global.store = this.store;
+    }
+
     await this.executeStep(page, graph, sequence, sequenceCallback);
     log('Finished sequence execution', 'blue');
   }
