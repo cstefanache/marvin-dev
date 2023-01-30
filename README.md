@@ -6,7 +6,7 @@ Marvin is an automation tool for web application.  It allows the users to easily
 
 # Features
 
-🛠 Built with [Electron](https://www.electronjs.org/), [React](https://www.react.org), [Blueprint](http://www.blueprintjs.com), [TypeScript](http://www.typecript.com)
+🛠 Built with [Electron](https://www.electronjs.org/), [React](https://reactjs.org/), [Blueprint](http://www.blueprintjs.com), [TypeScript](http://www.typecript.com)
 
 # Config
 
