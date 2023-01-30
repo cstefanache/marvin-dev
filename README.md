@@ -28,7 +28,7 @@ Clone this repository on your machine and then run `nmp install`.
 > 🚩 **Note**
 > - we allow the users to write their tests through CLI too. For this run `npx nx serve marvin-cli`
 > - if you want to build the discovery package you should run `npx nx build discovery` or if you want to only run the discovery unit tests run `npx nx test discovery`
-> - we provide a sample web application ( a 'todo' application) to allow the users to easily test Marvin functionalities against this application. To open this sample application run `npx nx serve sample-server` and `npx nx serve sample-frontend` and the application will run on `http://localhost:4200/` (you will find the username and password on ./data/database.json file)
+> - we provide a sample web application ( a 'todo' application) to allow the users to easily test Marvin functionalities against this application. To open this sample application run `npx nx serve sample-server` and `npx nx serve sample-frontend` and the application will run on `http://localhost:4200/` (you will find the username and password in ./data/database.json file)
 > - you can install NX plugin in your VS Code and manage all the packages from NX Console.
 
 
