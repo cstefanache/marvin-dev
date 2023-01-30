@@ -4,6 +4,10 @@ Marvin is an automation tool for web application.  It allows the users to easily
  - a mechanism that automatically identifies all the UI elements discovered in the current page and returns unique selectors
  - an intuitive GUI to cutomise the discovery mechanism, to create new methods or reuse the existing ones and to define execution flows to test the application
 
+# Features
+
+🛠 Built with [Electron](https://electronjs.com), [React](https://www.react.org), [Blueprint](http://www.blueprintjs.com), [TypeScript](http://www.typecript.com)
+
 # Config
 
 Format:
