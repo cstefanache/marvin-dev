@@ -31,6 +31,16 @@ Clone this repository on your machine and then run `nmp install`.
 > - we provide a sample web application ( a 'todo' application) to allow the users to easily test Marvin functionalities against this application. To open this sample application run `npx nx serve sample-server` and `npx nx serve sample-frontend` and the application will run on `http://localhost:4200/` (you will find the username and password in ./data/database.json file)
 > - you can install NX plugin in your VS Code and manage all the packages from NX Console.
 
+## GUI
+
+### Workspace tab
+
+Browse for a folder where the discovery output, configuration and flow files will be generated.
+For an already existing project, browse for a folder where discovery output, configuration and flow files exist
+
+<img width="562" alt="image" src="https://user-images.githubusercontent.com/15820565/215416714-f85ac3f1-ffa4-481e-be82-70b7ec281ede.png">
+
+### Config tab
 
 ## Config
 
