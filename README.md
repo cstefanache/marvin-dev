@@ -2,8 +2,8 @@
 
 Marvin is an automation framework for web applications. It allows the users to easily write their tests by providing them with:
  - a mechanism that automatically identifies all the UI elements discovered in the current page and returns unique selectors
- - a GUI to cutomise the discovery mechanism, to create methods or reuse the existing ones and to define execution flows to test the web application
-
+ - a GUI to cutomise the discovery mechanism, to create methods or reuse the existing ones and to define execution flows for the web application under test
+ 
 ## Features
 
 🛠 Built with [Electron](https://www.electronjs.org/), [React](https://reactjs.org/), [Blueprint](http://www.blueprintjs.com), [TypeScript](https://www.typescriptlang.org/), [Nx](https://nx.dev)
