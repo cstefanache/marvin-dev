@@ -1,8 +1,8 @@
 ## Marvin
 
-Marvin is an automation framework for web applications that allows the users to easily write their tests by providing them with:
- - a mechanism that automatically identifies all the UI elements discovered in the current page and returns unique selectors
- - a GUI to customise the discovery mechanism, to create methods or reuse the existing ones and to define execution flows for the web application under test
+Marvin is an automation framework for web applications that allows users to easily write their tests by providing them with:
+- a mechanism that automatically identifies all the UI elements discovered on the current page and returns unique selectors
+- a GUI to customise the discovery mechanism, create methods or reuse the existing ones, and to define execution flows for the web application under test
  
 ## Features
 
