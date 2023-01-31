@@ -47,7 +47,7 @@ export default function Workspace({ workspace }: Props) {
     });
 
     window.ipcRender.receive('flow-updated', (flow: any) => {
-      setFlow(flow);
+      setFlow({ ...flow });
       setFlowKey(Math.random());
     });
   }, []);
@@ -130,13 +130,12 @@ export default function Workspace({ workspace }: Props) {
   };
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       {!flow || !config || loading ? (
         <h3>Loading</h3>
       ) : (
         <>
           <Graph
-            key={flowKey}
             flow={flow}
             config={config}
             openDrawer={openDrawer}
@@ -175,6 +174,6 @@ export default function Workspace({ workspace }: Props) {
           </Drawer>
         </>
       )}
-    </>
+    </div>
   );
 }

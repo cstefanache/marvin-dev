@@ -9,23 +9,29 @@ contextBridge.exposeInMainWorld('electron', {
   getDiscovered: () => ipcRenderer.invoke('get-discovered'),
   getFlow: () => ipcRenderer.invoke('get-flow'),
   setFlow: (flow: any) => ipcRenderer.invoke('set-flow', flow),
-  getMethodsForPath: (path: string) => ipcRenderer.invoke('get-methods-for-path', path),
-  getDiscoveredPaths: (path: string) => ipcRenderer.invoke('get-discovered-paths', path),
-  getDiscoveredForPath: (path: string) => ipcRenderer.invoke('get-discovered-for-path', path),
-  saveMethodForUrl: (path: string, method: any) => ipcRenderer.invoke('save-method-for-url', path, method),
+  getMethodsForPath: (path: string) =>
+    ipcRenderer.invoke('get-methods-for-path', path),
+  getDiscoveredPaths: (path: string) =>
+    ipcRenderer.invoke('get-discovered-paths', path),
+  getDiscoveredForPath: (path: string) =>
+    ipcRenderer.invoke('get-discovered-for-path', path),
+  saveMethodForUrl: (path: string, method: any) =>
+    ipcRenderer.invoke('save-method-for-url', path, method),
   getWorkspacePath: () => ipcRenderer.invoke('get-workspace-path'),
-  addBranch: (id: string, data: any) => ipcRenderer.invoke('add-branch', id, data),
+  addBranch: (id: string, data: any) =>
+    ipcRenderer.invoke('add-branch', id, data),
   updateBranch: (data: any) => ipcRenderer.invoke('update-branch', data),
   cutBranch: (id: string) => ipcRenderer.invoke('cut-branch', id),
   runDiscovery: (sequence: any) =>
     ipcRenderer.invoke('run-discovery', sequence),
   selectNewWorkspaceFolder: () =>
     ipcRenderer.invoke('select-new-workspace-folder'),
-  selectWorkspace: (workspace: any) => ipcRenderer.invoke('select-workspace', workspace),
+  selectWorkspace: (workspace: any) =>
+    ipcRenderer.invoke('select-workspace', workspace),
   getLoggers: () => ipcRenderer.invoke('get-loggers'),
   getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
   // selectWorkspace: (workspace: { name: string, path: string }) => ipcRenderer.invoke('select-workspace', workspace),
- });
+});
 
 // White-listed channels.
 const ipc = {
@@ -33,7 +39,14 @@ const ipc = {
     // From render to main.
     send: [],
     // From main to render.
-    receive: ['action-finished', 'run-completed', 'log', 'config-updated', 'flow-updated'],
+    receive: [
+      'action-finished',
+      'run-completed',
+      'log',
+      'config-updated',
+      'flow-updated',
+      'running-discovery',
+    ],
     // From render to main and back again.
     sendReceive: [],
   },

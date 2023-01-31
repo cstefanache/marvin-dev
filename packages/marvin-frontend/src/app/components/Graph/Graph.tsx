@@ -33,6 +33,9 @@ export function Graph({
 }) {
   const [path, setPath] = useState(null);
   const [imageId, setImg] = useState(null);
+  const [storedContainer, setStoredContainer] = useState<any>(null);
+  const svgRef = useRef(null);
+  const overlayRef = useRef(null);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -67,7 +70,6 @@ export function Graph({
     runDiscovery(sequence.reverse());
   };
 
-  const svgRef = useRef(null);
   useEffect((): any => {
     function handleResize() {
       console.log({
@@ -80,12 +82,24 @@ export function Graph({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  window.ipcRender.receive('running-discovery', () => {
+    if (overlayRef.current) {
+      (overlayRef.current as any).style.display = 'flex';
+    }
+  });
+
   useEffect(() => {
-    console.log('Starting graph rendering');
     const { graph } = flow;
     const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-    const measureContainer = svg.append('g');
+
+    let measureContainer = storedContainer;
+    if (!measureContainer) {
+      measureContainer = svg.append('g');
+      setStoredContainer(storedContainer);
+    }
+
+    const toRemove = svg.selectAll('.graph');
+    const g = svg.append('g').attr('class', 'graph');
 
     window.ipcRender.receive('action-finished', (id: string) => {
       const idToUpdate = id ? id : 'root';
@@ -165,7 +179,6 @@ export function Graph({
     const width = right - left + 2 * padding + 60;
     const height = bottom - top + 2 * padding;
     const transX = (width - 60) / 2;
-    const g = svg.append('g');
 
     function handleZoom(e: any) {
       g.attr('transform', e.transform);
@@ -235,11 +248,22 @@ export function Graph({
       },
       showDiscovered: showDiscoveredElements,
     });
-    console.log('done!');
+    toRemove.remove();
+    if (overlayRef.current) {
+      (overlayRef.current as any).style.display = 'none';
+    }
   }, [flow]);
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexGrow: 1,
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+      }}
+    >
       {path && imageId && (
         <div
           className="backdrop"
@@ -257,6 +281,24 @@ export function Graph({
         ref={svgRef}
         style={{ width: '100%', flexGrow: 1, backgroundColor: '#2F343C' }}
       ></svg>
-    </>
+      <div
+        ref={overlayRef}
+        className="rebuildingGraph"
+        style={{
+          display: 'none',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          right: 0,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: 32
+        }}
+      >
+        <span>Running Discovery</span>
+      </div>
+    </div>
   );
 }

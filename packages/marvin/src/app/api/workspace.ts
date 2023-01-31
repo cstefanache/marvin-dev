@@ -172,7 +172,7 @@ export default class Workspace {
     await flow.export();
     logger.log('Export finished.');
     this.flow = flow.flow;
-
+    App.mainWindow.webContents.send('running-discovery', this.flow);
     if (sequence.length === 0) {
       const exitUrl = await page.url();
       console.log(exitUrl);
