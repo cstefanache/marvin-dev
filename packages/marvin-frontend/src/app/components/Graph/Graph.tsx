@@ -33,7 +33,6 @@ export function Graph({
 }) {
   const [path, setPath] = useState(null);
   const [imageId, setImg] = useState(null);
-  const [refresh, setRefresh] = useState(Math.random());
 
   useEffect(() => {
     const asyncFn = async () => {

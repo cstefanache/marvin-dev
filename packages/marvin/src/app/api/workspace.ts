@@ -214,7 +214,6 @@ export default class Workspace {
     } else {
       flowElement = searchInChildren(this.flow.graph);
     }
-    console.log(flowElement);
     if (flowElement) {
       flowElement.children.push({ id: uuid.v4(), ...branch, children: [] });
     }

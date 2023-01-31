@@ -116,7 +116,10 @@ export default class Runner {
         uid &&
         parameters[uid]
       ) {
-        log(`Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`, 'yellow');
+        log(
+          `Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
+          'yellow'
+        );
         await page.focus(locator);
         if (type === 'clearAndFill') {
           await page.evaluate(
@@ -239,8 +242,12 @@ export default class Runner {
       };
       global.store = this.store;
     }
-
-    await this.executeStep(page, graph, sequence, sequenceCallback);
+    await this.executeStep(
+      page,
+      graph,
+      sequence,
+      sequence.length > 1 ? sequenceCallback : undefined
+    );
     log('Finished sequence execution', 'blue');
   }
 }
