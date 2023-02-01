@@ -9,8 +9,9 @@ describe('Test Discovery - attribute priority', () => {
           info: [{ name: 'Legend', selectors: ['span', 'label'] }],
           optimizer: {
             priority: ['data', 'placeholder', 'type', 'id']
-         }
-        }
+         },
+         store: []
+        },
       } as Config);
       await page.evaluate(() => {
         document.body.innerHTML = `

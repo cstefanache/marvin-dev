@@ -7,6 +7,7 @@ describe('Use of nth-of-type to identify the elements', () => {
     const discovery = new Discovery({
       aliases: {
         action: [{ name: 'Link', selectors: ['a'] }],
+        store: []
       },
     } as Config);
 

@@ -16,6 +16,7 @@ describe('Test Discovery - class exclusion rule', () => {
             },
           ],
         },
+        store: []
       }
     } as Config);
     await page.evaluate(() => {
