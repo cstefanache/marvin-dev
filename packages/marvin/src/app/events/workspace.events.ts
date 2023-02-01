@@ -33,6 +33,13 @@ export default class WorkspaceEvents {
   }
 }
 
+ipcMain.handle('delete-path', async (_, path: string) => {
+  let workspaces = (store.get('workspaces') as any[]).filter(
+    (item) => item.path !== path
+  );
+  store.set('workspaces', workspaces);
+});
+
 ipcMain.handle('get-workspace-path', (id) => {
   const workspace: any = store.get('lastWorkspace');
 

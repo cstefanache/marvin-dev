@@ -2,18 +2,14 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
-  max-width: 1200px;
   height: calc(100vh - 50px);
   padding-top: 48px;
   padding-left: 36px;
   padding-right: 36px;
   background-color: #2F343C;
 
-  & > div {
-    width: 40%;
-  }
 
   .input {
     display: flex;
@@ -69,6 +65,7 @@
 
       .item-text {
         margin-left: 12px;
+        flex-grow: 1;
         
         p {
           margin-bottom: 2px;

@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electron', {
   setFlow: (flow: any) => ipcRenderer.invoke('set-flow', flow),
   getMethodsForPath: (path: string) =>
     ipcRenderer.invoke('get-methods-for-path', path),
+  deletePath: (path: string) => ipcRenderer.invoke('delete-path', path),
   getDiscoveredPaths: (path: string) =>
     ipcRenderer.invoke('get-discovered-paths', path),
   getDiscoveredForPath: (path: string) =>

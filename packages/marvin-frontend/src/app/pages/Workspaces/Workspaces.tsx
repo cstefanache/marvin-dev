@@ -28,36 +28,44 @@ export default function Workspaces({ selectWorkspace }: Props) {
     selectWorkspace();
   };
 
+  const deletePath = async (path: string) => {
+    const asyncFn = async () => {
+      await window.electron.deletePath(path);
+      const workspaces = await window.electron.getWorkspaces();
+      setWorkspaces(workspaces);
+    };
+    asyncFn();
+  }
+
   return (
     <div className="container">
-      <div>
-        {/* <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} /> */}
-        <div className="input">
-          <span>Workspace</span>
-          <button onClick={selectWorkspaceFolder}></button>
-        </div>
-        {workspaces && workspaces.length > 0 && (
-          <ul className="list">
-            <p>Recent:</p>
-            {workspaces.map((workspace: { path: string; name: string }) => {
-              const workspaceName = workspace.name;
+      {/* <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} /> */}
+      <div className="input">
+        <span>Workspace</span>
+        <button onClick={selectWorkspaceFolder}></button>
+      </div>
+      {workspaces && workspaces.length > 0 && (
+        <ul className="list">
+          <p>Recent:</p>
+          {workspaces.map((workspace: { path: string; name: string }) => {
+            const workspaceName = workspace.name;
 
-              return (
-                <li
-                  key={workspace.path}
+            return (
+              <li key={workspace.path}>
+                <Icon icon="box" />
+                <div
+                  className="item-text"
                   onClick={() => selectExistingWorkspace(workspace)}
                 >
-                  <Icon icon="box" />
-                  <div className="item-text">
-                    <p>{workspaceName}</p>
-                    <span>{workspace.path}</span>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+                  <p>{workspaceName}</p>
+                  <span>{workspace.path}</span>
+                </div>
+                <Icon icon="trash" onClick={() => deletePath(workspace.path)} />
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
