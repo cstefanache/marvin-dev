@@ -15,6 +15,7 @@ describe('Test Discovery - attribute exclusion rule', () => {
             },
           ],
         },
+        store: []
       }
     } as Config);
     await page.evaluate(() => {

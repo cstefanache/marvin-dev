@@ -18,6 +18,7 @@ describe('Test discovery - mixed exclusion rules', () => {
             },
           ],
         },
+        store: []
       }
     } as Config);
     await page.evaluate(() => {
@@ -41,6 +42,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -102,6 +104,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -171,6 +174,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -190,7 +194,7 @@ describe('Test discovery - mixed exclusion rules', () => {
           ],
         },
       }
-    } as Config);
+    } as any);
     await page.evaluate(() => {
       document.body.innerHTML = `
             <body>
@@ -308,6 +312,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -366,6 +371,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -425,6 +431,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -489,6 +496,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -556,6 +564,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: [],
         optimizer: {
           exclude: [
             {
@@ -627,6 +636,7 @@ describe('Test discovery - mixed exclusion rules', () => {
     const discovery = new Discovery({
       aliases: {
         info: [{ name: 'Legend', selectors: ['span', 'label'] }],
+        store: []
       },
     } as Config);
     await page.evaluate(() => {

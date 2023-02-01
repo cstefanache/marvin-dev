@@ -16,6 +16,7 @@ describe('Test Discovery - Identify aliases', () => {
             selectors: ['input'],
           },
         ],
+        store:[]
       },
     } as Config);
     await page.evaluate(() => {
