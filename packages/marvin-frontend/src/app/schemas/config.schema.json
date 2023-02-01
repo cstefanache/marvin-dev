@@ -84,16 +84,19 @@
             "exclude": {
               "title": "Exclude",
               "type": "array",
-              "size": { "xs": 12 },
-              "uiType": "container",
               "items": { "$ref": "#/definitions/Exclude" }
+            },
+            "priority": {
+              "title": "Priority",
+              "type": "array",
+              "items": { "title": "Priority", "type": "string" }
             }
           }
         },
         "store": {
           "title": "Store",
           "uiType": "tab",
-          "uiIndex": 6, 
+          "uiIndex": 6,
           "description": "Runtime initial store",
           "type": "array",
           "properties": {
@@ -119,12 +122,12 @@
       "title": "Exclude",
       "type": "object",
       "properties": {
-        "type": {
+        "regex": {
           "type": "string",
-          "title": "Type",
-          "enum": ["tag", "attribute"],
+          "size": { "xs": 12, "sm": 5 },
           "uiType": "item",
-          "size": { "xs": 12, "sm": 2 }
+          "title": "Regex",
+          "description": "Replace existing matches with alias"
         },
         "name": {
           "type": "string",
@@ -133,12 +136,12 @@
           "size": { "xs": 12, "sm": 5 },
           "description": "Exclude name"
         },
-        "regex": {
+        "type": {
           "type": "string",
-          "size": { "xs": 12, "sm": 5 },
+          "title": "Type",
+          "enum": ["tag", "attribute"],
           "uiType": "item",
-          "title": "Regex",
-          "description": "Replace existing matches with alias"
+          "size": { "xs": 12, "sm": 2 }
         }
       }
     },
@@ -231,7 +234,7 @@
           "type": "string",
           "title": "Identifier",
           "uiType": "item",
-          "size": { "xs": 12},
+          "size": { "xs": 12 },
           "description": "CSS Selector"
         },
         "elements": {

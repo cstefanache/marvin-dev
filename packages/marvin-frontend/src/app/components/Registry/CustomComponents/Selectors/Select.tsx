@@ -1,4 +1,12 @@
-import { FormGroup, InputGroup, NumericInput, Menu, MenuItem } from '@blueprintjs/core';
+import {
+  FormGroup,
+  Button,
+  InputGroup,
+  NumericInput,
+  Menu,
+  MenuItem,
+} from '@blueprintjs/core';
+import { Select2 } from '@blueprintjs/select';
 import { Property } from '../../../../types/Types';
 
 interface Props {
@@ -11,39 +19,57 @@ export default function CustomSelect(props: Props) {
   const { property, value, onChange } = props;
   const { type, enum: list, error, title, isRequired } = property;
 
-  const handleChange = (event: any) => {
-    if (type === 'integer') {
-      onChange(parseInt(event.target.value));
-    } else {
-      onChange(event.target.value);
+  const handleChange = (value: any) => {
+    onChange(value);
+    // if (type === 'integer') {
+    //   onChange(parseInt(event.target.value));
+    // } else {
+    //   onChange(event.target.value);
+    // }
+  };
+
+  const itemRenderer = (item: string, { handleClick, modifiers }: any) => {
+    if (!modifiers.matchesPredicate) {
+      return null;
     }
+    return (
+      <MenuItem
+        active={modifiers.active}
+        key={item}
+        onClick={handleClick}
+        text={item}
+      />
+    );
   };
 
   return (
-    <>
-      <FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"} className="form-group">
-        {type === 'string' && (
-          <InputGroup 
-            value={`${value}`} 
-            onChange={handleChange} 
-            leftIcon="filter"
+    <FormGroup
+      helperText={error}
+      label={title}
+      inline={false}
+      labelInfo={isRequired && '(required)'}
+      className="form-group"
+    >
+      <Select2
+        items={list}
+        fill={true}
+        itemRenderer={itemRenderer}
+        onItemSelect={handleChange}
+        noResults={
+          <MenuItem
+            disabled={true}
+            text="No results."
+            roleStructure="listoption"
           />
-        )}
-        {type === 'integer' && (
-          <NumericInput
-            value={value}
-            onValueChange={onChange}
-            leftIcon="filter"
-          />
-        )}
-      </FormGroup>
-      <Menu>
-        {list.map((item: string) => (
-          <MenuItem key={item} text={item} roleStructure="listoption">
-            {item}
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+        }
+        popoverProps={{ minimal: true }}
+      >
+        <Button
+          fill={true}
+          text={value || 'Select Value'}
+          rightIcon="double-caret-vertical"
+        />
+      </Select2>
+    </FormGroup>
   );
 }

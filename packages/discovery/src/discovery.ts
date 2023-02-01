@@ -68,6 +68,7 @@ export default class Discovery {
         ...defaultAliases.iterators,
         ...(config.aliases?.iterators || []),
       ],
+      store: [],
     };
   }
 
@@ -393,10 +394,10 @@ export default class Discovery {
         );
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
-          console.log('>>>>>>>', iteratorItem.selectors)
-          console.log((await element.evaluate(
-            (el) => el.textContent
-          )) as string);
+          console.log('>>>>>>>', iteratorItem.selectors);
+          console.log(
+            (await element.evaluate((el) => el.textContent)) as string
+          );
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {

@@ -29,14 +29,21 @@ export default function Selectors({ value, onChange }: Props) {
 
   const addButton = <Button icon="add" minimal onClick={add} />;
 
-  const clearButton = (idx: number) => <Button icon="cross" minimal onClick={() => handleDelete(idx)} />;
+  const clearButton = (idx: number) => (
+    <Button icon="cross" minimal onClick={() => handleDelete(idx)} />
+  );
 
   return (
     <>
-      <FormGroup helperText="Press Enter to add" label="Add Selector" inline={false} className="form-group">
-        <InputGroup 
-          value={addValue} 
-          onChange={(e) => setAddValue(e.target.value)} 
+      <FormGroup
+        helperText="Press Enter to add"
+        label="Add Selector"
+        inline={false}
+        className="form-group"
+      >
+        <InputGroup
+          value={addValue}
+          onChange={(e) => setAddValue(e.target.value)}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               add();
@@ -47,13 +54,17 @@ export default function Selectors({ value, onChange }: Props) {
         />
       </FormGroup>
       <div className="chips-container">
-        {value && value.length > 0 && value.map((locator, idx) => (
-          <Tag key={idx} onRemove={() => handleDelete(idx)} intent="primary">{locator}</Tag>
-          // <span data-tag-index="1" className="bp4-tag">
-          //   <span className="bp4-fill bp4-text-overflow-ellipsis">{locator}</span>
-          //   {clearButton(idx)}
-          // </span>
-        ))}
+        {value &&
+          value.length > 0 &&
+          value.map((locator, idx) => (
+            <Tag key={idx} onRemove={() => handleDelete(idx)} intent="primary">
+              {locator}
+            </Tag>
+            // <span data-tag-index="1" className="bp4-tag">
+            //   <span className="bp4-fill bp4-text-overflow-ellipsis">{locator}</span>
+            //   {clearButton(idx)}
+            // </span>
+          ))}
       </div>
     </>
   );
