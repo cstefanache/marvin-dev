@@ -38,11 +38,12 @@ export type ActionItem = {
   id: string;
   loop: number;
   methodLoop: number;
-  method: string;
+  method?: string;
   sequenceStep: string;
   parameters: { [key: string]: string };
   children: ActionItem[];
   exitUrl?: string;
+  fullUrl?: string;
 };
 
 export type Sequence = {

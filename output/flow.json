@@ -1,226 +1,205 @@
 {
   "actions": {
-    "": [
+    "/signin": [
       {
-        "method": "Select a ranking category",
+        "method": "Login",
         "sequence": [
           {
-            "type": "click",
-            "locator": ".button",
-            "uid": "ranking-card-uid"
-          }
-        ],
-        "iterator": {
-          "name": "Ranking Category Card Iterator",
-          "identifier": "h1",
-          "uid": "ranking-card-identifier-uid"
-        }
-      },
-      {
-        "method": "Go to Career Guides",
-        "sequence": [
+            "uid": "7a975ffa-0bed-4d8e-b5ec-34791ea6682e",
+            "locator": "input#username",
+            "details": " ",
+            "type": "clearAndFill"
+          },
           {
-            "type": "click",
-            "locator": "div[data-cy=\"navBar\"] > a:nth-of-type(3)",
-            "uid": "career-guides-uid"
+            "uid": "653fc369-1ee6-467d-804d-614ccf6ece54",
+            "locator": "input#password",
+            "details": " ",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "60b6c7df-fe6f-4774-86e3-42f6890e60d0",
+            "locator": "button",
+            "details": "Sign In ",
+            "type": "click"
           }
         ]
       }
     ],
-    "business/": [
+    "/": [
       {
-        "method": "Select a ranking",
+        "method": "Go to Ne Transaction screen",
         "sequence": [
           {
-            "type": "click",
-            "locator": ".rank-summary-description a",
-            "uid": "ranking-summary-card-uid"
-          }
-        ],
-        "iterator": {
-          "name": "Rank Summary Card Iterator",
-          "identifier": "h3",
-          "uid": "ranking-summary-card-identifier-uid"
-        }
-      }
-    ],
-    "newitem": [
-      {
-        "method": "Click an Article",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "h4",
-            "uid": "article-card-uid"
-          }
-        ],
-        "iterator": {
-          "name": "Article Iterator",
-          "identifier": "h4",
-          "uid": "article-card-iterator-uid"
-        }
-      }
-    ],
-    "business/best-online-mba-programs/": [
-      {
-        "method": "Click on Sort By dropdown",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "span.select-box--arrow-down",
-            "uid": "select-sort-by-dropdow-btn-uid"
+            "uid": "828a3dd4-381f-4985-9ea4-44ce7f3fcd6e",
+            "locator": "a[data-test=\"nav-top-new-transaction\"]",
+            "details": " New ",
+            "type": "click"
           }
         ]
       },
       {
-        "method": "Expand FAQ section",
+        "method": "See transaction details",
         "sequence": [
           {
-            "type": "click",
-            "locator": "span[data-cy=\"faq-sign\"]",
-            "uid": "faq-expand-uid"
+            "uid": "8b18dbfe-a45d-4c76-b3df-5ce380b623cc",
+            "locator": "p.MuiTypography-body2",
+            "details": "Payment-440579 Transaction Iterator",
+            "type": "click"
+          }
+        ],
+        "iterator": {
+          "name": "Transaction Iterator",
+          "identifier": ".MuiTypography-body2",
+          "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
+        }
+      },
+      {
+        "method": "Go To Bank Accounts",
+        "sequence": [
+          {
+            "uid": "3d67c1b2-966a-418a-bee8-e9f8e645ca2a",
+            "locator": "a[data-test=\"sidenav-bankaccounts\"]",
+            "details": "Bank Accounts ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "/transaction/new": [
+      {
+        "method": "Select Contact",
+        "sequence": [
+          {
+            "uid": "84b33d4c-d000-4182-bf0c-c971ac7268d6",
+            "locator": "li[data-test=\"user-list-item-t45AiwidW\"] > div:nth-of-type(2) > span",
+            "details": "Edgar Johns Edgar Johns",
+            "type": "click"
           }
         ]
       },
       {
-        "method": "Click on a FAQ article",
+        "method": "Select Contact (generic)",
         "sequence": [
           {
-            "type": "click",
-            "locator": "a",
-            "uid": "faq-article-uid"
+            "uid": "137dd38a-eed6-4d36-99f1-9a865fe596c4",
+            "locator": "span.MuiTypography-root",
+            "details": "Edgar Johns Contact Iterator",
+            "type": "click"
           }
         ],
         "iterator": {
-          "name": "FAQ Article Iterator",
-          "identifier": "a",
-          "uid": "faq-article-identifier-uid"
+          "name": "Contact Iterator",
+          "identifier": ".MuiTypography-body1",
+          "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
         }
       },
       {
-        "method": "Sort",
+        "method": "Create payment",
         "sequence": [
           {
-            "type": "click",
-            "uid": "sort-uid"
-          }
-        ],
-        "iterator": {
-          "name": "Sort Option Iterator",
-          "uid": "sort-uid"
-        }
-      }
-    ],
-    "business/best-online-mba-programs/#sort=alphabetical": [
-      {
-        "method": "Select GMAT",
-        "sequence": [
+            "uid": "d75898f3-8ba2-43ca-8062-7f7ceabf4110",
+            "locator": "input#amount",
+            "details": " Amount",
+            "type": "clearAndFill"
+          },
           {
-            "type": "click",
-            "locator": "span",
-            "uid": "gmat-uid"
-          }
-        ],
-        "iterator": {
-          "name": "GMAT Iterator",
-          "identifier": "span",
-          "uid": "gmat-identifier-uid"
-        }
-      }
-    ],
-    "leadership/": [
-      {
-        "method": "Select a ranking",
-        "sequence": [
+            "uid": "9f322e2d-246a-4715-9f61-f138359f4e4f",
+            "locator": "input#transaction-create-description-input",
+            "details": " Add a note",
+            "type": "clearAndFill"
+          },
           {
-            "type": "click",
-            "locator": ".rank-summary-description a",
-            "uid": "ranking-summary-card-uid"
-          }
-        ],
-        "iterator": {
-          "name": "Rank Summary Card Iterator",
-          "identifier": "h3",
-          "uid": "ranking-summary-card-identifier-uid"
-        }
-      }
-    ],
-    "articles/{articleName}/": [
-      {
-        "method": "Go back to Articles",
-        "sequence": [
+            "uid": "efe55669-1a9b-4432-bcda-ece186e80478",
+            "locator": "input#transaction-create-description-input",
+            "details": " Add a note",
+            "type": "store"
+          },
           {
-            "type": "click",
-            "locator": "a.simple-link",
-            "uid": "article-breadcrumbs-uid"
-          }
-        ]
-      }
-    ],
-    "articles/": [
-      {
-        "method": "Read More Hero Article",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "a.link-medium",
-            "uid": "read-more-hero-article-uid"
-          }
-        ]
-      }
-    ],
-    "leadership/best-online-doctor-education-programs/": [
-      {
-        "method": "Expand FAQ section",
-        "sequence": [
-          {
-            "type": "click",
-            "locator": "span[data-cy=\"faq-sign\"]",
-            "uid": "faq-expand-uid"
+            "uid": "a819c723-39c0-446b-899d-a6e86383dfad",
+            "locator": "button[data-test=\"transaction-create-submit-payment\"]",
+            "details": "Pay ",
+            "type": "click"
           }
         ]
       },
       {
-        "method": "Click on a FAQ article",
+        "method": "Back to Transactions",
         "sequence": [
           {
-            "type": "click",
-            "locator": "a",
-            "uid": "faq-article-uid"
+            "uid": "81745846-e1b6-4285-bfa1-9921c3686da2",
+            "locator": "a[data-test=\"new-transaction-return-to-transactions\"]",
+            "details": "Return To Transactions ",
+            "type": "click"
           }
-        ],
-        "iterator": {
-          "name": "FAQ Article Iterator",
-          "identifier": "a",
-          "uid": "faq-article-identifier-uid"
-        }
+        ]
       }
     ],
-    "business/best-online-mba-programs/#sort=alphabetical&gmat=flexible": [
+    "/transaction/krCl7-EnC": [
       {
-        "method": "Select MBA Card",
+        "method": "Check Details",
         "sequence": [
           {
-            "type": "click",
+            "uid": "cb58c3d5-1ba7-49f5-82c4-1dca51492ad1",
             "locator": "h2",
-            "uid": "mba-card-uid"
+            "details": "Transaction Detail Transaction Detail",
+            "type": "check"
           }
-        ],
-        "iterator": {
-          "name": "MBA Card Iterator",
-          "identifier": "h2",
-          "uid": "mba-card-identifier-uid"
-        }
+        ]
       }
     ],
-    "business/ashland-university/": [
+    "/transaction/{transactionId}": [
       {
-        "method": "Click Full Ranking button",
+        "method": "Check Result (second)",
         "sequence": [
           {
-            "type": "click",
-            "locator": "[data-cy=\"programDetails\"] > a",
-            "uid": "see-full-ranking-uid"
+            "uid": "9ef33ed0-f8d3-42c7-a421-f1cc01f9993c",
+            "locator": "h2",
+            "details": "Transaction Detail Transaction Detail",
+            "type": "check"
+          }
+        ]
+      }
+    ],
+    "/bankaccounts": [
+      {
+        "method": "Click Creat btn",
+        "sequence": [
+          {
+            "uid": "a44f020e-0db9-4079-b5a8-d1c523b80086",
+            "locator": "a[data-test=\"bankaccount-new\"]",
+            "details": "Create ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "/bankaccounts/new": [
+      {
+        "method": "Create Bank account",
+        "sequence": [
+          {
+            "uid": "dff7515c-35fa-4069-a6de-3e554bab2339",
+            "locator": "input#bankaccount-bankName-input",
+            "details": " Bank Name",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "fe297182-ce65-4b8b-911c-446be79587b8",
+            "locator": "input#bankaccount-routingNumber-input",
+            "details": " Routing Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "74081dcb-0c6d-475b-91ab-5b0554f62896",
+            "locator": "input#bankaccount-accountNumber-input",
+            "details": " Account Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "e60e440a-524a-4bfb-a235-118827626137",
+            "locator": "button[type=\"submit\"]",
+            "details": "Save ",
+            "type": "click"
           }
         ]
       }
@@ -228,248 +207,162 @@
   },
   "graph": [
     {
-      "id": "1",
-      "sequenceStep": "Select Top Business Schools category",
-      "method": "Select a ranking category",
-      "url": "",
-      "exitUrl": "business/",
-      "parameters": {
-        "ranking-card-identifier-uid": "Top Business Schools"
-      },
+      "id": "bank_account_id",
+      "sequenceStep": "Bank Account",
+      "loop": 1,
       "children": [
         {
-          "id": "2",
-          "sequenceStep": "Select Best Online MBA Programs in 2022 ranking",
-          "method": "Select a ranking",
-          "url": "business/",
-          "exitUrl": "business/best-online-mba-programs/",
+          "id": "18b1389b-fcc4-4fcb-ac82-d8cf114de313",
+          "method": "Login",
+          "sequenceStep": "Exec: Login As Jessyca",
+          "loop": 1,
+          "methodLoop": 1,
           "parameters": {
-            "ranking-summary-card-identifier-uid": "Best Online MBA Programs in 2022"
+            "7a975ffa-0bed-4d8e-b5ec-34791ea6682e": "Jessyca.Kuhic",
+            "653fc369-1ee6-467d-804d-614ccf6ece54": "s3cret"
           },
           "children": [
             {
-              "id": "3",
-              "sequenceStep": "Expand FAQ section",
-              "method": "Expand FAQ section",
-              "url": "business/best-online-mba-programs/",
-              "exitUrl": "business/best-online-mba-programs/",
+              "id": "8b3a3f66-c445-4550-8747-d0dd0d816a73",
+              "method": "Go to Ne Transaction screen",
+              "sequenceStep": "Exec: Go to Ne Transaction screen",
+              "loop": 1,
+              "methodLoop": 1,
               "children": [
                 {
-                  "id": "4",
-                  "sequenceStep": "Click on the Methodology FAQ article",
-                  "method": "Click on a FAQ article",
-                  "url": "business/best-online-mba-programs/",
-                  "exitUrl": "articles/methodology-for-fortunes-online-mba-ranking/",
-                  "parameters": {
-                    "faq-article-identifier-uid": "Methodology for Fortune’s online MBA ranking"
-                  },
-                  "children": [
-                    {
-                      "id": "5",
-                      "sequenceStep": "Go back to Articles",
-                      "method": "Go back to Articles",
-                      "url": "articles/methodology-for-fortunes-online-mba-ranking/",
-                      "exitUrl": "articles/",
-                      "children": [
-                        {
-                          "id": "6",
-                          "method": "Read More Hero Article",
-                          "sequenceStep": "Read More Hero Article",
-                          "url": "articles/",
-                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
-                        }
-                      ]
-                    }
-                  ]
+                  "id": "5da31fb0-295b-4f07-852a-f5c205b153e8",
+                  "method": "Select Contact",
+                  "sequenceStep": "Exec: Select Contact",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
                 },
                 {
-                  "id": "4-2",
-                  "method": "Click on a FAQ article",
-                  "sequenceStep": "Click on traditional MBA FAQ article",
-                  "url": "business/best-online-mba-programs/",
-                  "exitUrl": "articles/online-mba-versus-traditional-mba/",
+                  "id": "4b742f56-86e7-4abc-adb9-7097784db68f",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Edgar Johns",
+                  "loop": 1,
+                  "methodLoop": 1,
                   "parameters": {
-                    "faq-article-identifier-uid": "Online MBA versus traditional MBA: Here are the major differences"
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Edgar Johns"
                   },
                   "children": [
                     {
-                      "id": "4-3",
-                      "sequenceStep": "Go back to Articles",
-                      "method": "Go back to Articles",
-                      "url": "articles/online-mba-versus-traditional-mba/",
-                      "exitUrl": "articles/",
-                      "children": [
-                        {
-                          "id": "4-4",
-                          "method": "Read More Hero Article",
-                          "sequenceStep": "Read More Hero Article",
-                          "url": "articles/",
-                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "1-3",
-      "method": "Select a ranking category",
-      "sequenceStep": "Select Top Leadership Schools category",
-      "url": "",
-      "exitUrl": "leadership/",
-      "parameters": {
-        "ranking-card-identifier-uid": "Top Leadership Schools"
-      },
-      "children": [
-        {
-          "id": "2-3",
-          "method": "Select a ranking",
-          "sequenceStep": "Select EdD ranking",
-          "url": "leadership/",
-          "exitUrl": "leadership/best-online-doctor-education-programs/",
-          "parameters": {
-            "ranking-summary-card-identifier-uid": "Best Online Doctorate in Education (EdD) Programs in 2022"
-          },
-          "children": [
-            {
-              "id": "3-3",
-              "method": "Expand FAQ section",
-              "sequenceStep": "Expand FAQ section",
-              "url": "leadership/best-online-doctor-education-programs/",
-              "exitUrl": "leadership/best-online-doctor-education-programs/",
-              "children": [
-                {
-                  "id": "3-4",
-                  "method": "Click on a FAQ article",
-                  "sequenceStep": "Click on the Methodology FAQ article",
-                  "url": "leadership/best-online-doctor-education-programs/",
-                  "exitUrl": "articles/methodology-for-fortunes-ranking-of-online-doctorate-of-education-in-organizational-leadership-ed-d-programs/",
-                  "parameters": {
-                    "faq-article-identifier-uid": "Methodology for Fortune’s ranking of online doctorate of education in organizational leadership (Ed.D.) programs"
-                  },
-                  "children": [
-                    {
-                      "id": "3-5",
-                      "method": "Go back to Articles",
-                      "sequenceStep": "Go back to Articles",
-                      "url": "articles/methodology-for-fortunes-ranking-of-online-doctorate-of-education-in-organizational-leadership-ed-d-programs/",
-                      "exitUrl": "articles/",
-                      "children": [
-                        {
-                          "id": "3-6",
-                          "method": "Read More Hero Article",
-                          "sequenceStep": "Read More Hero Article",
-                          "url": "articles/",
-                          "exitUrl": "articles/launch-your-cybersecurity-career-for-free-this-organization-is-giving-away-1-million-entry-level-certifications/"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "4-1",
-      "method": "Select a ranking category",
-      "sequenceStep": "Select Top Business Schools category - Sort by flow",
-      "url": "",
-      "exitUrl": "business/",
-      "parameters": {
-        "ranking-card-identifier-uid": "Top Business Schools"
-      },
-      "children": [
-        {
-          "id": "4-2",
-          "method": "Select a ranking",
-          "sequenceStep": "Select Best Online MBA Programs in 2022 ranking - Sort by flow",
-          "url": "business/",
-          "exitUrl": "business/best-online-mba-programs/",
-          "parameters": {
-            "ranking-summary-card-identifier-uid": "Best Online MBA Programs in 2022"
-          },
-          "children": [
-            {
-              "id": "4-3",
-              "method": "Click on Sort By dropdown",
-              "sequenceStep": "Click on Sort By dropdown",
-              "url": "business/best-online-mba-programs/",
-              "exitUrl": "business/best-online-mba-programs/",
-              "children": [
-                {
-                  "id": "4-4-1",
-                  "method": "Sort",
-                  "sequenceStep": "Sort by A-Z",
-                  "url": "business/best-online-mba-programs/",
-                  "exitUrl": "business/best-online-mba-programs/",
-                  "parameters": {
-                    "sort-uid": "A - Z"
-                  },
-                  "children": [
-                    {
-                      "id": "4-5",
-                      "method": "Select GMAT",
-                      "sequenceStep": "Select Flexible GMAT",
-                      "url": "business/best-online-mba-programs/",
-                      "exitUrl": "business/best-online-mba-programs/",
+                      "id": "88d69570-19d7-4e2b-b222-306745958cdb",
+                      "method": "Create payment",
+                      "sequenceStep": "Exec: Create payment",
+                      "loop": 1,
+                      "methodLoop": 1,
                       "parameters": {
-                        "gmat-identifier-uid": "Flexible"
+                        "d75898f3-8ba2-43ca-8062-7f7ceabf4110": "13",
+                        "9f322e2d-246a-4715-9f61-f138359f4e4f": "Payment-${library.func.random()}",
+                        "efe55669-1a9b-4432-bcda-ece186e80478": "paymentDetails"
                       },
                       "children": [
                         {
-                          "id": "4-6",
-                          "method": "Select MBA Card",
-                          "sequenceStep": "Select Ashland University card",
-                          "url": "business/best-online-mba-programs/",
-                          "exitUrl": "business/ashland-university/",
-                          "parameters": {
-                            "mba-card-identifier-uid": "49. Ashland University"
-                          },
+                          "id": "51a41257-6b02-4475-9536-7408e4aed80a",
+                          "method": "Back to Transactions",
+                          "sequenceStep": "Exec: Back to Transactions",
+                          "loop": 1,
+                          "methodLoop": 1,
                           "children": [
                             {
-                              "method": "Click Full Ranking button",
-                              "sequenceStep": "Click Full Ranking button",
-                              "url": "business/ashland-university/",
-                              "exitUrl": "business/best-online-mba-programs/"
+                              "id": "32e99b61-0295-4822-93d4-d8f5e63f383a",
+                              "method": "See transaction details",
+                              "sequenceStep": "Exec: See transaction details",
+                              "loop": 1,
+                              "methodLoop": 1,
+                              "parameters": {
+                                "50f68634-7d00-403d-ba3a-d37d995217bb": "${store.paymentDetails}"
+                              },
+                              "children": [
+                                {
+                                  "id": "3a9b9771-6ab2-49ee-ae7f-4521f8485320",
+                                  "method": "Check Result (second)",
+                                  "sequenceStep": "Exec: Check Result (second)",
+                                  "loop": 1,
+                                  "methodLoop": 1,
+                                  "children": []
+                                }
+                              ],
+                              "url": "/",
+                              "exitUrl": "/transaction/{transactionId}"
                             }
-                          ]
+                          ],
+                          "url": "/transaction/new",
+                          "exitUrl": "/"
                         }
-                      ]
+                      ],
+                      "url": "/transaction/new",
+                      "exitUrl": "/transaction/new"
                     }
-                  ]
+                  ],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                },
+                {
+                  "id": "2ef5b94f-b306-4561-a58d-9a785a1c9909",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Ibrahim",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "parameters": {
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Ibrahim Dickens"
+                  },
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
                 }
-              ]
+              ],
+              "url": "/",
+              "exitUrl": "/transaction/new"
+            },
+            {
+              "id": "2d39098d-3fd1-4df0-be0c-e828b397e6f6",
+              "method": "Go To Bank Accounts",
+              "sequenceStep": "Exec: Go To Bank Accounts",
+              "loop": 1,
+              "methodLoop": 1,
+              "children": [
+                {
+                  "id": "1f5605c0-0249-4b56-aaa8-96042ddd09e9",
+                  "method": "Click Creat btn",
+                  "sequenceStep": "Exec: Click Creat btn",
+                  "loop": 3,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "3a250623-4880-4cb5-81a6-b92424d909bf",
+                      "method": "Create Bank account",
+                      "sequenceStep": "Exec: Create Bank account",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "dff7515c-35fa-4069-a6de-3e554bab2339": "${store.bank}-${library.func.random()}",
+                        "fe297182-ce65-4b8b-911c-446be79587b8": "${store.routing}",
+                        "74081dcb-0c6d-475b-91ab-5b0554f62896": "${store.account}"
+                      },
+                      "children": [],
+                      "url": "/bankaccounts/new",
+                      "exitUrl": "/bankaccounts"
+                    }
+                  ],
+                  "url": "/bankaccounts",
+                  "exitUrl": "/bankaccounts/new"
+                }
+              ],
+              "url": "/",
+              "exitUrl": "/bankaccounts"
             }
-          ]
+          ],
+          "url": "/signin",
+          "exitUrl": "/"
         }
-      ]
-    },
-    {
-      "id": "5-1",
-      "method": "Go to Career Guides",
-      "sequenceStep": "Go to Career Guides",
-      "url": "",
-      "exitUrl": "careers/",
-      "children": [
-        {
-          "id": "5-2",
-          "method": "Click an Article",
-          "sequenceStep": "Click How to become an entrepreneur article",
-          "url": "careers/",
-          "exitUrl": "careers/how-to-become-an-entrepreneur/",
-          "parameters": {
-            "article-card-iterator-uid": "How to become an entrepreneur"
-          }
-        }
-      ]
+      ],
+      "url": "/signin",
+      "exitUrl": "/signin"
     }
   ]
 }

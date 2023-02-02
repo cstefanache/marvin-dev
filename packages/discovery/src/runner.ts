@@ -143,7 +143,7 @@ export default class Runner {
 
   private async executeStep(
     page: Page,
-    currentStep: ActionItem[],
+    executionSteps: ActionItem[],
     steps: string[],
     sequenceCallback?: Function
   ) {
@@ -158,12 +158,29 @@ export default class Runner {
       this.config.rootUrl
     );
     log(`Current path: ${url}`, 'yellow');
-    if (currentStep.length === 0) {
+    if (executionSteps.length === 0) {
       return;
     }
-    let action = currentStep.find(
+    let action = executionSteps.find(
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
+
+    const continueExecution = async () => {
+      let url = processUrl(
+        page.url(),
+        this.config.aliases.urlReplacers,
+        this.config.rootUrl
+      );
+      action.exitUrl = url;
+      if (action.children && action.children.length && steps.length > 1) {
+        await this.executeStep(
+          page,
+          action.children,
+          [...steps].slice(1),
+          sequenceCallback
+        );
+      }
+    };
 
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
@@ -174,10 +191,10 @@ export default class Runner {
         const method = urlActions.find(
           (item: Actions) => item.method === methodName
         );
-        if (method) {
-          const loopTimes = loop || 1;
-          log(`Executing method ${methodName}, ${loopTimes} time(s)`);
-          for (let i = 0; i < loopTimes; i++) {
+        const loopTimes = loop || 1;
+        log(`Executing method ${methodName}, ${loopTimes} time(s)`);
+        for (let i = 0; i < loopTimes; i++) {
+          if (method) {
             for (let j = 0; j < (methodLoop || 1); j++) {
               log(`Executing method ${methodName}, iteration: ${i}, ${j}`);
               await this.executeMethod(method, page, parameters);
@@ -196,25 +213,12 @@ export default class Runner {
             if (sequenceCallback) {
               await sequenceCallback(action.id);
             }
-            let url = processUrl(
-              page.url(),
-              this.config.aliases.urlReplacers,
-              this.config.rootUrl
-            );
-            action.exitUrl = url;
-            console.log(action);
-
-            if (action.children && action.children.length && steps.length > 1) {
-              await this.executeStep(
-                page,
-                action.children,
-                steps.filter((_, i) => i > 0),
-                sequenceCallback
-              );
-            }
+            await continueExecution();
+          } else if (methodName) {
+            throw new Error(`Method ${methodName} not found`);
+          } else {
+            await continueExecution();
           }
-        } else {
-          throw new Error(`Method ${methodName} not found`);
         }
       } else {
         throw new Error(
