@@ -49,7 +49,7 @@ export default class Workspace {
           input: [],
           info: [],
           iterators: [],
-          store: []
+          store: [],
         },
         actions: {},
         discover: [],
@@ -65,7 +65,14 @@ export default class Workspace {
     if (!fs.existsSync(`${path}/flow.json`)) {
       this.flow = {
         actions: {},
-        graph: [],
+        graph: [
+          {
+            id: uuid.v4(),
+            sequenceStep: name,
+            children: [],
+            url,
+          },
+        ],
       };
       fs.writeFileSync(`${path}/flow.json`, JSON.stringify(this.flow, null, 2));
     }
@@ -160,7 +167,7 @@ export default class Workspace {
     const state = new State(page);
     await page.setRequestInterception(true);
     await page.waitForNetworkIdle({ timeout: this.config.defaultTimeout });
-    await flow.stateScreenshot(page, 'root');
+    // await flow.stateScreenshot(page, 'root');
 
     callback(undefined);
     const runner = new Runner(this.config, flow, state);

@@ -1,6 +1,5 @@
 .bp4-panel-stack2 {
     height: 100%;
-    margin: 2px 10px;
 
     .ra-schema-form {
         flex-direction: column;
@@ -9,6 +8,10 @@
     .bp4-panel-stack-header {
         background-color: transparent;
         margin-bottom: 20px;
+    }
+
+    .bp4-panel-stack-view {
+        padding: 10px;
     }
 
     .method-select {

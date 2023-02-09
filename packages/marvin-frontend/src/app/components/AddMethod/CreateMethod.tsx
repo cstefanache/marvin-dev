@@ -102,6 +102,7 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
+  console.log(props)
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [iterator, setIterator] = useState<any>(null);

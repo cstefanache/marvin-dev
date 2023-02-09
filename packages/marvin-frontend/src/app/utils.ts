@@ -26,3 +26,42 @@ export const getActionIcon = (action: any) => {
       return 'help';
   }
 };
+
+export function localFlattenTree(tree: any): any[] {
+
+  const flatTree: any[] = [];
+  let currentId = 0;
+
+  function traverse(node: any, parent: any, localParentId: number | undefined): any {
+    const currentNode: any = {
+      currentNode: node,
+      parentNode: parent,
+      name: node.sequenceStep,
+      id: currentId,
+      parent: localParentId,
+    };
+    flatTree.push(currentNode);
+    currentId += 1;
+    if (node.children) {
+      currentNode.children = node.children.reduce((memo: any[], child: any) => {
+        const childNode: any = traverse(child, currentNode, currentNode.id);
+        memo.push(childNode.id);
+        return memo;
+      }, []);
+    }
+
+    return currentNode;
+  }
+
+  // flatTree.push({
+  //   currentNode: tree,
+  //   name: tree.name,
+  //   id: 0,
+  //   parent: undefined,
+  //   children: traverse(tree, undefined, undefined),
+  // });
+
+  traverse(tree, undefined, undefined)
+
+  return flatTree;
+}

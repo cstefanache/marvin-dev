@@ -272,7 +272,7 @@ export default class Discovery {
 
     if (!isUniqueSoFar) {
       const parent = await element.$x('..');
-      const parentElement = parent[0].asElement() as ElementHandle<Element>;
+      const parentElement = parent.length > 0 ? parent[0].asElement() as ElementHandle<Element> : undefined;
 
       if (parentElement) {
         let parentLocator = await this.getLocator(

@@ -60,12 +60,12 @@ export default class Runner {
 
               const uid = iteratorDef ? iteratorDef.uid : 'root';
               if (iteratorIdentifierElem) {
-                const text = (await iteratorIdentifierElem.evaluate(
+                const text = ((await iteratorIdentifierElem.evaluate(
                   (el) => el.textContent
-                )) as string;
+                )) as string).trim();
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
-                );
+                ).trim();
 
                 console.log(`[${index}] ${uid}: |${text}|${resultEvaluation}|`);
                 if (text === resultEvaluation) {
@@ -165,6 +165,27 @@ export default class Runner {
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
 
+    const continueExecution = async (action) => {
+      if (sequenceCallback) {
+        await sequenceCallback(action.id);
+      }
+      let url = processUrl(
+        page.url(),
+        this.config.aliases.urlReplacers,
+        this.config.rootUrl
+      );
+      action.exitUrl = url;
+      await this.flow.stateScreenshot(page, action.id);
+      if (action.children && action.children.length && steps.length > 1) {
+        await this.executeStep(
+          page,
+          action.children,
+          steps.filter((_, i) => i > 0),
+          sequenceCallback
+        );
+      }
+    };
+
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
@@ -192,34 +213,19 @@ export default class Runner {
                 this.state.reportOnPendingRequests();
               }
             }
-            await this.flow.stateScreenshot(page, action.id);
-            if (sequenceCallback) {
-              await sequenceCallback(action.id);
-            }
-            let url = processUrl(
-              page.url(),
-              this.config.aliases.urlReplacers,
-              this.config.rootUrl
-            );
-            action.exitUrl = url;
-            console.log(action);
 
-            if (action.children && action.children.length && steps.length > 1) {
-              await this.executeStep(
-                page,
-                action.children,
-                steps.filter((_, i) => i > 0),
-                sequenceCallback
-              );
-            }
+            await continueExecution(action);
           }
+        } else if (method === undefined) {
+          await continueExecution(action);
         } else {
           throw new Error(`Method ${methodName} not found`);
         }
       } else {
-        throw new Error(
+        log(
           `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
         );
+        await continueExecution(action);
       }
     } else {
       throw new Error(`Action ${currentStepToExecute} not found in flow`);
