@@ -123,7 +123,6 @@ const CreateMethod = (props: any) => {
           // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
           ...iterable.reduce((memo: any[], item: any) => {
             const { identifier, iteratorName, elements } = item;
-            console.log(item);
             elements.forEach((element: any) => {
               memo.push({
                 from: 'iterable',
@@ -146,8 +145,6 @@ const CreateMethod = (props: any) => {
                   name: iteratorName,
                 },
               });
-
-              console.log(memo);
             }
             return memo;
           }, []),

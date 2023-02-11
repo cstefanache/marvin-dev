@@ -81,10 +81,14 @@
         overflow: auto;
         border-right: 1px solid #ccc;
 
-        &.running {
-            ul li > div:hover {
-                .bp4-icon-play {
-                    opacity: 0;
+        &.processing {
+            ul li {
+                color:rgb(163, 163, 163);
+
+                & > div:hover {
+                    .bp4-icon-play {
+                        opacity: 0;
+                    }
                 }
             }
         }

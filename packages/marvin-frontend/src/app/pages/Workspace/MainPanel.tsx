@@ -25,7 +25,6 @@ export default function MainPanel(props: any) {
       selectedElement.currentNode
     );
   };
-  
 
   return (
     (selectedElement && currentNode && (
@@ -37,9 +36,9 @@ export default function MainPanel(props: any) {
             newFolder={handleSave}
             deleteNode={deleteNode}
           />
-          {currentNode.exitUrl && (
+          {currentNode.exitUrl !== undefined && (
             <div className="working-panel">
-              <AddMethod
+              {currentNode.method && <AddMethod
                 exitUrl={data ? currentNode.url : currentNode.exitUrl}
                 style={{ width: panelWidth, minWidth: panelWidth }}
                 title={data?.method ? 'Edit Method Execution' : 'Add Method'}
@@ -50,9 +49,9 @@ export default function MainPanel(props: any) {
                 }
                 data={data}
                 save={save}
-              />
+              />}
               <div className="right">
-                {currentNode.exitUrl && (
+                {currentNode.exitUrl !== undefined && (
                   <Tabs
                     onChange={(id: string) => setTab(id)}
                     selectedTabId={tab}
@@ -83,7 +82,7 @@ export default function MainPanel(props: any) {
             </div>
           )}
         </div>
-        {!currentNode.exitUrl && (
+        {currentNode.exitUrl === undefined && (
           <NonIdealState
             title="Current node was not discovered yet."
             description="Please run discover to perform discovery"
@@ -98,6 +97,13 @@ export default function MainPanel(props: any) {
           />
         )}
       </>
-    )) || <div>select a node</div>
+    )) || (
+      <NonIdealState
+        title="No node selected"
+        description="Select a node from the left navigation panel"
+        icon="info-sign"
+        iconSize={100}
+      />
+    )
   );
 }

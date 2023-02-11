@@ -5,6 +5,7 @@ import { AddMethod } from '../../components/AddMethod/AddMethod';
 import { localFlattenTree } from '../../utils';
 import './workspace.scss';
 import MainPanel from './MainPanel';
+import RunningPanel from './Running';
 
 interface Props {
   workspace: {
@@ -23,6 +24,7 @@ export default function Workspace({ workspace }: Props) {
   const [selectedId, setSelectedId] = React.useState<null | number>(null);
   const [selectedNode, setSelectedNode] = React.useState<null | any>(null);
   const [loadingIds, setLoadingIds] = React.useState<any>([]);
+  const [running, setRunning] = React.useState(false);
 
   const [navWidth, setNavWidth] = React.useState<number>(300);
 
@@ -89,6 +91,7 @@ export default function Workspace({ workspace }: Props) {
       }, []);
       setExpandedIds(expandedIds);
       setFlow(localFlat);
+      setRunning(false);
     });
 
     window.ipcRender.receive('flow-updated', async (flow: any) => {
@@ -131,6 +134,7 @@ export default function Workspace({ workspace }: Props) {
   };
 
   const runDiscovery = async (element: any) => {
+    setRunning(true);
     const localLoadingIds: any[] = [];
     function addToSeq(element: any, sequence: string[]) {
       const { currentNode, parentNode, skip } = element;
@@ -208,7 +212,7 @@ export default function Workspace({ workspace }: Props) {
           <div className="workspace-layout">
             <div
               className={`workspace-layout__graph ${
-                loadingIds.length > 0 ? 'running' : ''
+                loadingIds.length > 0 ? 'processing' : ''
               }`}
               style={{ width: navWidth, minWidth: navWidth }}
             >
@@ -265,14 +269,16 @@ export default function Workspace({ workspace }: Props) {
                 )}
               />
             </div>
-            <MainPanel
-              selectedElement={selectedNode}
-              runDiscovery={runDiscovery}
-              key={selectedNode?.currentNode?.id}
-              save={save}
-              deleteNode={deleteNode}
-              path={path}
-            />
+            {!running && (
+              <MainPanel
+                selectedElement={selectedNode}
+                runDiscovery={runDiscovery}
+                save={save}
+                deleteNode={deleteNode}
+                path={path}
+              />
+            )}
+            {running && <RunningPanel path={path} loadingIds={loadingIds} />}
           </div>
         </>
       )}

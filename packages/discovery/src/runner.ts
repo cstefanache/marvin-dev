@@ -60,15 +60,18 @@ export default class Runner {
 
               const uid = iteratorDef ? iteratorDef.uid : 'root';
               if (iteratorIdentifierElem) {
-                const text = ((await iteratorIdentifierElem.evaluate(
-                  (el) => el.textContent
-                )) as string).trim();
+                const text = (
+                  (await iteratorIdentifierElem.evaluate(
+                    (el) => el.textContent
+                  )) as string
+                ).trim();
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
                 ).trim();
 
                 console.log(`[${index}] ${uid}: |${text}|${resultEvaluation}|`);
-                if (text === resultEvaluation) {
+                // if (text === resultEvaluation) {
+                if (new RegExp(resultEvaluation).test(text)) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                   break;
                 }
@@ -84,7 +87,7 @@ export default class Runner {
       }
 
       if (prefix === '') {
-        throw new Error(
+        log(
           `No root element found for ${iteratorName} for parameters ${JSON.stringify(
             parameters
           )}`

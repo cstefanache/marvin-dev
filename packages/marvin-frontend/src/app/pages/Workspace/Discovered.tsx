@@ -56,6 +56,7 @@ export default function DiscoveredElements(props: any) {
         setDiscoveredElements(items);
       }
     };
+    console.log('>>>', exitUrl)
     getElements(exitUrl);
   }, [exitUrl]);
 
