@@ -363,6 +363,329 @@
       ],
       "url": "/signin",
       "exitUrl": "/signin"
+    },
+    {
+      "id": "payment_flow_id",
+      "sequenceStep": "Payment Flow",
+      "loop": 1,
+      "children": [
+        {
+          "id": "18b1389b-fcc4-4fcb-ac82-d8cf114de314",
+          "method": "Login",
+          "sequenceStep": "Exec: Login As Jessyca",
+          "loop": 1,
+          "methodLoop": 1,
+          "parameters": {
+            "7a975ffa-0bed-4d8e-b5ec-34791ea6682e": "Jessyca.Kuhic",
+            "653fc369-1ee6-467d-804d-614ccf6ece54": "s3cret"
+          },
+          "children": [
+            {
+              "id": "8b3a3f66-c445-4550-8747-d0dd0d816a75",
+              "method": "Go to Ne Transaction screen",
+              "sequenceStep": "Exec: Go to Ne Transaction screen",
+              "loop": 1,
+              "methodLoop": 1,
+              "children": [
+                {
+                  "id": "5da31fb0-295b-4f07-852a-f5c205b153e9",
+                  "method": "Select Contact",
+                  "sequenceStep": "Exec: Select Contact",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                },
+                {
+                  "id": "4b742f56-86e7-4abc-adb9-7097784db68y",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Edgar Johns",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "parameters": {
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Edgar Johns"
+                  },
+                  "children": [
+                    {
+                      "id": "88d69570-19d7-4e2b-b222-306745958cdg",
+                      "method": "Create payment",
+                      "sequenceStep": "Exec: Create payment",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "d75898f3-8ba2-43ca-8062-7f7ceabf4110": "13",
+                        "9f322e2d-246a-4715-9f61-f138359f4e4f": "Payment-${library.func.random()}",
+                        "efe55669-1a9b-4432-bcda-ece186e80478": "paymentDetails"
+                      },
+                      "children": [
+                        {
+                          "id": "51a41257-6b02-4475-9536-7408e4aed80b",
+                          "method": "Back to Transactions",
+                          "sequenceStep": "Exec: Back to Transactions",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "children": [
+                            {
+                              "id": "32e99b61-0295-4822-93d4-d8f5e63f383c",
+                              "method": "See transaction details",
+                              "sequenceStep": "Exec: See transaction details",
+                              "loop": 1,
+                              "methodLoop": 1,
+                              "parameters": {
+                                "50f68634-7d00-403d-ba3a-d37d995217bb": "${store.paymentDetails}"
+                              },
+                              "children": [
+                                {
+                                  "id": "3a9b9771-6ab2-49ee-ae7f-4521f8485321",
+                                  "method": "Check Result (second)",
+                                  "sequenceStep": "Exec: Check Result (second)",
+                                  "loop": 1,
+                                  "methodLoop": 1,
+                                  "children": []
+                                }
+                              ],
+                              "url": "/",
+                              "exitUrl": "/transaction/{transactionId}"
+                            }
+                          ],
+                          "url": "/transaction/new",
+                          "exitUrl": "/"
+                        }
+                      ],
+                      "url": "/transaction/new",
+                      "exitUrl": "/transaction/new"
+                    }
+                  ],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                },
+                {
+                  "id": "2ef5b94f-b306-4561-a58d-9a785a1c9900",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Ibrahim",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "parameters": {
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Ibrahim Dickens"
+                  },
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                }
+              ],
+              "url": "/",
+              "exitUrl": "/transaction/new"
+            },
+            {
+              "id": "2d39098d-3fd1-4df0-be0c-e828b397e6f7",
+              "method": "Go To Bank Accounts",
+              "sequenceStep": "Exec: Go To Bank Accounts",
+              "loop": 1,
+              "methodLoop": 1,
+              "children": [
+                {
+                  "id": "1f5605c0-0249-4b56-aaa8-96042ddd09e8",
+                  "method": "Click Creat btn",
+                  "sequenceStep": "Exec: Click Creat btn",
+                  "loop": 3,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "3a250623-4880-4cb5-81a6-b92424d909bh",
+                      "method": "Create Bank account",
+                      "sequenceStep": "Exec: Create Bank account",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "dff7515c-35fa-4069-a6de-3e554bab2339": "${store.bank}-${library.func.random()}",
+                        "fe297182-ce65-4b8b-911c-446be79587b8": "${store.routing}",
+                        "74081dcb-0c6d-475b-91ab-5b0554f62896": "${store.account}"
+                      },
+                      "children": [],
+                      "url": "/bankaccounts/new",
+                      "exitUrl": "/bankaccounts"
+                    }
+                  ],
+                  "url": "/bankaccounts",
+                  "exitUrl": "/bankaccounts/new"
+                }
+              ],
+              "url": "/",
+              "exitUrl": "/bankaccounts"
+            }
+          ],
+          "url": "/signin",
+          "exitUrl": "/"
+        }
+      ],
+      "url": "/signin",
+      "exitUrl": "/signin"
+    },
+    {
+      "id": "bank_account_id_1",
+      "sequenceStep": "Bank Account First",
+      "loop": 1,
+      "children": [
+        {
+          "id": "18b1389b-fcc4-4fcb-ac82-d8cf114de315",
+          "method": "Login",
+          "sequenceStep": "Exec: Login As Jessyca",
+          "loop": 1,
+          "methodLoop": 1,
+          "parameters": {
+            "7a975ffa-0bed-4d8e-b5ec-34791ea6682e": "Jessyca.Kuhic",
+            "653fc369-1ee6-467d-804d-614ccf6ece54": "s3cret"
+          },
+          "children": [
+            {
+              "id": "8b3a3f66-c445-4550-8747-d0dd0d816a76",
+              "method": "Go to Ne Transaction screen",
+              "sequenceStep": "Exec: Go to Ne Transaction screen",
+              "loop": 1,
+              "methodLoop": 1,
+              "children": [
+                {
+                  "id": "5da31fb0-295b-4f07-852a-f5c205b153e7",
+                  "method": "Select Contact",
+                  "sequenceStep": "Exec: Select Contact",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                },
+                {
+                  "id": "4b742f56-86e7-4abc-adb9-7097784db68w",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Edgar Johns",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "parameters": {
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Edgar Johns"
+                  },
+                  "children": [
+                    {
+                      "id": "88d69570-19d7-4e2b-b222-306745958cdd",
+                      "method": "Create payment",
+                      "sequenceStep": "Exec: Create payment",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "d75898f3-8ba2-43ca-8062-7f7ceabf4110": "13",
+                        "9f322e2d-246a-4715-9f61-f138359f4e4f": "Payment-${library.func.random()}",
+                        "efe55669-1a9b-4432-bcda-ece186e80478": "paymentDetails"
+                      },
+                      "children": [
+                        {
+                          "id": "51a41257-6b02-4475-9536-7408e4aed80j",
+                          "method": "Back to Transactions",
+                          "sequenceStep": "Exec: Back to Transactions",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "children": [
+                            {
+                              "id": "32e99b61-0295-4822-93d4-d8f5e63f383k",
+                              "method": "See transaction details",
+                              "sequenceStep": "Exec: See transaction details",
+                              "loop": 1,
+                              "methodLoop": 1,
+                              "parameters": {
+                                "50f68634-7d00-403d-ba3a-d37d995217bb": "${store.paymentDetails}"
+                              },
+                              "children": [
+                                {
+                                  "id": "3a9b9771-6ab2-49ee-ae7f-4521f8485328",
+                                  "method": "Check Result (second)",
+                                  "sequenceStep": "Exec: Check Result (second)",
+                                  "loop": 1,
+                                  "methodLoop": 1,
+                                  "children": []
+                                }
+                              ],
+                              "url": "/",
+                              "exitUrl": "/transaction/{transactionId}"
+                            }
+                          ],
+                          "url": "/transaction/new",
+                          "exitUrl": "/"
+                        }
+                      ],
+                      "url": "/transaction/new",
+                      "exitUrl": "/transaction/new"
+                    }
+                  ],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                },
+                {
+                  "id": "2ef5b94f-b306-4561-a58d-9a785a1c9902",
+                  "method": "Select Contact (generic)",
+                  "sequenceStep": "Exec: Select Contact (generic) - Ibrahim",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "parameters": {
+                    "4d2fd344-cde2-4577-94d4-9431573705ab": "Ibrahim Dickens"
+                  },
+                  "children": [],
+                  "url": "/transaction/new",
+                  "exitUrl": "/transaction/new"
+                }
+              ],
+              "url": "/",
+              "exitUrl": "/transaction/new"
+            },
+            {
+              "id": "bank_account_id_2",
+              "sequenceStep": "Bank Account Second",
+              "loop": 1,
+              "children": [
+                {
+                  "id": "2d39098d-3fd1-4df0-be0c-e828b397e6f6",
+                  "method": "Go To Bank Accounts",
+                  "sequenceStep": "Exec: Go To Bank Accounts",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "1f5605c0-0249-4b56-aaa8-96042ddd09e2",
+                      "method": "Click Creat btn",
+                      "sequenceStep": "Exec: Click Creat btn",
+                      "loop": 3,
+                      "methodLoop": 1,
+                      "children": [
+                        {
+                          "id": "3a250623-4880-4cb5-81a6-b92424d909bz",
+                          "method": "Create Bank account",
+                          "sequenceStep": "Exec: Create Bank account",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "parameters": {
+                            "dff7515c-35fa-4069-a6de-3e554bab2339": "${store.bank}-${library.func.random()}",
+                            "fe297182-ce65-4b8b-911c-446be79587b8": "${store.routing}",
+                            "74081dcb-0c6d-475b-91ab-5b0554f62896": "${store.account}"
+                          },
+                          "children": [],
+                          "url": "/bankaccounts/new",
+                          "exitUrl": "/bankaccounts"
+                        }
+                      ],
+                      "url": "/bankaccounts",
+                      "exitUrl": "/bankaccounts/new"
+                    }
+                  ],
+                  "url": "/",
+                  "exitUrl": "/bankaccounts"
+                }
+              ]
+            }
+          ],
+          "url": "/signin",
+          "exitUrl": "/"
+        }
+      ],
+      "url": "/signin",
+      "exitUrl": "/signin"
     }
   ]
 }

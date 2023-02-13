@@ -1,8 +1,8 @@
 export type NewConfigModel = {
-  projectName: string; //name from the rawConfig
-  baseUrl: string; // rootUrl from the rawConfig,
-  inputPath: string; // path from the rawConfig
-  outputPath: string; // where tests are generated
+  projectName: string;
+  baseUrl: string;
+  inputPath: string;
+  outputPath: string;
   iterators: Iterator[];
   env: KeyValuePair[];
   specsFolder: string;
@@ -12,9 +12,9 @@ export type NewConfigModel = {
 
 export type Iterator = {
   name: string;
-  parents: string[]; //selectors from the iterators raw config
+  parents: string[];
   identifier: string;
-  siblings: string[]; // elements from the iterators raw config (only the selectors)
+  siblings: string[];
 };
 
 export type KeyValuePair = {

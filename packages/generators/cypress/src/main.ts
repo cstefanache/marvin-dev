@@ -1,8 +1,7 @@
-import Init from './init';
+import Structure from './structure';
 import { FlowModel } from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
 
-const init = new Init();
+const structure = new Structure();
 
-init.initialize('./marvin/output');
-init.initialize('./marvin/output');
+structure.generate();
