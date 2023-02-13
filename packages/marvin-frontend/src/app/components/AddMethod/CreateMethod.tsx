@@ -102,6 +102,7 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
+  console.log(props)
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [iterator, setIterator] = useState<any>(null);
@@ -122,7 +123,6 @@ const CreateMethod = (props: any) => {
           // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
           ...iterable.reduce((memo: any[], item: any) => {
             const { identifier, iteratorName, elements } = item;
-            console.log(item);
             elements.forEach((element: any) => {
               memo.push({
                 from: 'iterable',
@@ -145,8 +145,6 @@ const CreateMethod = (props: any) => {
                   name: iteratorName,
                 },
               });
-
-              console.log(memo);
             }
             return memo;
           }, []),

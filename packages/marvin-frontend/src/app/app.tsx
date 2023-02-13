@@ -16,7 +16,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import Header from './components/Header/Header';
 import Workspaces from './pages/Workspaces/Workspaces';
-import Workspace from './pages/Workspace';
+import Workspace from './pages/Workspace/Workspace';
 import Config from './pages/Configuration/Config';
 
 export function App() {

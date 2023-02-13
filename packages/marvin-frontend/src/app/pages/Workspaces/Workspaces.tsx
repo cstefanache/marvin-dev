@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { FileInput, Icon, Callout } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 import './WorkspacesStyles.scss';
 
 interface Props {
@@ -39,7 +39,6 @@ export default function Workspaces({ selectWorkspace }: Props) {
 
   return (
     <div className="container">
-      {/* <FileInput className="input" text="Workspaces" onInputChange={selectWorkspaceFolder} /> */}
       <div className="input">
         <span>Workspace</span>
         <button onClick={selectWorkspaceFolder}></button>

@@ -1,12 +1,6 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import {
-  Action,
-  Aliases,
-  Config,
-  Sequence,
-  KeyValuePair,
-} from './models/config';
+import { Config, KeyValuePair } from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -60,15 +54,18 @@ export default class Runner {
 
               const uid = iteratorDef ? iteratorDef.uid : 'root';
               if (iteratorIdentifierElem) {
-                const text = (await iteratorIdentifierElem.evaluate(
-                  (el) => el.textContent
-                )) as string;
+                const text = (
+                  (await iteratorIdentifierElem.evaluate(
+                    (el) => el.textContent
+                  )) as string
+                ).trim();
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
-                );
+                ).trim();
 
                 console.log(`[${index}] ${uid}: |${text}|${resultEvaluation}|`);
-                if (text === resultEvaluation) {
+                // if (text === resultEvaluation) {
+                if (new RegExp(resultEvaluation).test(text)) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
                   break;
                 }
@@ -84,7 +81,7 @@ export default class Runner {
       }
 
       if (prefix === '') {
-        throw new Error(
+        log(
           `No root element found for ${iteratorName} for parameters ${JSON.stringify(
             parameters
           )}`
@@ -165,13 +162,17 @@ export default class Runner {
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
 
-    const continueExecution = async () => {
+    const continueExecution = async (action) => {
+      if (sequenceCallback) {
+        await sequenceCallback(action.id);
+      }
       let url = processUrl(
         page.url(),
         this.config.aliases.urlReplacers,
         this.config.rootUrl
       );
       action.exitUrl = url;
+      await this.flow.stateScreenshot(page, action.id);
       if (action.children && action.children.length && steps.length > 1) {
         await this.executeStep(
           page,
@@ -191,10 +192,10 @@ export default class Runner {
         const method = urlActions.find(
           (item: Actions) => item.method === methodName
         );
-        const loopTimes = loop || 1;
-        log(`Executing method ${methodName}, ${loopTimes} time(s)`);
-        for (let i = 0; i < loopTimes; i++) {
-          if (method) {
+        if (method) {
+          const loopTimes = loop || 1;
+          log(`Executing method ${methodName}, ${loopTimes} time(s)`);
+          for (let i = 0; i < loopTimes; i++) {
             for (let j = 0; j < (methodLoop || 1); j++) {
               log(`Executing method ${methodName}, iteration: ${i}, ${j}`);
               await this.executeMethod(method, page, parameters);
@@ -209,21 +210,19 @@ export default class Runner {
                 this.state.reportOnPendingRequests();
               }
             }
-            await this.flow.stateScreenshot(page, action.id);
-            if (sequenceCallback) {
-              await sequenceCallback(action.id);
-            }
-            await continueExecution();
-          } else if (methodName) {
-            throw new Error(`Method ${methodName} not found`);
-          } else {
-            await continueExecution();
+
+            await continueExecution(action);
           }
+        } else if (method === undefined) {
+          await continueExecution(action);
+        } else {
+          throw new Error(`Method ${methodName} not found`);
         }
       } else {
-        throw new Error(
+        log(
           `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
         );
+        await continueExecution(action);
       }
     } else {
       throw new Error(`Action ${currentStepToExecute} not found in flow`);

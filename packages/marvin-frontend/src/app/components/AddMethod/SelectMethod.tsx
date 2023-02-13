@@ -9,6 +9,7 @@ import {
   SelectMethodCustomWrapper,
 } from '../Registry/Wrapper/Wrapper';
 import CreateMethod from './CreateMethod';
+import { exit } from 'process';
 
 const SelectMethod = (props: any) => {
   const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
@@ -16,7 +17,9 @@ const SelectMethod = (props: any) => {
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
   const { parent, save, data: propData } = props;
-  const { exitUrl, sequenceStep } = parent || {};
+  // const { exitUrl, sequenceStep } = parent || {};
+  const { exitUrl } = props;
+  const sequenceStep = '';
   const { method } = propData || {};
 
   useEffect(() => {
@@ -24,15 +27,14 @@ const SelectMethod = (props: any) => {
       const methods = await window.electron.getMethodsForPath(exitUrl);
       setMethods(methods || []);
 
-      if (method) {
+      if (method && methods) {
         const selectedMethod = methods.find((m: any) => m.method === method);
         setData(propData);
         setSelectedMethod(selectedMethod);
-        console.log(selectedMethod);
       }
     };
     asyncFn();
-  }, []);
+  }, [exitUrl]);
 
   const openNewPanel = () => {
     props.openPanel({
@@ -96,8 +98,6 @@ const SelectMethod = (props: any) => {
         },
       };
       setSchema(schema);
-      console.log(schema);
-      console.log(data);
     }
   }, [selectedMethod]);
 
@@ -160,6 +160,7 @@ const SelectMethod = (props: any) => {
 
       {schema && (
         <>
+          <pre>Url: {exitUrl}</pre>
           {!propData && <Divider />}
           <SchemaForm
             schema={schema}
