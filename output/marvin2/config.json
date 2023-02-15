@@ -1,9 +1,9 @@
 {
   "name": "Marvin2",
   "rootUrl": "http://localhost:3000/",
-  "path": "/Users/cornelstefanache/Projects/ACLabs/marvin/output/marvin2",
+  "path": "/Users/ralucabrie/Documents/qa_proj/marvin/output/marvin2",
   "defaultTimeout": 3000,
-  "output": "/Users/cornelstefanache/Projects/ACLabs/marvin/output/marvin2/output",
+  "output": "/Users/ralucabrie/Documents/qa_proj/marvin/output/marvin2",
   "aliases": {
     "urlReplacers": [
       {

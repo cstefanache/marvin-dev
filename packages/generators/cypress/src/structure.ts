@@ -45,11 +45,18 @@ export default class Structure {
   }
 
   private getTest(actionItem: ActionItem): Test {
+    let paramValuesQueue: string[] = [];
+
+    if (actionItem.parameters) {
+      for (let paramKey of Object.keys(actionItem.parameters)) {
+        paramValuesQueue.push(`${actionItem.parameters[paramKey]}`);
+      }
+    }
     return {
       name: this.formatName(actionItem.sequenceStep),
       method: {
-        name: actionItem.method,
-        paramValues: [],
+        name: this.formatName(actionItem.method),
+        paramValues: [...paramValuesQueue],
       },
     };
   }
@@ -62,7 +69,7 @@ export default class Structure {
     return tests;
   }
 
-  private getGroups(
+  private getFunctionalities(
     graph: ActionItem[],
     groups: Functionality[] = [],
     parentTests: Test[] = [],
@@ -74,7 +81,7 @@ export default class Structure {
         ? lastGroupName
         : actionItem.sequenceStep;
       if (actionItem.children.length > 0) {
-        this.getGroups(
+        this.getFunctionalities(
           actionItem.children,
           groups,
           [...parentTests, ...currentTests],
@@ -88,7 +95,6 @@ export default class Structure {
       ) {
         groups.push({
           group: lastGroupName,
-          name: this.formatName(actionItem.sequenceStep),
           specs: [
             {
               file: this.formatName(actionItem.sequenceStep) + '.spec.cy.ts',
@@ -105,20 +111,24 @@ export default class Structure {
 
   public generate() {
     console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-    this.flow.functionalities = this.getGroups(this.rawFlow.graph);
+    this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
     for (const func of this.flow.functionalities) {
       console.log('');
       console.log('++ Folder : ' + func.group);
       for (const spec of func.specs) {
-        console.log('FileName: ' + spec.file)
+        console.log('FileName: ' + spec.file);
         console.log('Before All:');
         for (const test of spec.beforeAll) {
           console.log(' | ' + test.name);
+          console.log('|||');
+          console.log(test.method);
         }
         console.log('');
         console.log('Tests:');
         for (const test of spec.tests) {
           console.log(' | ' + test.name);
+          console.log('|||');
+          console.log(test.method);
         }
       }
     }
