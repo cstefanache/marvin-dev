@@ -6,12 +6,14 @@ export type NewFlowModel = {
 
 export type Functionality = {
   group: string;
+  name: string;
   specs: Spec[];
 };
 
 export type Spec = {
   file: string;
   variables: KeyValuePair[];
+  beforeAll: Test[];
   tests: Test[];
 };
 

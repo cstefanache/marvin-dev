@@ -77,6 +77,7 @@ const SelectMethod = (props: any) => {
                   memo[obj.uid] = {
                     type: 'string',
                     title: obj.locator,
+                    description: obj.details, 
                     inputType: obj.type,
                   };
                   return memo;

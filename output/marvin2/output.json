@@ -1527,6 +1527,261 @@
           }
         ]
       }
+    },
+    "bankaccounts/new": {
+      "items": {
+        "info": [
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "h1"
+          },
+          {
+            "text": "Kaylin H",
+            "details": "Kaylin H",
+            "type": null,
+            "locator": "h6[data-test=\"sidenav-user-full-name\"]"
+          },
+          {
+            "text": "@Allie2",
+            "details": "@Allie2",
+            "type": null,
+            "locator": "h6[data-test=\"sidenav-username\"]"
+          },
+          {
+            "text": "$1,648.67",
+            "details": "$1,648.67",
+            "type": null,
+            "locator": "h6[data-test=\"sidenav-user-balance\"]"
+          },
+          {
+            "text": "Account Balance",
+            "details": "Account Balance",
+            "type": null,
+            "locator": "div.MuiDrawer-paper > div:nth-of-type(2) > div:nth-of-type(1) > h6:nth-of-type(2)"
+          },
+          {
+            "text": "Create Bank Account",
+            "details": "Create Bank Account",
+            "type": null,
+            "locator": "h2"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "button[type=\"button\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "button[type=\"button\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": " New",
+            "details": "New",
+            "type": null,
+            "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": "8",
+            "details": "8",
+            "type": null,
+            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "8",
+            "details": "8",
+            "type": null,
+            "locator": "span[data-test=\"nav-top-notifications-count\"]"
+          },
+          {
+            "text": "8",
+            "details": "8",
+            "type": null,
+            "locator": "span.MuiBadge-badge"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": "Home",
+            "details": "Home",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-home\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-home\"] > span"
+          },
+          {
+            "text": "My Account",
+            "details": "My Account",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-user-settings\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-user-settings\"] > span"
+          },
+          {
+            "text": "Bank Accounts",
+            "details": "Bank Accounts",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-bankaccounts\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-bankaccounts\"] > span"
+          },
+          {
+            "text": "Notifications",
+            "details": "Notifications",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-notifications\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "a[data-test=\"sidenav-notifications\"] > span"
+          },
+          {
+            "text": "Logout",
+            "details": "Logout",
+            "type": null,
+            "locator": "div[tabindex=\"0\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "div[tabindex=\"0\"] > span"
+          },
+          {
+            "text": "​",
+            "details": "​",
+            "type": null,
+            "locator": "div[data-test=\"bankaccount-bankName-input\"] > div > fieldset > legend > span"
+          },
+          {
+            "text": "​",
+            "details": "​",
+            "type": null,
+            "locator": "div[data-test=\"bankaccount-routingNumber-input\"] > div > fieldset > legend > span"
+          },
+          {
+            "text": "​",
+            "details": "​",
+            "type": null,
+            "locator": "div[data-test=\"bankaccount-accountNumber-input\"] > div > fieldset > legend > span"
+          },
+          {
+            "text": "Save",
+            "details": "Save",
+            "type": null,
+            "locator": "button[type=\"submit\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "button[type=\"submit\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": "Built by",
+            "details": "Built by",
+            "type": null,
+            "locator": "p"
+          }
+        ],
+        "input": [
+          {
+            "text": "",
+            "details": "Bank Name",
+            "type": "text",
+            "locator": "input#bankaccount-bankName-input"
+          },
+          {
+            "text": "",
+            "details": "Routing Number",
+            "type": "text",
+            "locator": "input#bankaccount-routingNumber-input"
+          },
+          {
+            "text": "",
+            "details": "Account Number",
+            "type": "text",
+            "locator": "input#bankaccount-accountNumber-input"
+          }
+        ],
+        "actions": [
+          {
+            "text": "",
+            "locator": "button[type=\"button\"]"
+          },
+          {
+            "text": "",
+            "locator": "a.MuiTypography-root"
+          },
+          {
+            "text": " New",
+            "locator": "a[data-test=\"nav-top-new-transaction\"]"
+          },
+          {
+            "text": "8",
+            "locator": "a[data-test=\"nav-top-notifications-link\"]"
+          },
+          {
+            "text": "Home",
+            "locator": "a[data-test=\"sidenav-home\"]"
+          },
+          {
+            "text": "My Account",
+            "locator": "a[data-test=\"sidenav-user-settings\"]"
+          },
+          {
+            "text": "Bank Accounts",
+            "locator": "a[data-test=\"sidenav-bankaccounts\"]"
+          },
+          {
+            "text": "Notifications",
+            "locator": "a[data-test=\"sidenav-notifications\"]"
+          },
+          {
+            "text": "Save",
+            "locator": "button[type=\"submit\"]"
+          },
+          {
+            "text": "",
+            "locator": "a[target=\"_blank\"]"
+          }
+        ],
+        "iterable": [
+          {
+            "locator": "ul, ol",
+            "iteratorName": "List Iterator",
+            "elements": []
+          }
+        ]
+      }
     }
   }
 }

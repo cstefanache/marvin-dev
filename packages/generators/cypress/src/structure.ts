@@ -58,10 +58,6 @@ export default class Structure {
     let tests: Test[] = [...parentTests];
     if (actionItem.method) {
       tests.push(this.getTest(actionItem));
-
-      for (const child of actionItem.children) {
-        tests = this.getTests(child, tests);
-      }
     }
     return tests;
   }
@@ -69,32 +65,40 @@ export default class Structure {
   private getGroups(
     graph: ActionItem[],
     groups: Functionality[] = [],
-    parentTests: Test[] = []
+    parentTests: Test[] = [],
+    lastGroupName: string = ''
   ) {
     for (const actionItem of graph) {
-      const currentTests = [...parentTests, ...this.getTests(actionItem)];
-
+      const currentTests = this.getTests(actionItem);
+      const currentLastGroupName = actionItem.method
+        ? lastGroupName
+        : actionItem.sequenceStep;
       if (actionItem.children.length > 0) {
-        this.getGroups(actionItem.children, groups, currentTests);
+        this.getGroups(
+          actionItem.children,
+          groups,
+          [...parentTests, ...currentTests],
+          currentLastGroupName
+        );
       }
 
-     
       if (
         (!actionItem.method || actionItem.children.length === 0) &&
         currentTests.length > 0
       ) {
         groups.push({
-          group: this.formatName(actionItem.sequenceStep),
+          group: lastGroupName,
+          name: this.formatName(actionItem.sequenceStep),
           specs: [
             {
               file: this.formatName(actionItem.sequenceStep) + '.spec.cy.ts',
               variables: [],
+              beforeAll: parentTests,
               tests: currentTests,
             },
           ],
         });
       }
-     
     }
     return groups;
   }
@@ -103,13 +107,18 @@ export default class Structure {
     console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     this.flow.functionalities = this.getGroups(this.rawFlow.graph);
     for (const func of this.flow.functionalities) {
-      console.log('-------------------------');
-      console.log('++ ' + func.group);
+      console.log('');
+      console.log('++ Folder : ' + func.group);
       for (const spec of func.specs) {
-        console.log('>>>>>>>>>>');
-        console.log(spec.file);
+        console.log('FileName: ' + spec.file)
+        console.log('Before All:');
+        for (const test of spec.beforeAll) {
+          console.log(' | ' + test.name);
+        }
+        console.log('');
+        console.log('Tests:');
         for (const test of spec.tests) {
-          console.log(test.name);
+          console.log(' | ' + test.name);
         }
       }
     }

@@ -85,6 +85,39 @@
             "type": "click"
           }
         ]
+      },
+      {
+        "method": "Date: All Button",
+        "sequence": [
+          {
+            "uid": "7165f530-9d39-4060-a380-8f5e10e84785",
+            "locator": "div[data-test=\"transaction-list-filter-date-range-button\"] > span:nth-of-type(1)",
+            "details": "Date: ALL Date: ALL",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Click on Amount",
+        "sequence": [
+          {
+            "uid": "cfe8b196-56e7-4170-b485-2edc1a51acbc",
+            "locator": "div[data-test=\"transaction-list-filter-amount-range-button\"] > span:nth-of-type(1)",
+            "details": "Amount: $0 - $1,000 Amount: $0 - $1,000",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Clear",
+        "sequence": [
+          {
+            "uid": "5a016abe-02ba-4177-8d31-636bbb09e7b3",
+            "locator": "button[data-test=\"transaction-list-filter-amount-clear-button\"]",
+            "details": "Clear ",
+            "type": "click"
+          }
+        ]
       }
     ],
     "transaction/new": [
@@ -191,6 +224,35 @@
             "locator": "a[data-test=\"bankaccount-new\"]",
             "details": "Create ",
             "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Bank Accounts Page Check",
+        "sequence": [
+          {
+            "uid": "c4448e1e-838a-4e9e-a984-6da279df45c6",
+            "locator": "h2",
+            "details": "Bank Accounts Bank Accounts",
+            "type": "check"
+          },
+          {
+            "uid": "d6518bc5-0561-4365-83cd-4b6cfa41873f",
+            "locator": "p.MuiTypography-body1",
+            "details": "Spinka Inc Bank  Spinka Inc Bank",
+            "type": "check"
+          },
+          {
+            "uid": "c2441405-71ab-4c4e-8a79-a280f91521d8",
+            "locator": "a[data-test=\"bankaccount-new\"] > span:nth-of-type(1)",
+            "details": "Create Create",
+            "type": "check"
+          },
+          {
+            "uid": "4a556fa1-0054-4550-8b08-f3393dd9da18",
+            "locator": "button[data-test=\"bankaccount-delete\"] > span:nth-of-type(1)",
+            "details": "Delete Delete",
+            "type": "check"
           }
         ]
       }
@@ -302,7 +364,7 @@
                     {
                       "id": "748a98d4-4315-49b4-848c-66101c963738",
                       "method": "Click on Dismiss",
-                      "sequenceStep": "Exec: Click on Dismiss 2",
+                      "sequenceStep": "Dismiss Notification 1",
                       "loop": 1,
                       "methodLoop": 1,
                       "children": [],
@@ -316,8 +378,41 @@
                 {
                   "id": "f2433c60-f38d-4b82-8479-6e66fa36845f",
                   "sequenceStep": "SubFolderNotif",
-                  "children": [],
-                  "url": ""
+                  "children": [
+                    {
+                      "id": "68e620d6-4f79-48d6-9779-4d41a4acc5fd",
+                      "method": "Date: All Button",
+                      "sequenceStep": "Exec: Date: All Button",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [],
+                      "url": "",
+                      "exitUrl": ""
+                    },
+                    {
+                      "id": "5fc047c1-3fd1-4dbe-81f6-56efb8cdf68d",
+                      "method": "Click on Amount",
+                      "sequenceStep": "Exec: Click on Amount",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [
+                        {
+                          "id": "3bdfa536-4bac-4918-b56d-b4f34ec6023b",
+                          "method": "Date: All Button",
+                          "sequenceStep": "Exec: Date: All Button",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "children": [],
+                          "url": "",
+                          "exitUrl": ""
+                        }
+                      ],
+                      "url": "",
+                      "exitUrl": ""
+                    }
+                  ],
+                  "url": "",
+                  "exitUrl": ""
                 }
               ],
               "url": "",
@@ -333,7 +428,24 @@
                   "sequenceStep": "Exec: Go To Bank Accounts",
                   "loop": 1,
                   "methodLoop": 1,
-                  "children": [],
+                  "children": [
+                    {
+                      "id": "42dd02a6-11c8-4883-808d-d4899881e0d7",
+                      "method": "Bank Accounts Page Check",
+                      "sequenceStep": "Exec: Bank Accounts Page Check",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "c4448e1e-838a-4e9e-a984-6da279df45c6": "Bank Accounts",
+                        "d6518bc5-0561-4365-83cd-4b6cfa41873f": "Spinka Inc Bank",
+                        "c2441405-71ab-4c4e-8a79-a280f91521d8": "Create",
+                        "4a556fa1-0054-4550-8b08-f3393dd9da18": "Delete"
+                      },
+                      "children": [],
+                      "url": "bankaccounts",
+                      "exitUrl": "bankaccounts/new"
+                    }
+                  ],
                   "url": "",
                   "exitUrl": "bankaccounts"
                 }
