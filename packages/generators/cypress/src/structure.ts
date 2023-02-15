@@ -8,7 +8,7 @@ import { NewConfigModel } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
-  inputPath: string = '/Users/ralucabrie/Documents/qa_proj/output/marvin2';
+  inputPath: string = 'output/marvin2';
   flow: NewFlowModel = {
     functionalities: [],
     selectors: [],
@@ -78,7 +78,11 @@ export default class Structure {
         this.getGroups(actionItem.children, groups, currentTests);
       }
 
-      if (!actionItem.method) {
+     
+      if (
+        (!actionItem.method || actionItem.children.length === 0) &&
+        currentTests.length > 0
+      ) {
         groups.push({
           group: this.formatName(actionItem.sequenceStep),
           specs: [
@@ -90,27 +94,13 @@ export default class Structure {
           ],
         });
       }
-
-      // if (!actionItem.method) {
-      //   groups.push({
-      //     group: this.formatName(actionItem.sequenceStep),
-      //     specs: [
-      //       {
-      //         file: this.formatName(actionItem.sequenceStep) + '.spec.cy.ts',
-      //         variables: [],
-      //         tests: currentTests,
-      //       },
-      //     ],
-      //   });
-      // }
-      // if (actionItem.children.length > 0) {
-      //   this.getGroups(actionItem.children, groups, [...currentTests);
-      // }
+     
     }
     return groups;
   }
 
   public generate() {
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     this.flow.functionalities = this.getGroups(this.rawFlow.graph);
     for (const func of this.flow.functionalities) {
       console.log('-------------------------');
@@ -119,7 +109,6 @@ export default class Structure {
         console.log('>>>>>>>>>>');
         console.log(spec.file);
         for (const test of spec.tests) {
-          console.log('*********');
           console.log(test.name);
         }
       }
