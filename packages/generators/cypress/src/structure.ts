@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as os from 'os';
 import { log } from './utils/logger';
 import { ActionItem, FlowModel } from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
@@ -15,6 +16,7 @@ export default class Structure {
     commands: [],
   };
   config: NewConfigModel;
+
 
   constructor() {
     if (fs.existsSync(`${this.inputPath}/config.json`)) {
@@ -41,7 +43,7 @@ export default class Structure {
   }
 
   private formatName(str: String) {
-    return str.replace(new RegExp(' ', 'g'), '-');
+    return str.toLocaleLowerCase().trim().replace(new RegExp('[ :\/\\\\]', 'g'), '-');
   }
 
   private getTest(actionItem: ActionItem): Test {
@@ -61,7 +63,7 @@ export default class Structure {
     };
   }
 
-  private getTests(actionItem: ActionItem, parentTests: Test[] = []) {
+  private getTests(actionItem: ActionItem, parentTests: Test[] = []): Test[] {
     let tests: Test[] = [...parentTests];
     if (actionItem.method) {
       tests.push(this.getTest(actionItem));
@@ -73,28 +75,29 @@ export default class Structure {
     graph: ActionItem[],
     groups: Functionality[] = [],
     parentTests: Test[] = [],
+    currentTestsFromParent: Test[] = [],
     lastGroupName: string = ''
   ) {
     for (const actionItem of graph) {
-      const currentTests = this.getTests(actionItem);
+      const currentTests: Test[] = [
+        ...currentTestsFromParent,
+        ...this.getTests(actionItem),
+      ];
       const currentLastGroupName = actionItem.method
         ? lastGroupName
-        : actionItem.sequenceStep;
-      if (actionItem.children.length > 0) {
-        this.getFunctionalities(
-          actionItem.children,
-          groups,
-          [...parentTests, ...currentTests],
-          currentLastGroupName
-        );
-      }
+        : `${lastGroupName}/${actionItem.sequenceStep}`;
 
-      if (
-        (!actionItem.method || actionItem.children.length === 0) &&
-        currentTests.length > 0
-      ) {
+      this.getFunctionalities(
+        actionItem.children,
+        groups,
+        actionItem.method ? parentTests : [...parentTests, ...currentTests],
+        actionItem.method ? currentTests : [],
+        currentLastGroupName
+      );
+
+      if (actionItem.children.length === 0) {
         groups.push({
-          group: lastGroupName,
+          group: currentLastGroupName,
           specs: [
             {
               file: this.formatName(actionItem.sequenceStep) + '.spec.cy.ts',
@@ -104,7 +107,7 @@ export default class Structure {
             },
           ],
         });
-      }
+      }    
     }
     return groups;
   }
@@ -119,16 +122,12 @@ export default class Structure {
         console.log('FileName: ' + spec.file);
         console.log('Before All:');
         for (const test of spec.beforeAll) {
-          console.log(' | ' + test.name);
-          console.log('|||');
-          console.log(test.method);
+          console.log(' |- ' + test.name + `(${test.method.name})`);
         }
         console.log('');
         console.log('Tests:');
         for (const test of spec.tests) {
-          console.log(' | ' + test.name);
-          console.log('|||');
-          console.log(test.method);
+          console.log(' |- ' + test.name + `(${test.method.name})`);
         }
       }
     }
