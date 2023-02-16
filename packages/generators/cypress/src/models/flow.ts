@@ -44,10 +44,12 @@ export type Command = {
 export type MethodDefinition = {
   name: string;
   parameters?: string[];
+  hasStore?: boolean;
   body: BodyDefinition[];
 };
 
 export type BodyDefinition = {
   locator: string;
+  name?: string;
   action: string;
 };
