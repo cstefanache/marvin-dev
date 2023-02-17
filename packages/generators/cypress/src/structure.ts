@@ -224,32 +224,32 @@ export default class Structure {
   }
 
   public generate() {
-    // console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-    // this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
-    // for (const func of this.flow.functionalities) {
-    //   console.log('');
-    //   console.log('++ Folder : ' + func.group);
-    //   for (const spec of func.specs) {
-    //     console.log('FileName: ' + spec.file);
-    //     console.log('Before All:');
-    //     for (const test of spec.beforeAll) {
-    //       console.log(' |- ' + test.name + `(${test.method.name})`);
-    //       console.log(test.method);
-    //     }
-    //     console.log('');
-    //     console.log('Tests:');
-    //     for (const test of spec.tests) {
-    //       console.log(' |- ' + test.name + `(${test.method.name})`);
-    //       console.log(test.method);
-    //     }
-    //   }
-    // }
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+    this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
+    for (const func of this.flow.functionalities) {
+      console.log('');
+      console.log('++ Folder : ' + func.group);
+      for (const spec of func.specs) {
+        console.log('FileName: ' + spec.file);
+        console.log('Before All:');
+        for (const test of spec.beforeAll) {
+          console.log(' |- ' + test.name + `(${test.method.name})`);
+          console.log(test.method);
+        }
+        console.log('');
+        console.log('Tests:');
+        for (const test of spec.tests) {
+          console.log(' |- ' + test.name + `(${test.method.name})`);
+          console.log(test.method);
+        }
+      }
+    }
 
-    // this.flow.selectors = this.getSelectors();
-    // console.log('>>>>>>>>>>>>> Selectors >>>>>>');
-    // for (const selector of this.flow.selectors) {
-    //   console.log(selector);
-    // }
+    this.flow.selectors = this.getSelectors();
+    console.log('>>>>>>>>>>>>> Selectors >>>>>>');
+    for (const selector of this.flow.selectors) {
+      console.log(selector);
+    }
 
     this.flow.commands = this.getCommands();
     console.log('********** Commands **********');
