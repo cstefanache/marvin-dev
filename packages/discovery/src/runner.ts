@@ -1,12 +1,6 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import {
-  Action,
-  Aliases,
-  Config,
-  Sequence,
-  KeyValuePair,
-} from './models/config';
+import { Config, KeyValuePair } from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -146,7 +140,7 @@ export default class Runner {
 
   private async executeStep(
     page: Page,
-    currentStep: ActionItem[],
+    executionSteps: ActionItem[],
     steps: string[],
     sequenceCallback?: Function
   ) {
@@ -161,10 +155,10 @@ export default class Runner {
       this.config.rootUrl
     );
     log(`Current path: ${url}`, 'yellow');
-    if (currentStep.length === 0) {
+    if (executionSteps.length === 0) {
       return;
     }
-    let action = currentStep.find(
+    let action = executionSteps.find(
       (item: ActionItem) => item.sequenceStep === currentStepToExecute
     );
 
@@ -183,7 +177,7 @@ export default class Runner {
         await this.executeStep(
           page,
           action.children,
-          steps.filter((_, i) => i > 0),
+          [...steps].slice(1),
           sequenceCallback
         );
       }

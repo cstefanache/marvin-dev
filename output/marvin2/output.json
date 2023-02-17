@@ -1,6 +1,6 @@
 {
   "discovered": {
-    "/signin": {
+    "signin": {
       "items": {
         "info": [
           {
@@ -8,60 +8,6 @@
             "details": "Sign in",
             "type": null,
             "locator": "h1"
-          },
-          {
-            "text": "Username",
-            "details": "Username",
-            "type": null,
-            "locator": "legend.PrivateNotchedOutline-legendNotched-83 > span"
-          },
-          {
-            "text": "Password",
-            "details": "Password",
-            "type": null,
-            "locator": "div[data-test=\"signin-password\"] > div > fieldset > legend > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "span[aria-disabled=\"false\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "span.MuiIconButton-label"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "span[aria-disabled=\"false\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "Remember me",
-            "details": "Remember me",
-            "type": null,
-            "locator": "span.MuiTypography-root"
-          },
-          {
-            "text": "Sign In",
-            "details": "Sign In",
-            "type": null,
-            "locator": "span.MuiButton-label"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button > span:nth-of-type(2)"
-          },
-          {
-            "text": "Built by",
-            "details": "Built by",
-            "type": null,
-            "locator": "p"
           }
         ],
         "input": [
@@ -101,7 +47,7 @@
         "iterable": []
       }
     },
-    "/": {
+    "": {
       "items": {
         "info": [
           {
@@ -111,20 +57,20 @@
             "locator": "h1"
           },
           {
-            "text": "Devon B",
-            "details": "Devon B",
+            "text": "Kaylin H",
+            "details": "Kaylin H",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-full-name\"]"
           },
           {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
+            "text": "@Allie2",
+            "details": "@Allie2",
             "type": null,
             "locator": "h6[data-test=\"sidenav-username\"]"
           },
           {
-            "text": "$623.69",
-            "details": "$623.69",
+            "text": "$1,648.67",
+            "details": "$1,648.67",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-balance\"]"
           },
@@ -312,181 +258,181 @@
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(1) > div > span"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(1) > div > span"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(1) > div > span > span"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(1) > div > span > span"
           },
           {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
+            "text": "Kaylin Homenick",
+            "details": "Kaylin Homenick",
             "type": null,
-            "locator": "span[data-test=\"transaction-sender-kI6EuGgcV\"]"
+            "locator": "span[data-test=\"transaction-sender-183VHWyuQMS\"]"
           },
           {
             "text": " paid ",
             "details": "paid",
             "type": null,
-            "locator": "span[data-test=\"transaction-action-kI6EuGgcV\"]"
+            "locator": "span[data-test=\"transaction-action-183VHWyuQMS\"]"
           },
           {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
+            "text": "Arely Kertzmann",
+            "details": "Arely Kertzmann",
             "type": null,
-            "locator": "span[data-test=\"transaction-receiver-kI6EuGgcV\"]"
+            "locator": "span[data-test=\"transaction-receiver-183VHWyuQMS\"]"
           },
           {
-            "text": "-$13.00",
-            "details": "-$13.00",
+            "text": "-$80.31",
+            "details": "-$80.31",
             "type": null,
-            "locator": "span[data-test=\"transaction-amount-kI6EuGgcV\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(1) > div > span"
+            "locator": "span[data-test=\"transaction-amount-183VHWyuQMS\"]"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(1) > div > span > span"
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(1) > div > span"
           },
           {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
+            "text": "",
+            "details": "",
             "type": null,
-            "locator": "span[data-test=\"transaction-sender-E9PfY8ScJ\"]"
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(1) > div > span > span"
+          },
+          {
+            "text": "Arely Kertzmann",
+            "details": "Arely Kertzmann",
+            "type": null,
+            "locator": "span[data-test=\"transaction-sender--7xanIywv9x\"]"
           },
           {
             "text": " paid ",
             "details": "paid",
             "type": null,
-            "locator": "span[data-test=\"transaction-action-E9PfY8ScJ\"]"
+            "locator": "span[data-test=\"transaction-action--7xanIywv9x\"]"
           },
           {
             "text": "Edgar Johns",
             "details": "Edgar Johns",
             "type": null,
-            "locator": "span[data-test=\"transaction-receiver-E9PfY8ScJ\"]"
+            "locator": "span[data-test=\"transaction-receiver--7xanIywv9x\"]"
           },
           {
-            "text": "-$13.00",
-            "details": "-$13.00",
+            "text": "-$259.71",
+            "details": "-$259.71",
             "type": null,
-            "locator": "span[data-test=\"transaction-amount-E9PfY8ScJ\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(1) > div > span"
+            "locator": "span[data-test=\"transaction-amount--7xanIywv9x\"]"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(1) > div > span > span"
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(1) > div > span"
           },
           {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
+            "text": "",
+            "details": "",
             "type": null,
-            "locator": "span[data-test=\"transaction-sender-Gk9JamYBE\"]"
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(1) > div > span > span"
+          },
+          {
+            "text": "Arely Kertzmann",
+            "details": "Arely Kertzmann",
+            "type": null,
+            "locator": "span[data-test=\"transaction-sender-4AvM8cN1DdS\"]"
           },
           {
             "text": " paid ",
             "details": "paid",
             "type": null,
-            "locator": "span[data-test=\"transaction-action-Gk9JamYBE\"]"
+            "locator": "span[data-test=\"transaction-action-4AvM8cN1DdS\"]"
           },
           {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
+            "text": "Kaylin Homenick",
+            "details": "Kaylin Homenick",
             "type": null,
-            "locator": "span[data-test=\"transaction-receiver-Gk9JamYBE\"]"
+            "locator": "span[data-test=\"transaction-receiver-4AvM8cN1DdS\"]"
           },
           {
-            "text": "-$13.00",
-            "details": "-$13.00",
+            "text": "-$190.85",
+            "details": "-$190.85",
             "type": null,
-            "locator": "span[data-test=\"transaction-amount-Gk9JamYBE\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(1) > div > span"
+            "locator": "span[data-test=\"transaction-amount-4AvM8cN1DdS\"]"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(1) > div > span > span"
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(1) > div > span"
           },
           {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
+            "text": "",
+            "details": "",
             "type": null,
-            "locator": "span[data-test=\"transaction-sender-55v-Eqnhk\"]"
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(1) > div > span > span"
+          },
+          {
+            "text": "Kaylin Homenick",
+            "details": "Kaylin Homenick",
+            "type": null,
+            "locator": "span[data-test=\"transaction-sender-PPrW38YZtQD\"]"
           },
           {
             "text": " paid ",
             "details": "paid",
             "type": null,
-            "locator": "span[data-test=\"transaction-action-55v-Eqnhk\"]"
+            "locator": "span[data-test=\"transaction-action-PPrW38YZtQD\"]"
           },
           {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
+            "text": "Arely Kertzmann",
+            "details": "Arely Kertzmann",
             "type": null,
-            "locator": "span[data-test=\"transaction-receiver-55v-Eqnhk\"]"
+            "locator": "span[data-test=\"transaction-receiver-PPrW38YZtQD\"]"
           },
           {
-            "text": "-$13.00",
-            "details": "-$13.00",
+            "text": "-$337.92",
+            "details": "-$337.92",
             "type": null,
-            "locator": "span[data-test=\"transaction-amount-55v-Eqnhk\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(1) > div > span"
+            "locator": "span[data-test=\"transaction-amount-PPrW38YZtQD\"]"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(1) > div > span > span"
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(1) > div > span"
           },
           {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
+            "text": "",
+            "details": "",
             "type": null,
-            "locator": "span[data-test=\"transaction-sender-Z46U8Foq8\"]"
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(1) > div > span > span"
+          },
+          {
+            "text": "Arely Kertzmann",
+            "details": "Arely Kertzmann",
+            "type": null,
+            "locator": "span[data-test=\"transaction-sender-6uaALAE3eKA\"]"
           },
           {
             "text": " paid ",
             "details": "paid",
             "type": null,
-            "locator": "span[data-test=\"transaction-action-Z46U8Foq8\"]"
+            "locator": "span[data-test=\"transaction-action-6uaALAE3eKA\"]"
           },
           {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
+            "text": "Kaylin Homenick",
+            "details": "Kaylin Homenick",
             "type": null,
-            "locator": "span[data-test=\"transaction-receiver-Z46U8Foq8\"]"
+            "locator": "span[data-test=\"transaction-receiver-6uaALAE3eKA\"]"
           },
           {
-            "text": "-$13.00",
-            "details": "-$13.00",
+            "text": "-$20.23",
+            "details": "-$20.23",
             "type": null,
-            "locator": "span[data-test=\"transaction-amount-Z46U8Foq8\"]"
+            "locator": "span[data-test=\"transaction-amount-6uaALAE3eKA\"]"
           },
           {
             "text": "",
@@ -669,124 +615,124 @@
             "locator": "span[data-test=\"transaction-amount-NMrYdkrY_18W\"]"
           },
           {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
+            "text": "Kaylin Homenick paid Arely Kertzmann",
+            "details": "Kaylin Homenick paid Arely Kertzmann",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
           },
           {
-            "text": "Payment-542608",
-            "details": "Payment-542608",
+            "text": "Payment: bDjUb4ir5O to qywYp6hS0U",
+            "details": "Payment: bDjUb4ir5O to qywYp6hS0U",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
-          },
-          {
-            "text": "0",
-            "details": "0",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-kI6EuGgcV\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
-          },
-          {
-            "text": "Payment-970537",
-            "details": "Payment-970537",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+            "locator": "li[data-test=\"transaction-item-183VHWyuQMS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
+          },
+          {
+            "text": "Arely Kertzmann paid Edgar Johns",
+            "details": "Arely Kertzmann paid Edgar Johns",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
+          },
+          {
+            "text": "Payment: qywYp6hS0U to t45AiwidW",
+            "details": "Payment: qywYp6hS0U to t45AiwidW",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-E9PfY8ScJ\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
-          },
-          {
-            "text": "Payment-238177",
-            "details": "Payment-238177",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+            "locator": "li[data-test=\"transaction-item--7xanIywv9x\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
+          },
+          {
+            "text": "Arely Kertzmann paid Kaylin Homenick",
+            "details": "Arely Kertzmann paid Kaylin Homenick",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
+          },
+          {
+            "text": "Payment: qywYp6hS0U to bDjUb4ir5O",
+            "details": "Payment: qywYp6hS0U to bDjUb4ir5O",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Gk9JamYBE\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
-          },
-          {
-            "text": "Payment-950983",
-            "details": "Payment-950983",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+            "locator": "li[data-test=\"transaction-item-4AvM8cN1DdS\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
+          },
+          {
+            "text": "Kaylin Homenick paid Arely Kertzmann",
+            "details": "Kaylin Homenick paid Arely Kertzmann",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
+          },
+          {
+            "text": "Payment: bDjUb4ir5O to qywYp6hS0U",
+            "details": "Payment: bDjUb4ir5O to qywYp6hS0U",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
+          },
+          {
+            "text": "1",
+            "details": "1",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-55v-Eqnhk\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
+            "locator": "li[data-test=\"transaction-item-PPrW38YZtQD\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
           },
           {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
+            "text": "Arely Kertzmann paid Kaylin Homenick",
+            "details": "Arely Kertzmann paid Kaylin Homenick",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(1)"
           },
           {
-            "text": "Payment-572350",
-            "details": "Payment-572350",
+            "text": "Payment: qywYp6hS0U to bDjUb4ir5O",
+            "details": "Payment: qywYp6hS0U to bDjUb4ir5O",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
-          },
-          {
-            "text": "0",
-            "details": "0",
-            "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > p:nth-of-type(2)"
           },
           {
             "text": "0",
             "details": "0",
             "type": null,
-            "locator": "li[data-test=\"transaction-item-Z46U8Foq8\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(2) > p"
+          },
+          {
+            "text": "0",
+            "details": "0",
+            "type": null,
+            "locator": "li[data-test=\"transaction-item-6uaALAE3eKA\"] > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(4) > p"
           },
           {
             "text": "Kaylin Homenick requested Devon Becker",
@@ -978,7 +924,7 @@
             "iteratorName": "Transaction Iterator",
             "elements": [
               {
-                "text": "Payment-542608",
+                "text": "Payment: bDjUb4ir5O to qywYp6hS0U",
                 "locator": "p.MuiTypography-body2"
               }
             ]
@@ -986,7 +932,7 @@
         ]
       }
     },
-    "/transaction/new": {
+    "notifications": {
       "items": {
         "info": [
           {
@@ -996,20 +942,20 @@
             "locator": "h1"
           },
           {
-            "text": "Devon B",
-            "details": "Devon B",
+            "text": "Kaylin H",
+            "details": "Kaylin H",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-full-name\"]"
           },
           {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
+            "text": "@Allie2",
+            "details": "@Allie2",
             "type": null,
             "locator": "h6[data-test=\"sidenav-username\"]"
           },
           {
-            "text": "$675.69",
-            "details": "$675.69",
+            "text": "$1,648.67",
+            "details": "$1,648.67",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-balance\"]"
           },
@@ -1020,16 +966,10 @@
             "locator": "div.MuiDrawer-paper > div:nth-of-type(2) > div:nth-of-type(1) > h6:nth-of-type(2)"
           },
           {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
+            "text": "Notifications",
+            "details": "Notifications",
             "type": null,
-            "locator": "div.MuiGrid-direction-xs-column > div:nth-of-type(2) > h2"
-          },
-          {
-            "text": "Paid $13.00 for Payment-572350",
-            "details": "Paid $13.00 for Payment-572350",
-            "type": null,
-            "locator": "div.MuiGrid-justify-content-xs-center > div > h2"
+            "locator": "h2"
           },
           {
             "text": "",
@@ -1056,20 +996,20 @@
             "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(2)"
           },
           {
-            "text": "8",
-            "details": "8",
+            "text": "7",
+            "details": "7",
             "type": null,
             "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(1)"
           },
           {
-            "text": "8",
-            "details": "8",
+            "text": "7",
+            "details": "7",
             "type": null,
             "locator": "span[data-test=\"nav-top-notifications-count\"]"
           },
           {
-            "text": "8",
-            "details": "8",
+            "text": "7",
+            "details": "7",
             "type": null,
             "locator": "span.MuiBadge-badge"
           },
@@ -1140,112 +1080,130 @@
             "locator": "div[tabindex=\"0\"] > span"
           },
           {
-            "text": "Select Contact",
-            "details": "Select Contact",
+            "text": "Kaylin Homenick received payment.",
+            "details": "Kaylin Homenick received payment.",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(1) > span"
+            "locator": "li[data-test=\"notification-list-item-aCU3_sQsUuJe\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "Dismiss",
+            "details": "Dismiss",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-aCU3_sQsUuJe\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(1) > span > span:nth-of-type(1)"
+            "locator": "button[data-test=\"notification-mark-read-aCU3_sQsUuJe\"] > span:nth-of-type(2)"
           },
           {
-            "text": "Select Contact",
-            "details": "Select Contact",
+            "text": "Kaylin Homenick liked a transaction.",
+            "details": "Kaylin Homenick liked a transaction.",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(1) > span > span:nth-of-type(2)"
+            "locator": "li[data-test=\"notification-list-item-BEv_CgxfLJ4G\"] > div:nth-of-type(2) > span"
           },
           {
-            "text": "Select Contact",
-            "details": "Select Contact",
+            "text": "Dismiss",
+            "details": "Dismiss",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(1) > span > span:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "Payment",
-            "details": "Payment",
-            "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(3) > span"
+            "locator": "button[data-test=\"notification-mark-read-BEv_CgxfLJ4G\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(3) > span > span:nth-of-type(1)"
+            "locator": "button[data-test=\"notification-mark-read-BEv_CgxfLJ4G\"] > span:nth-of-type(2)"
           },
           {
-            "text": "Payment",
-            "details": "Payment",
+            "text": "Kaylin Homenick requested payment.",
+            "details": "Kaylin Homenick requested payment.",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(3) > span > span:nth-of-type(2)"
+            "locator": "li[data-test=\"notification-list-item-oexmNQ8kn180\"] > div:nth-of-type(2) > span"
           },
           {
-            "text": "Payment",
-            "details": "Payment",
+            "text": "Dismiss",
+            "details": "Dismiss",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(3) > span > span:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(4) > span"
-          },
-          {
-            "text": "Complete",
-            "details": "Complete",
-            "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(5) > span"
+            "locator": "button[data-test=\"notification-mark-read-oexmNQ8kn180\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(5) > span > span:nth-of-type(1)"
+            "locator": "button[data-test=\"notification-mark-read-oexmNQ8kn180\"] > span:nth-of-type(2)"
           },
           {
-            "text": "Complete",
-            "details": "Complete",
+            "text": "Ibrahim Dickens received payment.",
+            "details": "Ibrahim Dickens received payment.",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(5) > span > span:nth-of-type(2)"
+            "locator": "li[data-test=\"notification-list-item-YqxDdNXYa0-F\"] > div:nth-of-type(2) > span"
           },
           {
-            "text": "Complete",
-            "details": "Complete",
+            "text": "Dismiss",
+            "details": "Dismiss",
             "type": null,
-            "locator": "div.MuiStepper-root > div:nth-of-type(5) > span > span:nth-of-type(2) > span"
-          },
-          {
-            "text": "Return To Transactions",
-            "details": "Return To Transactions",
-            "type": null,
-            "locator": "a[data-test=\"new-transaction-return-to-transactions\"] > span:nth-of-type(1)"
+            "locator": "button[data-test=\"notification-mark-read-YqxDdNXYa0-F\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "a[data-test=\"new-transaction-return-to-transactions\"] > span:nth-of-type(2)"
+            "locator": "button[data-test=\"notification-mark-read-YqxDdNXYa0-F\"] > span:nth-of-type(2)"
           },
           {
-            "text": "Create Another Transaction",
-            "details": "Create Another Transaction",
+            "text": "Ibrahim Dickens requested payment.",
+            "details": "Ibrahim Dickens requested payment.",
             "type": null,
-            "locator": "button[data-test=\"new-transaction-create-another-transaction\"] > span:nth-of-type(1)"
+            "locator": "li[data-test=\"notification-list-item-X1FhHIt3PWm5\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "Dismiss",
+            "details": "Dismiss",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-X1FhHIt3PWm5\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "button[data-test=\"new-transaction-create-another-transaction\"] > span:nth-of-type(2)"
+            "locator": "button[data-test=\"notification-mark-read-X1FhHIt3PWm5\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": "Kaylin Homenick received payment.",
+            "details": "Kaylin Homenick received payment.",
+            "type": null,
+            "locator": "li[data-test=\"notification-list-item-8Vfrq-7SDD1g\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "Dismiss",
+            "details": "Dismiss",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-8Vfrq-7SDD1g\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-8Vfrq-7SDD1g\"] > span:nth-of-type(2)"
+          },
+          {
+            "text": "Kaylin Homenick requested payment.",
+            "details": "Kaylin Homenick requested payment.",
+            "type": null,
+            "locator": "li[data-test=\"notification-list-item-8vvxn3hmHWYK\"] > div:nth-of-type(2) > span"
+          },
+          {
+            "text": "Dismiss",
+            "details": "Dismiss",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-8vvxn3hmHWYK\"] > span:nth-of-type(1)"
+          },
+          {
+            "text": "",
+            "details": "",
+            "type": null,
+            "locator": "button[data-test=\"notification-mark-read-8vvxn3hmHWYK\"] > span:nth-of-type(2)"
           },
           {
             "text": "Built by",
@@ -1269,7 +1227,7 @@
             "locator": "a[data-test=\"nav-top-new-transaction\"]"
           },
           {
-            "text": "8",
+            "text": "7",
             "locator": "a[data-test=\"nav-top-notifications-link\"]"
           },
           {
@@ -1289,279 +1247,32 @@
             "locator": "a[data-test=\"sidenav-notifications\"]"
           },
           {
-            "text": "Return To Transactions",
-            "locator": "a[data-test=\"new-transaction-return-to-transactions\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-aCU3_sQsUuJe\"]"
           },
           {
-            "text": "Create Another Transaction",
-            "locator": "button[data-test=\"new-transaction-create-another-transaction\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-BEv_CgxfLJ4G\"]"
           },
           {
-            "text": "",
-            "locator": "a[target=\"_blank\"]"
-          }
-        ],
-        "iterable": [
-          {
-            "locator": "ul, ol",
-            "iteratorName": "List Iterator",
-            "elements": []
-          }
-        ]
-      }
-    },
-    "/transaction/krCl7-EnC": {
-      "items": {
-        "info": [
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "h1"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-oexmNQ8kn180\"]"
           },
           {
-            "text": "Devon B",
-            "details": "Devon B",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-full-name\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-YqxDdNXYa0-F\"]"
           },
           {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-username\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-X1FhHIt3PWm5\"]"
           },
           {
-            "text": "$701.69",
-            "details": "$701.69",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-balance\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-8Vfrq-7SDD1g\"]"
           },
           {
-            "text": "Account Balance",
-            "details": "Account Balance",
-            "type": null,
-            "locator": "div.MuiDrawer-paper > div:nth-of-type(2) > div:nth-of-type(1) > h6:nth-of-type(2)"
-          },
-          {
-            "text": "Transaction Detail",
-            "details": "Transaction Detail",
-            "type": null,
-            "locator": "h2"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": " New",
-            "details": "New",
-            "type": null,
-            "locator": "span.MuiButton-label"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span[data-test=\"nav-top-notifications-count\"]"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span.MuiBadge-badge"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "Home",
-            "details": "Home",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > span"
-          },
-          {
-            "text": "My Account",
-            "details": "My Account",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > span"
-          },
-          {
-            "text": "Bank Accounts",
-            "details": "Bank Accounts",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > span"
-          },
-          {
-            "text": "Notifications",
-            "details": "Notifications",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > span"
-          },
-          {
-            "text": "Logout",
-            "details": "Logout",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > span"
-          },
-          {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
-            "type": null,
-            "locator": "span[data-test=\"transaction-sender-krCl7-EnC\"]"
-          },
-          {
-            "text": " paid ",
-            "details": "paid",
-            "type": null,
-            "locator": "span[data-test=\"transaction-action-krCl7-EnC\"]"
-          },
-          {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
-            "type": null,
-            "locator": "span[data-test=\"transaction-receiver-krCl7-EnC\"]"
-          },
-          {
-            "text": "-$13.00",
-            "details": "-$13.00",
-            "type": null,
-            "locator": "span[data-test=\"transaction-amount-krCl7-EnC\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-krCl7-EnC\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-krCl7-EnC\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "​",
-            "details": "​",
-            "type": null,
-            "locator": "legend > span"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "p.makeStyles-title-117"
-          },
-          {
-            "text": "Payment-539609",
-            "details": "Payment-539609",
-            "type": null,
-            "locator": "p[data-test=\"transaction-description\"]"
-          },
-          {
-            "text": "Built by",
-            "details": "Built by",
-            "type": null,
-            "locator": "p.MuiTypography-alignCenter"
-          }
-        ],
-        "input": [
-          {
-            "text": "",
-            "details": "Write a comment...",
-            "type": "text",
-            "locator": "input"
-          }
-        ],
-        "actions": [
-          {
-            "text": "",
-            "locator": "button[data-test=\"sidenav-toggle\"]"
-          },
-          {
-            "text": "",
-            "locator": "a.MuiTypography-root"
-          },
-          {
-            "text": " New",
-            "locator": "a[data-test=\"nav-top-new-transaction\"]"
-          },
-          {
-            "text": "8",
-            "locator": "a[data-test=\"nav-top-notifications-link\"]"
-          },
-          {
-            "text": "Home",
-            "locator": "a[data-test=\"sidenav-home\"]"
-          },
-          {
-            "text": "My Account",
-            "locator": "a[data-test=\"sidenav-user-settings\"]"
-          },
-          {
-            "text": "Bank Accounts",
-            "locator": "a[data-test=\"sidenav-bankaccounts\"]"
-          },
-          {
-            "text": "Notifications",
-            "locator": "a[data-test=\"sidenav-notifications\"]"
-          },
-          {
-            "text": "",
-            "locator": "button[data-test=\"transaction-like-button-krCl7-EnC\"]"
+            "text": "Dismiss",
+            "locator": "button[data-test=\"notification-mark-read-8vvxn3hmHWYK\"]"
           },
           {
             "text": "",
@@ -1577,7 +1288,7 @@
         ]
       }
     },
-    "/transaction/8bFo_NwEf": {
+    "bankaccounts": {
       "items": {
         "info": [
           {
@@ -1587,554 +1298,20 @@
             "locator": "h1"
           },
           {
-            "text": "Devon B",
-            "details": "Devon B",
+            "text": "Kaylin H",
+            "details": "Kaylin H",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-full-name\"]"
           },
           {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
+            "text": "@Allie2",
+            "details": "@Allie2",
             "type": null,
             "locator": "h6[data-test=\"sidenav-username\"]"
           },
           {
-            "text": "$688.69",
-            "details": "$688.69",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-balance\"]"
-          },
-          {
-            "text": "Account Balance",
-            "details": "Account Balance",
-            "type": null,
-            "locator": "div.MuiDrawer-paper > div:nth-of-type(2) > div:nth-of-type(1) > h6:nth-of-type(2)"
-          },
-          {
-            "text": "Transaction Detail",
-            "details": "Transaction Detail",
-            "type": null,
-            "locator": "h2"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": " New",
-            "details": "New",
-            "type": null,
-            "locator": "span.MuiButton-label"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span[data-test=\"nav-top-notifications-count\"]"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span.MuiBadge-badge"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "Home",
-            "details": "Home",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > span"
-          },
-          {
-            "text": "My Account",
-            "details": "My Account",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > span"
-          },
-          {
-            "text": "Bank Accounts",
-            "details": "Bank Accounts",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > span"
-          },
-          {
-            "text": "Notifications",
-            "details": "Notifications",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > span"
-          },
-          {
-            "text": "Logout",
-            "details": "Logout",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > span"
-          },
-          {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
-            "type": null,
-            "locator": "span[data-test=\"transaction-sender-8bFo_NwEf\"]"
-          },
-          {
-            "text": " paid ",
-            "details": "paid",
-            "type": null,
-            "locator": "span[data-test=\"transaction-action-8bFo_NwEf\"]"
-          },
-          {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
-            "type": null,
-            "locator": "span[data-test=\"transaction-receiver-8bFo_NwEf\"]"
-          },
-          {
-            "text": "-$13.00",
-            "details": "-$13.00",
-            "type": null,
-            "locator": "span[data-test=\"transaction-amount-8bFo_NwEf\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-8bFo_NwEf\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-8bFo_NwEf\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "​",
-            "details": "​",
-            "type": null,
-            "locator": "legend > span"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "p.makeStyles-title-117"
-          },
-          {
-            "text": "Payment-567516",
-            "details": "Payment-567516",
-            "type": null,
-            "locator": "p[data-test=\"transaction-description\"]"
-          },
-          {
-            "text": "Built by",
-            "details": "Built by",
-            "type": null,
-            "locator": "p.MuiTypography-alignCenter"
-          }
-        ],
-        "input": [
-          {
-            "text": "",
-            "details": "Write a comment...",
-            "type": "text",
-            "locator": "input"
-          }
-        ],
-        "actions": [
-          {
-            "text": "",
-            "locator": "button[data-test=\"sidenav-toggle\"]"
-          },
-          {
-            "text": "",
-            "locator": "a.MuiTypography-root"
-          },
-          {
-            "text": " New",
-            "locator": "a[data-test=\"nav-top-new-transaction\"]"
-          },
-          {
-            "text": "8",
-            "locator": "a[data-test=\"nav-top-notifications-link\"]"
-          },
-          {
-            "text": "Home",
-            "locator": "a[data-test=\"sidenav-home\"]"
-          },
-          {
-            "text": "My Account",
-            "locator": "a[data-test=\"sidenav-user-settings\"]"
-          },
-          {
-            "text": "Bank Accounts",
-            "locator": "a[data-test=\"sidenav-bankaccounts\"]"
-          },
-          {
-            "text": "Notifications",
-            "locator": "a[data-test=\"sidenav-notifications\"]"
-          },
-          {
-            "text": "",
-            "locator": "button[data-test=\"transaction-like-button-8bFo_NwEf\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[target=\"_blank\"]"
-          }
-        ],
-        "iterable": [
-          {
-            "locator": "ul, ol",
-            "iteratorName": "List Iterator",
-            "elements": []
-          }
-        ]
-      }
-    },
-    "/transaction/{transactionId}": {
-      "items": {
-        "info": [
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "h1"
-          },
-          {
-            "text": "Devon B",
-            "details": "Devon B",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-full-name\"]"
-          },
-          {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-username\"]"
-          },
-          {
-            "text": "$636.69",
-            "details": "$636.69",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-balance\"]"
-          },
-          {
-            "text": "Account Balance",
-            "details": "Account Balance",
-            "type": null,
-            "locator": "div.MuiDrawer-paper > div:nth-of-type(2) > div:nth-of-type(1) > h6:nth-of-type(2)"
-          },
-          {
-            "text": "Transaction Detail",
-            "details": "Transaction Detail",
-            "type": null,
-            "locator": "h2"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"sidenav-toggle\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": " New",
-            "details": "New",
-            "type": null,
-            "locator": "span.MuiButton-label"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-new-transaction\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span[data-test=\"nav-top-notifications-count\"]"
-          },
-          {
-            "text": "8",
-            "details": "8",
-            "type": null,
-            "locator": "span.MuiBadge-badge"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"nav-top-notifications-link\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "Home",
-            "details": "Home",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-home\"] > span"
-          },
-          {
-            "text": "My Account",
-            "details": "My Account",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-user-settings\"] > span"
-          },
-          {
-            "text": "Bank Accounts",
-            "details": "Bank Accounts",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-bankaccounts\"] > span"
-          },
-          {
-            "text": "Notifications",
-            "details": "Notifications",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "a[data-test=\"sidenav-notifications\"] > span"
-          },
-          {
-            "text": "Logout",
-            "details": "Logout",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > div:nth-of-type(2) > span"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "div[tabindex=\"0\"] > span"
-          },
-          {
-            "text": "Devon Becker",
-            "details": "Devon Becker",
-            "type": null,
-            "locator": "span[data-test=\"transaction-sender-E9PfY8ScJ\"]"
-          },
-          {
-            "text": " paid ",
-            "details": "paid",
-            "type": null,
-            "locator": "span[data-test=\"transaction-action-E9PfY8ScJ\"]"
-          },
-          {
-            "text": "Edgar Johns",
-            "details": "Edgar Johns",
-            "type": null,
-            "locator": "span[data-test=\"transaction-receiver-E9PfY8ScJ\"]"
-          },
-          {
-            "text": "-$13.00",
-            "details": "-$13.00",
-            "type": null,
-            "locator": "span[data-test=\"transaction-amount-E9PfY8ScJ\"]"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-E9PfY8ScJ\"] > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "button[data-test=\"transaction-like-button-E9PfY8ScJ\"] > span:nth-of-type(2)"
-          },
-          {
-            "text": "​",
-            "details": "​",
-            "type": null,
-            "locator": "legend > span"
-          },
-          {
-            "text": "Devon Becker paid Edgar Johns",
-            "details": "Devon Becker paid Edgar Johns",
-            "type": null,
-            "locator": "p.makeStyles-title-117"
-          },
-          {
-            "text": "Payment-970537",
-            "details": "Payment-970537",
-            "type": null,
-            "locator": "p[data-test=\"transaction-description\"]"
-          },
-          {
-            "text": "Built by",
-            "details": "Built by",
-            "type": null,
-            "locator": "p.MuiTypography-alignCenter"
-          }
-        ],
-        "input": [
-          {
-            "text": "",
-            "details": "Write a comment...",
-            "type": "text",
-            "locator": "input"
-          }
-        ],
-        "actions": [
-          {
-            "text": "",
-            "locator": "button[data-test=\"sidenav-toggle\"]"
-          },
-          {
-            "text": "",
-            "locator": "a.MuiTypography-root"
-          },
-          {
-            "text": " New",
-            "locator": "a[data-test=\"nav-top-new-transaction\"]"
-          },
-          {
-            "text": "8",
-            "locator": "a[data-test=\"nav-top-notifications-link\"]"
-          },
-          {
-            "text": "Home",
-            "locator": "a[data-test=\"sidenav-home\"]"
-          },
-          {
-            "text": "My Account",
-            "locator": "a[data-test=\"sidenav-user-settings\"]"
-          },
-          {
-            "text": "Bank Accounts",
-            "locator": "a[data-test=\"sidenav-bankaccounts\"]"
-          },
-          {
-            "text": "Notifications",
-            "locator": "a[data-test=\"sidenav-notifications\"]"
-          },
-          {
-            "text": "",
-            "locator": "button[data-test=\"transaction-like-button-E9PfY8ScJ\"]"
-          },
-          {
-            "text": "",
-            "locator": "a[target=\"_blank\"]"
-          }
-        ],
-        "iterable": [
-          {
-            "locator": "ul, ol",
-            "iteratorName": "List Iterator",
-            "elements": []
-          }
-        ]
-      }
-    },
-    "/bankaccounts": {
-      "items": {
-        "info": [
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "h1"
-          },
-          {
-            "text": "Devon B",
-            "details": "Devon B",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-user-full-name\"]"
-          },
-          {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
-            "type": null,
-            "locator": "h6[data-test=\"sidenav-username\"]"
-          },
-          {
-            "text": "$753.69",
-            "details": "$753.69",
+            "text": "$1,648.67",
+            "details": "$1,648.67",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-balance\"]"
           },
@@ -2274,121 +1451,19 @@
             "text": "Delete",
             "details": "Delete",
             "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-KtPcRvTYDCm\"] > div > div:nth-of-type(2) > button > span:nth-of-type(1)"
+            "locator": "button[data-test=\"bankaccount-delete\"] > span:nth-of-type(1)"
           },
           {
             "text": "",
             "details": "",
             "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-KtPcRvTYDCm\"] > div > div:nth-of-type(2) > button > span:nth-of-type(2)"
+            "locator": "button[data-test=\"bankaccount-delete\"] > span:nth-of-type(2)"
           },
           {
-            "text": "Delete",
-            "details": "Delete",
+            "text": "Spinka Inc Bank ",
+            "details": "Spinka Inc Bank",
             "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-A2dpILrDn\"] > div > div:nth-of-type(2) > button > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-A2dpILrDn\"] > div > div:nth-of-type(2) > button > span:nth-of-type(2)"
-          },
-          {
-            "text": "Delete",
-            "details": "Delete",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-pjY1ZJsdn\"] > div > div:nth-of-type(2) > button > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-pjY1ZJsdn\"] > div > div:nth-of-type(2) > button > span:nth-of-type(2)"
-          },
-          {
-            "text": "Delete",
-            "details": "Delete",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-dIlMuAtEk\"] > div > div:nth-of-type(2) > button > span:nth-of-type(1)"
-          },
-          {
-            "text": "",
-            "details": "",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-dIlMuAtEk\"] > div > div:nth-of-type(2) > button > span:nth-of-type(2)"
-          },
-          {
-            "text": "Dickinson - Goodwin Bank ",
-            "details": "Dickinson - Goodwin Bank",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-KtPcRvTYDCm\"] > div > div:nth-of-type(1) > p"
-          },
-          {
-            "text": "Revolut-Loop-717707 (Deleted)",
-            "details": "Revolut-Loop-717707 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-oiIFZ3sWV\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-762771 (Deleted)",
-            "details": "Revolut-Loop-762771 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-mKy4Vil-e\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-122850 (Deleted)",
-            "details": "Revolut-Loop-122850 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-HpYKg1GkN\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-40231 (Deleted)",
-            "details": "Revolut-Loop-40231 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-iNLVvVnvk\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-725117 (Deleted)",
-            "details": "Revolut-Loop-725117 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-JGAYRlqQ6\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-664548 (Deleted)",
-            "details": "Revolut-Loop-664548 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-SouHruaMR\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-845803 (Deleted)",
-            "details": "Revolut-Loop-845803 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-EXhQfLazU\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-972411 (Deleted)",
-            "details": "Revolut-Loop-972411 (Deleted)",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-HI-9eZWtF\"] > div > div > p"
-          },
-          {
-            "text": "Revolut-Loop-450223 ",
-            "details": "Revolut-Loop-450223",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-A2dpILrDn\"] > div > div:nth-of-type(1) > p"
-          },
-          {
-            "text": "Revolut-Loop-369686 ",
-            "details": "Revolut-Loop-369686",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-pjY1ZJsdn\"] > div > div:nth-of-type(1) > p"
-          },
-          {
-            "text": "Revolut-Loop-626726 ",
-            "details": "Revolut-Loop-626726",
-            "type": null,
-            "locator": "li[data-test=\"bankaccount-list-item-dIlMuAtEk\"] > div > div:nth-of-type(1) > p"
+            "locator": "p.MuiTypography-body1"
           },
           {
             "text": "Built by",
@@ -2437,19 +1512,7 @@
           },
           {
             "text": "Delete",
-            "locator": "li[data-test=\"bankaccount-list-item-KtPcRvTYDCm\"] > div > div:nth-of-type(2) > button"
-          },
-          {
-            "text": "Delete",
-            "locator": "li[data-test=\"bankaccount-list-item-A2dpILrDn\"] > div > div:nth-of-type(2) > button"
-          },
-          {
-            "text": "Delete",
-            "locator": "li[data-test=\"bankaccount-list-item-pjY1ZJsdn\"] > div > div:nth-of-type(2) > button"
-          },
-          {
-            "text": "Delete",
-            "locator": "li[data-test=\"bankaccount-list-item-dIlMuAtEk\"] > div > div:nth-of-type(2) > button"
+            "locator": "button[data-test=\"bankaccount-delete\"]"
           },
           {
             "text": "",
@@ -2465,7 +1528,7 @@
         ]
       }
     },
-    "/bankaccounts/new": {
+    "bankaccounts/new": {
       "items": {
         "info": [
           {
@@ -2475,20 +1538,20 @@
             "locator": "h1"
           },
           {
-            "text": "Devon B",
-            "details": "Devon B",
+            "text": "Kaylin H",
+            "details": "Kaylin H",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-full-name\"]"
           },
           {
-            "text": "@Jessyca.Kuhic",
-            "details": "@Jessyca.Kuhic",
+            "text": "@Allie2",
+            "details": "@Allie2",
             "type": null,
             "locator": "h6[data-test=\"sidenav-username\"]"
           },
           {
-            "text": "$636.69",
-            "details": "$636.69",
+            "text": "$1,648.67",
+            "details": "$1,648.67",
             "type": null,
             "locator": "h6[data-test=\"sidenav-user-balance\"]"
           },

@@ -38,7 +38,7 @@ export default function MainPanel(props: any) {
           />
           {currentNode.exitUrl !== undefined && (
             <div className="working-panel">
-              {currentNode.method && <AddMethod
+              {<AddMethod
                 exitUrl={data ? currentNode.url : currentNode.exitUrl}
                 style={{ width: panelWidth, minWidth: panelWidth }}
                 title={data?.method ? 'Edit Method Execution' : 'Add Method'}

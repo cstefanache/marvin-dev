@@ -13,7 +13,7 @@ interface Props {
 
 export default function CustomTextField(props: Props) {
   const { property, value, onChange } = props;
-  const { type, title, error, isRequired, readOnly, inputType } = property;
+  const { type, title, description, error, isRequired, readOnly, inputType } = property;
 
   const handleChange = (event: any) => {
     if (type === 'integer') {
@@ -26,6 +26,7 @@ export default function CustomTextField(props: Props) {
   return readOnly ? 
       (<p className="disabled-text"><strong>{title}:</strong> {value}</p>) : 
       (<FormGroup helperText={error} label={title} inline={false} labelInfo={isRequired && "(required)"} className="form-group">
+        {description && (<p className="description">{description}</p>)}
         {type === 'string' && (
           <InputGroup
             value={value ? `${value}` : undefined}

@@ -1,0 +1,533 @@
+{
+  "actions": {
+    "signin": [
+      {
+        "method": "Login",
+        "sequence": [
+          {
+            "uid": "7a975ffa-0bed-4d8e-b5ec-34791ea6682e",
+            "locator": "input#username",
+            "details": " ",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "653fc369-1ee6-467d-804d-614ccf6ece54",
+            "locator": "input#password",
+            "details": " ",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "60b6c7df-fe6f-4774-86e3-42f6890e60d0",
+            "locator": "button",
+            "details": "Sign In ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "": [
+      {
+        "method": "Go to Ne Transaction screen",
+        "sequence": [
+          {
+            "uid": "828a3dd4-381f-4985-9ea4-44ce7f3fcd6e",
+            "locator": "a[data-test=\"nav-top-new-transaction\"]",
+            "details": " New ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "See transaction details",
+        "sequence": [
+          {
+            "uid": "8b18dbfe-a45d-4c76-b3df-5ce380b623cc",
+            "locator": "p.MuiTypography-body2",
+            "details": "Payment-440579 Transaction Iterator",
+            "type": "click"
+          }
+        ],
+        "iterator": {
+          "name": "Transaction Iterator",
+          "identifier": ".MuiTypography-body2",
+          "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
+        }
+      },
+      {
+        "method": "Go To Bank Accounts",
+        "sequence": [
+          {
+            "uid": "3d67c1b2-966a-418a-bee8-e9f8e645ca2a",
+            "locator": "a[data-test=\"sidenav-bankaccounts\"]",
+            "details": "Bank Accounts ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Logout",
+        "sequence": [
+          {
+            "uid": "69bfcf8c-3cc2-4f93-a32c-bc6a24005185",
+            "locator": "div[aria-disabled=\"false\"] > div:nth-of-type(2) > span",
+            "details": "Logout Logout",
+            "type": "check"
+          }
+        ]
+      },
+      {
+        "method": "Go To Notifications",
+        "sequence": [
+          {
+            "uid": "763ae599-cc72-4df3-8ddd-d77654f348e1",
+            "locator": "a[data-test=\"sidenav-notifications\"]",
+            "details": "Notifications ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Date: All Button",
+        "sequence": [
+          {
+            "uid": "7165f530-9d39-4060-a380-8f5e10e84785",
+            "locator": "div[data-test=\"transaction-list-filter-date-range-button\"] > span:nth-of-type(1)",
+            "details": "Date: ALL Date: ALL",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Click on Amount",
+        "sequence": [
+          {
+            "uid": "cfe8b196-56e7-4170-b485-2edc1a51acbc",
+            "locator": "div[data-test=\"transaction-list-filter-amount-range-button\"] > span:nth-of-type(1)",
+            "details": "Amount: $0 - $1,000 Amount: $0 - $1,000",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Clear",
+        "sequence": [
+          {
+            "uid": "5a016abe-02ba-4177-8d31-636bbb09e7b3",
+            "locator": "button[data-test=\"transaction-list-filter-amount-clear-button\"]",
+            "details": "Clear ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "transaction/new": [
+      {
+        "method": "Select Contact",
+        "sequence": [
+          {
+            "uid": "84b33d4c-d000-4182-bf0c-c971ac7268d6",
+            "locator": "li[data-test=\"user-list-item-t45AiwidW\"] > div:nth-of-type(2) > span",
+            "details": "Edgar Johns Edgar Johns",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Select Contact (generic)",
+        "sequence": [
+          {
+            "uid": "137dd38a-eed6-4d36-99f1-9a865fe596c4",
+            "locator": "span.MuiTypography-root",
+            "details": "Edgar Johns Contact Iterator",
+            "type": "click"
+          }
+        ],
+        "iterator": {
+          "name": "Contact Iterator",
+          "identifier": ".MuiTypography-body1",
+          "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
+        }
+      },
+      {
+        "method": "Create payment",
+        "sequence": [
+          {
+            "uid": "d75898f3-8ba2-43ca-8062-7f7ceabf4110",
+            "locator": "input#amount",
+            "details": " Amount",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "9f322e2d-246a-4715-9f61-f138359f4e4f",
+            "locator": "input#transaction-create-description-input",
+            "details": " Add a note",
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "note"
+          },
+          {
+            "uid": "a819c723-39c0-446b-899d-a6e86383dfad",
+            "locator": "button[data-test=\"transaction-create-submit-payment\"]",
+            "details": "Pay ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Back to Transactions",
+        "sequence": [
+          {
+            "uid": "81745846-e1b6-4285-bfa1-9921c3686da2",
+            "locator": "a[data-test=\"new-transaction-return-to-transactions\"]",
+            "details": "Return To Transactions ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "transaction/krCl7-EnC": [
+      {
+        "method": "Check Details",
+        "sequence": [
+          {
+            "uid": "cb58c3d5-1ba7-49f5-82c4-1dca51492ad1",
+            "locator": "h2",
+            "details": "Transaction Detail Transaction Detail",
+            "type": "check"
+          }
+        ]
+      }
+    ],
+    "transaction/{transactionId}": [
+      {
+        "method": "Check Result (second)",
+        "sequence": [
+          {
+            "uid": "9ef33ed0-f8d3-42c7-a421-f1cc01f9993c",
+            "locator": "h2",
+            "details": "Transaction Detail Transaction Detail",
+            "type": "check"
+          }
+        ]
+      }
+    ],
+    "bankaccounts": [
+      {
+        "method": "Click Creat btn",
+        "sequence": [
+          {
+            "uid": "a44f020e-0db9-4079-b5a8-d1c523b80086",
+            "locator": "a[data-test=\"bankaccount-new\"]",
+            "details": "Create ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Bank Accounts Page Check",
+        "sequence": [
+          {
+            "uid": "c4448e1e-838a-4e9e-a984-6da279df45c6",
+            "locator": "h2",
+            "details": "Bank Accounts Bank Accounts",
+            "type": "check"
+          },
+          {
+            "uid": "d6518bc5-0561-4365-83cd-4b6cfa41873f",
+            "locator": "p.MuiTypography-body1",
+            "details": "Spinka Inc Bank  Spinka Inc Bank",
+            "type": "check"
+          },
+          {
+            "uid": "c2441405-71ab-4c4e-8a79-a280f91521d8",
+            "locator": "a[data-test=\"bankaccount-new\"] > span:nth-of-type(1)",
+            "details": "Create Create",
+            "type": "check"
+          },
+          {
+            "uid": "4a556fa1-0054-4550-8b08-f3393dd9da18",
+            "locator": "button[data-test=\"bankaccount-delete\"] > span:nth-of-type(1)",
+            "details": "Delete Delete",
+            "type": "check"
+          }
+        ]
+      }
+    ],
+    "bankaccounts/new": [
+      {
+        "method": "Create Bank account",
+        "sequence": [
+          {
+            "uid": "dff7515c-35fa-4069-a6de-3e554bab2339",
+            "locator": "input#bankaccount-bankName-input",
+            "details": " Bank Name",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "fe297182-ce65-4b8b-911c-446be79587b8",
+            "locator": "input#bankaccount-routingNumber-input",
+            "details": " Routing Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "74081dcb-0c6d-475b-91ab-5b0554f62896",
+            "locator": "input#bankaccount-accountNumber-input",
+            "details": " Account Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "e60e440a-524a-4bfb-a235-118827626137",
+            "locator": "button[type=\"submit\"]",
+            "details": "Save ",
+            "type": "click"
+          }
+        ]
+      },
+      {
+        "method": "Logout",
+        "sequence": [
+          {
+            "uid": "b635feba-c0be-4d6c-8081-779471a8c64a",
+            "locator": "div[tabindex=\"0\"] > div:nth-of-type(2) > span",
+            "details": "Logout Logout",
+            "type": "check"
+          }
+        ]
+      },
+      {
+        "method": "Create Bank Account with store",
+        "sequence": [
+          {
+            "uid": "664a007f-7d98-4d55-af87-8bb088751e1f",
+            "locator": "input#bankaccount-bankName-input",
+            "details": " Bank Name",
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "bankName"
+          },
+          {
+            "uid": "06b37e6f-028f-4250-9bbd-3dd8eb64dfd1",
+            "locator": "input#bankaccount-routingNumber-input",
+            "details": " Routing Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "5655795c-6cf0-4d23-bc64-82eef640a47b",
+            "locator": "input#bankaccount-accountNumber-input",
+            "details": " Account Number",
+            "type": "clearAndFill"
+          }
+        ]
+      },
+      {
+        "method": "Create Bank Account memory store",
+        "sequence": [
+          {
+            "uid": "5b0191ea-fc4f-46ef-b45e-7a85b5ec784f",
+            "locator": "input#bankaccount-bankName-input",
+            "details": " Bank Name",
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "bankName"
+          },
+          {
+            "uid": "1ff77245-5361-4d96-900c-46534abf310b",
+            "locator": "input#bankaccount-routingNumber-input",
+            "details": " Routing Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "b61702a1-ee5f-4447-b845-7a7fd6e9d517",
+            "locator": "input#bankaccount-accountNumber-input",
+            "details": " Account Number",
+            "type": "clearAndFill"
+          },
+          {
+            "uid": "248608f2-ba2c-4331-813a-3791cacc86ac",
+            "locator": "button[type=\"submit\"]",
+            "details": "Save ",
+            "type": "click"
+          }
+        ]
+      }
+    ],
+    "notifications": [
+      {
+        "method": "Click on Dismiss",
+        "sequence": [
+          {
+            "uid": "41704326-bd09-4ad4-ae3f-eef100c08716",
+            "locator": "button[data-test=\"notification-mark-read-mAaCKAb0SJeJ\"]",
+            "details": "Dismiss ",
+            "type": "click"
+          }
+        ]
+      }
+    ]
+  },
+  "graph": [
+    {
+      "id": "fa785627-d343-42c2-8bfb-dcf253c2d747",
+      "sequenceStep": "Marvin2",
+      "children": [
+        {
+          "id": "ae2e10cd-c943-4ff5-b82e-4f7065e08fab",
+          "method": "Login",
+          "sequenceStep": "Exec: Login",
+          "loop": 1,
+          "methodLoop": 1,
+          "parameters": {
+            "7a975ffa-0bed-4d8e-b5ec-34791ea6682e": "Allie2",
+            "653fc369-1ee6-467d-804d-614ccf6ece54": "s3cret"
+          },
+          "children": [
+            {
+              "id": "90b8cc3e-b346-4fdf-b4cf-d57a11d4c170",
+              "sequenceStep": "Notifications",
+              "children": [
+                {
+                  "id": "a3e8fd1e-1b67-4734-b88f-23229805590d",
+                  "method": "Go To Notifications",
+                  "sequenceStep": "Exec: Go To Notifications 1",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "37ef4f9a-5aef-4a9b-807b-3671b536d93b",
+                      "method": "Click on Dismiss",
+                      "sequenceStep": "Exec: Click on Dismiss 1",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [],
+                      "url": "notifications",
+                      "exitUrl": "notifications"
+                    }
+                  ],
+                  "url": "",
+                  "exitUrl": "notifications"
+                },
+                {
+                  "id": "461db779-aa32-4082-ad28-5668d4f3db69",
+                  "method": "Go To Notifications",
+                  "sequenceStep": "Go To Notifications Second 2",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "748a98d4-4315-49b4-848c-66101c963738",
+                      "method": "Click on Dismiss",
+                      "sequenceStep": "Dismiss Notification 1",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [],
+                      "url": "notifications",
+                      "exitUrl": "notifications"
+                    }
+                  ],
+                  "url": "",
+                  "exitUrl": "notifications"
+                },
+                {
+                  "id": "f2433c60-f38d-4b82-8479-6e66fa36845f",
+                  "sequenceStep": "SubFolderNotif",
+                  "children": [
+                    {
+                      "id": "68e620d6-4f79-48d6-9779-4d41a4acc5fd",
+                      "method": "Date: All Button",
+                      "sequenceStep": "Exec: Date: All Button",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [],
+                      "url": "",
+                      "exitUrl": ""
+                    },
+                    {
+                      "id": "5fc047c1-3fd1-4dbe-81f6-56efb8cdf68d",
+                      "method": "Click on Amount",
+                      "sequenceStep": "Exec: Click on Amount",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "children": [
+                        {
+                          "id": "3bdfa536-4bac-4918-b56d-b4f34ec6023b",
+                          "method": "Date: All Button",
+                          "sequenceStep": "Exec: Date: All Button",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "children": [],
+                          "url": "",
+                          "exitUrl": ""
+                        }
+                      ],
+                      "url": "",
+                      "exitUrl": ""
+                    }
+                  ],
+                  "url": "",
+                  "exitUrl": ""
+                }
+              ],
+              "url": "",
+              "exitUrl": ""
+            },
+            {
+              "id": "56eb1ca9-0ed7-45c3-bdd7-3c8522213116",
+              "sequenceStep": "Bank Accounts",
+              "children": [
+                {
+                  "id": "d36823e9-73a5-4db8-86bb-261c214d9026",
+                  "method": "Go To Bank Accounts",
+                  "sequenceStep": "Exec: Go To Bank Accounts",
+                  "loop": 1,
+                  "methodLoop": 1,
+                  "children": [
+                    {
+                      "id": "42dd02a6-11c8-4883-808d-d4899881e0d7",
+                      "method": "Bank Accounts Page Check",
+                      "sequenceStep": "Exec: Bank Accounts Page Check",
+                      "loop": 1,
+                      "methodLoop": 1,
+                      "parameters": {
+                        "c4448e1e-838a-4e9e-a984-6da279df45c6": "Bank Accounts",
+                        "d6518bc5-0561-4365-83cd-4b6cfa41873f": "Spinka Inc Bank",
+                        "c2441405-71ab-4c4e-8a79-a280f91521d8": "Create",
+                        "4a556fa1-0054-4550-8b08-f3393dd9da18": "Delete"
+                      },
+                      "children": [
+                        {
+                          "id": "af33c4b9-d75c-44fb-aef5-1be1dbf63777",
+                          "method": "Create Bank Account memory store",
+                          "sequenceStep": "Exec: Create Bank Account memory store",
+                          "loop": 1,
+                          "methodLoop": 1,
+                          "parameters": {
+                            "5b0191ea-fc4f-46ef-b45e-7a85b5ec784f": "Revolut Test",
+                            "1ff77245-5361-4d96-900c-46534abf310b": "123456789",
+                            "b61702a1-ee5f-4447-b845-7a7fd6e9d517": "123456789"
+                          },
+                          "children": [],
+                          "url": "bankaccounts/new",
+                          "exitUrl": "bankaccounts"
+                        }
+                      ],
+                      "url": "bankaccounts",
+                      "exitUrl": "bankaccounts/new"
+                    }
+                  ],
+                  "url": "",
+                  "exitUrl": "bankaccounts"
+                }
+              ],
+              "url": "",
+              "exitUrl": ""
+            }
+          ],
+          "url": "signin",
+          "exitUrl": ""
+        }
+      ],
+      "url": "signin",
+      "exitUrl": "signin"
+    }
+  ]
+}

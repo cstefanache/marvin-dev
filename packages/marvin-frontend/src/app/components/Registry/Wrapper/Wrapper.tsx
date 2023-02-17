@@ -92,6 +92,7 @@ export function SelectMethodCustomWrapper({
   if (
     inputType === undefined ||
     inputType === 'fill' ||
+    inputType === 'check' ||
     inputType === 'clearAndFill' ||
     inputType === 'store'
   ) {

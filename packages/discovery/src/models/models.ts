@@ -43,11 +43,14 @@ export type ActionItem = {
   parameters?: { [key: string]: string };
   children: ActionItem[];
   exitUrl?: string;
+  fullUrl?: string;
 };
 
 export type Sequence = {
   type: string;
   uid: string;
+  store?: boolean;
+  storeName?: string;
   locator: string;
 };
 
