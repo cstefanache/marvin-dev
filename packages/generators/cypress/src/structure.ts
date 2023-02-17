@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { log } from '../../../discovery/src/utils/logger';
 import { ActionItem, FlowModel } from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
+import { camelCase } from 'lodash';
 import {
   NewFlowModel,
   Functionality,
@@ -52,6 +53,10 @@ export default class Structure {
       .replace(new RegExp('[ :/\\\\]', 'g'), '-');
   }
 
+  private toCamelCase(str: String) {
+    return camelCase(str);
+  }
+
   private getTest(actionItem: ActionItem): Test {
     let paramValuesQueue: string[] = [];
 
@@ -61,9 +66,9 @@ export default class Structure {
       }
     }
     return {
-      name: this.formatName(actionItem.sequenceStep),
+      name: this.toCamelCase(actionItem.sequenceStep),
       method: {
-        name: this.formatName(actionItem.method),
+        name: this.toCamelCase(actionItem.method),
         paramValues: [...paramValuesQueue],
       },
     };
@@ -106,7 +111,7 @@ export default class Structure {
           group: currentLastGroupName,
           specs: [
             {
-              file: this.formatName(actionItem.sequenceStep) + '.spec.cy.ts',
+              file: this.toCamelCase(actionItem.sequenceStep) + '.spec.cy.js',
               //variables: [],
               beforeAll: parentTests,
               tests: currentTests,
@@ -125,7 +130,7 @@ export default class Structure {
         key:
           step.details.trim() === ''
             ? this.formatName(step.locator)
-            : this.formatName(step.details),
+            : this.toCamelCase(step.details),
         value: step.locator,
       });
     }
@@ -138,7 +143,7 @@ export default class Structure {
     for (const key of Object.keys(actions)) {
       for (const action of actions[key]) {
         selectors.push({
-          file: this.formatName(action.method) + '.po.ts',
+          file: this.toCamelCase(action.method) + '.po.js',
           selectors: [...this.getSelectorIdentifiers(action.sequence)],
         });
       }
@@ -154,7 +159,7 @@ export default class Structure {
           key:
             step.details.trim() === ''
               ? this.formatName(step.locator)
-              : this.formatName(step.details),
+              : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
         },
@@ -177,12 +182,12 @@ export default class Structure {
               key:
                 step.details.trim() === ''
                   ? this.formatName(step.locator)
-                  : this.formatName(step.details),
+                  : this.toCamelCase(step.details),
               storeName: step.storeName ? step.storeName : null,
             })
           : params.push({
               key: step.details
-                ? this.formatName(step.details)
+                ? this.toCamelCase(step.details)
                 : this.formatName(step.locator),
             });
       }
@@ -196,9 +201,9 @@ export default class Structure {
     for (const key of Object.keys(actions)) {
       for (const action of actions[key]) {
         commands.push({
-          file: this.formatName(action.method) + '.commands.ts',
+          file: this.toCamelCase(action.method) + '.commands.js',
           method: {
-            name: this.formatName(action.method),
+            name: this.toCamelCase(action.method),
             parameters: [...this.getParameters(action.sequence)],
             hasStore: this.getStoreFlagValue(action.sequence),
             body: [...this.getBodyDefinitions(action.sequence)],
@@ -213,35 +218,33 @@ export default class Structure {
   public generate() {
     console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
-    for (const func of this.flow.functionalities) {
-      console.log('');
-      console.log('++ Folder : ' + func.group);
-      for (const spec of func.specs) {
-        console.log('FileName: ' + spec.file);
-        console.log('Before All:');
-        for (const test of spec.beforeAll) {
-          console.log(' |- ' + test.name + `(${test.method.name})`);
-          console.log(test.method);
-        }
-        console.log('');
-        console.log('Tests:');
-        for (const test of spec.tests) {
-          console.log(' |- ' + test.name + `(${test.method.name})`);
-          console.log(test.method);
-        }
-      }
-    }
-
+    // for (const func of this.flow.functionalities) {
+    //   console.log('');
+    //   console.log('++ Folder : ' + func.group);
+    //   for (const spec of func.specs) {
+    //     console.log('FileName: ' + spec.file);
+    //     console.log('Before All:');
+    //     for (const test of spec.beforeAll) {
+    //       console.log(' |- ' + test.name + `(${test.method.name})`);
+    //       console.log(test.method);
+    //     }
+    //     console.log('');
+    //     console.log('Tests:');
+    //     for (const test of spec.tests) {
+    //       console.log(' |- ' + test.name + `(${test.method.name})`);
+    //       console.log(test.method);
+    //     }
+    //   }
+    // }
     this.flow.selectors = this.getSelectors();
-    console.log('>>>>>>>>>>>>> Selectors >>>>>>');
-    for (const selector of this.flow.selectors) {
-      console.log(selector);
-    }
-
+    // console.log('>>>>>>>>>>>>> Selectors >>>>>>');
+    // for (const selector of this.flow.selectors) {
+    //   console.log(selector);
+    // }
     this.flow.commands = this.getCommands();
-    console.log('********** Commands **********');
-    for (const command of this.flow.commands) {
-      console.log(command);
-    }
+    // console.log('********** Commands **********');
+    // for (const command of this.flow.commands) {
+    //   console.log(command);
+    // }
   }
 }
