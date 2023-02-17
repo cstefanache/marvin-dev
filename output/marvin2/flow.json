@@ -161,13 +161,9 @@
             "uid": "9f322e2d-246a-4715-9f61-f138359f4e4f",
             "locator": "input#transaction-create-description-input",
             "details": " Add a note",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "efe55669-1a9b-4432-bcda-ece186e80478",
-            "locator": "input#transaction-create-description-input",
-            "details": " Add a note",
-            "type": "store"
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "note"
           },
           {
             "uid": "a819c723-39c0-446b-899d-a6e86383dfad",
@@ -305,7 +301,9 @@
             "uid": "664a007f-7d98-4d55-af87-8bb088751e1f",
             "locator": "input#bankaccount-bankName-input",
             "details": " Bank Name",
-            "type": "clearAndFill"
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "bankName"
           },
           {
             "uid": "06b37e6f-028f-4250-9bbd-3dd8eb64dfd1",
@@ -318,12 +316,6 @@
             "locator": "input#bankaccount-accountNumber-input",
             "details": " Account Number",
             "type": "clearAndFill"
-          },
-          {
-            "uid": "668d5d8b-bf55-4f1b-9b73-89aa04935098",
-            "locator": "input#bankaccount-bankName-input",
-            "details": " Bank Name",
-            "type": "store"
           }
         ]
       },
@@ -334,7 +326,9 @@
             "uid": "5b0191ea-fc4f-46ef-b45e-7a85b5ec784f",
             "locator": "input#bankaccount-bankName-input",
             "details": " Bank Name",
-            "type": "clearAndFill"
+            "type": "clearAndFill",
+            "store": "true",
+            "storeName": "bankName"
           },
           {
             "uid": "1ff77245-5361-4d96-900c-46534abf310b",
@@ -347,12 +341,6 @@
             "locator": "input#bankaccount-accountNumber-input",
             "details": " Account Number",
             "type": "clearAndFill"
-          },
-          {
-            "uid": "b40225d9-4d5c-4069-a9eb-4caaa5a7acf3",
-            "locator": "input#bankaccount-bankName-input",
-            "details": " Bank Name",
-            "type": "store"
           },
           {
             "uid": "248608f2-ba2c-4331-813a-3791cacc86ac",
@@ -515,8 +503,7 @@
                           "parameters": {
                             "5b0191ea-fc4f-46ef-b45e-7a85b5ec784f": "Revolut Test",
                             "1ff77245-5361-4d96-900c-46534abf310b": "123456789",
-                            "b61702a1-ee5f-4447-b845-7a7fd6e9d517": "123456789",
-                            "b40225d9-4d5c-4069-a9eb-4caaa5a7acf3": "bankName"
+                            "b61702a1-ee5f-4447-b845-7a7fd6e9d517": "123456789"
                           },
                           "children": [],
                           "url": "bankaccounts/new",

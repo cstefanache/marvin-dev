@@ -11,14 +11,15 @@ export type Functionality = {
 
 export type Spec = {
   file: string;
-  variables: string[];
+  // variables: string[];
   beforeAll: Test[];
   tests: Test[];
 };
 
-export type KeyValuePair = {
+export type Identifier = {
   key: string;
-  value: string;
+  value?: string;
+  storeName?: string;
 };
 
 export type Test = {
@@ -33,7 +34,7 @@ export type MethodExecution = {
 
 export type Selector = {
   file: string;
-  identifier: KeyValuePair[];
+  selectors: Identifier[];
 };
 
 export type Command = {
@@ -43,13 +44,12 @@ export type Command = {
 
 export type MethodDefinition = {
   name: string;
-  parameters?: string[];
+  parameters?: Identifier[];
   hasStore?: boolean;
   body: BodyDefinition[];
 };
 
 export type BodyDefinition = {
-  locator: string;
-  name?: string;
+  element: Identifier;
   action: string;
 };
