@@ -1,11 +1,6 @@
 import * as fs from 'fs';
-import { log } from './utils/logger';
-import {
-  ActionItem,
-  FlowModel,
-  Actions,
-  Sequence,
-} from '../../../discovery/src/models/models';
+import { log } from '../../../discovery/src/utils/logger';
+import { ActionItem, FlowModel } from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
 import {
   NewFlowModel,
@@ -14,10 +9,7 @@ import {
   Identifier,
   BodyDefinition,
 } from './models/models';
-import { NewConfigModel } from './models/config';
-import { Action } from 'packages/discovery/src/models/config';
-import bodyParser = require('body-parser');
-
+import { ConfigModel } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
@@ -27,7 +19,7 @@ export default class Structure {
     selectors: [],
     commands: [],
   };
-  config: NewConfigModel;
+  config: ConfigModel;
 
   constructor() {
     if (fs.existsSync(`${this.inputPath}/config.json`)) {
@@ -131,7 +123,7 @@ export default class Structure {
     for (const step of sequence) {
       identifiers.push({
         key:
-          step.details === ' '
+          step.details.trim() === ''
             ? this.formatName(step.locator)
             : this.formatName(step.details),
         value: step.locator,
@@ -160,7 +152,7 @@ export default class Structure {
       definitions.push({
         element: {
           key:
-            step.details === ' '
+            step.details.trim() === ''
               ? this.formatName(step.locator)
               : this.formatName(step.details),
           value: step.locator,
@@ -173,22 +165,17 @@ export default class Structure {
   }
 
   private getStoreFlagValue(sequence: any) {
-    for (const step of sequence) {
-      if (step.store === 'true') {
-        return true;
-      }
-    }
-    return false;
+    return sequence.find((step: any) => step.store === 'true') ? true : false;
   }
 
   private getParameters(sequence: any) {
     const params: Identifier[] = [];
     for (const step of sequence) {
-      if (step.type === 'clearAndFill') {
+      if (step.type === 'clearAndFill' || step.type === 'fill') {
         step.store
           ? params.push({
               key:
-                step.details === ' '
+                step.details.trim() === ''
                   ? this.formatName(step.locator)
                   : this.formatName(step.details),
               storeName: step.storeName ? step.storeName : null,
@@ -254,7 +241,7 @@ export default class Structure {
     this.flow.commands = this.getCommands();
     console.log('********** Commands **********');
     for (const command of this.flow.commands) {
-      console.log(command.method.body);
+      console.log(command);
     }
   }
 }

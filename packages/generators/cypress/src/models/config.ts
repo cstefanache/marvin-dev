@@ -1,4 +1,4 @@
-export type NewConfigModel = {
+export type ConfigModel = {
   projectName: string;
   baseUrl: string;
   inputPath: string;

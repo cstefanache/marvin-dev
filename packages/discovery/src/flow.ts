@@ -110,7 +110,6 @@ export default class Flow {
     const { sequence } = actions[0];
 
     for (const item of sequence) {
-      0;
       const { type, locator, value } = item;
       log(`Executing ${type} on ${locator} ...`, 'blue');
       if (type === 'fill') {
