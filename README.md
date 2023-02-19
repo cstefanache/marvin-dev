@@ -17,7 +17,7 @@ TypeScript will be added as a local dependency to the project, so no need to ins
 
 ### Installation
 
-Clone this repository on your machine, then run `nmp install`.
+Clone this repository on your machine, then run `npm install`.
 
 ### Run the app
 
