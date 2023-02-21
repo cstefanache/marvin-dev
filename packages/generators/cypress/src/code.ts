@@ -1,6 +1,6 @@
 import { Config } from '@marvin/discovery';
-import { ConfigModel } from './models/config';
-import { Command, NewFlowModel } from './models/models';
+import { ConfigModel, Iterator } from './models/config';
+import { Command, NewFlowModel, BodyDefinition } from './models/models';
 import * as fs from 'fs';
 import * as process from 'process';
 import * as path from 'path';
@@ -24,27 +24,121 @@ export default class CypressCodeGenerator {
     }
   }
 
-  private generateCommands(commands: Command[]) {
+  private getIterator(iteratorName: string): Iterator {
+    return this.config.iterators.find((i) => i.name === iteratorName);
+  }
+
+  private replaceDoubleQuotes(value: string) {
+    return value.replace(/"/g, "'");
+  }
+
+  private getIteratorItemCommand(
+    iterator: Iterator,
+    value: string = '`${iteratorValue}`'
+  ): string {
+    const parent = this.replaceDoubleQuotes(iterator.parent);
+    const identifier = this.replaceDoubleQuotes(iterator.identifier);
+    const item = `"${parent} ${identifier}"`;
+    const command = `cy.contains(${item}, ${value})`;
+    return command;
+  }
+
+  private getIteratorParentCommand(iterator: Iterator): string {
+    const parent = this.replaceDoubleQuotes(iterator.parent);
+    const locator = `"${parent}"`;
+    const command = `parentsUntil(${locator})`;
+    return command;
+  }
+
+  private getIteratorCommand(bodyItem: BodyDefinition) {
+    const { element, iteratorName, action } = bodyItem;
+    const { key, value, storeName } = element;
+    const iterator: Iterator = this.getIterator(iteratorName);
+    const siblings: string[] = iterator.siblings;
+    const siblingElement: string = siblings.find((s) => s === value);
+    const commonPart: string = siblingElement
+      ? `${this.getIteratorItemCommand(
+          iterator
+        )}.${this.getIteratorParentCommand(
+          iterator
+        )}.siblings().find("${this.replaceDoubleQuotes(siblingElement)}")`
+      : undefined;
+
+    return commonPart;
+  }
+
+  private getBody(body: BodyDefinition[]) {
+    const bodyContent = body.map((b) => {
+      const { element, iteratorName, action } = b;
+      const { key, value, storeName } = element;
+
+      if (!iteratorName) {
+        if (action === 'click') {
+          return `cy.get('${value}').click();`;
+        }
+
+        if (action === 'clearAndFill' || action === 'fill') {
+          return storeName === null
+            ? `cy.get('${value}').clear().type(${key});`
+            : `cy.get('${value}').clear().type(${key});
+             store.${storeName} = ${key};`;
+        }
+
+        if (action === 'check') {
+          return `cy.get('${value}').should('have.text', ${key} || 'have.value', ${key});`;
+        }
+      } else {
+        if (action === 'click') {
+          return this.getIteratorCommand(b)
+            ? `${this.getIteratorCommand(b)}.click()`
+            : `cy.get('${value}').click();`;
+        }
+
+        if (action === 'check') {
+          return this.getIteratorCommand(b)
+            ? `${this.getIteratorCommand(
+                b
+              )}.should('have.text', ${key} || 'have.value', ${key})`
+            : `cy.get('${value}').should('have.text', ${key} || 'have.value', ${key});`;
+        }
+      }
+    });
+
+    return bodyContent;
+  }
+
+  private getParams(method: any) {
+    const { parameters, hasStore, hasIterator } = method;
+    const paramNames = parameters.map((p) => p.key);
+    let params = paramNames.length > 0 ? paramNames : [];
+    if (hasStore) {
+      return (params = [...paramNames, 'store']);
+    }
+    if (hasIterator) {
+      return (params = [...paramNames, 'iteratorValue']);
+    }
+    if (hasStore && hasIterator) {
+      return (params = [...paramNames, 'iteratorValue', 'store']);
+    }
+    return params;
+  }
+
+  private async generateCommands(commands: Command[]) {
     for (const command of commands) {
       const { file, method } = command;
       const commandFile = `${this.localFolder}/commands/${file}`;
-      const { name, parameters, hasStore, body } = method;
-      console.log('!!!!!');
-      console.log(body);
-      const paramNames = parameters.map((p) => p.key);
-      const params = hasStore ? [...paramNames, 'store'] : paramNames;
+      const { name, body } = method;
+      const params = this.getParams(method);
       const fileContent = `
 Cypress.Commands.add('${name}', (${params.join(', ')}) => {
-    ${body.map((b) => {})}            
+${this.getBody(body).join('\r\n')}            
 });
       `;
-
       fs.writeFileSync(commandFile, fileContent);
     }
   }
 
   public async generate() {
-    //your code here
     await this.generateCommands(this.flow.commands);
   }
 }

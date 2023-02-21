@@ -12,7 +12,7 @@ export type ConfigModel = {
 
 export type Iterator = {
   name: string;
-  parents: string[];
+  parent: string;
   identifier: string;
   siblings: string[];
 };

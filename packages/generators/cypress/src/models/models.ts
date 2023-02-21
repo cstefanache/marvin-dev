@@ -45,11 +45,13 @@ export type Command = {
 export type MethodDefinition = {
   name: string;
   parameters?: Identifier[];
+  hasIterator?: boolean;
   hasStore?: boolean;
   body: BodyDefinition[];
 };
 
 export type BodyDefinition = {
   element: Identifier;
+  iteratorName?: string;
   action: string;
 };

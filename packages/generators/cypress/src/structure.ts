@@ -10,7 +10,7 @@ import {
   Identifier,
   BodyDefinition,
 } from './models/models';
-import { ConfigModel } from './models/config';
+import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
@@ -20,7 +20,17 @@ export default class Structure {
     selectors: [],
     commands: [],
   };
-  config: ConfigModel;
+  config: ConfigModel = {
+    projectName: '',
+    baseUrl: '',
+    inputPath: '',
+    outputPath: '',
+    iterators: [],
+    env: [],
+    specsFolder: '',
+    selectorsFolder: '',
+    commandsFolder: '',
+  };
 
   constructor() {
     if (fs.existsSync(`${this.inputPath}/config.json`)) {
@@ -51,6 +61,14 @@ export default class Structure {
       .toLocaleLowerCase()
       .trim()
       .replace(new RegExp('[ :/\\\\]', 'g'), '-');
+  }
+
+  private getNameFromLocator(locator: string) {
+    let name = `Param${Math.random().toString(36).substr(2, 9)}`;
+    if (locator.includes('#')) {
+      name = locator.split('#')[1];
+    }
+    return name;
   }
 
   private toCamelCase(str: String) {
@@ -151,18 +169,23 @@ export default class Structure {
     return selectors;
   }
 
-  private getBodyDefinitions(sequence: any) {
-    const definitions: BodyDefinition[] = [];
+  private getIteratorFlag(action: any) {
+    return action.iterator ? true : false;
+  }
+
+  private getBodyDefinitions(sequence: any, iterator: string = undefined) {
+    const definitions: any[] = [];
     for (const step of sequence) {
       definitions.push({
         element: {
           key:
             step.details.trim() === ''
-              ? this.formatName(step.locator)
+              ? this.getNameFromLocator(step.locator)
               : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
         },
+        iteratorName: iterator,
         action: step.type,
       });
     }
@@ -176,23 +199,32 @@ export default class Structure {
   private getParameters(sequence: any) {
     const params: Identifier[] = [];
     for (const step of sequence) {
-      if (step.type === 'clearAndFill' || step.type === 'fill') {
+      if (
+        step.type === 'clearAndFill' ||
+        step.type === 'fill' ||
+        step.type === 'check'
+      ) {
         step.store
           ? params.push({
               key:
                 step.details.trim() === ''
-                  ? this.formatName(step.locator)
+                  ? this.getNameFromLocator(step.locator)
                   : this.toCamelCase(step.details),
-              storeName: step.storeName ? step.storeName : null,
+              storeName: step.storeName ? step.storeName : false,
             })
           : params.push({
-              key: step.details
-                ? this.toCamelCase(step.details)
-                : this.formatName(step.locator),
+              key:
+                step.details.trim() === ''
+                  ? this.getNameFromLocator(step.locator)
+                  : this.toCamelCase(step.details),
             });
       }
     }
     return params;
+  }
+
+  private getCommandFileName(key: string): string {
+    return key.trim() === '' ? 'rootPage' : this.toCamelCase(key);
   }
 
   private getCommands() {
@@ -205,14 +237,47 @@ export default class Structure {
           method: {
             name: this.toCamelCase(action.method),
             parameters: [...this.getParameters(action.sequence)],
+            hasIterator: this.getIteratorFlag(action),
             hasStore: this.getStoreFlagValue(action.sequence),
-            body: [...this.getBodyDefinitions(action.sequence)],
+            body: this.getIteratorFlag(action)
+              ? [
+                  ...this.getBodyDefinitions(
+                    action.sequence,
+                    action.iterator.name
+                  ),
+                ]
+              : [...this.getBodyDefinitions(action.sequence)],
           },
         });
       }
     }
-
     return commands;
+  }
+
+  private getParent(iterator: any) {
+    return iterator.selectors.join();
+  }
+
+  private getSiblings(iterator: any) {
+    const siblings: string[] = [];
+    for (const sibling of iterator.elements) {
+      siblings.push(sibling.selector);
+    }
+    return siblings;
+  }
+
+  private getIterators() {
+    const { iterators } = this.rawConfig.aliases;
+    const array: any[] = [];
+    for (const iterator of iterators) {
+      array.push({
+        name: iterator.name,
+        parent: this.getParent(iterator),
+        identifier: iterator.identifier,
+        siblings: [...this.getSiblings(iterator)],
+      });
+    }
+    return array;
   }
 
   public generate() {
@@ -244,7 +309,14 @@ export default class Structure {
     this.flow.commands = this.getCommands();
     // console.log('********** Commands **********');
     // for (const command of this.flow.commands) {
-    //   console.log(command);
+    //   console.log(command.file);
+    //   console.log(command.method);
+    // }
+
+    this.config.iterators = this.getIterators();
+    // console.log('>>>>>>>>>>>>> Iterators >>>>>>');
+    // for (const iterator of this.config.iterators) {
+    //   console.log(iterator);
     // }
   }
 }
