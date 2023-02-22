@@ -64,10 +64,11 @@ export default class Structure {
   }
 
   private getNameFromLocator(locator: string) {
-    let name: string = '';
+    let name: string = locator;
     if (locator.includes('#')) {
       name = locator.split('#')[1];
     }
+
     return name;
   }
 
