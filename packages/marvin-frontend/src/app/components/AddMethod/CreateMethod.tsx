@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './AddMethodStyles.scss';
 import {
   Button,
+  Checkbox,
   Divider,
   Icon,
   InputGroup,
@@ -102,7 +103,7 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
-  console.log(props)
+  console.log(props);
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [iterator, setIterator] = useState<any>(null);
@@ -265,9 +266,32 @@ const CreateMethod = (props: any) => {
 
                   setSequence([...sequence]);
                 }}
-                options={['check', 'click', 'clearAndFill', 'fill', 'store']}
+                options={['check', 'click', 'clearAndFill', 'fill']}
               />
               <p className="locator">{step.locator}</p>
+              <div>
+                <Checkbox
+                  checked={step.store}
+                  label="Store value"
+                  onChange={(e: any) => {
+                    step.store = e.target.checked;
+                    if (!step.store) {
+                      delete step.storeName;
+                    }
+                    setSequence([...sequence]);
+                  }}
+                />
+              </div>
+              {step.store && (
+                <InputGroup
+                  value={step.storeName}
+                  placeholder="Store variable name"
+                  onChange={(e) => {
+                    step.storeName = e.target.value;
+                    setSequence([...sequence]);
+                  }}
+                />
+              )}
               <p className="discovered-text">
                 Content at discovery time: <i>{step.details}</i>
               </p>

@@ -94,21 +94,7 @@ export default class Runner {
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
       log(`Executing sequence: [${type}]: ${locator}`);
-      if (type === 'store') {
-        const element = await page.$(locator);
-        if (element) {
-          const value = await page.evaluate(
-            (element: any) => element.getAttribute('value'),
-            element
-          );
-          const text = await element.evaluate((el: any) =>
-            el.textContent?.trim()
-          );
-          const key = parameters[uid];
-          this.store[key] = value || text;
-          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
-        }
-      } else if (
+      if (
         (type === 'fill' || type === 'clearAndFill') &&
         uid &&
         parameters[uid]
@@ -133,6 +119,25 @@ export default class Runner {
           await element.screenshot({ path: 'example.png' });
           await element.click();
           log(`Clicked on ${text}`, 'yellow');
+        }
+      }
+
+      if (sequenceItem.store) {
+        const element = await page.$(locator);
+        if (element) {
+          const value = await page.evaluate(
+            (element: any) => element.getAttribute('value'),
+            element
+          );
+          const text = await element.evaluate((el: any) =>
+            el.textContent?.trim()
+          );
+
+          log(`+++++++++++ ${value}, ${text}`)
+          // const key = parameters[uid];
+          const key = sequenceItem.storeName;
+          this.store[key] = value || text;
+          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
         }
       }
     }
