@@ -64,7 +64,7 @@ export default class Structure {
   }
 
   private getNameFromLocator(locator: string) {
-    let name = `Param${Math.random().toString(36).substr(2, 9)}`;
+    let name: string = '';
     if (locator.includes('#')) {
       name = locator.split('#')[1];
     }
