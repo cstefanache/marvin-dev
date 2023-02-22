@@ -147,7 +147,7 @@ export default class Structure {
       identifiers.push({
         key:
           step.details.trim() === ''
-            ? this.formatName(step.locator)
+            ? this.getNameFromLocator(step.locator)
             : this.toCamelCase(step.details),
         value: step.locator,
       });
