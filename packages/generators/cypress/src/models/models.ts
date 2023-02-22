@@ -39,7 +39,7 @@ export type Selector = {
 
 export type Command = {
   file: string;
-  method: MethodDefinition;
+  methods: MethodDefinition[];
 };
 
 export type MethodDefinition = {

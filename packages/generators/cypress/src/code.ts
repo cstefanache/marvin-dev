@@ -1,6 +1,11 @@
 import { Config } from '@marvin/discovery';
 import { ConfigModel, Iterator } from './models/config';
-import { Command, NewFlowModel, BodyDefinition } from './models/models';
+import {
+  Command,
+  NewFlowModel,
+  BodyDefinition,
+  MethodDefinition,
+} from './models/models';
 import * as fs from 'fs';
 import * as process from 'process';
 import * as path from 'path';
@@ -123,18 +128,25 @@ export default class CypressCodeGenerator {
     return params;
   }
 
+  private async writeMethod(commandFile: string, method: MethodDefinition) {
+    const { name, body } = method;
+    const params = this.getParams(method);
+    let fileContent: string = '';
+    fileContent = `
+      Cypress.Commands.add('${name}', (${params.join(', ')}) => {
+      ${this.getBody(body).join('\r\n')}
+          });
+                    `;
+    fs.appendFileSync(commandFile, fileContent);
+  }
+
   private async generateCommands(commands: Command[]) {
     for (const command of commands) {
-      const { file, method } = command;
+      const { file, methods } = command;
       const commandFile = `${this.localFolder}/commands/${file}`;
-      const { name, body } = method;
-      const params = this.getParams(method);
-      const fileContent = `
-Cypress.Commands.add('${name}', (${params.join(', ')}) => {
-${this.getBody(body).join('\r\n')}            
-});
-      `;
-      fs.writeFileSync(commandFile, fileContent);
+      for (const method of methods) {
+        await this.writeMethod(commandFile, method);
+      }
     }
   }
 

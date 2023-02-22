@@ -8,7 +8,7 @@ import {
   Functionality,
   Test,
   Identifier,
-  BodyDefinition,
+  MethodDefinition,
 } from './models/models';
 import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
@@ -227,29 +227,30 @@ export default class Structure {
     return key.trim() === '' ? 'rootPage' : this.toCamelCase(key);
   }
 
+  private getMethods(actions: any[]) {
+    const methods: MethodDefinition[] = [];
+    for (const action of actions) {
+      methods.push({
+        name: this.toCamelCase(action.method),
+        parameters: [...this.getParameters(action.sequence)],
+        hasIterator: this.getIteratorFlag(action),
+        hasStore: this.getStoreFlagValue(action.sequence),
+        body: this.getIteratorFlag(action)
+          ? [...this.getBodyDefinitions(action.sequence, action.iterator.name)]
+          : [...this.getBodyDefinitions(action.sequence)],
+      });
+    }
+    return methods;
+  }
+
   private getCommands() {
     const { actions } = this.rawFlow;
     let commands: any[] = [];
     for (const key of Object.keys(actions)) {
-      for (const action of actions[key]) {
-        commands.push({
-          file: this.toCamelCase(action.method) + '.commands.js',
-          method: {
-            name: this.toCamelCase(action.method),
-            parameters: [...this.getParameters(action.sequence)],
-            hasIterator: this.getIteratorFlag(action),
-            hasStore: this.getStoreFlagValue(action.sequence),
-            body: this.getIteratorFlag(action)
-              ? [
-                  ...this.getBodyDefinitions(
-                    action.sequence,
-                    action.iterator.name
-                  ),
-                ]
-              : [...this.getBodyDefinitions(action.sequence)],
-          },
-        });
-      }
+      commands.push({
+        file: this.getCommandFileName(key) + '.js',
+        methods: [...this.getMethods(actions[key])],
+      });
     }
     return commands;
   }
@@ -310,7 +311,9 @@ export default class Structure {
     // console.log('********** Commands **********');
     // for (const command of this.flow.commands) {
     //   console.log(command.file);
-    //   console.log(command.method);
+    //   for (const method of command.methods) {
+    //     console.log(method);
+    //   }
     // }
 
     this.config.iterators = this.getIterators();
