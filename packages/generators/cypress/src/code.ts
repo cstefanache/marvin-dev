@@ -171,6 +171,8 @@ export default class CypressCodeGenerator {
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
+      const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+      fs.appendFileSync(e2eFile, `import './commands/${file}';`);
       let importLocation: string = this.getRelativePath(
         `${this.localSupportFolder}/commands`,
         `${this.localSupportFolder}/app.po.ts`
