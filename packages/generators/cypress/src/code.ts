@@ -95,6 +95,14 @@ export default class CypressCodeGenerator {
     return commonPart;
   }
 
+  private getCheckTextCommand(key: string) {
+    return `  cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((text) => {
+      text.trim() === ''
+        ? cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key})
+        : cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.value', ${key});
+    });`;
+  }
+
   private getBody(body: BodyDefinition[]) {
     const bodyContent = body.map((b) => {
       const { element, iteratorName, action } = b;
@@ -113,7 +121,7 @@ export default class CypressCodeGenerator {
         }
 
         if (action === 'check') {
-          return `cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key} || 'have.value', ${key});`;
+          return this.getCheckTextCommand(`${key}`);
         }
       } else {
         if (action === 'click') {
@@ -124,10 +132,12 @@ export default class CypressCodeGenerator {
 
         if (action === 'check') {
           return this.getIteratorCommand(b)
-            ? `${this.getIteratorCommand(
-                b
-              )}.should('have.text', ${key} || 'have.value', ${key})`
-            : `cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key} || 'have.value', ${key});`;
+            ? `${this.getIteratorCommand(b)}.invoke('val').then((text) => {
+                text.trim() === ''
+                  ? ${this.getIteratorCommand(b)}.should('have.value', ${key})
+                  : ${this.getIteratorCommand(b)}.should('have.text', ${key});
+              });`
+            : this.getCheckTextCommand(key);
         }
       }
     });
@@ -172,7 +182,11 @@ export default class CypressCodeGenerator {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
       const e2eFile = `${this.localSupportFolder}/e2e.ts`;
-      fs.appendFileSync(e2eFile, `import './commands/${file}';`);
+      fs.appendFileSync(
+        e2eFile,
+        `import './commands/${file}';
+      `
+      );
       let importLocation: string = this.getRelativePath(
         `${this.localSupportFolder}/commands`,
         `${this.localSupportFolder}/app.po.ts`
@@ -290,7 +304,7 @@ export const ${selector.key} = '${selector.value}';
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
         let startDecribeCommand = `
-         store={};
+         const store={};
         describe('${file}', () => {`;
         fs.writeFileSync(specFile, startDecribeCommand);
         let endDescribeCommand = `})`;
