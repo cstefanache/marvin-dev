@@ -14,7 +14,7 @@ import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
-  inputPath: string = 'output/marvin2';
+  inputPath: string = '/Users/ralucabrie/Desktop/CodeGen';
   flow: NewFlowModel = {
     functionalities: [],
     selectors: [],
@@ -355,5 +355,8 @@ export default class Structure {
     // }
 
     this.config.baseUrl = this.rawConfig.rootUrl;
+    this.rawConfig.aliases.store && this.rawConfig.aliases.store.length > 0
+      ? (this.config.env = this.rawConfig.aliases.store)
+      : (this.config.env = []);
   }
 }

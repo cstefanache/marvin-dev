@@ -226,7 +226,6 @@ export default class CypressCodeGenerator {
   private async getUniqueSelectors(locators: Selector[]) {
     let allSelectors: any[] = [];
     let filterDuplicateObjects: any[] = [];
-    let filterDuplicateKeys: any[] = [];
     for (const locator of locators) {
       const { selectors } = locator;
       for (const selector of selectors) {
@@ -273,12 +272,30 @@ export const ${selector.key} = '${selector.value}';
     }
   }
 
+  private getStoreCommand(params: string[]) {
+    const storeCommands: string[] = [];
+    for (const p of params) {
+      if (p.includes('${store.')) {
+        const extractVarName = p.split('store.')[1].split('}')[0];
+        for (const item of this.config.env) {
+          if (item.key === extractVarName) {
+            storeCommands.push(
+              `store.${extractVarName} = ${`'${item.value}'`};`
+            );
+          }
+        }
+      }
+    }
+    return storeCommands.join('\r\n');
+  }
+
   private getTestsBody(tests: Test[]) {
     const fileContent = tests.map((t) => {
       const { method } = t;
       const { name, paramValues } = method;
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `it('${name}', () => {
+        ${this.getStoreCommand(paramValues)}
         cy.${name}(${params});
       });`;
     });
@@ -290,7 +307,9 @@ export const ${selector.key} = '${selector.value}';
       const { method } = b;
       const { name, paramValues } = method;
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
-      return `cy.${name}(${`${params}`});`;
+      return `
+      ${this.getStoreCommand(paramValues)}
+      cy.${name}(${`${params}`});`;
     });
     return fileContent;
   }
@@ -304,7 +323,7 @@ export const ${selector.key} = '${selector.value}';
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
         let startDecribeCommand = `
-         const store={};
+         let store={};
         describe('${file}', () => {`;
         fs.writeFileSync(specFile, startDecribeCommand);
         let endDescribeCommand = `})`;
