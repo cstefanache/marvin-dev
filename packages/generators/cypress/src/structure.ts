@@ -78,8 +78,8 @@ export default class Structure {
     return camelCase(str);
   }
 
-  private getParamType(param: string) {
-    if (isNaN(parseInt(param))) {
+  private getParamType(param: any) {
+    if (isNaN(param)) {
       if (param.startsWith('$')) {
         return 'reference';
       } else {
