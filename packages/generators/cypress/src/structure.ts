@@ -67,8 +67,10 @@ export default class Structure {
     let name: string = locator;
     if (locator.includes('#')) {
       name = locator.split('#')[1];
+      if (new RegExp('(0|[1-9][0-9]*)', 'g').test(name)) {
+        name = name.replace(new RegExp('(0|[1-9][0-9]*)', 'g'), '');
+      }
     }
-
     return name;
   }
 
@@ -76,12 +78,36 @@ export default class Structure {
     return camelCase(str);
   }
 
+  private getParamType(param: string) {
+    if (isNaN(parseInt(param))) {
+      if (param.startsWith('$')) {
+        return 'reference';
+      } else {
+        return 'string';
+      }
+    } else {
+      return 'number';
+    }
+  }
+
   private getTest(actionItem: ActionItem): Test {
     let paramValuesQueue: string[] = [];
 
     if (actionItem.parameters) {
       for (const paramKey of Object.keys(actionItem.parameters)) {
-        paramValuesQueue.push(`${actionItem.parameters[paramKey]}`);
+        if (
+          this.getParamType(actionItem.parameters[paramKey]) === 'reference'
+        ) {
+          const param = `'${actionItem.parameters[paramKey]}'`;
+          paramValuesQueue.push(param.replace(new RegExp("'", 'g'), '`'));
+        }
+        if (this.getParamType(actionItem.parameters[paramKey]) === 'string') {
+          paramValuesQueue.push(`'${actionItem.parameters[paramKey]}'`);
+        }
+
+        if (this.getParamType(actionItem.parameters[paramKey]) === 'number') {
+          paramValuesQueue.push(`${actionItem.parameters[paramKey]}`);
+        }
       }
     }
     return {
@@ -115,7 +141,7 @@ export default class Structure {
       ];
       const currentLastGroupName = actionItem.method
         ? lastGroupName
-        : `${lastGroupName}/${actionItem.sequenceStep}`;
+        : `${lastGroupName}/${this.toCamelCase(actionItem.sequenceStep)}`;
 
       this.getFunctionalities(
         actionItem.children,
@@ -187,6 +213,7 @@ export default class Structure {
           storeName: step.storeName ? step.storeName : null,
         },
         iteratorName: iterator,
+        iteratorLocator: iterator ? step.locator : undefined,
         action: step.type,
       });
     }
@@ -226,6 +253,10 @@ export default class Structure {
 
   private getCommandFileName(key: string): string {
     return key.trim() === '' ? 'rootPage' : this.toCamelCase(key);
+  }
+
+  private getIteratorLocator(sequence: any[]): string {
+    return sequence[0].locator;
   }
 
   private getMethods(actions: any[]) {
@@ -322,5 +353,7 @@ export default class Structure {
     // for (const iterator of this.config.iterators) {
     //   console.log(iterator);
     // }
+
+    this.config.baseUrl = this.rawConfig.rootUrl;
   }
 }
