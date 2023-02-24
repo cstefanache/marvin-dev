@@ -6,6 +6,9 @@ import {
   BodyDefinition,
   MethodDefinition,
   Selector,
+  Functionality,
+  Test,
+  MethodExecution,
 } from './models/models';
 import * as fs from 'fs';
 import * as process from 'process';
@@ -13,24 +16,37 @@ import * as path from 'path';
 import { camelCase } from 'lodash';
 
 export default class CypressCodeGenerator {
-  private localFolder: string;
+  private localSupportFolder: string;
+  private localTestFolder: string;
   private locatorKeyWord = 'locators';
   private iteratorValueKewWord = 'iteratorValue';
   private storeKeyWord = 'store';
 
   constructor(private flow: NewFlowModel, private config: ConfigModel) {
-    this.localFolder = path.join(
+    this.localSupportFolder = path.join(
       process.cwd(),
       '/packages/sample-frontend-e2e/src/support'
     );
+    this.localTestFolder = path.join(
+      process.cwd(),
+      '/packages/sample-frontend-e2e/src/e2e'
+    );
 
-    if (fs.existsSync(this.localFolder)) {
-      fs.rmdirSync(this.localFolder, { recursive: true });
+    if (fs.existsSync(this.localSupportFolder)) {
+      fs.rmdirSync(this.localSupportFolder, { recursive: true });
     }
 
-    if (!fs.existsSync(this.localFolder)) {
-      fs.mkdirSync(this.localFolder);
-      fs.mkdirSync(`${this.localFolder}/commands`);
+    if (fs.existsSync(this.localTestFolder)) {
+      fs.rmdirSync(this.localTestFolder, { recursive: true });
+    }
+
+    if (!fs.existsSync(this.localSupportFolder)) {
+      fs.mkdirSync(this.localSupportFolder);
+      fs.mkdirSync(`${this.localSupportFolder}/commands`);
+    }
+
+    if (!fs.existsSync(this.localTestFolder)) {
+      fs.mkdirSync(this.localTestFolder);
     }
   }
 
@@ -65,20 +81,32 @@ export default class CypressCodeGenerator {
   }
 
   private getIteratorCommand(bodyItem: BodyDefinition) {
-    const { element, iteratorName, action } = bodyItem;
+    const { element, iteratorName, iteratorLocator, action } = bodyItem;
     const { key, value, storeName } = element;
     const iterator: Iterator = this.getIterator(iteratorName);
-    const siblings: string[] = iterator.siblings;
-    const siblingElement: string = siblings.find((s) => s === value);
-    const commonPart: string = siblingElement
+    const commonPart: string = iteratorLocator
       ? `${this.getIteratorItemCommand(
           iterator
         )}.${this.getIteratorParentCommand(
           iterator
-        )}.siblings().find("${this.replaceDoubleQuotes(siblingElement)}")`
+        )}.children().find("${this.replaceDoubleQuotes(iteratorLocator)}")`
       : undefined;
 
     return commonPart;
+  }
+
+  private getCheckTextCommand(key: string) {
+    return `  cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+      if (val.trim() === '') {
+        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('text').then((text) => {
+            expect(text.trim()).to.eq(${key});
+          });
+      } else {
+        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+            expect(val.trim()).to.eq(${key});
+          });
+        }
+    });`;
   }
 
   private getBody(body: BodyDefinition[]) {
@@ -99,7 +127,7 @@ export default class CypressCodeGenerator {
         }
 
         if (action === 'check') {
-          return `cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key} || 'have.value', ${key});`;
+          return this.getCheckTextCommand(`${key}`);
         }
       } else {
         if (action === 'click') {
@@ -110,10 +138,18 @@ export default class CypressCodeGenerator {
 
         if (action === 'check') {
           return this.getIteratorCommand(b)
-            ? `${this.getIteratorCommand(
-                b
-              )}.should('have.text', ${key} || 'have.value', ${key})`
-            : `cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key} || 'have.value', ${key});`;
+            ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
+              if (val.trim() === '') {
+                ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
+                    expect(text.trim()).to.eq(${key});
+                  });
+              } else {
+                ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
+                    expect(val.trim()).to.eq(${key});
+                  });
+              }
+              });`
+            : this.getCheckTextCommand(key);
         }
       }
     });
@@ -156,10 +192,16 @@ export default class CypressCodeGenerator {
   private async generateCommands(commands: Command[]) {
     for (const command of commands) {
       const { file, methods } = command;
-      const commandFile = `${this.localFolder}/commands/${file}`;
+      const commandFile = `${this.localSupportFolder}/commands/${file}`;
+      const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+      fs.appendFileSync(
+        e2eFile,
+        `import './commands/${file}';
+      `
+      );
       let importLocation: string = this.getRelativePath(
-        `${this.localFolder}/commands`,
-        `${this.localFolder}/app.po.ts`
+        `${this.localSupportFolder}/commands`,
+        `${this.localSupportFolder}/app.po.ts`
       );
       fs.writeFileSync(
         commandFile,
@@ -195,26 +237,32 @@ export default class CypressCodeGenerator {
 
   private async getUniqueSelectors(locators: Selector[]) {
     let allSelectors: any[] = [];
-    let filterDuplicates: any[] = [];
+    let filterDuplicateObjects: any[] = [];
     for (const locator of locators) {
       const { selectors } = locator;
       for (const selector of selectors) {
         allSelectors.push(selector);
       }
     }
-    filterDuplicates = allSelectors.filter(
-      (v, i, a) => a.findIndex((t) => t.key === v.key) === i
+    filterDuplicateObjects = allSelectors.filter(
+      (v, i, a) =>
+        a.findIndex((t) => t.key === v.key && t.value === v.value) === i
     );
 
-    for (const selector of filterDuplicates) {
+    for (const selector of filterDuplicateObjects) {
       selector.key = this.replaceKeyWord(selector.key);
     }
+    filterDuplicateObjects.findIndex((v, i, a) => {
+      if (a.findIndex((t) => t.key === v.key) !== i) {
+        v.key = `${v.key}${i}`;
+      }
+    });
 
-    return filterDuplicates;
+    return filterDuplicateObjects;
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localFolder}/app.po.ts`;
+    const selectorFile = `${this.localSupportFolder}/app.po.ts`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
@@ -224,10 +272,89 @@ export const ${selector.key} = '${selector.value}';
     }
   }
 
+  private createGroupFolders(group: string) {
+    const folderGroup: string = group;
+    let basePath = this.localTestFolder;
+    const folderArr: string[] = [...folderGroup.split('/')];
+    for (const folder of folderArr) {
+      if (!fs.existsSync(`${basePath}/${folder}`)) {
+        fs.mkdirSync(`${basePath}/${folder}`);
+      }
+      basePath = `${basePath}/${folder}`;
+    }
+  }
+
+  private getStoreCommand(params: string[]) {
+    const storeCommands: string[] = [];
+    for (const p of params) {
+      if (p.includes('${store.')) {
+        const extractVarName = p.split('store.')[1].split('}')[0];
+        for (const item of this.config.env) {
+          if (item.key === extractVarName) {
+            storeCommands.push(
+              `store.${extractVarName} = ${`'${item.value}'`};`
+            );
+          }
+        }
+      }
+    }
+    return storeCommands.join('\r\n');
+  }
+
+  private getTestsBody(tests: Test[]) {
+    const fileContent = tests.map((t) => {
+      const { method } = t;
+      const { name, paramValues } = method;
+      const params = paramValues.length > 0 ? paramValues.join(', ') : '';
+      return `it('${name}', () => {
+        ${this.getStoreCommand(paramValues)}
+        cy.${name}(${params});
+      });`;
+    });
+    return fileContent;
+  }
+
+  private getBeforeAllBody(beforeAll: Test[]) {
+    const fileContent = beforeAll.map((b) => {
+      const { method } = b;
+      const { name, paramValues } = method;
+      const params = paramValues.length > 0 ? paramValues.join(', ') : '';
+      return `
+      ${this.getStoreCommand(paramValues)}
+      cy.${name}(${`${params}`});`;
+    });
+    return fileContent;
+  }
+
+  private async generateFunctionalities(functionalities: Functionality[]) {
+    for (const functionality of functionalities) {
+      const { group, specs } = functionality;
+      const groupFolder = `${this.localTestFolder}${group}`;
+      this.createGroupFolders(group);
+      for (const spec of specs) {
+        const { file, beforeAll, tests } = spec;
+        const specFile = `${groupFolder}/${file}`;
+        let startDecribeCommand = `
+         let store={};
+        describe('${file}', () => {`;
+        fs.writeFileSync(specFile, startDecribeCommand);
+        let endDescribeCommand = `})`;
+        let beforeAllContent = `before( () => {
+          cy.visit('${this.config.baseUrl}');
+          ${this.getBeforeAllBody(beforeAll).join('\r\n')}
+        });`;
+        fs.appendFileSync(specFile, beforeAllContent);
+        fs.appendFileSync(specFile, this.getTestsBody(tests).join('\r\n'));
+        fs.appendFileSync(specFile, endDescribeCommand);
+      }
+    }
+  }
+
   public async generate() {
     await this.generateCommands(this.flow.commands);
     await this.generateSelectors(
       await this.getUniqueSelectors(this.flow.selectors)
     );
+    await this.generateFunctionalities(this.flow.functionalities);
   }
 }

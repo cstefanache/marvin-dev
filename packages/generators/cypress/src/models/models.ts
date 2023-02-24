@@ -53,5 +53,6 @@ export type MethodDefinition = {
 export type BodyDefinition = {
   element: Identifier;
   iteratorName?: string;
+  iteratorLocator?: string;
   action: string;
 };
