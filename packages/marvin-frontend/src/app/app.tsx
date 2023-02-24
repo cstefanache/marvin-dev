@@ -18,9 +18,13 @@ import Header from './components/Header/Header';
 import Workspaces from './pages/Workspaces/Workspaces';
 import Workspace from './pages/Workspace/Workspace';
 import Config from './pages/Configuration/Config';
+import Methods from './pages/Methods/Methods';
 
 export function App() {
   const [workspace, setWorkspace] = useState<{ name: string; path: string }>();
+  const [highlightedMethod, setHighlightedMethod] = useState<string | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -37,9 +41,14 @@ export function App() {
 
   const selectWorkspace = async (fromNew: boolean = false) => {
     const workspace = await window.electron.getWorkspace();
-    console.log(workspace)
+    console.log(workspace);
     setWorkspace(workspace);
     navigate(fromNew ? '/configuration' : '/');
+  };
+
+  const highlightMethod = (id: string) => {
+    setHighlightedMethod(id);
+    navigate('/');
   };
 
   return (
@@ -48,7 +57,14 @@ export function App() {
       <Routes>
         <Route
           path="/"
-          element={workspace && <Workspace workspace={workspace} />} // Execution Workflow aka Main Screen
+          element={
+            workspace && (
+              <Workspace
+                workspace={workspace}
+                highlightedMethod={highlightedMethod}
+              />
+            )
+          } // Execution Workflow aka Main Screen
         />
         <Route
           path="/workspaces"
@@ -57,6 +73,10 @@ export function App() {
         <Route
           path="/configuration"
           element={<Config />} // Configuration page
+        />
+        <Route
+          path="/methods"
+          element={<Methods setHighlightedMethod={highlightMethod} />}
         />
       </Routes>
     </>

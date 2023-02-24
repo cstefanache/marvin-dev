@@ -202,7 +202,6 @@ export default class Workspace {
   addBranch(id: string, branch: any): void {
     const searchInChildren = (children: any[]) => {
       for (const child of children) {
-        console.log(child.id, id);
         if (child.id === id) {
           return child;
         }
@@ -227,11 +226,64 @@ export default class Workspace {
     this.store();
   }
 
+  deleteMethod(id: string): void {
+    Object.keys(this.flow.actions).forEach((key) => {
+      this.flow.actions[key] = this.flow.actions[key].filter((item) => {
+        return item.uid !== id;
+      });
+    });
+
+    this.store();
+  }
+
   saveMethodForUrl(url: string, method: any): void {
     if (!this.flow.actions[url]) {
       this.flow.actions[url] = [];
     }
-    this.flow.actions[url].push(method);
+
+    const methodUid = method.uid || uuid.v4();
+    let methodExists = false;
+    this.flow.actions[url] = this.flow.actions[url].reduce(
+      (memo: any, item: any) => {
+        if (
+          (method.uid && item.uid === method.uid) ||
+          (!method.uid && method.method === item.method)
+        ) {
+          memo.push(method);
+          methodExists = true;
+
+          const updateWithNewMethod = (children: any[]) => {
+            for (const child of children) {
+              if (
+                (method.uid &&
+                  child.methodUid &&
+                  child.methodUid === method.uid) ||
+                ((!method.uid || !child.methodUid) &&
+                  child.method === method.method)
+              ) {
+                child.method = method.method;
+                child.methodUid = methodUid;
+              }
+              if (child.children) {
+                updateWithNewMethod(child.children);
+              }
+            }
+          };
+
+          updateWithNewMethod(this.flow.graph);
+        } else {
+          memo.push(item);
+        }
+        return memo;
+      },
+      []
+    );
+
+    method.uid = methodUid;
+    if (!methodExists) {
+      this.flow.actions[url].push(method);
+    }
+
     this.store();
   }
 

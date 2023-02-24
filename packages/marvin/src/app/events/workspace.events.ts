@@ -84,6 +84,10 @@ ipcMain.handle('set-config', (_, data) => {
   workspace.setConfig(data);
 });
 
+ipcMain.handle('delete-method', (_, id) => {
+  workspace.deleteMethod(id);
+});
+
 ipcMain.handle('cut-branch', (_, id) => {
   workspace.cutBranch(id);
 });

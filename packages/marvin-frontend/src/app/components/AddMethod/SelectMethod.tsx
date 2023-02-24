@@ -162,6 +162,7 @@ const SelectMethod = (props: any) => {
       {schema && (
         <>
           <pre>Url: {exitUrl}</pre>
+          <pre>Method: {method}</pre>
           {!propData && <Divider />}
           <SchemaForm
             schema={schema}

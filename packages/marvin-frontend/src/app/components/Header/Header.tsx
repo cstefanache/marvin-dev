@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import {
   Alignment,
   AnchorButton,
@@ -6,8 +6,8 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
-} from "@blueprintjs/core";
-import "./HeaderStyles.scss";
+} from '@blueprintjs/core';
+import './HeaderStyles.scss';
 
 interface Props {
   workspaceName?: string;
@@ -19,18 +19,37 @@ const Header = ({ workspaceName }: Props) => {
       <NavbarGroup align={Alignment.LEFT}>
         <NavbarHeading>Marvin</NavbarHeading>
         <NavLink to="/workspaces" className="menu-link">
-          <AnchorButton className="bp4-button bp4-minimal button" icon="box" text={`Workspace ${workspaceName ? `(${workspaceName})` : ''}`} />
+          <AnchorButton
+            className="bp4-button bp4-minimal button"
+            icon="box"
+            text={`Workspace ${workspaceName ? `(${workspaceName})` : ''}`}
+          />
         </NavLink>
         <NavbarDivider />
         <NavLink to="/configuration" className="menu-link">
-         <AnchorButton className="bp4-button bp4-minimal button" icon="wrench" text="Config" />
+          <AnchorButton
+            className="bp4-button bp4-minimal button"
+            icon="wrench"
+            text="Config"
+          />
+        </NavLink>
+        <NavLink to="/methods" className="menu-link">
+          <AnchorButton
+            className="bp4-button bp4-minimal button"
+            icon="code-block"
+            text="Methods"
+          />
         </NavLink>
         <NavLink to="/" className="menu-link">
-          <AnchorButton className="bp4-button bp4-minimal button" icon="layout-hierarchy" text="Execution Workflow" />
+          <AnchorButton
+            className="bp4-button bp4-minimal button"
+            icon="lab-test"
+            text="Execution Workflow"
+          />
         </NavLink>
-    </NavbarGroup>
+      </NavbarGroup>
     </Navbar>
   );
-}
+};
 
 export default Header;

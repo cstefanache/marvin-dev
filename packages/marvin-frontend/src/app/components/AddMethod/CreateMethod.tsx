@@ -1,19 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AddMethodStyles.scss';
 import {
   Button,
   Checkbox,
-  Divider,
   Icon,
   InputGroup,
   MenuItem,
-  PanelStack2,
 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import * as uuid from 'uuid';
 
-import { SchemaForm } from '@ascentcore/react-schema-form';
-import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
 import { EditableSelectionBox } from '../Common/EditableSelectionBox';
 
 import { getIcon } from '../../utils';
@@ -103,12 +99,12 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
-  console.log(props);
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
+  const [uid, setUid] = useState<string>(uuid.v4());
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -158,11 +154,21 @@ const CreateMethod = (props: any) => {
       }
     };
     asyncFn();
+
+    const { selectedMethod } = props;
+    if (selectedMethod && selectedMethod.sequence) {
+      console.log(selectedMethod);
+      const { name, uid, sequence } = selectedMethod;
+      setUid(uid);
+      setSequence(sequence);
+      setMethodName(name);
+    }
   }, []);
 
   async function doSave() {
     const saveObject: any = {
       method: methodName,
+      uid,
       sequence,
     };
     if (iterator) {
@@ -208,6 +214,7 @@ const CreateMethod = (props: any) => {
 
   return (
     <div className="create-container">
+      <div>Url: {exitUrl}</div>
       <InputGroup
         value={methodName}
         placeholder="Method name"
