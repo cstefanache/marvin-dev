@@ -287,7 +287,7 @@ export const ${selector.key} = '${selector.value}';
   private getStoreCommand(params: string[]) {
     const storeCommands: string[] = [];
     for (const p of params) {
-      if (p.includes('${store.')) {
+      if (p.includes('${store.' || '$store[')) {
         const extractVarName = p.split('store.')[1].split('}')[0];
         for (const item of this.config.env) {
           if (item.key === extractVarName) {
@@ -335,8 +335,9 @@ export const ${selector.key} = '${selector.value}';
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
         let startDecribeCommand = `
-         let store={};
-        describe('${file}', () => {`;
+        describe('${file}', () => {
+          let store={};
+          `;
         fs.writeFileSync(specFile, startDecribeCommand);
         let endDescribeCommand = `})`;
         let beforeAllContent = `before( () => {
