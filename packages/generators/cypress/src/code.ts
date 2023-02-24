@@ -89,17 +89,23 @@ export default class CypressCodeGenerator {
           iterator
         )}.${this.getIteratorParentCommand(
           iterator
-        )}.siblings().find("${this.replaceDoubleQuotes(iteratorLocator)}")`
+        )}.children().find("${this.replaceDoubleQuotes(iteratorLocator)}")`
       : undefined;
 
     return commonPart;
   }
 
   private getCheckTextCommand(key: string) {
-    return `  cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((text) => {
-      text.trim() === ''
-        ? cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.text', ${key})
-        : cy.get(${`${this.locatorKeyWord}.${key}`}).should('have.value', ${key});
+    return `  cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+      if (val.trim() === '') {
+        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('text').then((text) => {
+            expect(text.trim()).to.eq(${key});
+          });
+      } else {
+        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+            expect(val.trim()).to.eq(${key});
+          });
+        }
     });`;
   }
 
@@ -132,10 +138,16 @@ export default class CypressCodeGenerator {
 
         if (action === 'check') {
           return this.getIteratorCommand(b)
-            ? `${this.getIteratorCommand(b)}.invoke('val').then((text) => {
-                text.trim() === ''
-                  ? ${this.getIteratorCommand(b)}.should('have.value', ${key})
-                  : ${this.getIteratorCommand(b)}.should('have.text', ${key});
+            ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
+              if (val.trim() === '') {
+                ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
+                    expect(text.trim()).to.eq(${key});
+                  });
+              } else {
+                ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
+                    expect(val.trim()).to.eq(${key});
+                  });
+              }
               });`
             : this.getCheckTextCommand(key);
         }
