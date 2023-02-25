@@ -2,6 +2,21 @@
     margin-top: 2px;
 }
 
+.running-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;    
+    column-gap: 2px;
+
+
+    > * {
+        width: 50%;
+        height: calc(100vh - 50px);
+        overflow: auto;
+    }
+}
+
 .workspace-layout {
     display: flex;
     flex-direction: row;

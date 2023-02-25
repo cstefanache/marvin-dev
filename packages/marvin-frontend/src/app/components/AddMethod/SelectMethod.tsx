@@ -176,7 +176,7 @@ const SelectMethod = (props: any) => {
                   save(data);
                 } else {
                   save(
-                    { method: selectedMethod.method, ...data },
+                    { method: selectedMethod.method, methodUid: selectedMethod.uid, ...data },
                     props.parent
                   );
                 }
