@@ -221,7 +221,7 @@ export default class Structure {
   }
 
   private getStoreFlagValue(sequence: any) {
-    return sequence.find((step: any) => step.store === 'true') ? true : false;
+    return sequence.find((step: any) => step.store === true) ? true : false;
   }
 
   private getParameters(sequence: any) {
@@ -238,7 +238,7 @@ export default class Structure {
                 step.details.trim() === ''
                   ? this.getNameFromLocator(step.locator)
                   : this.toCamelCase(step.details),
-              storeName: step.storeName ? step.storeName : false,
+              storeName: step.storeName ? step.storeName : undefined,
             })
           : params.push({
               key:
