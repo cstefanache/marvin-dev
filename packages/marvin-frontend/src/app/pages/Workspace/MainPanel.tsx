@@ -3,6 +3,7 @@ import { Button, NonIdealState, Tab, Tabs } from '@blueprintjs/core';
 import Summary from './Summary';
 import { AddMethod } from '../../components/AddMethod/AddMethod';
 import DiscoveredElements from './Discovered';
+import { Log } from '../../components/Log';
 
 export default function MainPanel(props: any) {
   const { selectedElement, path, runDiscovery, save, deleteNode } = props;
@@ -32,6 +33,7 @@ export default function MainPanel(props: any) {
         <div className="main-panel">
           <Summary
             selectedElement={selectedElement}
+            run={() => runDiscovery(selectedElement)}
             addBranch={() => setData(null)}
             newFolder={handleSave}
             deleteNode={deleteNode}
@@ -63,7 +65,7 @@ export default function MainPanel(props: any) {
                         <div
                           className="image"
                           style={{
-                            backgroundImage: `url(file://${path}/screenshots/${currentNode.id}.png)`,
+                            backgroundImage: `url(file://${path}/screenshots/${currentNode.id}.png?cache=${Date.now()})`,
                             backgroundSize: 'cover',
                           }}
                         ></div>
@@ -74,6 +76,13 @@ export default function MainPanel(props: any) {
                       title="Discovered"
                       panel={
                         <DiscoveredElements exitUrl={currentNode.exitUrl} />
+                      }
+                    />
+                     <Tab
+                      id="discovery-console"
+                      title="Discovery Console"
+                      panel={
+                        <Log log="marvin:discovery" />
                       }
                     />
                   </Tabs>
