@@ -173,7 +173,7 @@ const SelectMethod = (props: any) => {
               (data) => {
                 if (data.id) {
                   delete data.children;
-                  save(data);
+                  save({...data, methodUid: selectedMethod.uid});
                 } else {
                   save(
                     { method: selectedMethod.method, methodUid: selectedMethod.uid, ...data },
