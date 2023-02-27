@@ -15,7 +15,7 @@ import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
-  inputPath: string = '/Users/ralucabrie/Desktop/CodeGen';
+  inputPath: string = '/output/marvin2';
   flow: NewFlowModel = {
     functionalities: [],
     selectors: [],
