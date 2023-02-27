@@ -49,6 +49,7 @@ export default function Selectors({ value, onChange }: Props) {
               add();
             }
           }}
+          onBlur={add}
           leftElement={<Icon icon="code" />}
           rightElement={addButton}
         />

@@ -203,7 +203,9 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
                   <div
                     key={element.id}
                     className={
-                      (highlightedMethod && highlightedMethod === (element as any).currentNode.methodUid
+                      (highlightedMethod &&
+                      highlightedMethod ===
+                        (element as any).currentNode.methodUid
                         ? 'highlight'
                         : '') +
                       ' ' +
@@ -219,7 +221,7 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
                         ? 'discovery'
                         : '')
                     }
-                    style={{ paddingLeft: 10 * (level - 1) }}
+                    style={{ paddingLeft: 5 * (level - 1) }}
                   >
                     <span {...getNodeProps()}>
                       {element.children?.length > 0 &&

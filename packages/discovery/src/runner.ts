@@ -94,7 +94,19 @@ export default class Runner {
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
       log(`Executing sequence: [${type}]: ${locator}`);
-      if (
+
+      if (type === 'check') {
+        const element = await page.$(locator);
+        const text = await element.evaluate((el) => el.textContent?.trim());
+        const value = await page.evaluate(
+          (locator) => ((document.querySelector(locator) as any).value),
+          locator
+        );
+        const valueToValidate = this.evaluateExpression(parameters[uid]);
+
+        log(`Checking ${text} | ${value} against ${valueToValidate} for (${locator})`, 'yellow');
+
+      } else if (
         (type === 'fill' || type === 'clearAndFill') &&
         uid &&
         parameters[uid]
@@ -133,7 +145,7 @@ export default class Runner {
             el.textContent?.trim()
           );
 
-          log(`+++++++++++ ${value}, ${text}`)
+          log(`+++++++++++ ${value}, ${text}`);
           // const key = parameters[uid];
           const key = sequenceItem.storeName;
           this.store[key] = value || text;

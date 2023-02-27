@@ -1,12 +1,13 @@
 // const showDiscoveredElements =
 
 import React from 'react';
+import { Log } from '../../components/Log';
 
 export default function RunningPanel(props: any) {
   const { path, loadingIds } = props;
 
   return (
-    <>
+    <div className='running-panel'>
       <div
         className="image"
         style={{
@@ -18,6 +19,7 @@ export default function RunningPanel(props: any) {
           height: '100%',
         }}
       ></div>
-    </>
+      <Log log="marvin:discovery" />
+    </div>
   );
 }

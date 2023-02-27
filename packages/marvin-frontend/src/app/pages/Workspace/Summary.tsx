@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Icon, Intent, InputGroup } from '@blueprintjs/core';
+import { Alert, Icon, Intent, InputGroup, Divider } from '@blueprintjs/core';
 
 export default function Summary(props: any) {
-  const { selectedElement, addBranch, newFolder, deleteNode } = props;
+  const { selectedElement, addBranch, newFolder, deleteNode, run } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);
   const [newFolderName, setNewFolderName] = useState<any>(null);
@@ -26,8 +26,9 @@ export default function Summary(props: any) {
           icon="folder-new"
           onClick={() => setNewFolderName('Method Group')}
         />
+        <span className="divider" />
+        <Icon icon="play" onClick={run} />
       </div>
-      <div className="summary-content">Text</div>
       <Alert
         cancelButtonText="Cancel"
         confirmButtonText="Confirm"
