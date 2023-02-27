@@ -89,7 +89,7 @@ export default class CypressCodeGenerator {
           iterator
         )}.${this.getIteratorParentCommand(
           iterator
-        )}.children().find("${this.replaceDoubleQuotes(iteratorLocator)}")`
+        )}.children("${this.replaceDoubleQuotes(iteratorLocator)}")`
       : undefined;
 
     return commonPart;
