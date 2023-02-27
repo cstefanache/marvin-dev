@@ -1,0 +1,8 @@
+export const OUTPUT_PATH = '/packages/sample-frontend-e2e/src';
+export const LOCATOR_KEY_WORD = 'locators';
+export const ITERATOR_VALUE_KEY_WORD = 'iteratorValue';
+export const STORE_KEY_WORD = 'store';
+export const CLICK_ACTION = 'click';
+export const FILL_ACTION = 'fill';
+export const CLEAR_AND_FILL_ACTION = 'clearAndFill';
+export const CHECK_ACTION = 'check';

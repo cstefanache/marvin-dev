@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import { log } from '../../../discovery/src/utils/logger';
+import * as constants from './utils/constants';
+import * as regex from './utils/regex';
 import { ActionItem, FlowModel } from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
 import { camelCase } from 'lodash';
@@ -9,7 +11,6 @@ import {
   Test,
   Identifier,
   MethodDefinition,
-  Selector,
 } from './models/models';
 import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
@@ -25,7 +26,7 @@ export default class Structure {
     projectName: '',
     baseUrl: '',
     inputPath: '',
-    outputPath: '',
+    outputPath: `${constants.OUTPUT_PATH}`,
     iterators: [],
     env: [],
     specsFolder: '',
@@ -57,19 +58,15 @@ export default class Structure {
     }
   }
 
-  private formatName(str: String) {
-    return str
-      .toLocaleLowerCase()
-      .trim()
-      .replace(new RegExp('[ :/\\\\]', 'g'), '-');
-  }
-
   private getNameFromLocator(locator: string) {
     let name: string = locator;
     if (locator.includes('#')) {
       name = locator.split('#')[1];
-      if (new RegExp('(0|[1-9][0-9]*)', 'g').test(name)) {
-        name = name.replace(new RegExp('(0|[1-9][0-9]*)', 'g'), '');
+      if (new RegExp(`${regex.STRING_STARTS_WITH_NUMBERS}`, 'g').test(name)) {
+        name = name.replace(
+          new RegExp(`${regex.STRING_STARTS_WITH_NUMBERS}`, 'g'),
+          ''
+        );
       }
     }
     return name;
@@ -314,46 +311,10 @@ export default class Structure {
   }
 
   public generate() {
-    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
-    // for (const func of this.flow.functionalities) {
-    //   console.log('');
-    //   console.log('++ Folder : ' + func.group);
-    //   for (const spec of func.specs) {
-    //     console.log('FileName: ' + spec.file);
-    //     console.log('Before All:');
-    //     for (const test of spec.beforeAll) {
-    //       console.log(' |- ' + test.name + `(${test.method.name})`);
-    //       console.log(test.method);
-    //     }
-    //     console.log('');
-    //     console.log('Tests:');
-    //     for (const test of spec.tests) {
-    //       console.log(' |- ' + test.name + `(${test.method.name})`);
-    //       console.log(test.method);
-    //     }
-    //   }
-    // }
     this.flow.selectors = this.getSelectors();
-    // console.log('>>>>>>>>>>>>> Selectors >>>>>>');
-    // for (const selector of this.flow.selectors) {
-    //   console.log(selector);
-    // }
     this.flow.commands = this.getCommands();
-    // console.log('********** Commands **********');
-    // for (const command of this.flow.commands) {
-    //   console.log(command.file);
-    //   for (const method of command.methods) {
-    //     console.log(method);
-    //   }
-    // }
-
     this.config.iterators = this.getIterators();
-    // console.log('>>>>>>>>>>>>> Iterators >>>>>>');
-    // for (const iterator of this.config.iterators) {
-    //   console.log(iterator);
-    // }
-
     this.config.baseUrl = this.rawConfig.rootUrl;
     this.rawConfig.aliases.store && this.rawConfig.aliases.store.length > 0
       ? (this.config.env = this.rawConfig.aliases.store)

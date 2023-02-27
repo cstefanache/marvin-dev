@@ -99,13 +99,15 @@ export default class Runner {
         const element = await page.$(locator);
         const text = await element.evaluate((el) => el.textContent?.trim());
         const value = await page.evaluate(
-          (locator) => ((document.querySelector(locator) as any).value),
+          (locator) => (document.querySelector(locator) as any).value,
           locator
         );
         const valueToValidate = this.evaluateExpression(parameters[uid]);
 
-        log(`Checking ${text} | ${value} against ${valueToValidate} for (${locator})`, 'yellow');
-
+        log(
+          `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
+          'yellow'
+        );
       } else if (
         (type === 'fill' || type === 'clearAndFill') &&
         uid &&
@@ -144,8 +146,6 @@ export default class Runner {
           const text = await element.evaluate((el: any) =>
             el.textContent?.trim()
           );
-
-          log(`+++++++++++ ${value}, ${text}`);
           // const key = parameters[uid];
           const key = sequenceItem.storeName;
           this.store[key] = value || text;

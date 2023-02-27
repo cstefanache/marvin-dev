@@ -1,5 +1,5 @@
-import { Config } from '@marvin/discovery';
 import { ConfigModel, Iterator } from './models/config';
+import * as constants from './utils/constants';
 import {
   Command,
   NewFlowModel,
@@ -8,27 +8,22 @@ import {
   Selector,
   Functionality,
   Test,
-  MethodExecution,
 } from './models/models';
 import * as fs from 'fs';
 import * as process from 'process';
 import * as path from 'path';
-import { camelCase } from 'lodash';
 export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
-  private locatorKeyWord = 'locators';
-  private iteratorValueKewWord = 'iteratorValue';
-  private storeKeyWord = 'store';
 
   constructor(private flow: NewFlowModel, private config: ConfigModel) {
     this.localSupportFolder = path.join(
       process.cwd(),
-      '/packages/sample-frontend-e2e/src/support'
+      `${this.config.outputPath}/support`
     );
     this.localTestFolder = path.join(
       process.cwd(),
-      '/packages/sample-frontend-e2e/src/e2e'
+      `${this.config.outputPath}/e2e`
     );
 
     if (fs.existsSync(this.localSupportFolder)) {
@@ -63,7 +58,7 @@ export default class CypressCodeGenerator {
 
   private getIteratorItemCommand(
     iterator: Iterator,
-    value: string = `${this.iteratorValueKewWord}`
+    value: string = `${constants.ITERATOR_VALUE_KEY_WORD}`
   ): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
     const identifier = this.replaceDoubleQuotes(iterator.identifier);
@@ -95,13 +90,13 @@ export default class CypressCodeGenerator {
   }
 
   private getCheckTextCommand(key: string) {
-    return `  cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('val').then((val) => {
       if (val.trim() === '') {
-        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('text').then((text) => {
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('text').then((text) => {
             expect(text.trim()).to.eq(${key});
           });
       } else {
-        cy.get(${`${this.locatorKeyWord}.${key}`}).invoke('val').then((val) => {
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('val').then((val) => {
             expect(val.trim()).to.eq(${key});
           });
         }
@@ -114,38 +109,41 @@ export default class CypressCodeGenerator {
       const { key, value, storeName } = element;
 
       if (!iteratorName) {
-        if (action === 'click') {
-          return `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+        if (action === constants.CLICK_ACTION) {
+          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
             key
           )}`}).click();`;
         }
 
-        if (action === 'clearAndFill' || action === 'fill') {
+        if (
+          action === constants.CLEAR_AND_FILL_ACTION ||
+          action === constants.FILL_ACTION
+        ) {
           return storeName === null
-            ? `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
                 key
               )}`}).clear().type(${this.replaceKeyWord(key)});`
-            : `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
                 key
               )}`}).clear().type(${this.replaceKeyWord(key)});
-             ${this.storeKeyWord}["${storeName}"] = ${this.replaceKeyWord(
-                key
-              )};`;
+             ${
+               constants.STORE_KEY_WORD
+             }["${storeName}"] = ${this.replaceKeyWord(key)};`;
         }
 
-        if (action === 'check') {
+        if (action === constants.CHECK_ACTION) {
           return this.getCheckTextCommand(`${this.replaceKeyWord(key)}`);
         }
       } else {
-        if (action === 'click') {
+        if (action === constants.CLICK_ACTION) {
           return this.getIteratorCommand(b)
             ? `${this.getIteratorCommand(b)}.click()`
-            : `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
                 key
               )}`}).click();`;
         }
 
-        if (action === 'check') {
+        if (action === constants.CHECK_ACTION) {
           return this.getIteratorCommand(b)
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
@@ -171,16 +169,16 @@ export default class CypressCodeGenerator {
     const paramNames = parameters.map((p) => p.key);
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
-      return (params = [...paramNames, this.storeKeyWord]);
+      return (params = [...paramNames, constants.STORE_KEY_WORD]);
     }
     if (hasIterator) {
-      return (params = [...paramNames, this.iteratorValueKewWord]);
+      return (params = [...paramNames, constants.ITERATOR_VALUE_KEY_WORD]);
     }
     if (hasStore && hasIterator) {
       return (params = [
         ...paramNames,
-        this.iteratorValueKewWord,
-        this.storeKeyWord,
+        constants.ITERATOR_VALUE_KEY_WORD,
+        constants.STORE_KEY_WORD,
       ]);
     }
     return params;
@@ -325,7 +323,7 @@ export const ${selector.key} = '${selector.value}';
       const { method } = t;
       let { name, paramValues } = method;
       this.getMethodDefinitionStoreFlag(name)
-        ? (paramValues = [...paramValues, `${this.storeKeyWord}`])
+        ? (paramValues = [...paramValues, `${constants.STORE_KEY_WORD}`])
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `it('${name}', () => {
@@ -352,7 +350,7 @@ export const ${selector.key} = '${selector.value}';
       const { method } = b;
       let { name, paramValues } = method;
       this.getMethodDefinitionStoreFlag(name)
-        ? (paramValues = [...paramValues, `${this.storeKeyWord}`])
+        ? (paramValues = [...paramValues, `${constants.STORE_KEY_WORD}`])
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `
