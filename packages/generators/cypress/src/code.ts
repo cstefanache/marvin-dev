@@ -123,7 +123,7 @@ export default class CypressCodeGenerator {
           return storeName === null
             ? `cy.get(${`${this.locatorKeyWord}.${key}`}).clear().type(${key});`
             : `cy.get(${`${this.locatorKeyWord}.${key}`}).clear().type(${key});
-             ${this.storeKeyWord}.${storeName} = ${key};`;
+             ${this.storeKeyWord}["${storeName}"] = ${key};`;
         }
 
         if (action === 'check') {
@@ -284,17 +284,27 @@ export const ${selector.key} = '${selector.value}';
     }
   }
 
+  private getVariableName(p: string) {
+    if (p.includes('${store.')) {
+      return p.split('store.')[1].split('}')[0];
+    }
+    if (p.includes('${store["')) {
+      return p.split('store["')[1].split('"]')[0];
+    }
+    if (p.includes("${store['")) {
+      return p.split("store['")[1].split("']")[0];
+    }
+  }
+
   private getStoreCommand(params: string[]) {
     const storeCommands: string[] = [];
     for (const p of params) {
-      if (p.includes('${store.' || '$store[')) {
-        const extractVarName = p.split('store.')[1].split('}')[0];
-        for (const item of this.config.env) {
-          if (item.key === extractVarName) {
-            storeCommands.push(
-              `store.${extractVarName} = ${`'${item.value}'`};`
-            );
-          }
+      const extractVarName = this.getVariableName(p);
+      for (const item of this.config.env) {
+        if (item.key === extractVarName) {
+          storeCommands.push(
+            `store["${extractVarName}"] = ${`'${item.value}'`};`
+          );
         }
       }
     }
@@ -304,7 +314,10 @@ export const ${selector.key} = '${selector.value}';
   private getTestsBody(tests: Test[]) {
     const fileContent = tests.map((t) => {
       const { method } = t;
-      const { name, paramValues } = method;
+      let { name, paramValues } = method;
+      this.getMethodDefinitionStoreFlag(name)
+        ? (paramValues = [...paramValues, `${this.storeKeyWord}`])
+        : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `it('${name}', () => {
         ${this.getStoreCommand(paramValues)}
@@ -314,10 +327,24 @@ export const ${selector.key} = '${selector.value}';
     return fileContent;
   }
 
+  private getMethodDefinitionStoreFlag(methodName: string) {
+    for (const command of this.flow.commands) {
+      const { methods } = command;
+      for (const method of methods) {
+        if (method.name === methodName) {
+          return method.hasStore;
+        }
+      }
+    }
+  }
+
   private getBeforeAllBody(beforeAll: Test[]) {
     const fileContent = beforeAll.map((b) => {
       const { method } = b;
-      const { name, paramValues } = method;
+      let { name, paramValues } = method;
+      this.getMethodDefinitionStoreFlag(name)
+        ? (paramValues = [...paramValues, `${this.storeKeyWord}`])
+        : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `
       ${this.getStoreCommand(paramValues)}
@@ -337,6 +364,13 @@ export const ${selector.key} = '${selector.value}';
         let startDecribeCommand = `
         describe('${file}', () => {
           let store={};
+          let library = {
+            func: {
+              random: () => {
+                return Math.floor(Math.random() * 1000);
+              },
+            },
+          };
           `;
         fs.writeFileSync(specFile, startDecribeCommand);
         let endDescribeCommand = `})`;

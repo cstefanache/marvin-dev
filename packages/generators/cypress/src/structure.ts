@@ -9,6 +9,7 @@ import {
   Test,
   Identifier,
   MethodDefinition,
+  Selector,
 } from './models/models';
 import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
@@ -80,7 +81,7 @@ export default class Structure {
 
   private getParamType(param: any) {
     if (isNaN(param)) {
-      if (param.startsWith('$')) {
+      if (param.startsWith('$') || param.includes('${library.func')) {
         return 'reference';
       } else {
         return 'string';
