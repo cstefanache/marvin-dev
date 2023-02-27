@@ -158,7 +158,6 @@ export default class Structure {
           specs: [
             {
               file: this.toCamelCase(actionItem.sequenceStep) + '.spec.cy.js',
-              //variables: [],
               beforeAll: parentTests,
               tests: currentTests,
             },

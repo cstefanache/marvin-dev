@@ -14,7 +14,6 @@ import * as fs from 'fs';
 import * as process from 'process';
 import * as path from 'path';
 import { camelCase } from 'lodash';
-
 export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
@@ -116,24 +115,34 @@ export default class CypressCodeGenerator {
 
       if (!iteratorName) {
         if (action === 'click') {
-          return `cy.get(${`${this.locatorKeyWord}.${key}`}).click();`;
+          return `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+            key
+          )}`}).click();`;
         }
 
         if (action === 'clearAndFill' || action === 'fill') {
           return storeName === null
-            ? `cy.get(${`${this.locatorKeyWord}.${key}`}).clear().type(${key});`
-            : `cy.get(${`${this.locatorKeyWord}.${key}`}).clear().type(${key});
-             ${this.storeKeyWord}["${storeName}"] = ${key};`;
+            ? `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+                key
+              )}`}).clear().type(${this.replaceKeyWord(key)});`
+            : `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+                key
+              )}`}).clear().type(${this.replaceKeyWord(key)});
+             ${this.storeKeyWord}["${storeName}"] = ${this.replaceKeyWord(
+                key
+              )};`;
         }
 
         if (action === 'check') {
-          return this.getCheckTextCommand(`${key}`);
+          return this.getCheckTextCommand(`${this.replaceKeyWord(key)}`);
         }
       } else {
         if (action === 'click') {
           return this.getIteratorCommand(b)
             ? `${this.getIteratorCommand(b)}.click()`
-            : `cy.get(${`${this.locatorKeyWord}.${key}`}).click();`;
+            : `cy.get(${`${this.locatorKeyWord}.${this.replaceKeyWord(
+                key
+              )}`}).click();`;
         }
 
         if (action === 'check') {
@@ -141,15 +150,15 @@ export default class CypressCodeGenerator {
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim()).to.eq(${key});
+                    expect(text.trim()).to.eq(${this.replaceKeyWord(key)});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim()).to.eq(${key});
+                    expect(val.trim()).to.eq(${this.replaceKeyWord(key)});
                   });
               }
               });`
-            : this.getCheckTextCommand(key);
+            : this.getCheckTextCommand(this.replaceKeyWord(key));
         }
       }
     });
@@ -228,7 +237,7 @@ export default class CypressCodeGenerator {
     ];
     for (const k of keyWords) {
       if (sel.includes(k)) {
-        sel = selector.replace(k, camelCase(`${k} ${k}`));
+        sel = `_${selector}`;
         break;
       }
     }
@@ -254,7 +263,7 @@ export default class CypressCodeGenerator {
     }
     filterDuplicateObjects.findIndex((v, i, a) => {
       if (a.findIndex((t) => t.key === v.key) !== i) {
-        v.key = `${v.key}${i}`;
+        v.key = `_${v.key}`;
       }
     });
 
@@ -386,10 +395,10 @@ export const ${selector.key} = '${selector.value}';
   }
 
   public async generate() {
-    await this.generateCommands(this.flow.commands);
     await this.generateSelectors(
       await this.getUniqueSelectors(this.flow.selectors)
     );
+    await this.generateCommands(this.flow.commands);
     await this.generateFunctionalities(this.flow.functionalities);
   }
 }
