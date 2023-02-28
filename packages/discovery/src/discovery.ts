@@ -390,7 +390,7 @@ export default class Discovery {
           iteratorItem.selectors.join(', ')
         );
         log(
-          `Elements found for for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
+          `Elements found for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
         );
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
@@ -417,7 +417,7 @@ export default class Discovery {
 
                 elements.push({
                   text,
-                  locator: await getLocatorForElement(
+                  locator: iteratorElements.length > 1 ? await getLocatorForElement(
                     {
                       name: iteratorElement.name,
                       skipOptimizer: iteratorElement.skipOptimizer || false,
@@ -426,7 +426,7 @@ export default class Discovery {
                     index,
                     childElement,
                     element
-                  ),
+                  ) : iteratorElement.selector,
                 });
               }
             }

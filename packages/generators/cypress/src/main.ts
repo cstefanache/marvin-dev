@@ -1,7 +1,11 @@
 import Structure from './structure';
-import { FlowModel } from '../../../discovery/src/models/models';
-import { Config } from '@marvin/discovery';
+import CypressCodeGenerator from './code';
 
-const structure = new Structure();
+async function run() {
+  const structure = new Structure('./output');
 
-structure.generate();
+  const code = new CypressCodeGenerator(structure.flow, structure.config);
+  await code.generate();
+}
+
+run();

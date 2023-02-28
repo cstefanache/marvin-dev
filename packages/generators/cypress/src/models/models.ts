@@ -39,17 +39,20 @@ export type Selector = {
 
 export type Command = {
   file: string;
-  method: MethodDefinition;
+  methods: MethodDefinition[];
 };
 
 export type MethodDefinition = {
   name: string;
   parameters?: Identifier[];
+  hasIterator?: boolean;
   hasStore?: boolean;
   body: BodyDefinition[];
 };
 
 export type BodyDefinition = {
   element: Identifier;
+  iteratorName?: string;
+  iteratorLocator?: string;
   action: string;
 };

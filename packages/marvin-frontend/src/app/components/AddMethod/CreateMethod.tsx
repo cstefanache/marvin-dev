@@ -1,18 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AddMethodStyles.scss';
 import {
   Button,
-  Divider,
+  Checkbox,
   Icon,
   InputGroup,
   MenuItem,
-  PanelStack2,
 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import * as uuid from 'uuid';
 
-import { SchemaForm } from '@ascentcore/react-schema-form';
-import { CustomRegistry, CustomWrapper } from '../Registry/Wrapper/Wrapper';
 import { EditableSelectionBox } from '../Common/EditableSelectionBox';
 
 import { getIcon } from '../../utils';
@@ -102,12 +99,12 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
-  console.log(props)
   const { exitUrl, saveMethod } = props;
   const [items, setItems] = useState<any>(null);
   const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
+  const [uid, setUid] = useState<string>(uuid.v4());
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -157,11 +154,21 @@ const CreateMethod = (props: any) => {
       }
     };
     asyncFn();
+
+    const { selectedMethod } = props;
+    if (selectedMethod && selectedMethod.sequence) {
+      console.log(selectedMethod);
+      const { name, uid, sequence } = selectedMethod;
+      setUid(uid);
+      setSequence(sequence);
+      setMethodName(name);
+    }
   }, []);
 
   async function doSave() {
     const saveObject: any = {
       method: methodName,
+      uid,
       sequence,
     };
     if (iterator) {
@@ -207,6 +214,7 @@ const CreateMethod = (props: any) => {
 
   return (
     <div className="create-container">
+      <div>Url: {exitUrl}</div>
       <InputGroup
         value={methodName}
         placeholder="Method name"
@@ -265,9 +273,32 @@ const CreateMethod = (props: any) => {
 
                   setSequence([...sequence]);
                 }}
-                options={['check', 'click', 'clearAndFill', 'fill', 'store']}
+                options={['check', 'click', 'clearAndFill', 'fill']}
               />
               <p className="locator">{step.locator}</p>
+              <div>
+                <Checkbox
+                  checked={step.store}
+                  label="Store value"
+                  onChange={(e: any) => {
+                    step.store = e.target.checked;
+                    if (!step.store) {
+                      delete step.storeName;
+                    }
+                    setSequence([...sequence]);
+                  }}
+                />
+              </div>
+              {step.store && (
+                <InputGroup
+                  value={step.storeName}
+                  placeholder="Store variable name"
+                  onChange={(e) => {
+                    step.storeName = e.target.value;
+                    setSequence([...sequence]);
+                  }}
+                />
+              )}
               <p className="discovered-text">
                 Content at discovery time: <i>{step.details}</i>
               </p>

@@ -162,6 +162,7 @@ const SelectMethod = (props: any) => {
       {schema && (
         <>
           <pre>Url: {exitUrl}</pre>
+          <pre>Method: {method}</pre>
           {!propData && <Divider />}
           <SchemaForm
             schema={schema}
@@ -172,10 +173,10 @@ const SelectMethod = (props: any) => {
               (data) => {
                 if (data.id) {
                   delete data.children;
-                  save(data);
+                  save({...data, methodUid: selectedMethod.uid});
                 } else {
                   save(
-                    { method: selectedMethod.method, ...data },
+                    { method: selectedMethod.method, methodUid: selectedMethod.uid, ...data },
                     props.parent
                   );
                 }

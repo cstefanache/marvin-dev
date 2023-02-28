@@ -155,7 +155,8 @@ export default class Workspace {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: [`--window-size=1920,2080`],
+      ignoreHTTPSErrors: true,
+      args: [`--window-size=1920,2080`, "--proxy-server='direct://'", '--proxy-bypass-list=*'],
       defaultViewport: {
         width: 1920,
         height: 2080,
@@ -164,6 +165,7 @@ export default class Workspace {
 
     const flow = new Flow(this.config, browser);
     const page = await flow.navigateTo(this.config.rootUrl);
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36')
     const state = new State(page);
     await page.setRequestInterception(true);
     await page.waitForNetworkIdle({ timeout: this.config.defaultTimeout });
@@ -202,7 +204,6 @@ export default class Workspace {
   addBranch(id: string, branch: any): void {
     const searchInChildren = (children: any[]) => {
       for (const child of children) {
-        console.log(child.id, id);
         if (child.id === id) {
           return child;
         }
@@ -227,11 +228,64 @@ export default class Workspace {
     this.store();
   }
 
+  deleteMethod(id: string): void {
+    Object.keys(this.flow.actions).forEach((key) => {
+      this.flow.actions[key] = this.flow.actions[key].filter((item) => {
+        return item.uid !== id;
+      });
+    });
+
+    this.store();
+  }
+
   saveMethodForUrl(url: string, method: any): void {
     if (!this.flow.actions[url]) {
       this.flow.actions[url] = [];
     }
-    this.flow.actions[url].push(method);
+
+    const methodUid = method.uid || uuid.v4();
+    let methodExists = false;
+    this.flow.actions[url] = this.flow.actions[url].reduce(
+      (memo: any, item: any) => {
+        if (
+          (method.uid && item.uid === method.uid) ||
+          (!method.uid && method.method === item.method)
+        ) {
+          memo.push(method);
+          methodExists = true;
+
+          const updateWithNewMethod = (children: any[]) => {
+            for (const child of children) {
+              if (
+                (method.uid &&
+                  child.methodUid &&
+                  child.methodUid === method.uid) ||
+                ((!method.uid || !child.methodUid) &&
+                  child.method === method.method)
+              ) {
+                child.method = method.method;
+                child.methodUid = methodUid;
+              }
+              if (child.children) {
+                updateWithNewMethod(child.children);
+              }
+            }
+          };
+
+          updateWithNewMethod(this.flow.graph);
+        } else {
+          memo.push(item);
+        }
+        return memo;
+      },
+      []
+    );
+
+    method.uid = methodUid;
+    if (!methodExists) {
+      this.flow.actions[url].push(method);
+    }
+
     this.store();
   }
 

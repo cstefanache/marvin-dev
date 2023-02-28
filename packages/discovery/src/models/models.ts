@@ -62,6 +62,7 @@ export type IdentifiableIterator = {
 
 export type Actions = {
   method: string;
+  uid: string;
   iterator?: IdentifiableIterator;
   sequence: Sequence[];
 };

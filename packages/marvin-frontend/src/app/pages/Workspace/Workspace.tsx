@@ -8,13 +8,14 @@ import MainPanel from './MainPanel';
 import RunningPanel from './Running';
 
 interface Props {
+  highlightedMethod: any;
   workspace: {
     name: string;
     path: string;
   };
 }
 
-export default function Workspace({ workspace }: Props) {
+export default function Workspace({ workspace, highlightedMethod }: Props) {
   const [path, setPath] = useState(null);
   const [flow, setFlow] = React.useState<any>(null);
   const [config, setConfig] = React.useState<any>(null);
@@ -155,35 +156,6 @@ export default function Workspace({ workspace }: Props) {
     ]);
   };
 
-  // const openDrawer = (type: string, title: string, props: any, data?: any) => {
-  //   setDrawerTitle(title);
-  //   switch (type) {
-  //     case 'addMethod':
-  //       const properties = { ...{ parent: props, title }, save };
-  //       setDrawerElement(<AddMethod {...properties} data={data} />);
-  //       break;
-  //   }
-  // };
-
-  // const getIconFor = (className: string, handleSelect: any) => {
-  //   if (className.indexOf('tree-node__branch') !== -1) {
-  //     if (className.indexOf('--expanded') !== -1) {
-  //       return <Icon icon="cube" onClick={handleSelect} />;
-  //     } else {
-  //       return (
-  //         <Icon
-  //           icon="cube-add"
-  //           onClick={(e: any) => {
-  //             handleSelect(e);
-  //           }}
-  //         />
-  //       );
-  //     }
-  //   } else {
-  //     return <Icon icon="code" />;
-  //   }
-  // };
-
   const selectElement = (element: any) => {
     setSelectedNode(element);
     setSelectedId(element.id);
@@ -231,6 +203,12 @@ export default function Workspace({ workspace }: Props) {
                   <div
                     key={element.id}
                     className={
+                      (highlightedMethod &&
+                      highlightedMethod ===
+                        (element as any).currentNode.methodUid
+                        ? 'highlight'
+                        : '') +
+                      ' ' +
                       (selectedId && selectedId === element.id
                         ? 'selected'
                         : '') +
@@ -243,7 +221,7 @@ export default function Workspace({ workspace }: Props) {
                         ? 'discovery'
                         : '')
                     }
-                    style={{ paddingLeft: 10 * (level - 1) }}
+                    style={{ paddingLeft: 5 * (level - 1) }}
                   >
                     <span {...getNodeProps()}>
                       {element.children?.length > 0 &&

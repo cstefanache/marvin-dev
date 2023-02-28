@@ -2,6 +2,21 @@
     margin-top: 2px;
 }
 
+.running-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;    
+    column-gap: 2px;
+
+
+    > * {
+        width: 50%;
+        height: calc(100vh - 50px);
+        overflow: auto;
+    }
+}
+
 .workspace-layout {
     display: flex;
     flex-direction: row;
@@ -14,16 +29,20 @@
         padding: 8px 4px;
         display: flex;
         flex-direction: row;
-        column-gap: 10px;
 
         .summary-actions {
             display: flex;
             flex-direction: row;
-            column-gap: 8px;
+            column-gap: 12px;
 
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            padding-right: 10px;
-
+            .divider {
+                display: inline-block;
+                width: 1px;
+                height: 100%;
+                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                margin: 0 4px 0 8px;
+            }
+            
             [icon] {
                 cursor: pointer;
                 color: #fff;
@@ -95,6 +114,10 @@
 
         .selected {
             color: rgb(255, 179, 0);
+        }
+
+        .highlight { 
+            background-color: rgb(4, 255, 0, 0.2);
         }
 
         .running {
