@@ -12,7 +12,7 @@ import {
   Identifier,
   MethodDefinition,
 } from './models/models';
-import { ConfigModel, Iterator } from './models/config';
+import { ConfigModel } from './models/config';
 
 export default class Structure {
   rawFlow: FlowModel;
@@ -62,13 +62,11 @@ export default class Structure {
 
   private getNameFromLocator(locator: string) {
     let name: string = locator;
+    const reg = RegExp(`${regex.STRING_STARTS_WITH_NUMBERS}`, 'g');
     if (locator.includes('#')) {
       name = locator.split('#')[1];
-      if (new RegExp(`${regex.STRING_STARTS_WITH_NUMBERS}`, 'g').test(name)) {
-        name = name.replace(
-          new RegExp(`${regex.STRING_STARTS_WITH_NUMBERS}`, 'g'),
-          ''
-        );
+      if (reg.test(name)) {
+        name = name.replace(reg, '_');
       }
     }
     return name;
@@ -227,9 +225,9 @@ export default class Structure {
     const params: Identifier[] = [];
     for (const step of sequence) {
       if (
-        step.type === 'clearAndFill' ||
-        step.type === 'fill' ||
-        step.type === 'check'
+        step.type === constants.CLEAR_AND_FILL_ACTION ||
+        step.type === constants.FILL_ACTION ||
+        step.type === constants.CHECK_ACTION
       ) {
         step.store
           ? params.push({
@@ -251,7 +249,9 @@ export default class Structure {
   }
 
   private getCommandFileName(key: string): string {
-    return key.trim() === '' ? 'rootPage' : this.toCamelCase(key);
+    return key.trim() === '' || key.trim() === '/'
+      ? 'rootPage'
+      : this.toCamelCase(key);
   }
 
   private getIteratorLocator(sequence: any[]): string {
@@ -318,7 +318,10 @@ export default class Structure {
     this.flow.commands = this.getCommands();
     this.config.iterators = this.getIterators();
     this.config.baseUrl = this.rawConfig.rootUrl;
-    this.config.outputPath = this.rawConfig.outputPath;
+    this.config.outputPath =
+      !this.rawConfig.outputPath || this.rawConfig.outputPath.trim() === ''
+        ? constants.DEFAULT_OUTPUT_PATH
+        : this.rawConfig.outputPath;
     this.rawConfig.aliases.store && this.rawConfig.aliases.store.length > 0
       ? (this.config.env = this.rawConfig.aliases.store)
       : (this.config.env = []);

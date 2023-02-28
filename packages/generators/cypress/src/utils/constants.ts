@@ -6,3 +6,4 @@ export const CLICK_ACTION = 'click';
 export const FILL_ACTION = 'fill';
 export const CLEAR_AND_FILL_ACTION = 'clearAndFill';
 export const CHECK_ACTION = 'check';
+export const DEFAULT_OUTPUT_PATH = '/packages/sample-frontend-e2e/src';

@@ -1,5 +1,6 @@
 import { ConfigModel, Iterator } from './models/config';
 import * as constants from './utils/constants';
+import * as regex from './utils/regex';
 import * as prettier from 'prettier';
 import {
   Command,
@@ -22,6 +23,7 @@ export default class CypressCodeGenerator {
       process.cwd(),
       `${this.config.outputPath}/support`
     );
+
     this.localTestFolder = path.join(
       process.cwd(),
       `${this.config.outputPath}/e2e`
@@ -285,8 +287,10 @@ export default class CypressCodeGenerator {
 
   private sanitizeKey(key: string): string {
     let finalKey = key.replace(/\./g, '_');
-    finalKey = finalKey.replace(/^(\d)/g, '_$1');
-
+    const reg = new RegExp(regex.STRING_STARTS_WITH_NUMBERS, 'g');
+    if (reg.test(finalKey)) {
+      finalKey = finalKey.replace(reg, '__');
+    }
     return finalKey;
   }
 
