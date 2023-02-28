@@ -16,7 +16,6 @@ import { ConfigModel, Iterator } from './models/config';
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
-  inputPath: string = '/output/marvin2';
   flow: NewFlowModel = {
     functionalities: [],
     selectors: [],
@@ -26,7 +25,7 @@ export default class Structure {
     projectName: '',
     baseUrl: '',
     inputPath: '',
-    outputPath: `${constants.OUTPUT_PATH}`,
+    outputPath: '',
     iterators: [],
     env: [],
     specsFolder: '',
@@ -34,7 +33,7 @@ export default class Structure {
     commandsFolder: '',
   };
 
-  constructor() {
+  constructor(private inputPath: string) {
     if (fs.existsSync(`${this.inputPath}/config.json`)) {
       log('Previous config file found, loading ...', 'green');
       this.rawConfig = JSON.parse(

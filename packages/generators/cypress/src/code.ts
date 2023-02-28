@@ -90,14 +90,14 @@ export default class CypressCodeGenerator {
   }
 
   private getCheckTextCommand(key: string) {
-    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('val').then((val) => {
+    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('val').then((val) => {
       if (val.trim() === '') {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('text').then((text) => {
-            expect(text.trim()).to.eq(${key});
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('text').then((text) => {
+            expect(text.trim()).to.eq(${this.sanitizeKey(key)});
           });
       } else {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${key}`}).invoke('val').then((val) => {
-            expect(val.trim()).to.eq(${key});
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('val').then((val) => {
+            expect(val.trim()).to.eq(${this.sanitizeKey(key)});
           });
         }
     });`;
@@ -268,12 +268,19 @@ export default class CypressCodeGenerator {
     return filterDuplicateObjects;
   }
 
+  private sanitizeKey(key: string): string {
+    let finalKey =  key.replace(/\./g, '_');
+    finalKey = finalKey.replace(/^(\d)/g, '_$1');
+
+    return finalKey
+  }
+
   private async generateSelectors(selectors: any[]) {
     const selectorFile = `${this.localSupportFolder}/app.po.ts`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
-export const ${selector.key} = '${selector.value}';
+export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
       `;
       fs.appendFileSync(selectorFile, fileContent);
     }
