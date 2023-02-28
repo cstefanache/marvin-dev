@@ -39,6 +39,7 @@ export type ActionItem = {
   loop?: number;
   methodLoop?: number;
   method?: string;
+  methodUid?: string;
   sequenceStep: string;
   parameters?: { [key: string]: string };
   children: ActionItem[];
@@ -63,6 +64,7 @@ export type IdentifiableIterator = {
 export type Actions = {
   method: string;
   uid: string;
+  methodUid: string;
   iterator?: IdentifiableIterator;
   sequence: Sequence[];
 };

@@ -4,17 +4,18 @@
   "sourceRoot": "packages/sample-frontend-e2e/src",
   "projectType": "application",
   "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cypress open",
+        "cwd": "packages/sample-frontend-e2e"
+      }
+    },
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "packages/sample-frontend-e2e/cypress.config.ts",
-        "devServerTarget": "sample-frontend:serve:development",
         "testingType": "e2e"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "sample-frontend:serve:production"
-        }
       }
     },
     "lint": {

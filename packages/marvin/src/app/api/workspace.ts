@@ -39,6 +39,7 @@ export default class Workspace {
         path,
         defaultTimeout: 3000,
         output: `${path}/output`,
+        outputPath: `${path}/output/e2e`,
         aliases: {
           urlReplacers: [],
           optimizer: {

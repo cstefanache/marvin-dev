@@ -15,6 +15,7 @@ import {
 import { ConfigModel } from './models/config';
 
 export default class Structure {
+  paramKeys: { [key: string]: string[] } = {};
   rawFlow: FlowModel;
   rawConfig: Config;
   flow: NewFlowModel = {
@@ -90,9 +91,13 @@ export default class Structure {
 
   private getTest(actionItem: ActionItem): Test {
     let paramValuesQueue: string[] = [];
-
+    const { method, methodUid } = actionItem;
+    const paramOrder = this.paramKeys[methodUid || method]
     if (actionItem.parameters) {
-      for (const paramKey of Object.keys(actionItem.parameters)) {
+      for (const paramKey of paramOrder || Object.keys(actionItem.parameters)) {
+        if (actionItem.parameters[paramKey] === undefined) {
+          continue
+        }
         if (
           this.getParamType(actionItem.parameters[paramKey]) === 'reference'
         ) {
@@ -108,6 +113,7 @@ export default class Structure {
         }
       }
     }
+
     return {
       name: this.toCamelCase(actionItem.sequenceStep),
       method: {
@@ -221,9 +227,17 @@ export default class Structure {
     return sequence.find((step: any) => step.store === true) ? true : false;
   }
 
-  private getParameters(sequence: any) {
+  private getParameters(action: any) {
     const params: Identifier[] = [];
-    for (const step of sequence) {
+    const { method, uid: methodUid } = action;
+    const paramsOrder: string[] = [];
+    for (const step of action.sequence) {
+      const { uid, locator, details } = step;
+      const keyName =
+        step.details.trim() === ''
+          ? this.getNameFromLocator(locator)
+          : this.toCamelCase(details);
+      paramsOrder.push(uid);
       if (
         step.type === constants.CLEAR_AND_FILL_ACTION ||
         step.type === constants.FILL_ACTION ||
@@ -231,27 +245,25 @@ export default class Structure {
       ) {
         step.store
           ? params.push({
-              key:
-                step.details.trim() === ''
-                  ? this.getNameFromLocator(step.locator)
-                  : this.toCamelCase(step.details),
+              key: keyName,
               storeName: step.storeName ? step.storeName : undefined,
             })
           : params.push({
-              key:
-                step.details.trim() === ''
-                  ? this.getNameFromLocator(step.locator)
-                  : this.toCamelCase(step.details),
+              key: keyName,
             });
       }
     }
+    if (action.iterator) {
+      paramsOrder.push(action.iterator.uid);
+    }
+    this.paramKeys[methodUid || method] = paramsOrder;
     return params;
   }
 
   private getCommandFileName(key: string): string {
     return key.trim() === '' || key.trim() === '/'
       ? 'rootPage'
-      : this.toCamelCase(key);
+      : this.toCamelCase(key)
   }
 
   private getIteratorLocator(sequence: any[]): string {
@@ -263,7 +275,7 @@ export default class Structure {
     for (const action of actions) {
       methods.push({
         name: this.toCamelCase(action.method),
-        parameters: [...this.getParameters(action.sequence)],
+        parameters: [...this.getParameters(action)],
         hasIterator: this.getIteratorFlag(action),
         hasStore: this.getStoreFlagValue(action.sequence),
         body: this.getIteratorFlag(action)
@@ -313,10 +325,10 @@ export default class Structure {
   }
 
   public prepareStructure() {
-    this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
     this.flow.selectors = this.getSelectors();
-    this.flow.commands = this.getCommands();
     this.config.iterators = this.getIterators();
+    this.flow.commands = this.getCommands();
+    this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
     this.config.baseUrl = this.rawConfig.rootUrl;
     this.config.outputPath =
       !this.rawConfig.outputPath || this.rawConfig.outputPath.trim() === ''

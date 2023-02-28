@@ -286,11 +286,9 @@ export default class CypressCodeGenerator {
   }
 
   private sanitizeKey(key: string): string {
-    let finalKey = key.replace(/\./g, '_');
-    const reg = new RegExp(regex.STRING_STARTS_WITH_NUMBERS, 'g');
-    if (reg.test(finalKey)) {
-      finalKey = finalKey.replace(reg, '__');
-    }
+    let finalKey = key
+      .replace(/\./g, '_')
+      .replace(regex.CAPTURE_STRING_STARTS_WITH_NUMBERS, '_$1');
     return finalKey;
   }
 
