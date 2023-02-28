@@ -13,6 +13,7 @@ import {
   MethodDefinition,
 } from './models/models';
 import { ConfigModel, Iterator } from './models/config';
+
 export default class Structure {
   rawFlow: FlowModel;
   rawConfig: Config;
@@ -55,6 +56,8 @@ export default class Structure {
         `No flow file was found in the provided path: ${this.inputPath}`
       );
     }
+
+    this.prepareStructure();
   }
 
   private getNameFromLocator(locator: string) {
@@ -309,12 +312,13 @@ export default class Structure {
     return array;
   }
 
-  public generate() {
+  public prepareStructure() {
     this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
     this.flow.selectors = this.getSelectors();
     this.flow.commands = this.getCommands();
     this.config.iterators = this.getIterators();
     this.config.baseUrl = this.rawConfig.rootUrl;
+    this.config.outputPath = this.rawConfig.outputPath;
     this.rawConfig.aliases.store && this.rawConfig.aliases.store.length > 0
       ? (this.config.env = this.rawConfig.aliases.store)
       : (this.config.env = []);

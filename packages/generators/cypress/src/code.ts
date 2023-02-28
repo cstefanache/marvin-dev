@@ -1,5 +1,6 @@
 import { ConfigModel, Iterator } from './models/config';
 import * as constants from './utils/constants';
+import * as prettier from 'prettier';
 import {
   Command,
   NewFlowModel,
@@ -90,17 +91,28 @@ export default class CypressCodeGenerator {
   }
 
   private getCheckTextCommand(key: string) {
-    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('val').then((val) => {
+    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+      key
+    )}`}).invoke('val').then((val) => {
       if (val.trim() === '') {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('text').then((text) => {
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
             expect(text.trim()).to.eq(${this.sanitizeKey(key)});
           });
       } else {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(key)}`}).invoke('val').then((val) => {
+        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
             expect(val.trim()).to.eq(${this.sanitizeKey(key)});
           });
         }
     });`;
+  }
+
+  private formatFile(file: string) {
+    const content = fs.readFileSync(file, 'utf8');
+    fs.writeFileSync(file, prettier.format(content, { parser: 'typescript' }));
   }
 
   private getBody(body: BodyDefinition[]) {
@@ -197,10 +209,11 @@ export default class CypressCodeGenerator {
   }
 
   private async generateCommands(commands: Command[]) {
+    const e2eFile = `${this.localSupportFolder}/e2e.ts`;
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
-      const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+
       fs.appendFileSync(
         e2eFile,
         `import './commands/${file}';
@@ -219,7 +232,9 @@ export default class CypressCodeGenerator {
       for (const method of methods) {
         await this.writeMethod(commandFile, method);
       }
+      this.formatFile(commandFile);
     }
+    this.formatFile(e2eFile);
   }
 
   private replaceKeyWord(selector: string): string {
@@ -269,10 +284,10 @@ export default class CypressCodeGenerator {
   }
 
   private sanitizeKey(key: string): string {
-    let finalKey =  key.replace(/\./g, '_');
+    let finalKey = key.replace(/\./g, '_');
     finalKey = finalKey.replace(/^(\d)/g, '_$1');
 
-    return finalKey
+    return finalKey;
   }
 
   private async generateSelectors(selectors: any[]) {
@@ -333,7 +348,9 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
         ? (paramValues = [...paramValues, `${constants.STORE_KEY_WORD}`])
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
-      return `it('${name}', () => {
+      return `
+      
+      it('${name}', () => {
         ${this.getStoreCommand(paramValues)}
         cy.${name}(${params});
       });`;
@@ -376,6 +393,7 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
         let startDecribeCommand = `
+        
         describe('${file}', () => {
           let store={};
           let library = {
@@ -386,15 +404,23 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
             },
           };
           `;
-        fs.writeFileSync(specFile, startDecribeCommand);
         let endDescribeCommand = `})`;
-        let beforeAllContent = `before( () => {
+        let beforeAllContent = `
+        
+        before( () => {
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;
-        fs.appendFileSync(specFile, beforeAllContent);
-        fs.appendFileSync(specFile, this.getTestsBody(tests).join('\r\n'));
-        fs.appendFileSync(specFile, endDescribeCommand);
+
+        const finalOutput =
+          startDecribeCommand +
+          beforeAllContent +
+          this.getTestsBody(tests).join('\r\n') +
+          endDescribeCommand;
+        fs.writeFileSync(
+          specFile,
+          prettier.format(finalOutput, { parser: 'typescript' })
+        );
       }
     }
   }

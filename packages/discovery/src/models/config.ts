@@ -7,6 +7,7 @@ export interface Config {
   path: string;
   defaultTimeout: number;
   output: string;
+  outputPath: string;
   waitFor?: string;
   aliases: Aliases;
   actions: { [key: string]: Action[] };
