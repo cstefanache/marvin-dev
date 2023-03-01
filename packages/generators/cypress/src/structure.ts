@@ -92,11 +92,11 @@ export default class Structure {
   private getTest(actionItem: ActionItem): Test {
     let paramValuesQueue: string[] = [];
     const { method, methodUid } = actionItem;
-    const paramOrder = this.paramKeys[methodUid || method]
+    const paramOrder = this.paramKeys[methodUid || method];
     if (actionItem.parameters) {
       for (const paramKey of paramOrder || Object.keys(actionItem.parameters)) {
         if (actionItem.parameters[paramKey] === undefined) {
-          continue
+          continue;
         }
         if (
           this.getParamType(actionItem.parameters[paramKey]) === 'reference'
@@ -263,7 +263,7 @@ export default class Structure {
   private getCommandFileName(key: string): string {
     return key.trim() === '' || key.trim() === '/'
       ? 'rootPage'
-      : this.toCamelCase(key)
+      : this.toCamelCase(key);
   }
 
   private getIteratorLocator(sequence: any[]): string {

@@ -126,7 +126,8 @@ export default class CypressCodeGenerator {
         if (action === constants.CLICK_ACTION) {
           return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
             key
-          )}`}).click();`;
+          )}`}).click();
+          cy.waitForNetworkIdle(1000);`;
         }
 
         if (
@@ -151,10 +152,12 @@ export default class CypressCodeGenerator {
       } else {
         if (action === constants.CLICK_ACTION) {
           return this.getIteratorCommand(b)
-            ? `${this.getIteratorCommand(b)}.click()`
+            ? `${this.getIteratorCommand(b)}.click()
+            cy.waitForNetworkIdle(1000);`
             : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
                 key
-              )}`}).click();`;
+              )}`}).click();
+              cy.waitForNetworkIdle(1000);`;
         }
 
         if (action === constants.CHECK_ACTION) {
@@ -212,6 +215,7 @@ export default class CypressCodeGenerator {
 
   private async generateCommands(commands: Command[]) {
     const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+    fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
