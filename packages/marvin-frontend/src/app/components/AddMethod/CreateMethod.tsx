@@ -275,7 +275,14 @@ const CreateMethod = (props: any) => {
                 }}
                 options={['check', 'click', 'clearAndFill', 'fill']}
               />
-              <p className="locator">{step.locator}</p>
+              {/* <p className="locator">{step.locator}</p> */}
+              <InputGroup
+                value={step.locator}
+                onChange={(e) => {
+                  step.locator = e.target.value;
+                  setSequence([...sequence]);
+                }}
+              />
               <div>
                 <Checkbox
                   checked={step.store}

@@ -14,6 +14,7 @@ const library = {
 
 export default class Runner {
   store: any;
+  lastActionId: string | undefined;
   constructor(
     private readonly config: Config,
     private readonly flow: Flow,
@@ -86,6 +87,7 @@ export default class Runner {
             parameters
           )}`
         );
+        return;
       }
     }
     for (const sequenceItem of method.sequence) {
@@ -127,11 +129,13 @@ export default class Runner {
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
+        await element.hover();
+        await element.focus();
         if (element) {
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text} (${locator})`, 'yellow');
-          await element.screenshot({ path: 'example.png' });
-          await element.click();
+          // await element.screenshot({ path: 'example.png' });
+          await element.evaluate((el: any) => el.click());
           log(`Clicked on ${text}`, 'yellow');
         }
       }
@@ -153,6 +157,10 @@ export default class Runner {
         }
       }
     }
+  }
+
+  public async performScreenshotForLastAction(page: Page): Promise<void> {
+    await this.flow.stateScreenshot(page, this.lastActionId);
   }
 
   private async executeStep(
@@ -190,6 +198,7 @@ export default class Runner {
       );
       action.exitUrl = url;
       await this.flow.stateScreenshot(page, action.id);
+      this.lastActionId = action.id
       if (action.children && action.children.length && steps.length > 1) {
         await this.executeStep(
           page,

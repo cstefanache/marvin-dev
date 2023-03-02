@@ -179,6 +179,7 @@ export default class Workspace {
     logger.log(`Finished running sequence. Discovering...`);
     await flow.discover(page, true);
     logger.log(`Discovery finished.`);
+    await runner.performScreenshotForLastAction(page);
     await flow.export();
     logger.log('Export finished.');
     this.flow = flow.flow;
