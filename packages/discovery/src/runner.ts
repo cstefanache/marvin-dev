@@ -27,7 +27,7 @@ export default class Runner {
     actual: any,
     expected: any,
     op: string,
-    isNumber: boolean = false
+    isNumber: boolean
   ): boolean {
     try {
       if (isNumber && !isNaN(actual) && !isNaN(expected)) {
@@ -127,7 +127,7 @@ export default class Runner {
       }
     }
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, locator } = sequenceItem;
+      let { type, uid, op, isNumber, locator } = sequenceItem;
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
@@ -148,7 +148,7 @@ export default class Runner {
         );
         if (op) {
           if (value) {
-            if (!this.assert(value, valueToValidate, op)) {
+            if (!this.assert(value, valueToValidate, op, isNumber)) {
               throw new Error(
                 `Failed to assert ${value} ${op} ${valueToValidate}`
               );
@@ -159,7 +159,7 @@ export default class Runner {
               );
             }
           } else {
-            if (!this.assert(text, valueToValidate, op)) {
+            if (!this.assert(text, valueToValidate, op, isNumber)) {
               throw new Error(
                 `Failed to assert ${text} ${op} ${valueToValidate}`
               );

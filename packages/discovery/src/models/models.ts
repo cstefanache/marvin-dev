@@ -51,6 +51,7 @@ export type Sequence = {
   type: string;
   uid: string;
   op?: string;
+  isNumber?: boolean;
   store?: boolean;
   storeName?: string;
   locator: string;
