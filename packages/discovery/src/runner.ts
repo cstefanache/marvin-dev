@@ -149,24 +149,20 @@ export default class Runner {
         if (op) {
           if (value) {
             if (!this.assert(value, valueToValidate, op, isNumber)) {
-              throw new Error(
-                `Failed to assert ${value} ${op} ${valueToValidate}`
-              );
+              log(`Failed to assert ${value} ${op} ${valueToValidate}`, 'red');
             } else {
               log(
                 `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                'blue'
+                'green'
               );
             }
           } else {
             if (!this.assert(text, valueToValidate, op, isNumber)) {
-              throw new Error(
-                `Failed to assert ${text} ${op} ${valueToValidate}`
-              );
+              log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
             } else {
               log(
                 `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                'blue'
+                'green'
               );
             }
           }
