@@ -132,27 +132,29 @@ export default class Runner {
           `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
           'yellow'
         );
-        if (value) {
-          if (!this.assert(value, valueToValidate, op)) {
-            throw new Error(
-              `Failed to assert ${value} ${op} ${valueToValidate}`
-            );
+        if (op) {
+          if (value) {
+            if (!this.assert(value, valueToValidate, op)) {
+              throw new Error(
+                `Failed to assert ${value} ${op} ${valueToValidate}`
+              );
+            } else {
+              log(
+                `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                'blue'
+              );
+            }
           } else {
-            log(
-              `Assertion passed for ${value} ${op} ${valueToValidate}`,
-              'blue'
-            );
-          }
-        } else {
-          if (!this.assert(text, valueToValidate, op)) {
-            throw new Error(
-              `Failed to assert ${text} ${op} ${valueToValidate}`
-            );
-          } else {
-            log(
-              `Assertion passed for ${value} ${op} ${valueToValidate}`,
-              'blue'
-            );
+            if (!this.assert(text, valueToValidate, op)) {
+              throw new Error(
+                `Failed to assert ${text} ${op} ${valueToValidate}`
+              );
+            } else {
+              log(
+                `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                'blue'
+              );
+            }
           }
         }
       } else if (
