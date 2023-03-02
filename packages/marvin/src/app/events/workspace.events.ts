@@ -7,7 +7,7 @@ import { ipcMain, dialog } from 'electron';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import { Structure, CypressCodeGenerator } from '@marvin/generators/cypress';
 import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
@@ -114,6 +114,21 @@ ipcMain.handle('select-workspace', async (event, data) => {
   logger.log('Workspace selected ' + data.path);
   workspace = new Workspace();
   workspace.initialize(data.path, data.name);
+});
+
+ipcMain.handle('generate-tests-in-folder', async () => {
+  const promise = dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+  });
+
+  promise.then((data) => {
+    if (data.filePaths.length > 0) {
+      const workspacePath = data.filePaths[0];
+      const structure = new Structure(workspace.config.path);
+      const generator = new CypressCodeGenerator(structure.flow, structure.config, workspacePath);
+      generator.generate()
+    }
+  });
 });
 
 ipcMain.handle('select-new-workspace-folder', async (data) => {

@@ -17,9 +17,11 @@ function debounce(func, timeout = 300) {
 }
 
 export default class Workspace {
+
+  public config: Config;
+  public flow: Models.FlowModel;
+
   private folder: string;
-  private config: Config;
-  private flow: Models.FlowModel;
   private output: Models.Discovered;
 
   async initialize(path: string, name: string, url?: string) {

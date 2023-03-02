@@ -30,6 +30,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('select-new-workspace-folder'),
   selectWorkspace: (workspace: any) =>
     ipcRenderer.invoke('select-workspace', workspace),
+  generateTests: () =>
+    ipcRenderer.invoke('generate-tests-in-folder'),
   getLoggers: () => ipcRenderer.invoke('get-loggers'),
   getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
   // selectWorkspace: (workspace: { name: string, path: string }) => ipcRenderer.invoke('select-workspace', workspace),

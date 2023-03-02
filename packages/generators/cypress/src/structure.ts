@@ -304,7 +304,7 @@ export default class Structure {
 
   private getSiblings(iterator: any) {
     const siblings: string[] = [];
-    for (const sibling of iterator.elements) {
+    for (const sibling of iterator.elements || []) {
       siblings.push(sibling.selector);
     }
     return siblings;
