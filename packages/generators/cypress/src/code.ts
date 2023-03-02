@@ -331,18 +331,20 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
     }
   }
 
-  private getStoreCommand(params: string[]) {
+  private getStoreCommand(tests: Test[]) {
     const storeCommands: string[] = [];
-    for (const p of params) {
-      const extractVarName = this.getVariableName(p);
-      for (const item of this.config.env) {
-        if (item.key === extractVarName) {
-          storeCommands.push(
-            `store["${extractVarName}"] = ${`'${item.value}'`};`
-          );
+    tests.map((t) => {
+      const { method } = t;
+      const { name, paramValues } = method;
+      for (const p of paramValues) {
+        const extractVarName = this.getVariableName(p);
+        for (const item of this.config.env) {
+          if (item.key === extractVarName) {
+            storeCommands.push(`"${extractVarName}": ${`'${item.value}'`},`);
+          }
         }
       }
-    }
+    });
     return storeCommands.join('\r\n');
   }
 
@@ -357,7 +359,6 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
       return `
       
       it('${name}', () => {
-        ${this.getStoreCommand(paramValues)}
         cy.${name}(${params});
       });`;
     });
@@ -384,7 +385,6 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `
-      ${this.getStoreCommand(paramValues)}
       cy.${name}(${`${params}`});`;
     });
     return fileContent;
@@ -398,10 +398,13 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
       for (const spec of specs) {
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
-        let startDecribeCommand = `
+        let startDescribeCommand = `
         
         describe('${file}', () => {
-          let store={};
+          let store={
+          ${this.getStoreCommand(beforeAll)}
+          ${this.getStoreCommand(tests)}
+          };
           let library = {
             func: {
               random: () => {
@@ -419,7 +422,7 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
         });`;
 
         const finalOutput =
-          startDecribeCommand +
+          startDescribeCommand +
           beforeAllContent +
           this.getTestsBody(tests).join('\r\n') +
           endDescribeCommand;
