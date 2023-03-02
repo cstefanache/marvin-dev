@@ -50,6 +50,7 @@ export type ActionItem = {
 export type Sequence = {
   type: string;
   uid: string;
+  op: string;
   store?: boolean;
   storeName?: string;
   locator: string;
