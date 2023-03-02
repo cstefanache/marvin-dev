@@ -23,7 +23,21 @@ export default class Runner {
     global.store = this.store;
   }
 
-  private assert(actual: string, expected: string, op: string): boolean {
+  private assert(
+    actual: any,
+    expected: any,
+    op: string,
+    isNumber: boolean = false
+  ): boolean {
+    try {
+      if (isNumber && !isNaN(actual) && !isNaN(expected)) {
+        actual = parseFloat(actual);
+        expected = parseFloat(expected);
+      }
+    } catch (e) {
+      log('Error at converting the string to a number');
+    }
+
     switch (op) {
       case 'eq':
         return actual === expected;
