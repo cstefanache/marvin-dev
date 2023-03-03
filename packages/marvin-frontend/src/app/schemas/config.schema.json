@@ -127,7 +127,13 @@
           "size": { "xs": 12, "sm": 5 },
           "uiType": "item",
           "title": "Regex",
-          "description": "Replace existing matches with alias"
+          "description": "Replace existing matches with alias",
+          "registryKey": "selectors",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "name": {
           "type": "string",

@@ -47,6 +47,13 @@ const Header = ({ workspaceName }: Props) => {
             text="Execution Workflow"
           />
         </NavLink>
+        <NavLink to="/generate" className="menu-link">
+          <AnchorButton
+            className="bp4-button bp4-minimal button"
+            icon="export"
+            text="Generate"
+          />
+        </NavLink>
       </NavbarGroup>
     </Navbar>
   );

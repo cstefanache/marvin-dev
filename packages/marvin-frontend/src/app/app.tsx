@@ -19,6 +19,7 @@ import Workspaces from './pages/Workspaces/Workspaces';
 import Workspace from './pages/Workspace/Workspace';
 import Config from './pages/Configuration/Config';
 import Methods from './pages/Methods/Methods';
+import Generate from './pages/Generate/Generate';
 
 export function App() {
   const [workspace, setWorkspace] = useState<{ name: string; path: string }>();
@@ -77,6 +78,10 @@ export function App() {
         <Route
           path="/methods"
           element={<Methods setHighlightedMethod={highlightMethod} />}
+        />
+        <Route
+          path="/generate"
+          element={<Generate />}
         />
       </Routes>
     </>

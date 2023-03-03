@@ -17,17 +17,29 @@ import * as path from 'path';
 export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
+  private outputPath: string;
 
-  constructor(private flow: NewFlowModel, private config: ConfigModel) {
+  constructor(
+    private flow: NewFlowModel,
+    private config: ConfigModel,
+    private forcedOutputPath?: string
+  ) {
+    this.outputPath = forcedOutputPath
+      ? forcedOutputPath
+      : this.config.outputPath;
     this.localSupportFolder = path.join(
-      process.cwd(),
-      `${this.config.outputPath}/support`
+      forcedOutputPath ? '' : process.cwd(),
+      `${this.outputPath}/support`
     );
 
     this.localTestFolder = path.join(
-      process.cwd(),
-      `${this.config.outputPath}/e2e`
+      forcedOutputPath ? '' : process.cwd(),
+      `${this.outputPath}/e2e`
     );
+
+    if (!fs.existsSync(this.localTestFolder)) {
+      fs.mkdirSync(this.localTestFolder);
+    }
 
     if (fs.existsSync(this.localSupportFolder)) {
       fs.rmdirSync(this.localSupportFolder, { recursive: true });
@@ -40,10 +52,6 @@ export default class CypressCodeGenerator {
     if (!fs.existsSync(this.localSupportFolder)) {
       fs.mkdirSync(this.localSupportFolder);
       fs.mkdirSync(`${this.localSupportFolder}/commands`);
-    }
-
-    if (!fs.existsSync(this.localTestFolder)) {
-      fs.mkdirSync(this.localTestFolder);
     }
   }
 
@@ -64,7 +72,9 @@ export default class CypressCodeGenerator {
     value: string = `${constants.ITERATOR_VALUE_KEY_WORD}`
   ): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
-    const identifier = this.replaceDoubleQuotes(iterator.identifier);
+    const identifier = iterator.identifier
+      ? this.replaceDoubleQuotes(iterator.identifier)
+      : '';
     const item = `"${parent} ${identifier}"`;
     const command = `cy.contains(${item}, ${value})`;
     return command;
@@ -73,7 +83,7 @@ export default class CypressCodeGenerator {
   private getIteratorParentCommand(iterator: Iterator): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
     const locator = `"${parent}"`;
-    const command = `parentsUntil(${locator})`;
+    const command = `closest(${locator})`;
     return command;
   }
 
@@ -86,7 +96,7 @@ export default class CypressCodeGenerator {
           iterator
         )}.${this.getIteratorParentCommand(
           iterator
-        )}.children("${this.replaceDoubleQuotes(iteratorLocator)}")`
+        )}.find("${this.replaceDoubleQuotes(iteratorLocator)}")`
       : undefined;
 
     return commonPart;
@@ -121,12 +131,11 @@ export default class CypressCodeGenerator {
     const bodyContent = body.map((b) => {
       const { element, iteratorName, action } = b;
       const { key, value, storeName } = element;
-
       if (!iteratorName) {
         if (action === constants.CLICK_ACTION) {
-          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
+          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
             key
-          )}`}).click();
+          )}`}).click({force: true});
           cy.waitForNetworkIdle(1000);`;
         }
 
@@ -135,12 +144,12 @@ export default class CypressCodeGenerator {
           action === constants.FILL_ACTION
         ) {
           return storeName === null
-            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
+            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
                 key
-              )}`}).clear().type(${this.replaceKeyWord(key)});`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
+              )}`}).clear().type(${this.sanitizeKey(key)});`
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
                 key
-              )}`}).clear().type(${this.replaceKeyWord(key)});
+              )}`}).clear().type(${this.sanitizeKey(key)});
              ${
                constants.STORE_KEY_WORD
              }["${storeName}"] = ${this.replaceKeyWord(key)};`;
@@ -152,11 +161,11 @@ export default class CypressCodeGenerator {
       } else {
         if (action === constants.CLICK_ACTION) {
           return this.getIteratorCommand(b)
-            ? `${this.getIteratorCommand(b)}.click()
+            ? `${this.getIteratorCommand(b)}.click({force: true})
             cy.waitForNetworkIdle(1000);`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.replaceKeyWord(
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
                 key
-              )}`}).click();
+              )}`}).click({force: true});
               cy.waitForNetworkIdle(1000);`;
         }
 
@@ -165,15 +174,15 @@ export default class CypressCodeGenerator {
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim()).to.eq(${this.replaceKeyWord(key)});
+                    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim()).to.eq(${this.replaceKeyWord(key)});
+                    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
                   });
               }
               });`
-            : this.getCheckTextCommand(this.replaceKeyWord(key));
+            : this.getCheckTextCommand(this.sanitizeKey(key));
         }
       }
     });
@@ -183,7 +192,7 @@ export default class CypressCodeGenerator {
 
   private getParams(method: any) {
     const { parameters, hasStore, hasIterator } = method;
-    const paramNames = parameters.map((p) => p.key);
+    const paramNames = parameters.map((p) => this.sanitizeKey(p.key));
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
@@ -216,6 +225,14 @@ export default class CypressCodeGenerator {
   private async generateCommands(commands: Command[]) {
     const e2eFile = `${this.localSupportFolder}/e2e.ts`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
+    fs.appendFileSync(e2eFile, `
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      return false;
+    });
+    Cypress.on('load', (err, runnable) => {
+      return false;
+    });
+    `)
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
@@ -277,22 +294,28 @@ export default class CypressCodeGenerator {
         a.findIndex((t) => t.key === v.key && t.value === v.value) === i
     );
 
-    for (const selector of filterDuplicateObjects) {
-      selector.key = this.replaceKeyWord(selector.key);
-    }
-    filterDuplicateObjects.findIndex((v, i, a) => {
-      if (a.findIndex((t) => t.key === v.key) !== i) {
-        v.key = `_${v.key}`;
-      }
-    });
+    // for (const selector of filterDuplicateObjects) {
+    //   selector.key = this.replaceKeyWord(selector.key);
+    // }
+    // filterDuplicateObjects.findIndex((v, i, a) => {
+    //   if (a.findIndex((t) => t.key === v.key) !== i) {
+    //     v.key = `_${v.key}`;
+    //   }
+    // });
 
     return filterDuplicateObjects;
   }
 
   private sanitizeKey(key: string): string {
-    let finalKey = key
-      .replace(/\./g, '_')
-      .replace(regex.CAPTURE_STRING_STARTS_WITH_NUMBERS, '_$1');
+    let finalKey = key.replace(/\./g, '').replace(/[> \[\]=":\-\(\)]/g, '');
+
+    if (/^\d/.test(finalKey)) {
+      finalKey = `_${finalKey}`;
+    }
+
+    if (['delete', 'new'].find((k) => k === finalKey)) {
+      finalKey = `_${finalKey}`;
+    }
     return finalKey;
   }
 
@@ -303,6 +326,7 @@ export default class CypressCodeGenerator {
       fileContent = `
 export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
       `;
+      console.log('selector', selector, fileContent);
       fs.appendFileSync(selectorFile, fileContent);
     }
   }
@@ -416,7 +440,7 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
         let endDescribeCommand = `})`;
         let beforeAllContent = `
         
-        before( () => {
+        before( () => {          
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;
