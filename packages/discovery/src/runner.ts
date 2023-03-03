@@ -11,7 +11,6 @@ const library = {
     random: (decimals = 1000000) => Math.floor(Math.random() * decimals),
   },
 };
-
 export default class Runner {
   store: any;
   lastActionId: string | undefined;
@@ -22,6 +21,43 @@ export default class Runner {
   ) {
     this.store = { library };
     global.store = this.store;
+  }
+
+  private assert(
+    actual: any,
+    expected: any,
+    op: string,
+    isNumber: boolean
+  ): boolean {
+    try {
+      if (isNumber && !isNaN(actual) && !isNaN(expected)) {
+        actual = parseFloat(actual);
+        expected = parseFloat(expected);
+      }
+    } catch (e) {
+      log('Error at converting the string to a number');
+    }
+
+    switch (op) {
+      case 'eq':
+        return actual === expected;
+      case 'neq':
+        return actual !== expected;
+      case 'gt':
+        return actual > expected;
+      case 'gte':
+        return actual >= expected;
+      case 'lt':
+        return actual < expected;
+      case 'lte':
+        return actual <= expected;
+      case 'contains':
+        return actual.includes(expected);
+      case 'ncontains':
+        return !actual.includes(expected);
+      default:
+        return false;
+    }
   }
 
   private evaluateExpression(exp: string) {
@@ -91,7 +127,7 @@ export default class Runner {
       }
     }
     for (const sequenceItem of method.sequence) {
-      let { type, uid, locator } = sequenceItem;
+      let { type, uid, op, isNumber, locator } = sequenceItem;
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
@@ -110,6 +146,27 @@ export default class Runner {
           `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
           'yellow'
         );
+        if (op) {
+          if (value) {
+            if (!this.assert(value, valueToValidate, op, isNumber)) {
+              log(`Failed to assert ${value} ${op} ${valueToValidate}`, 'red');
+            } else {
+              log(
+                `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                'green'
+              );
+            }
+          } else {
+            if (!this.assert(text, valueToValidate, op, isNumber)) {
+              log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
+            } else {
+              log(
+                `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                'green'
+              );
+            }
+          }
+        }
       } else if (
         (type === 'fill' || type === 'clearAndFill') &&
         uid &&
@@ -198,7 +255,7 @@ export default class Runner {
       );
       action.exitUrl = url;
       await this.flow.stateScreenshot(page, action.id);
-      this.lastActionId = action.id
+      this.lastActionId = action.id;
       if (action.children && action.children.length && steps.length > 1) {
         await this.executeStep(
           page,
