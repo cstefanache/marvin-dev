@@ -225,14 +225,17 @@ export default class CypressCodeGenerator {
   private async generateCommands(commands: Command[]) {
     const e2eFile = `${this.localSupportFolder}/e2e.ts`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
-    fs.appendFileSync(e2eFile, `
+    fs.appendFileSync(
+      e2eFile,
+      `
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
     Cypress.on('load', (err, runnable) => {
       return false;
     });
-    `)
+    `
+    );
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/commands/${file}`;
@@ -326,7 +329,6 @@ export default class CypressCodeGenerator {
       fileContent = `
 export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
       `;
-      console.log('selector', selector, fileContent);
       fs.appendFileSync(selectorFile, fileContent);
     }
   }
