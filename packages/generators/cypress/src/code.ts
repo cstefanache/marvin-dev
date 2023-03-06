@@ -102,24 +102,171 @@ export default class CypressCodeGenerator {
     return commonPart;
   }
 
-  private getCheckTextCommand(key: string) {
-    return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-      key
-    )}`}).invoke('val').then((val) => {
-      if (val.trim() === '') {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-            expect(text.trim()).to.eq(${this.sanitizeKey(key)});
-          });
-      } else {
-        cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+  private getCheckTextCommand(key: string, op: string, isNumber: boolean) {
+    switch (op) {
+      case 'eq':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
           key
         )}`}).invoke('val').then((val) => {
-            expect(val.trim()).to.eq(${this.sanitizeKey(key)});
-          });
-        }
-    });`;
+        if (val.trim() === '') {
+          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            key
+          )}`}).invoke('text').then((text) => {
+              expect(text.trim()).to.eq(${this.sanitizeKey(key)});
+            });
+        } else {
+          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            key
+          )}`}).invoke('val').then((val) => {
+              expect(val.trim()).to.eq(${this.sanitizeKey(key)});
+            });
+          }
+      });`;
+      case 'neq':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+    if (val.trim() === '') {
+      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+        key
+      )}`}).invoke('text').then((text) => {
+          expect(text.trim()).not.to.eq(${this.sanitizeKey(key)});
+        });
+    } else {
+      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+        key
+      )}`}).invoke('val').then((val) => {
+          expect(val.trim()).not.to.eq(${this.sanitizeKey(key)});
+        });
+      }
+  });`;
+      case 'gt':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+    expect(text.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
+  });
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+    expect(val.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
+  });
+}
+});`;
+      case 'gte':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+expect(text.trim()).to.be.at.least(${this.sanitizeKey(key)});
+});
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+expect(val.trim()).to.be.at.least(${this.sanitizeKey(key)});
+});
+}
+});`;
+      case 'lt':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+expect(text.trim()).to.be.lessThan(${this.sanitizeKey(key)});
+});
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+expect(val.trim()).to.be.lessThan(${this.sanitizeKey(key)});
+});
+}
+});`;
+      case 'lte':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+expect(text.trim()).to.be.at.most(${this.sanitizeKey(key)});
+});
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+expect(val.trim()).to.be.at.most(${this.sanitizeKey(key)});
+});
+}
+});`;
+      case 'contains':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+expect(text.trim()).to.contain(${this.sanitizeKey(key)});
+});
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+expect(val.trim()).to.contain(${this.sanitizeKey(key)});
+});
+}
+});`;
+      case 'ncontains':
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+expect(text.trim()).not.to.contain(${this.sanitizeKey(key)});
+});
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+expect(val.trim()).not.to.contain(${this.sanitizeKey(key)});
+});
+}
+});`;
+      default:
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
+  });
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
+  });
+}
+});`;
+    }
   }
 
   private formatFile(file: string) {
@@ -129,7 +276,7 @@ export default class CypressCodeGenerator {
 
   private getBody(body: BodyDefinition[]) {
     const bodyContent = body.map((b) => {
-      const { element, iteratorName, action } = b;
+      const { element, iteratorName, op, isNumber, action } = b;
       const { key, value, storeName } = element;
       if (!iteratorName) {
         if (action === constants.CLICK_ACTION) {
@@ -156,7 +303,11 @@ export default class CypressCodeGenerator {
         }
 
         if (action === constants.CHECK_ACTION) {
-          return this.getCheckTextCommand(`${this.replaceKeyWord(key)}`);
+          return this.getCheckTextCommand(
+            `${this.replaceKeyWord(key)}`,
+            op,
+            isNumber
+          );
         }
       } else {
         if (action === constants.CLICK_ACTION) {
@@ -182,7 +333,7 @@ export default class CypressCodeGenerator {
                   });
               }
               });`
-            : this.getCheckTextCommand(this.sanitizeKey(key));
+            : this.getCheckTextCommand(this.sanitizeKey(key), op, isNumber);
         }
       }
     });
@@ -297,14 +448,15 @@ export default class CypressCodeGenerator {
         a.findIndex((t) => t.key === v.key && t.value === v.value) === i
     );
 
-    // for (const selector of filterDuplicateObjects) {
-    //   selector.key = this.replaceKeyWord(selector.key);
-    // }
-    // filterDuplicateObjects.findIndex((v, i, a) => {
-    //   if (a.findIndex((t) => t.key === v.key) !== i) {
-    //     v.key = `_${v.key}`;
-    //   }
-    // });
+    //to remove duplicate constants that have the same names but different values
+    for (const selector of filterDuplicateObjects) {
+      selector.key = this.replaceKeyWord(selector.key);
+    }
+    filterDuplicateObjects.findIndex((v, i, a) => {
+      if (a.findIndex((t) => t.key === v.key) !== i) {
+        v.key = `_${v.key}`;
+      }
+    });
 
     return filterDuplicateObjects;
   }
@@ -438,11 +590,24 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
               },
             },
           };
+
+          beforeEach(() => {
+            Cypress.Cookies.defaults({
+              preserve: (cookie) => {
+                return true;
+              },
+            });
+          });
           `;
         let endDescribeCommand = `})`;
         let beforeAllContent = `
         
-        before( () => {          
+        before( () => {   
+          cy.getCookies().then((cookies) => {
+            cookies.forEach((cookie) => {
+              cy.clearCookie(cookie.name);
+            });
+          });       
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;

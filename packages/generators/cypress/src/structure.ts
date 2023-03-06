@@ -219,6 +219,8 @@ export default class Structure {
         iteratorName: iterator,
         iteratorLocator: iterator ? step.locator : undefined,
         action: step.type,
+        op: step.op ? step.op : undefined,
+        isNumber: step.isNumber ? step.isNumber : undefined,
       });
     }
     return definitions;
