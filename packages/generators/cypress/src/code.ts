@@ -449,14 +449,14 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
     );
 
     //to remove duplicate constants that have the same names but different values
-    for (const selector of filterDuplicateObjects) {
-      selector.key = this.replaceKeyWord(selector.key);
-    }
-    filterDuplicateObjects.findIndex((v, i, a) => {
-      if (a.findIndex((t) => t.key === v.key) !== i) {
-        v.key = `_${v.key}`;
-      }
-    });
+    // for (const selector of filterDuplicateObjects) {
+    //   selector.key = this.replaceKeyWord(selector.key);
+    // }
+    // filterDuplicateObjects.findIndex((v, i, a) => {
+    //   if (a.findIndex((t) => t.key === v.key) !== i) {
+    //     v.key = `_${v.key}`;
+    //   }
+    // });
 
     return filterDuplicateObjects;
   }

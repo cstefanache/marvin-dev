@@ -196,7 +196,10 @@ export default function Workspace({
                 data={flow}
                 expandedIds={expandedIds}
                 onExpand={(prop) => {
-                  setExpandedIds(Array.from(prop.treeState.expandedIds));
+                  const { element, treeState } = prop;
+                  const { children } = element
+                  const expandedIdsList = Array.from(prop.treeState.expandedIds).filter((item) => !children.includes(item))
+                  setExpandedIds(expandedIdsList);
                 }}
                 nodeRenderer={({
                   element,
