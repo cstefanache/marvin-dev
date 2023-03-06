@@ -55,4 +55,6 @@ export type BodyDefinition = {
   iteratorName?: string;
   iteratorLocator?: string;
   action: string;
+  op?: string;
+  isNumber?: boolean;
 };
