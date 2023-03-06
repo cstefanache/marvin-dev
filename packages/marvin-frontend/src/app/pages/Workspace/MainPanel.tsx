@@ -8,7 +8,6 @@ import { Log } from '../../components/Log';
 export default function MainPanel(props: any) {
   const { selectedElement, path, runDiscovery, save, deleteNode } = props;
   const { currentNode } = selectedElement || {};
-  const [expandedIds, setExpandedIds] = useState([]);
   const [tab, setTab] = useState<string>('screenshot');
   const [panelWidth, setPanelWidth] = useState<number>(450);
   const [data, setData] = useState<any | null>(null);
@@ -32,6 +31,7 @@ export default function MainPanel(props: any) {
     <div className="main-panel">
       {selectedElement && (
         <Summary
+          changeParent={props.changeParent}
           selectedElement={selectedElement}
           run={() => runDiscovery(selectedElement)}
           addBranch={() => setData(null)}
@@ -111,5 +111,4 @@ export default function MainPanel(props: any) {
       iconSize={100}
     />
   );
-
 }

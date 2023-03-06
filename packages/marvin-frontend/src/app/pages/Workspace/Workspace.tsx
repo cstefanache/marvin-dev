@@ -33,6 +33,7 @@ export default function Workspace({
   const [selectedNode, setSelectedNode] = React.useState<null | any>(null);
   const [loadingIds, setLoadingIds] = React.useState<any>([]);
   const [running, setRunning] = React.useState(false);
+  const [subIds, setSubIds] = React.useState<any>([]);
 
   const [navWidth, setNavWidth] = React.useState<number>(300);
 
@@ -60,7 +61,7 @@ export default function Workspace({
       children: graph,
     });
 
-    console.log(expandedIds)
+    console.log(expandedIds);
     // if (expandedIds === undefined) {
     //   console.log('expanding!!!!')
     //   setExpandedIds(localFlat.map((i: any) => i.id));
@@ -156,22 +157,62 @@ export default function Workspace({
     ]);
   };
 
-  const selectElement = (element: any) => {
-    setSelectedNode(element);
-    setSelectedId(element.id);
+  const selectElement = async (element: any) => {
+    if (subIds.includes(element.currentNode.id)) {
+      const newParent = element.currentNode;
+      const { currentNode, parentNode } = selectedNode;
+      const parentBranch = parentNode.currentNode;
+
+      parentBranch.children = parentBranch.children.filter(
+        (child: any) => child.id !== currentNode.id
+      );
+      await window.electron.updateBranch(parentBranch);
+      newParent.children.push(currentNode);
+      await window.electron.updateBranch(newParent);
+      loadFlow();
+    } else {
+      setSelectedNode(element);
+      setSelectedId(element.id);
+    }
+    setSubIds([]);
+  };
+
+  const changeParent = () => {
+    if (subIds.length === 0) {
+      const { currentNode } = selectedNode;
+      const { url } = currentNode;
+      const menuItems = flow.filter(
+        (item: any) => item.currentNode.exitUrl === url
+      );
+
+      setSubIds(menuItems.map((item: any) => item.currentNode.id));
+    } else {
+      setSubIds([]);
+    }
   };
 
   const getIconFor = (currentNode: any, isExpanded: boolean) => {
     if (loadingIds.includes(currentNode.id)) {
-      return <Icon icon="cog" />;
+      return <Icon size={12} icon="cog" />;
     } else if (loadingIds.includes(currentNode.id + '-discovery')) {
-      return <Icon icon="search-template" />;
+      return <Icon size={12} icon="search-template" />;
     } else if (currentNode.method) {
-      return <Icon icon="code-block" />;
+      return <Icon size={12} icon="code-block" style={{ color: '#00B7FF' }} />;
     } else if (!currentNode.method && isExpanded) {
-      return <Icon icon="folder-open" />;
+      return <Icon size={12} icon="folder-open" style={{ color: '#FFC100' }} />;
     } else if (!currentNode.method && !isExpanded) {
-      return <Icon icon="folder-close" />;
+      return (
+        <Icon size={12} icon="folder-close" style={{ color: '#FFB900' }} />
+      );
+    }
+  };
+
+  const getActionFor = (listNode: any, isExpanded: boolean) => {
+    if (
+      subIds.includes(listNode.id) &&
+      selectedNode.currentNode.id !== listNode.id
+    ) {
+      return <Icon size={12} icon="inheritance" />;
     }
   };
 
@@ -197,8 +238,10 @@ export default function Workspace({
                 expandedIds={expandedIds}
                 onExpand={(prop) => {
                   const { element, treeState } = prop;
-                  const { children } = element
-                  const expandedIdsList = Array.from(prop.treeState.expandedIds).filter((item) => !children.includes(item))
+                  const { children } = element;
+                  const expandedIdsList = Array.from(
+                    prop.treeState.expandedIds
+                  ).filter((item) => !children.includes(item));
                   setExpandedIds(expandedIdsList);
                 }}
                 nodeRenderer={({
@@ -235,12 +278,12 @@ export default function Workspace({
                     <span {...getNodeProps()}>
                       {element.children?.length > 0 &&
                         isBranch &&
-                        !isExpanded && <Icon icon="chevron-right" />}
+                        !isExpanded && <Icon size={14} icon="chevron-right" />}
                       {element.children?.length > 0 &&
                         isBranch &&
-                        isExpanded && <Icon icon="chevron-down" />}
+                        isExpanded && <Icon size={14} icon="chevron-down" />}
                       {(!isBranch || element.children?.length === 0) && (
-                        <Icon icon="dot" />
+                        <Icon size={12} icon="dot" />
                       )}
                     </span>
                     <span
@@ -248,16 +291,21 @@ export default function Workspace({
                       onClick={() => selectElement(element)}
                     >
                       {getIconFor((element as any).currentNode, isExpanded)}
-
+                      {getActionFor((element as any).currentNode, isExpanded)}
                       {element.name}
                     </span>
-                    <Icon icon="play" onClick={() => runDiscovery(element)} />
+                    <Icon
+                      size={12}
+                      icon="play"
+                      onClick={() => runDiscovery(element)}
+                    />
                   </div>
                 )}
               />
             </div>
             {!running && (
               <MainPanel
+                changeParent={changeParent}
                 selectedElement={selectedNode}
                 runDiscovery={runDiscovery}
                 save={save}
