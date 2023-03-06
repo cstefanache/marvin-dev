@@ -438,11 +438,24 @@ export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
               },
             },
           };
+
+          beforeEach(() => {
+            Cypress.Cookies.defaults({
+              preserve: (cookie) => {
+                return true;
+              },
+            });
+          });
           `;
         let endDescribeCommand = `})`;
         let beforeAllContent = `
         
-        before( () => {          
+        before( () => {   
+          cy.getCookies().then((cookies) => {
+            cookies.forEach((cookie) => {
+              cy.clearCookie(cookie.name);
+            });
+          });       
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;
