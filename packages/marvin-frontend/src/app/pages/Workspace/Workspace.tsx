@@ -9,19 +9,26 @@ import RunningPanel from './Running';
 
 interface Props {
   highlightedMethod: any;
+  expandedIds?: any[];
+  setExpandedIds: Function;
   workspace: {
     name: string;
     path: string;
   };
 }
 
-export default function Workspace({ workspace, highlightedMethod }: Props) {
+export default function Workspace({
+  workspace,
+  highlightedMethod,
+  expandedIds,
+  setExpandedIds,
+}: Props) {
   const [path, setPath] = useState(null);
   const [flow, setFlow] = React.useState<any>(null);
   const [config, setConfig] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
   const [actions, setActions] = React.useState<any>(null);
-  const [expandedIds, setExpandedIds] = React.useState<any>([]);
+
   const [selectedId, setSelectedId] = React.useState<null | number>(null);
   const [selectedNode, setSelectedNode] = React.useState<null | any>(null);
   const [loadingIds, setLoadingIds] = React.useState<any>([]);
@@ -39,7 +46,8 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
       });
     }, []);
 
-  const loadFlow = async () => {
+  const loadFlow = async (initial = false) => {
+    console.log('load flow', initial);
     const flow = await window.electron.getFlow();
     const config = await window.electron.getConfig();
     const path = await window.electron.getWorkspacePath();
@@ -52,7 +60,11 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
       children: graph,
     });
 
-    setExpandedIds(localFlat.map((i: any) => i.id));
+    console.log(expandedIds)
+    // if (expandedIds === undefined) {
+    //   console.log('expanding!!!!')
+    //   setExpandedIds(localFlat.map((i: any) => i.id));
+    // }
     setPath(path);
     setFlow(localFlat);
     setConfig(config);
@@ -62,7 +74,7 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
 
   useEffect(() => {
     const asyncFn = async () => {
-      await loadFlow();
+      await loadFlow(true);
     };
     asyncFn();
 
@@ -84,13 +96,7 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
         skip: true,
         children: graph,
       });
-      const expandedIds = localFlat.reduce((memo: any[], i: any) => {
-        if (i.children && i.children.length) {
-          memo.push(i.id);
-        }
-        return memo;
-      }, []);
-      setExpandedIds(expandedIds);
+
       setFlow(localFlat);
       setRunning(false);
     });
@@ -104,13 +110,7 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
         skip: true,
         children: graph,
       });
-      const expandedIds = localFlat.reduce((memo: any[], i: any) => {
-        if (i.children && i.children.length) {
-          memo.push(i.id);
-        }
-        return memo;
-      }, []);
-      setExpandedIds(expandedIds);
+
       setFlow(localFlat);
       setLoadingIds([]);
     });
@@ -186,12 +186,18 @@ export default function Workspace({ workspace, highlightedMethod }: Props) {
               className={`workspace-layout__graph ${
                 loadingIds.length > 0 ? 'processing' : ''
               }`}
-              style={{ width: navWidth, minWidth: navWidth }}
+              style={{
+                width: navWidth,
+                minWidth: navWidth,
+                height: 'calc(100vh - 50px)',
+              }}
             >
               <TreeView
                 data={flow}
-                key={expandedIds.join(',')}
                 expandedIds={expandedIds}
+                onExpand={(prop) => {
+                  setExpandedIds(Array.from(prop.treeState.expandedIds));
+                }}
                 nodeRenderer={({
                   element,
                   getNodeProps,

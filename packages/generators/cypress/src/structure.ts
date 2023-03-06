@@ -176,9 +176,10 @@ export default class Structure {
     for (const step of sequence) {
       identifiers.push({
         key:
-          step.details.trim() === ''
-            ? this.getNameFromLocator(step.locator)
-            : this.toCamelCase(step.details),
+          step.locator,
+          // step.details.trim() === ''
+          //   ? this.getNameFromLocator(step.locator)
+          //   : this.toCamelCase(step.details),
         value: step.locator,
       });
     }
@@ -208,10 +209,10 @@ export default class Structure {
     for (const step of sequence) {
       definitions.push({
         element: {
-          key:
-            step.details.trim() === ''
-              ? this.getNameFromLocator(step.locator)
-              : this.toCamelCase(step.details),
+          key: step.locator,
+            // step.details.trim() === ''
+            //   ? this.getNameFromLocator(step.locator)
+            //   : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
         },
@@ -233,10 +234,10 @@ export default class Structure {
     const paramsOrder: string[] = [];
     for (const step of action.sequence) {
       const { uid, locator, details } = step;
-      const keyName =
-        step.details.trim() === ''
-          ? this.getNameFromLocator(locator)
-          : this.toCamelCase(details);
+      const keyName = step.locator
+        // step.details.trim() === ''
+        //   ? this.getNameFromLocator(locator)
+        //   : this.toCamelCase(details);
       paramsOrder.push(uid);
       if (
         step.type === constants.CLEAR_AND_FILL_ACTION ||

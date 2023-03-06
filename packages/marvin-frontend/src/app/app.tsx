@@ -26,6 +26,7 @@ export function App() {
   const [highlightedMethod, setHighlightedMethod] = useState<string | null>(
     null
   );
+  const [expandedIds, setExpandedIds] = useState<any[] | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -61,6 +62,8 @@ export function App() {
           element={
             workspace && (
               <Workspace
+                expandedIds={expandedIds}
+                setExpandedIds={setExpandedIds}
                 workspace={workspace}
                 highlightedMethod={highlightedMethod}
               />
@@ -79,10 +82,7 @@ export function App() {
           path="/methods"
           element={<Methods setHighlightedMethod={highlightMethod} />}
         />
-        <Route
-          path="/generate"
-          element={<Generate />}
-        />
+        <Route path="/generate" element={<Generate />} />
       </Routes>
     </>
   );

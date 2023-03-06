@@ -272,7 +272,10 @@ export default class Discovery {
 
     if (!isUniqueSoFar) {
       const parent = await element.$x('..');
-      const parentElement = parent.length > 0 ? parent[0].asElement() as ElementHandle<Element> : undefined;
+      const parentElement =
+        parent.length > 0
+          ? (parent[0].asElement() as ElementHandle<Element>)
+          : undefined;
 
       if (parentElement) {
         let parentLocator = await this.getLocator(
@@ -358,8 +361,8 @@ export default class Discovery {
         const text = (await element.evaluate((el) => el.textContent)) as string;
         input.push({
           text,
-          details: await element.evaluate((el) =>
-            el.getAttribute('placeholder')
+          details: await element.evaluate(
+            (el) => `${(el as any).value}  ${el.getAttribute('placeholder')}`
           ),
           type: await element.evaluate((el) => el.getAttribute('type')),
           locator: await getLocatorForElement(inputSelector, index, element),
@@ -375,10 +378,19 @@ export default class Discovery {
 
       for (const [index, element] of elements.entries()) {
         const text = (await element.evaluate((el) => el.textContent)) as string;
-        actions.push({
+        const item: any = {
           text,
           locator: await getLocatorForElement(actionSelector, index, element),
-        });
+        };
+
+        try {
+          item.base64Image = await (
+            await element.screenshot({ type: 'png', encoding: 'base64' })
+          ).toString();
+        } catch (err) {
+          //silent
+        }
+        actions.push(item);
       }
     }
 
@@ -417,16 +429,20 @@ export default class Discovery {
 
                 elements.push({
                   text,
-                  locator: iteratorElements.length > 1 ? await getLocatorForElement(
-                    {
-                      name: iteratorElement.name,
-                      skipOptimizer: iteratorElement.skipOptimizer || false,
-                      selectors: [iteratorElement.selector],
-                    },
-                    index,
-                    childElement,
-                    element
-                  ) : iteratorElement.selector,
+                  locator:
+                    iteratorElements.length > 1
+                      ? await getLocatorForElement(
+                          {
+                            name: iteratorElement.name,
+                            skipOptimizer:
+                              iteratorElement.skipOptimizer || false,
+                            selectors: [iteratorElement.selector],
+                          },
+                          index,
+                          childElement,
+                          element
+                        )
+                      : iteratorElement.selector,
                 });
               }
             }

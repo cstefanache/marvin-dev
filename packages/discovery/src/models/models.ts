@@ -4,6 +4,7 @@ export type IdentifiableElement = {
   text?: string;
   locator?: string;
   details?: string | null;
+  base64Image?: string;
   type?: string | null;
   el?: ElementHandle<Element>;
   identifier?: ElementHandle<Element>;

@@ -8,7 +8,7 @@ export function log(message: string, color = 'yellow'): void {
 
     aditionalLoggers.forEach((logger: unknown) => {
       // @ts-ignore
-      logger?.log(message);
+      logger?.log(message, color);
     })
 }
 

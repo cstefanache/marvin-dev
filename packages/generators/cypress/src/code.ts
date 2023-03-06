@@ -310,7 +310,7 @@ export default class CypressCodeGenerator {
   }
 
   private sanitizeKey(key: string): string {
-    let finalKey = key.replace(/\./g, '').replace(/[> \[\]=":\-\(\)]/g, '');
+    let finalKey = key.replace(/\./g, '').replace(/[> #\/\[\]=":\-\(\)]/g, '');
 
     if (/^\d/.test(finalKey)) {
       finalKey = `_${finalKey}`;

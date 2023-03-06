@@ -44,7 +44,6 @@ export default function DiscoveredElements(props: any) {
                   name: iteratorName,
                 },
               });
-
             }
             return memo;
           }, []),
@@ -56,7 +55,7 @@ export default function DiscoveredElements(props: any) {
         setDiscoveredElements(items);
       }
     };
-    console.log('>>>', exitUrl)
+    console.log('>>>', exitUrl);
     getElements(exitUrl);
   }, [exitUrl]);
 
@@ -69,6 +68,9 @@ export default function DiscoveredElements(props: any) {
             <div>
               <Tag minimal={true}>{item.locator}</Tag>
             </div>
+            {item.base64Image && (
+              <img src={`data:image/png;base64,${item.base64Image}`} />
+            )}
           </Callout>
         ))}
       </div>

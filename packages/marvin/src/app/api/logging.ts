@@ -4,27 +4,27 @@ import App from '../app';
 
 export class Logger {
   private consoleLogFn: Function;
-  private logs: string[] = [];
+  private logs: string[][] = [];
 
   constructor(private section: string, color: string) {
     this.consoleLogFn = (colors as any)[color];
     this.log(`Logger initialized for ${section}`)
   }
 
-  public log(message: string): void {
+  public log(message: string, col?: string): void {
     console.log(this.consoleLogFn(`[ ${this.section} ] ${message}`));
     if (App.mainWindow) {
-      App.mainWindow.webContents.send('log', this.section, message);
+      App.mainWindow.webContents.send('log', this.section, [col, message]);
     }
-    this.logs.push(message);
+    this.logs.push([col, message]);
   }
 
   public error(message: string): void {
     (colors as any)['red'](`[ ${this.section} ] ${message}`);
-    this.logs.push(message);
+    this.logs.push(['red', message]);
   }
 
-  public getLogs(count = 100): string[] {
+  public getLogs(count = 100): string[][] {
     return this.logs.slice(-count);
   }
 }
@@ -52,7 +52,7 @@ export function getRegisteredLogs(): string[] {
   return Object.keys(logs);
 }
 
-export function getLogs(section: string, count = 100): string[] {
+export function getLogs(section: string, count = 100): string[][] {
   if (section) {
     return logs[section].getLogs(count);
   }

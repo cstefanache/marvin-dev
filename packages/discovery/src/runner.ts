@@ -99,8 +99,7 @@ export default class Runner {
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
                 ).trim();
-
-                console.log(`[${index}] ${uid}: |${text}|${resultEvaluation}|`);
+                log(`${index.toString().padStart(3)}: |${resultEvaluation}|${text}|`, 'yellow')
                 // if (text === resultEvaluation) {
                 if (new RegExp(resultEvaluation).test(text)) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
@@ -134,38 +133,45 @@ export default class Runner {
       log(`Executing sequence: [${type}]: ${locator}`);
 
       if (type === 'check') {
-        const element = await page.$(locator);
-        const text = await element.evaluate((el) => el.textContent?.trim());
-        const value = await page.evaluate(
-          (locator) => (document.querySelector(locator) as any).value,
-          locator
-        );
-        const valueToValidate = this.evaluateExpression(parameters[uid]);
+        try {
+          const element = await page.$(locator);
+          const text = await element.evaluate((el) => el.textContent?.trim());
+          const value = await page.evaluate(
+            (locator) => (document.querySelector(locator) as any).value,
+            locator
+          );
+          const valueToValidate = this.evaluateExpression(parameters[uid]);
 
-        log(
-          `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
-          'yellow'
-        );
-        if (op) {
-          if (value) {
-            if (!this.assert(value, valueToValidate, op, isNumber)) {
-              log(`Failed to assert ${value} ${op} ${valueToValidate}`, 'red');
+          log(
+            `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
+            'yellow'
+          );
+          if (op) {
+            if (value) {
+              if (!this.assert(value, valueToValidate, op, isNumber)) {
+                log(
+                  `Failed to assert ${value} ${op} ${valueToValidate}`,
+                  'red'
+                );
+              } else {
+                log(
+                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                  'green'
+                );
+              }
             } else {
-              log(
-                `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                'green'
-              );
-            }
-          } else {
-            if (!this.assert(text, valueToValidate, op, isNumber)) {
-              log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
-            } else {
-              log(
-                `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                'green'
-              );
+              if (!this.assert(text, valueToValidate, op, isNumber)) {
+                log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
+              } else {
+                log(
+                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
+                  'green'
+                );
+              }
             }
           }
+        } catch (err) {
+          log(`Error on checking`, 'red');
         }
       } else if (
         (type === 'fill' || type === 'clearAndFill') &&
@@ -186,14 +192,17 @@ export default class Runner {
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
-        await element.hover();
-        await element.focus();
+       
         if (element) {
+          await element.hover();
+          await element.focus();
           const text = await element.evaluate((el) => el.textContent?.trim());
           log(`Clicking on ${text} (${locator})`, 'yellow');
           // await element.screenshot({ path: 'example.png' });
           await element.evaluate((el: any) => el.click());
           log(`Clicked on ${text}`, 'yellow');
+        } else {
+          log(`Element ${locator} not found`, 'red')
         }
       }
 

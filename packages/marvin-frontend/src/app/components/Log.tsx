@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-
+import './LogStyles.scss';
 export function Log({ log }: { log: string }) {
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -17,7 +16,7 @@ export function Log({ log }: { log: string }) {
     window.ipcRender.receive('log', (section: string, message: string) => {
       // console.log(section, message);
       if (section === log) {
-        console.log('received log', section, message)
+        console.log('received log', section, message);
         setMessages((messages) => [...messages, message].slice(-500));
         scrollToBottom();
       }
@@ -42,7 +41,9 @@ export function Log({ log }: { log: string }) {
   return (
     <div className="log-panel" ref={logsRef}>
       {messages.map((message: string, index: number) => (
-        <p key={index}>{message}</p>
+        <pre style={{ color: message[0] }} key={index}>
+          {message[1]}
+        </pre>
       ))}
     </div>
   );
