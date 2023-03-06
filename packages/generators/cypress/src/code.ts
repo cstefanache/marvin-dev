@@ -248,6 +248,24 @@ expect(val.trim()).not.to.contain(${this.sanitizeKey(key)});
 });
 }
 });`;
+      default:
+        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+if (val.trim() === '') {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('text').then((text) => {
+    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
+  });
+} else {
+cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          key
+        )}`}).invoke('val').then((val) => {
+    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
+  });
+}
+});`;
     }
   }
 
