@@ -56,21 +56,25 @@ export default function Workspace({
     const { graph, actions } = flow;
 
     const localFlat = localFlattenTree({
-      sequenceStep: config.name,
+      sequenceStep: '[root] ' + config.name,
       skip: true,
       children: graph,
     });
 
-    console.log(expandedIds);
-    // if (expandedIds === undefined) {
-    //   console.log('expanding!!!!')
-    //   setExpandedIds(localFlat.map((i: any) => i.id));
-    // }
     setPath(path);
     setFlow(localFlat);
     setConfig(config);
     setActions(actions);
     setLoading(false);
+
+  };
+
+  const expandAll = () => {
+    setExpandedIds(flow.map((i: any) => i.id));
+  };
+
+  const collapseAll = () => {
+    setExpandedIds([]);
   };
 
   useEffect(() => {
@@ -228,80 +232,103 @@ export default function Workspace({
                 loadingIds.length > 0 ? 'processing' : ''
               }`}
               style={{
+                display: 'flex',
+                flexDirection: 'column',
                 width: navWidth,
                 minWidth: navWidth,
                 height: 'calc(100vh - 50px)',
               }}
             >
-              <TreeView
-                data={flow}
-                expandedIds={expandedIds}
-                onExpand={(prop) => {
-                  const { element, treeState } = prop;
-                  const { children } = element;
-                  const expandedIdsList = Array.from(
-                    prop.treeState.expandedIds
-                  ).filter((item) => !children.includes(item));
-                  setExpandedIds(expandedIdsList);
-                }}
-                nodeRenderer={({
-                  element,
-                  getNodeProps,
-                  isBranch,
-                  isExpanded,
-                  level,
-                  handleSelect,
-                }) => (
-                  <div
-                    key={element.id}
-                    className={
-                      (highlightedMethod &&
-                      highlightedMethod ===
-                        (element as any).currentNode.methodUid
-                        ? 'highlight'
-                        : '') +
-                      ' ' +
-                      (selectedId && selectedId === element.id
-                        ? 'selected'
-                        : '') +
-                      ' ' +
-                      (loadingIds.includes((element as any).currentNode.id)
-                        ? 'running'
-                        : loadingIds.includes(
-                            (element as any).currentNode.id + '-discovery'
-                          )
-                        ? 'discovery'
-                        : '')
-                    }
-                    style={{ paddingLeft: 5 * (level - 1) }}
-                  >
-                    <span {...getNodeProps()}>
-                      {element.children?.length > 0 &&
-                        isBranch &&
-                        !isExpanded && <Icon size={14} icon="chevron-right" />}
-                      {element.children?.length > 0 &&
-                        isBranch &&
-                        isExpanded && <Icon size={14} icon="chevron-down" />}
-                      {(!isBranch || element.children?.length === 0) && (
-                        <Icon size={12} icon="dot" />
-                      )}
-                    </span>
-                    <span
-                      className="sequence"
-                      onClick={() => selectElement(element)}
+              <div className="treeview-header">
+                <Icon
+                  size={12}
+                  icon="expand-all"
+                  title="Expand All"
+                  onClick={expandAll}
+                />
+                <Icon
+                  size={12}
+                  icon="collapse-all"
+                  title="Collapse All"
+                  onClick={collapseAll}
+                />
+              </div>
+              <div
+                className="treeview-content"
+                style={{ flexGrow: 1, overflow: 'auto' }}
+              >
+                <TreeView
+                  data={flow}
+                  expandedIds={expandedIds}
+                  onExpand={(prop) => {
+                    const { element, treeState } = prop;
+                    const { children } = element;
+                    const expandedIdsList = Array.from(
+                      prop.treeState.expandedIds
+                    ).filter((item) => !children.includes(item));
+                    setExpandedIds(expandedIdsList);
+                  }}
+                  nodeRenderer={({
+                    element,
+                    getNodeProps,
+                    isBranch,
+                    isExpanded,
+                    level,
+                    handleSelect,
+                  }) => (
+                    <div
+                      key={element.id}
+                      className={
+                        (highlightedMethod &&
+                        highlightedMethod ===
+                          (element as any).currentNode.methodUid
+                          ? 'highlight'
+                          : '') +
+                        ' ' +
+                        (selectedId && selectedId === element.id
+                          ? 'selected'
+                          : '') +
+                        ' ' +
+                        (loadingIds.includes((element as any).currentNode.id)
+                          ? 'running'
+                          : loadingIds.includes(
+                              (element as any).currentNode.id + '-discovery'
+                            )
+                          ? 'discovery'
+                          : '')
+                      }
+                      style={{ paddingLeft: 5 * (level - 1) }}
                     >
-                      {getIconFor((element as any).currentNode, isExpanded)}
-                      {getActionFor((element as any).currentNode, isExpanded)}
-                      {element.name}
-                    </span>
-                    <Icon
-                      size={12}
-                      icon="play"
-                      onClick={() => runDiscovery(element)}
-                    />
-                  </div>
-                )}
-              />
+                      <span {...getNodeProps()}>
+                        {element.children?.length > 0 &&
+                          isBranch &&
+                          !isExpanded && (
+                            <Icon size={14} icon="chevron-right" />
+                          )}
+                        {element.children?.length > 0 &&
+                          isBranch &&
+                          isExpanded && <Icon size={14} icon="chevron-down" />}
+                        {(!isBranch || element.children?.length === 0) && (
+                          <Icon size={12} icon="dot" />
+                        )}
+                      </span>
+                      <span
+                        className="sequence"
+                        onClick={() => selectElement(element)}
+                      >
+                        {getIconFor((element as any).currentNode, isExpanded)}
+                        {getActionFor((element as any).currentNode, isExpanded)}
+                        {element.name}
+                      </span>
+                      <Icon
+                        size={12}
+                        icon="play"
+                        onClick={() => runDiscovery(element)}
+                      />
+                    </div>
+                  )}
+                />
+              </div>
             </div>
             {!running && (
               <MainPanel

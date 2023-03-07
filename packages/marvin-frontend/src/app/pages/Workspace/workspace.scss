@@ -25,6 +25,23 @@
     height: 100%;
     column-gap: 2px;
 
+    .treeview-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 0 0 5px;
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        
+
+        .bp4-icon {
+            cursor: pointer;
+            margin-left: 4px;
+            &:hover {
+                color: #ffcc00;
+            }
+        }
+    }
+
     .summary {
         padding: 8px 4px;
         display: flex;
