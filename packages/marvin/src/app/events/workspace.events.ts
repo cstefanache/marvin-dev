@@ -7,7 +7,10 @@ import { ipcMain, dialog } from 'electron';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Structure, CypressCodeGenerator } from '@marvin/generators/cypress';
+import {
+  Structure,
+  CypressCodeGenerator,
+} from '../../../../generators/cypress/src';
 import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
@@ -125,8 +128,12 @@ ipcMain.handle('generate-tests-in-folder', async () => {
     if (data.filePaths.length > 0) {
       const workspacePath = data.filePaths[0];
       const structure = new Structure(workspace.config.path);
-      const generator = new CypressCodeGenerator(structure.flow, structure.config, workspacePath);
-      generator.generate()
+      const generator = new CypressCodeGenerator(
+        structure.flow,
+        structure.config,
+        workspacePath
+      );
+      generator.generate();
     }
   });
 });
