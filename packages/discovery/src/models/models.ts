@@ -70,9 +70,11 @@ export type Actions = {
   methodUid: string;
   iterator?: IdentifiableIterator;
   sequence: Sequence[];
+  path?: string;
+  isGlobal?: boolean;
 };
 
 export type FlowModel = {
   graph: ActionItem[];
-  actions: { [key: string]: Actions[] };
+  actions: Actions[];
 };

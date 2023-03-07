@@ -99,7 +99,12 @@ export default class Runner {
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
                 ).trim();
-                log(`${index.toString().padStart(3)}: |${resultEvaluation}|${text}|`, 'yellow')
+                log(
+                  `${index
+                    .toString()
+                    .padStart(3)}: |${resultEvaluation}|${text}|`,
+                  'yellow'
+                );
                 // if (text === resultEvaluation) {
                 if (new RegExp(resultEvaluation).test(text)) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
@@ -192,7 +197,7 @@ export default class Runner {
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         const element = await page.$(locator);
-       
+
         if (element) {
           await element.hover();
           await element.focus();
@@ -202,7 +207,7 @@ export default class Runner {
           await element.evaluate((el: any) => el.click());
           log(`Clicked on ${text}`, 'yellow');
         } else {
-          log(`Element ${locator} not found`, 'red')
+          log(`Element ${locator} not found`, 'red');
         }
       }
 
@@ -279,7 +284,10 @@ export default class Runner {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
       const { method: methodName, loop, methodLoop, parameters } = action;
-      const urlActions = actions[url];
+      const urlActions = actions.filter(
+        (item: Actions) =>
+          (!item.isGlobal && item.path === url) || item.isGlobal
+      );
       if (urlActions) {
         const method = urlActions.find(
           (item: Actions) => item.method === methodName
