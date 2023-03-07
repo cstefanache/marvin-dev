@@ -18,7 +18,8 @@
     "paths": {
       "@marvin-nx/generate-code": ["packages/generate-code/src/index.ts"],
       "@marvin-nx/generate-tests": ["packages/generate-tests/src/index.ts"],
-      "@marvin/discovery": ["packages/discovery/src/index.ts"]
+      "@marvin/discovery": ["packages/discovery/src/index.ts"],
+      "@marvin/generators/cypress": ["packages/generators/cypress/src/index.ts"]
     },
     "types": ["puppeteer", "jest-environment-puppeteer", "expect-puppeteer"]
   },
