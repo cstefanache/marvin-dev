@@ -4,29 +4,35 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 100%;
 
     .methods__navigation {
         width: 350px;
         border-right: 2px solid rgba(255, 255, 255, 0.5);
         margin-right: 2px;
-        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 50px);
 
-        .tree-node {
-            display: flex;
+        .tree {
             flex-grow: 1;
-            flex-direction: row;
-            padding: 2px;
+            overflow: auto;
 
-            &:hover {
-                background-color: rgb(87, 86, 92);
+            .tree-node {
+                display: flex;
+                flex-grow: 1;
+                flex-direction: row;
+                padding: 2px;
 
-                .bp4-icon {
-                    color: rgba(255, 255, 255, 0.6);
-                    cursor: pointer;
+                &:hover {
+                    background-color: rgb(87, 86, 92);
 
-                    &:hover {
-                        color: rgba(255, 255, 255, 1);
+                    .bp4-icon {
+                        color: rgba(255, 255, 255, 0.6);
+                        cursor: pointer;
+
+                        &:hover {
+                            color: rgba(255, 255, 255, 1);
+                        }
                     }
                 }
             }

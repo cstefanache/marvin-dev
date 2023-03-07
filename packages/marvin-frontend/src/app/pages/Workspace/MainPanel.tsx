@@ -39,69 +39,66 @@ export default function MainPanel(props: any) {
           deleteNode={deleteNode}
         />
       )}
-      {currentNode.exitUrl !== undefined && (
-        <div className="working-panel">
-          {
-            <AddMethod
-              exitUrl={data ? currentNode.url : currentNode.exitUrl}
-              style={{ width: panelWidth, minWidth: panelWidth }}
-              title={data?.method ? 'Edit Method Execution' : 'Add Method'}
-              parent={
-                data
-                  ? selectedElement.parentNode?.currentNode
-                  : selectedElement.currentNode
-              }
-              data={data}
-              save={save}
-            />
+
+      <div className="working-panel">
+        <AddMethod
+          exitUrl={data ? currentNode.url : currentNode.exitUrl}
+          style={{ width: panelWidth, minWidth: panelWidth }}
+          title={data?.method ? 'Edit Method Execution' : 'Add Method'}
+          parent={
+            data
+              ? selectedElement.parentNode?.currentNode
+              : selectedElement.currentNode
           }
-          <div className="right">
-            {currentNode.exitUrl !== undefined && (
-              <Tabs onChange={(id: string) => setTab(id)} selectedTabId={tab}>
-                <Tab
-                  id="screenshot"
-                  title="Screenshot"
-                  panel={
-                    <div
-                      className="image"
-                      style={{
-                        backgroundImage: `url(file://${path}/screenshots/${
-                          currentNode.id
-                        }.png?cache=${Date.now()})`,
-                        backgroundSize: 'cover',
-                      }}
-                    ></div>
-                  }
-                />
-                <Tab
-                  id="discovered"
-                  title="Discovered"
-                  panel={<DiscoveredElements exitUrl={currentNode.exitUrl} />}
-                />
-                <Tab
-                  id="discovery-console"
-                  title="Discovery Console"
-                  panel={<Log log="marvin:discovery" />}
-                />
-              </Tabs>
-            )}
-          </div>
-        </div>
-      )}
-      {currentNode.exitUrl === undefined && (
-        <NonIdealState
-          title="Current node was not discovered yet."
-          description="Please run discover to perform discovery"
-          action={
-            <Button
-              title="Discover"
-              onClick={() => runDiscovery(selectedElement)}
-            >
-              Discover
-            </Button>
-          }
+          data={data}
+          save={save}
         />
-      )}
+        <div className="right">
+          {currentNode.exitUrl !== undefined && (
+            <Tabs onChange={(id: string) => setTab(id)} selectedTabId={tab}>
+              <Tab
+                id="screenshot"
+                title="Screenshot"
+                panel={
+                  <div
+                    className="image"
+                    style={{
+                      backgroundImage: `url(file://${path}/screenshots/${
+                        currentNode.id
+                      }.png?cache=${Date.now()})`,
+                      backgroundSize: 'cover',
+                    }}
+                  ></div>
+                }
+              />
+              <Tab
+                id="discovered"
+                title="Discovered"
+                panel={<DiscoveredElements exitUrl={currentNode.exitUrl} />}
+              />
+              <Tab
+                id="discovery-console"
+                title="Discovery Console"
+                panel={<Log log="marvin:discovery" />}
+              />
+            </Tabs>
+          )}
+          {currentNode.exitUrl === undefined && (
+            <NonIdealState
+              title="Current node was not discovered yet."
+              description="Please run discover to perform discovery"
+              action={
+                <Button
+                  title="Discover"
+                  onClick={() => runDiscovery(selectedElement)}
+                >
+                  Discover
+                </Button>
+              }
+            />
+          )}
+        </div>
+      </div>
     </div>
   ) : (
     <NonIdealState

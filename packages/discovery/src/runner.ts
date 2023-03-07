@@ -99,7 +99,12 @@ export default class Runner {
                 const resultEvaluation = this.evaluateExpression(
                   parameters[uid]
                 ).trim();
-                log(`${index.toString().padStart(3)}: |${resultEvaluation}|${text}|`, 'yellow')
+                log(
+                  `${index
+                    .toString()
+                    .padStart(3)}: |${resultEvaluation}|${text}|`,
+                  'yellow'
+                );
                 // if (text === resultEvaluation) {
                 if (new RegExp(resultEvaluation).test(text)) {
                   prefix = `${rootSelector}:nth-of-type(${index + 1})`;
@@ -131,10 +136,13 @@ export default class Runner {
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
       log(`Executing sequence: [${type}]: ${locator}`);
-
+      const element = await page.$(locator);
+      if (!element) {
+        log(`Element ${locator} not found`, 'red');
+        continue;
+      }
       if (type === 'check') {
         try {
-          const element = await page.$(locator);
           const text = await element.evaluate((el) => el.textContent?.trim());
           const value = await page.evaluate(
             (locator) => (document.querySelector(locator) as any).value,
@@ -191,36 +199,40 @@ export default class Runner {
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
-        const element = await page.$(locator);
-       
-        if (element) {
-          await element.hover();
-          await element.focus();
-          const text = await element.evaluate((el) => el.textContent?.trim());
-          log(`Clicking on ${text} (${locator})`, 'yellow');
-          // await element.screenshot({ path: 'example.png' });
-          await element.evaluate((el: any) => el.click());
-          log(`Clicked on ${text}`, 'yellow');
-        } else {
-          log(`Element ${locator} not found`, 'red')
-        }
+        await element.hover();
+        await element.focus();
+        const text = await element.evaluate((el) => el.textContent?.trim());
+        log(`Clicking on ${text} (${locator})`, 'yellow');
+        // await element.screenshot({ path: 'example.png' });
+        await element.evaluate((el: any) => el.click());
+        log(`Clicked on ${text}`, 'yellow');
       }
 
       if (sequenceItem.store) {
-        const element = await page.$(locator);
-        if (element) {
-          const value = await page.evaluate(
-            (element: any) => element.getAttribute('value'),
-            element
-          );
-          const text = await element.evaluate((el: any) =>
-            el.textContent?.trim()
-          );
-          // const key = parameters[uid];
-          const key = sequenceItem.storeName;
-          this.store[key] = value || text;
-          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
-        }
+        await page.evaluate(
+          (element: any) => element.blur(),
+          element
+        );
+        log(`Locator: ${locator}`, 'red');
+        const value = await page.evaluate(
+          (element: any) => element.value,
+          element
+        );
+        const text = await element.evaluate((el: any) =>
+          el.textContent?.trim(),
+          element
+        );
+
+        console.log('#######');
+
+        await element.screenshot({ path: 'example.png' });
+        // const key = parameters[uid];
+        const key = sequenceItem.storeName;
+        this.store[key] = value || text;
+        log(
+          `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
+          'yellow'
+        );
       }
     }
   }

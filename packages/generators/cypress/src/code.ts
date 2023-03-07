@@ -299,12 +299,12 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
               )}`}).clear().type(${this.sanitizeKey(key)});
              ${
                constants.STORE_KEY_WORD
-             }["${storeName}"] = ${this.replaceKeyWord(key)};`;
+             }["${storeName}"] = ${this.sanitizeKey(key)};`;
         }
 
         if (action === constants.CHECK_ACTION) {
           return this.getCheckTextCommand(
-            `${this.replaceKeyWord(key)}`,
+            `${this.sanitizeKey(key)}`,
             op,
             isNumber
           );
