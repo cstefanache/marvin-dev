@@ -1,210 +1,208 @@
 {
-  "actions": {
-    "/signin": [
-      {
-        "method": "Login",
-        "sequence": [
-          {
-            "uid": "7a975ffa-0bed-4d8e-b5ec-34791ea6682e",
-            "locator": "input#username",
-            "details": " ",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "653fc369-1ee6-467d-804d-614ccf6ece54",
-            "locator": "input#password",
-            "details": " ",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "60b6c7df-fe6f-4774-86e3-42f6890e60d0",
-            "locator": "button",
-            "details": "Sign In ",
-            "type": "click"
-          }
-        ]
-      }
-    ],
-    "/": [
-      {
-        "method": "Go to Ne Transaction screen",
-        "sequence": [
-          {
-            "uid": "828a3dd4-381f-4985-9ea4-44ce7f3fcd6e",
-            "locator": "a[data-test=\"nav-top-new-transaction\"]",
-            "details": " New ",
-            "type": "click"
-          }
-        ]
-      },
-      {
-        "method": "See transaction details",
-        "sequence": [
-          {
-            "uid": "8b18dbfe-a45d-4c76-b3df-5ce380b623cc",
-            "locator": "p.MuiTypography-body2",
-            "details": "Payment-440579 Transaction Iterator",
-            "type": "click"
-          }
-        ],
-        "iterator": {
-          "name": "Transaction Iterator",
-          "identifier": ".MuiTypography-body2",
-          "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
+  "actions": [
+    {
+      "method": "Login",
+      "path": "/signin",
+      "sequence": [
+        {
+          "uid": "7a975ffa-0bed-4d8e-b5ec-34791ea6682e",
+          "locator": "input#username",
+          "details": " ",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "653fc369-1ee6-467d-804d-614ccf6ece54",
+          "locator": "input#password",
+          "details": " ",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "60b6c7df-fe6f-4774-86e3-42f6890e60d0",
+          "locator": "button",
+          "details": "Sign In ",
+          "type": "click"
         }
-      },
-      {
-        "method": "Go To Bank Accounts",
-        "sequence": [
-          {
-            "uid": "3d67c1b2-966a-418a-bee8-e9f8e645ca2a",
-            "locator": "a[data-test=\"sidenav-bankaccounts\"]",
-            "details": "Bank Accounts ",
-            "type": "click"
-          }
-        ]
-      }
-    ],
-    "/transaction/new": [
-      {
-        "method": "Select Contact",
-        "sequence": [
-          {
-            "uid": "84b33d4c-d000-4182-bf0c-c971ac7268d6",
-            "locator": "li[data-test=\"user-list-item-t45AiwidW\"] > div:nth-of-type(2) > span",
-            "details": "Edgar Johns Edgar Johns",
-            "type": "click"
-          }
-        ]
-      },
-      {
-        "method": "Select Contact (generic)",
-        "sequence": [
-          {
-            "uid": "137dd38a-eed6-4d36-99f1-9a865fe596c4",
-            "locator": "span.MuiTypography-root",
-            "details": "Edgar Johns Contact Iterator",
-            "type": "click"
-          }
-        ],
-        "iterator": {
-          "name": "Contact Iterator",
-          "identifier": ".MuiTypography-body1",
-          "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
+      ]
+    },
+    {
+      "method": "Go to Ne Transaction screen",
+      "path": "/",
+      "sequence": [
+        {
+          "uid": "828a3dd4-381f-4985-9ea4-44ce7f3fcd6e",
+          "locator": "a[data-test=\"nav-top-new-transaction\"]",
+          "details": " New ",
+          "type": "click"
         }
-      },
-      {
-        "method": "Create payment",
-        "sequence": [
-          {
-            "uid": "d75898f3-8ba2-43ca-8062-7f7ceabf4110",
-            "locator": "input#amount",
-            "details": " Amount",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "9f322e2d-246a-4715-9f61-f138359f4e4f",
-            "locator": "input#transaction-create-description-input",
-            "details": " Add a note",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "efe55669-1a9b-4432-bcda-ece186e80478",
-            "locator": "input#transaction-create-description-input",
-            "details": " Add a note",
-            "type": "store"
-          },
-          {
-            "uid": "a819c723-39c0-446b-899d-a6e86383dfad",
-            "locator": "button[data-test=\"transaction-create-submit-payment\"]",
-            "details": "Pay ",
-            "type": "click"
-          }
-        ]
-      },
-      {
-        "method": "Back to Transactions",
-        "sequence": [
-          {
-            "uid": "81745846-e1b6-4285-bfa1-9921c3686da2",
-            "locator": "a[data-test=\"new-transaction-return-to-transactions\"]",
-            "details": "Return To Transactions ",
-            "type": "click"
-          }
-        ]
+      ]
+    },
+    {
+      "method": "See transaction details",
+      "path": "/",
+      "sequence": [
+        {
+          "uid": "8b18dbfe-a45d-4c76-b3df-5ce380b623cc",
+          "locator": "p.MuiTypography-body2",
+          "details": "Payment-440579 Transaction Iterator",
+          "type": "click"
+        }
+      ],
+      "iterator": {
+        "name": "Transaction Iterator",
+        "identifier": ".MuiTypography-body2",
+        "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
       }
-    ],
-    "/transaction/krCl7-EnC": [
-      {
-        "method": "Check Details",
-        "sequence": [
-          {
-            "uid": "cb58c3d5-1ba7-49f5-82c4-1dca51492ad1",
-            "locator": "h2",
-            "details": "Transaction Detail Transaction Detail",
-            "type": "check"
-          }
-        ]
+    },
+    {
+      "method": "Go To Bank Accounts",
+      "path": "/",
+      "sequence": [
+        {
+          "uid": "3d67c1b2-966a-418a-bee8-e9f8e645ca2a",
+          "locator": "a[data-test=\"sidenav-bankaccounts\"]",
+          "details": "Bank Accounts ",
+          "type": "click"
+        }
+      ]
+    },
+    {
+      "method": "Select Contact",
+      "path": "/transaction/new",
+      "sequence": [
+        {
+          "uid": "84b33d4c-d000-4182-bf0c-c971ac7268d6",
+          "locator": "li[data-test=\"user-list-item-t45AiwidW\"] > div:nth-of-type(2) > span",
+          "details": "Edgar Johns Edgar Johns",
+          "type": "click"
+        }
+      ]
+    },
+    {
+      "method": "Select Contact (generic)",
+      "path": "/transaction/new",
+      "sequence": [
+        {
+          "uid": "137dd38a-eed6-4d36-99f1-9a865fe596c4",
+          "locator": "span.MuiTypography-root",
+          "details": "Edgar Johns Contact Iterator",
+          "type": "click"
+        }
+      ],
+      "iterator": {
+        "name": "Contact Iterator",
+        "identifier": ".MuiTypography-body1",
+        "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
       }
-    ],
-    "/transaction/{transactionId}": [
-      {
-        "method": "Check Result (second)",
-        "sequence": [
-          {
-            "uid": "9ef33ed0-f8d3-42c7-a421-f1cc01f9993c",
-            "locator": "h2",
-            "details": "Transaction Detail Transaction Detail",
-            "type": "check"
-          }
-        ]
-      }
-    ],
-    "/bankaccounts": [
-      {
-        "method": "Click Creat btn",
-        "sequence": [
-          {
-            "uid": "a44f020e-0db9-4079-b5a8-d1c523b80086",
-            "locator": "a[data-test=\"bankaccount-new\"]",
-            "details": "Create ",
-            "type": "click"
-          }
-        ]
-      }
-    ],
-    "/bankaccounts/new": [
-      {
-        "method": "Create Bank account",
-        "sequence": [
-          {
-            "uid": "dff7515c-35fa-4069-a6de-3e554bab2339",
-            "locator": "input#bankaccount-bankName-input",
-            "details": " Bank Name",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "fe297182-ce65-4b8b-911c-446be79587b8",
-            "locator": "input#bankaccount-routingNumber-input",
-            "details": " Routing Number",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "74081dcb-0c6d-475b-91ab-5b0554f62896",
-            "locator": "input#bankaccount-accountNumber-input",
-            "details": " Account Number",
-            "type": "clearAndFill"
-          },
-          {
-            "uid": "e60e440a-524a-4bfb-a235-118827626137",
-            "locator": "button[type=\"submit\"]",
-            "details": "Save ",
-            "type": "click"
-          }
-        ]
-      }
-    ]
-  },
+    },
+    {
+      "method": "Create payment",
+      "path": "/transaction/new",
+      "sequence": [
+        {
+          "uid": "d75898f3-8ba2-43ca-8062-7f7ceabf4110",
+          "locator": "input#amount",
+          "details": " Amount",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "9f322e2d-246a-4715-9f61-f138359f4e4f",
+          "locator": "input#transaction-create-description-input",
+          "details": " Add a note",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "efe55669-1a9b-4432-bcda-ece186e80478",
+          "locator": "input#transaction-create-description-input",
+          "details": " Add a note",
+          "type": "store"
+        },
+        {
+          "uid": "a819c723-39c0-446b-899d-a6e86383dfad",
+          "locator": "button[data-test=\"transaction-create-submit-payment\"]",
+          "details": "Pay ",
+          "type": "click"
+        }
+      ]
+    },
+    {
+      "method": "Back to Transactions",
+      "path": "/transaction/new",
+      "sequence": [
+        {
+          "uid": "81745846-e1b6-4285-bfa1-9921c3686da2",
+          "locator": "a[data-test=\"new-transaction-return-to-transactions\"]",
+          "details": "Return To Transactions ",
+          "type": "click"
+        }
+      ]
+    },
+    {
+      "method": "Check Details",
+      "path": "/transaction/krCl7-EnC",
+      "sequence": [
+        {
+          "uid": "cb58c3d5-1ba7-49f5-82c4-1dca51492ad1",
+          "locator": "h2",
+          "details": "Transaction Detail Transaction Detail",
+          "type": "check"
+        }
+      ]
+    },
+    {
+      "method": "Check Result (second)",
+      "path": "/transaction/{transactionId}",
+      "sequence": [
+        {
+          "uid": "9ef33ed0-f8d3-42c7-a421-f1cc01f9993c",
+          "locator": "h2",
+          "details": "Transaction Detail Transaction Detail",
+          "type": "check"
+        }
+      ]
+    },
+    {
+      "method": "Click Creat btn",
+      "path": "/bankaccounts",
+      "sequence": [
+        {
+          "uid": "a44f020e-0db9-4079-b5a8-d1c523b80086",
+          "locator": "a[data-test=\"bankaccount-new\"]",
+          "details": "Create ",
+          "type": "click"
+        }
+      ]
+    },
+    {
+      "method": "Create Bank account",
+      "path": "/bankaccounts/new",
+      "sequence": [
+        {
+          "uid": "dff7515c-35fa-4069-a6de-3e554bab2339",
+          "locator": "input#bankaccount-bankName-input",
+          "details": " Bank Name",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "fe297182-ce65-4b8b-911c-446be79587b8",
+          "locator": "input#bankaccount-routingNumber-input",
+          "details": " Routing Number",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "74081dcb-0c6d-475b-91ab-5b0554f62896",
+          "locator": "input#bankaccount-accountNumber-input",
+          "details": " Account Number",
+          "type": "clearAndFill"
+        },
+        {
+          "uid": "e60e440a-524a-4bfb-a235-118827626137",
+          "locator": "button[type=\"submit\"]",
+          "details": "Save ",
+          "type": "click"
+        }
+      ]
+    }
+  ],
   "graph": [
     {
       "id": "bank_account_id",
