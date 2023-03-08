@@ -70,7 +70,7 @@ export type Actions = {
   methodUid: string;
   iterator?: IdentifiableIterator;
   sequence: Sequence[];
-  path?: string;
+  path: string;
   isGlobal?: boolean;
 };
 

@@ -1,6 +1,6 @@
 import { ConfigModel, Iterator } from './models/config';
 import * as constants from './utils/constants';
-import * as regex from './utils/regex';
+import { getCheckTextCommand, sanitizeKey } from './utils/utils';
 import * as prettier from 'prettier';
 import {
   Command,
@@ -29,12 +29,12 @@ export default class CypressCodeGenerator {
       : this.config.outputPath;
     this.localSupportFolder = path.join(
       forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/support`
+      `${this.outputPath}/${constants.SUPPORT_FOLDER}`
     );
 
     this.localTestFolder = path.join(
       forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/e2e`
+      `${this.outputPath}/${constants.SPEC_FOLDER}`
     );
 
     if (!fs.existsSync(this.localTestFolder)) {
@@ -51,7 +51,7 @@ export default class CypressCodeGenerator {
 
     if (!fs.existsSync(this.localSupportFolder)) {
       fs.mkdirSync(this.localSupportFolder);
-      fs.mkdirSync(`${this.localSupportFolder}/commands`);
+      fs.mkdirSync(`${this.localSupportFolder}/${constants.COMMAND_FOLDER}`);
     }
   }
 
@@ -102,173 +102,6 @@ export default class CypressCodeGenerator {
     return commonPart;
   }
 
-  private getCheckTextCommand(key: string, op: string, isNumber: boolean) {
-    switch (op) {
-      case 'eq':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-        if (val.trim() === '') {
-          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-            key
-          )}`}).invoke('text').then((text) => {
-              expect(text.trim()).to.eq(${this.sanitizeKey(key)});
-            });
-        } else {
-          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-            key
-          )}`}).invoke('val').then((val) => {
-              expect(val.trim()).to.eq(${this.sanitizeKey(key)});
-            });
-          }
-      });`;
-      case 'neq':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    if (val.trim() === '') {
-      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-        key
-      )}`}).invoke('text').then((text) => {
-          expect(text.trim()).not.to.eq(${this.sanitizeKey(key)});
-        });
-    } else {
-      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-        key
-      )}`}).invoke('val').then((val) => {
-          expect(val.trim()).not.to.eq(${this.sanitizeKey(key)});
-        });
-      }
-  });`;
-      case 'gt':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
-  });
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    expect(val.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
-  });
-}
-});`;
-      case 'gte':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.least(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.at.least(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'lt':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.lessThan(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.lessThan(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'lte':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.most(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.at.most(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'contains':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.contain(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.contain(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'ncontains':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).not.to.contain(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).not.to.contain(${this.sanitizeKey(key)});
-});
-}
-});`;
-      default:
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
-  });
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
-  });
-}
-});`;
-    }
-  }
-
   private formatFile(file: string) {
     const content = fs.readFileSync(file, 'utf8');
     fs.writeFileSync(file, prettier.format(content, { parser: 'typescript' }));
@@ -280,7 +113,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
       const { key, value, storeName } = element;
       if (!iteratorName) {
         if (action === constants.CLICK_ACTION) {
-          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
             key
           )}`}).click({force: true});
           cy.waitForNetworkIdle(1000);`;
@@ -291,19 +124,19 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
           action === constants.FILL_ACTION
         ) {
           return storeName === null
-            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
-              )}`}).clear().type(${this.sanitizeKey(key)});`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+              )}`}).clear().type(${sanitizeKey(key)});`
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
-              )}`}).clear().type(${this.sanitizeKey(key)});
-             ${
-               constants.STORE_KEY_WORD
-             }["${storeName}"] = ${this.replaceKeyWord(key)};`;
+              )}`}).clear().type(${sanitizeKey(key)});
+             ${constants.STORE_KEY_WORD}["${storeName}"] = ${sanitizeKey(
+                key
+              )};`;
         }
 
         if (action === constants.CHECK_ACTION) {
-          return this.getCheckTextCommand(
+          return getCheckTextCommand(
             `${this.replaceKeyWord(key)}`,
             op,
             isNumber
@@ -314,7 +147,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
           return this.getIteratorCommand(b)
             ? `${this.getIteratorCommand(b)}.click({force: true})
             cy.waitForNetworkIdle(1000);`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
               )}`}).click({force: true});
               cy.waitForNetworkIdle(1000);`;
@@ -325,15 +158,15 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
+                    expect(text.trim()).to.eq(${sanitizeKey(key)});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
+                    expect(val.trim()).to.eq(${sanitizeKey(key)});
                   });
               }
               });`
-            : this.getCheckTextCommand(this.sanitizeKey(key), op, isNumber);
+            : getCheckTextCommand(sanitizeKey(key), op, isNumber);
         }
       }
     });
@@ -343,7 +176,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
 
   private getParams(method: any) {
     const { parameters, hasStore, hasIterator } = method;
-    const paramNames = parameters.map((p) => this.sanitizeKey(p.key));
+    const paramNames = parameters.map((p) => sanitizeKey(p.key));
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
@@ -374,7 +207,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateCommands(commands: Command[]) {
-    const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+    const e2eFile = `${this.localSupportFolder}/${constants.GLOBAL_SUPPORT_FILE_NAME}`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     fs.appendFileSync(
       e2eFile,
@@ -389,27 +222,29 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
     );
     for (const command of commands) {
       const { file, methods } = command;
-      const commandFile = `${this.localSupportFolder}/commands/${file}`;
+      const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
 
       fs.appendFileSync(
         e2eFile,
-        `import './commands/${file}';
+        `import './${constants.COMMAND_FOLDER}/${file}';
       `
       );
       let importLocation: string = this.getRelativePath(
-        `${this.localSupportFolder}/commands`,
-        `${this.localSupportFolder}/app.po.ts`
+        `${this.localSupportFolder}/${constants.COMMAND_FOLDER}`,
+        `${this.localSupportFolder}/${constants.PAGE_FILE_NAME}`
       );
-      fs.writeFileSync(
-        commandFile,
-        `
-  import * as locators from '${importLocation}';
-        `
-      );
-      for (const method of methods) {
-        await this.writeMethod(commandFile, method);
+      if (methods.length > 0) {
+        fs.writeFileSync(
+          commandFile,
+          `
+    import * as locators from '${importLocation}';
+          `
+        );
+        for (const method of methods) {
+          await this.writeMethod(commandFile, method);
+        }
+        this.formatFile(commandFile);
       }
-      this.formatFile(commandFile);
     }
     this.formatFile(e2eFile);
   }
@@ -461,25 +296,12 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
     return filterDuplicateObjects;
   }
 
-  private sanitizeKey(key: string): string {
-    let finalKey = key.replace(/\./g, '').replace(/[> #\/\[\]=":\-\(\)]/g, '');
-
-    if (/^\d/.test(finalKey)) {
-      finalKey = `_${finalKey}`;
-    }
-
-    if (['delete', 'new'].find((k) => k === finalKey)) {
-      finalKey = `_${finalKey}`;
-    }
-    return finalKey;
-  }
-
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localSupportFolder}/app.po.ts`;
+    const selectorFile = `${this.localSupportFolder}/${constants.PAGE_FILE_NAME}`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
-export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
+export const ${sanitizeKey(selector.key)} = '${selector.value}';
       `;
       fs.appendFileSync(selectorFile, fileContent);
     }

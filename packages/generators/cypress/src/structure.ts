@@ -2,7 +2,11 @@ import * as fs from 'fs';
 import { log } from '../../../discovery/src/utils/logger';
 import * as constants from './utils/constants';
 import * as regex from './utils/regex';
-import { ActionItem, FlowModel } from '../../../discovery/src/models/models';
+import {
+  ActionItem,
+  FlowModel,
+  Actions,
+} from '../../../discovery/src/models/models';
 import { Config } from '@marvin/discovery';
 import { camelCase } from 'lodash';
 import {
@@ -36,10 +40,13 @@ export default class Structure {
   };
 
   constructor(private inputPath: string) {
-    if (fs.existsSync(`${this.inputPath}/config.json`)) {
+    if (fs.existsSync(`${this.inputPath}/${constants.CONFIG_FILE_NAME}`)) {
       log('Previous config file found, loading ...', 'green');
       this.rawConfig = JSON.parse(
-        fs.readFileSync(`${this.inputPath}/config.json`, 'utf8')
+        fs.readFileSync(
+          `${this.inputPath}/${constants.CONFIG_FILE_NAME}`,
+          'utf8'
+        )
       );
     } else {
       throw new Error(
@@ -47,10 +54,10 @@ export default class Structure {
       );
     }
 
-    if (fs.existsSync(`${this.inputPath}/flow.json`)) {
+    if (fs.existsSync(`${this.inputPath}/${constants.FLOW_FILE_NAME}`)) {
       log('The flow file found, loading ...', 'green');
       this.rawFlow = JSON.parse(
-        fs.readFileSync(`${this.inputPath}/flow.json`, 'utf8')
+        fs.readFileSync(`${this.inputPath}/${constants.FLOW_FILE_NAME}`, 'utf8')
       );
     } else {
       throw new Error(
@@ -160,7 +167,9 @@ export default class Structure {
           group: currentLastGroupName,
           specs: [
             {
-              file: this.toCamelCase(actionItem.sequenceStep) + '.spec.cy.js',
+              file:
+                this.toCamelCase(actionItem.sequenceStep) +
+                `${constants.SPEC_SUFFIX}`,
               beforeAll: parentTests,
               tests: currentTests,
             },
@@ -175,11 +184,10 @@ export default class Structure {
     const identifiers: Identifier[] = [];
     for (const step of sequence) {
       identifiers.push({
-        key:
-          step.locator,
-          // step.details.trim() === ''
-          //   ? this.getNameFromLocator(step.locator)
-          //   : this.toCamelCase(step.details),
+        key: step.locator,
+        // step.details.trim() === ''
+        //   ? this.getNameFromLocator(step.locator)
+        //   : this.toCamelCase(step.details),
         value: step.locator,
       });
     }
@@ -189,13 +197,11 @@ export default class Structure {
   private getSelectors() {
     const { actions } = this.rawFlow;
     let selectors: any[] = [];
-    for (const key of Object.keys(actions)) {
-      for (const action of actions[key]) {
-        selectors.push({
-          file: this.toCamelCase(action.method) + '.po.js',
-          selectors: [...this.getSelectorIdentifiers(action.sequence)],
-        });
-      }
+    for (const action of actions) {
+      selectors.push({
+        file: this.toCamelCase(action.method) + `${constants.PAGE_SUFFIX}`,
+        selectors: [...this.getSelectorIdentifiers(action.sequence)],
+      });
     }
     return selectors;
   }
@@ -210,9 +216,9 @@ export default class Structure {
       definitions.push({
         element: {
           key: step.locator,
-            // step.details.trim() === ''
-            //   ? this.getNameFromLocator(step.locator)
-            //   : this.toCamelCase(step.details),
+          // step.details.trim() === ''
+          //   ? this.getNameFromLocator(step.locator)
+          //   : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
         },
@@ -236,10 +242,10 @@ export default class Structure {
     const paramsOrder: string[] = [];
     for (const step of action.sequence) {
       const { uid, locator, details } = step;
-      const keyName = step.locator
-        // step.details.trim() === ''
-        //   ? this.getNameFromLocator(locator)
-        //   : this.toCamelCase(details);
+      const keyName = step.locator;
+      // step.details.trim() === ''
+      //   ? this.getNameFromLocator(locator)
+      //   : this.toCamelCase(details);
       paramsOrder.push(uid);
       if (
         step.type === constants.CLEAR_AND_FILL_ACTION ||
@@ -289,13 +295,41 @@ export default class Structure {
     return methods;
   }
 
+  private getIsGlobalFlag(actions: Actions[]): boolean {
+    for (const action of actions) {
+      if (action.isGlobal) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private getUniquePaths(actions: Actions[]): string[] {
+    const paths: string[] = [];
+    for (const action of actions) {
+      paths.push(action.path);
+    }
+    return [...new Set(paths)];
+  }
+
+  private getMethodsByPath(actions: Actions[], path: string) {
+    return actions.filter(
+      (action) =>
+        (action.path === path && !action.isGlobal) ||
+        (action.isGlobal && path === constants.COMMON_FILE_NAME)
+    );
+  }
+
   private getCommands() {
     const { actions } = this.rawFlow;
     let commands: any[] = [];
-    for (const key of Object.keys(actions)) {
+    const paths: string[] = this.getIsGlobalFlag(actions)
+      ? [...this.getUniquePaths(actions), constants.COMMON_FILE_NAME]
+      : [...this.getUniquePaths(actions)];
+    for (const path of paths) {
       commands.push({
-        file: this.getCommandFileName(key) + '.js',
-        methods: [...this.getMethods(actions[key])],
+        file: this.getCommandFileName(path) + '.js',
+        methods: [...this.getMethods(this.getMethodsByPath(actions, path))],
       });
     }
     return commands;
