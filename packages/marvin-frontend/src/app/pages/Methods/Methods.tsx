@@ -1,4 +1,4 @@
-import { Alert, Icon, Intent } from '@blueprintjs/core';
+import { Alert, Icon, InputGroup, Intent } from '@blueprintjs/core';
 import { ReactNode, useEffect, useState, useMemo, useRef } from 'react';
 import CreateMethod from '../../components/AddMethod/CreateMethod';
 import TreeView from 'react-accessible-treeview';
@@ -8,6 +8,7 @@ import '../../components/AddMethod/AddMethodStyles.scss';
 
 export default function Methods(props: any) {
   const { setHighlightedMethod } = props;
+  const [filter, setFilter] = useState<string | undefined>(undefined);
   const [actions, setActions] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState<any>([]);
   const [selectedMethod, setSelectedMethod] = useState<any>(null);
@@ -79,6 +80,13 @@ export default function Methods(props: any) {
   return (
     <div className="methods">
       <div className="methods__navigation">
+        <InputGroup
+          value={filter}
+          leftIcon="filter"
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}
+        />
         {actions && (
           <TreeView
             data={actions}
@@ -93,7 +101,11 @@ export default function Methods(props: any) {
               handleSelect,
             }) => {
               const { currentNode, parentNode } = element as any;
-              return (
+              return !filter ||
+                filter.length === 0 ||
+                currentNode.name
+                  .toLowerCase()
+                  .includes(filter.toLowerCase()) ? (
                 <div
                   {...getNodeProps()}
                   onClick={() => {
@@ -130,11 +142,14 @@ export default function Methods(props: any) {
                     )}
 
                     {currentNode.useCount > 0 && (
-                      <Icon icon="highlight" onClick={handleHighlight(currentNode)} />
+                      <Icon
+                        icon="highlight"
+                        onClick={handleHighlight(currentNode)}
+                      />
                     )}
                   </span>
                 </div>
-              );
+              ) : null;
             }}
           />
         )}

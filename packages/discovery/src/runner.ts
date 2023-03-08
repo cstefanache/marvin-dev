@@ -136,10 +136,13 @@ export default class Runner {
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
       log(`Executing sequence: [${type}]: ${locator}`);
-
+      const element = await page.$(locator);
+      if (!element) {
+        log(`Element ${locator} not found`, 'red');
+        continue;
+      }
       if (type === 'check') {
         try {
-          const element = await page.$(locator);
           const text = await element.evaluate((el) => el.textContent?.trim());
           const value = await page.evaluate(
             (locator) => (document.querySelector(locator) as any).value,
@@ -212,20 +215,27 @@ export default class Runner {
       }
 
       if (sequenceItem.store) {
-        const element = await page.$(locator);
-        if (element) {
-          const value = await page.evaluate(
-            (element: any) => element.getAttribute('value'),
-            element
-          );
-          const text = await element.evaluate((el: any) =>
-            el.textContent?.trim()
-          );
-          // const key = parameters[uid];
-          const key = sequenceItem.storeName;
-          this.store[key] = value || text;
-          log(`Stored ${key} as ${this.store[key]}`, 'yellow');
-        }
+        await page.evaluate((element: any) => element.blur(), element);
+        log(`Locator: ${locator}`, 'red');
+        const value = await page.evaluate(
+          (element: any) => element.value,
+          element
+        );
+        const text = await element.evaluate(
+          (el: any) => el.textContent?.trim(),
+          element
+        );
+
+        console.log('#######');
+
+        await element.screenshot({ path: 'example.png' });
+        // const key = parameters[uid];
+        const key = sequenceItem.storeName;
+        this.store[key] = value || text;
+        log(
+          `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
+          'yellow'
+        );
       }
     }
   }

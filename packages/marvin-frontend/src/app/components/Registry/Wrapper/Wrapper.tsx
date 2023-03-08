@@ -87,8 +87,7 @@ export function SelectMethodCustomWrapper({
   property,
   children,
 }: CustomWrapperProps) {
-  const { inputType, title } = property as any;
-
+  const { inputType, title, store, storeName } = property as any;
   if (
     inputType === undefined ||
     inputType === 'fill' ||
@@ -100,12 +99,12 @@ export function SelectMethodCustomWrapper({
       <div
         style={
           inputType !== undefined
-            ? { paddingLeft: 5, borderLeft: '4px solid #FFF' }
-            : {}
+            ? { paddingLeft: 5, borderLeft: '4px solid #FFF', marginBottom: 10 }
+            : { marginBottom: 10}
         }
       >
-        {/* {inputType && <Icon icon={getActionIcon(inputType)} />} */}
         <Wrapper property={property}>{children}</Wrapper>
+        {store && <Tag minimal={true} icon="database">{storeName}</Tag>}
       </div>
     );
   } else {
@@ -122,6 +121,7 @@ export function SelectMethodCustomWrapper({
           [{inputType}]
         </span>{' '}
         <Tag minimal={true}>{title}</Tag>
+        
       </div>
     );
   }

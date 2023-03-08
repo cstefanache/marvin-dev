@@ -24,7 +24,7 @@ export class Logger {
     this.logs.push(['red', message]);
   }
 
-  public getLogs(count = 100): string[][] {
+  public getLogs(count = 500): string[][] {
     return this.logs.slice(-count);
   }
 }

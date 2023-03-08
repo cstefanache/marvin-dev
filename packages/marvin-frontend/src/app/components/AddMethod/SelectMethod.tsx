@@ -24,7 +24,7 @@ const SelectMethod = (props: any) => {
 
   useEffect(() => {
     const asyncFn = async () => {
-      const methods = await window.electron.getMethodsForPath(exitUrl);
+      const methods = await window.electron.getMethodsForPath(exitUrl || parent.exitUrl);
       setMethods(methods || []);
 
       if (method && methods) {
@@ -79,6 +79,8 @@ const SelectMethod = (props: any) => {
                     title: obj.locator,
                     description: obj.details, 
                     inputType: obj.type,
+                    store: obj.store,
+                    storeName: obj.storeName
                   };
                   return memo;
                 }, {}),
