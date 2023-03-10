@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import { Config, KeyValuePair } from './models/config';
+import { Config, KeyValuePair, Sequence, Alias } from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -64,24 +64,48 @@ export default class Runner {
     return eval('`' + exp + '`');
   }
 
+  private getFlowIterators(method: Actions): IdentifiableIterator[] {
+    const iterators: IdentifiableIterator[] = [];
+    for (const seq of method.sequence) {
+      if (seq.iterator) {
+        iterators.push(seq.iterator);
+      }
+    }
+    return iterators;
+  }
+
+  private async findIteratorDefinition(
+    iterators: IdentifiableIterator[],
+    name: string
+  ): Promise<IdentifiableIterator> {
+    return iterators.find((it) => it.name === name);
+  }
+
   private async executeMethod(
     method: Actions,
     page: Page,
     parameters: any
   ): Promise<void> {
     let prefix = '';
-    if (method.iterator && this.config.aliases.iterators) {
-      const iteratorName = method.iterator.name;
+    const methodIterators = this.getFlowIterators(method);
+    if (methodIterators.length > 0 && this.config.aliases.iterators) {
       log(
         `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
       );
-      const iteratorConfig = this.config.aliases.iterators.find(
-        (configIterator) => configIterator.name === iteratorName
-      );
+      let iteratorConfig: Alias | undefined;
+      for (const iterator of methodIterators) {
+        iteratorConfig = this.config.aliases.iterators.find(
+          (it) => it.name === iterator.name
+        );
+      }
       if (iteratorConfig) {
         for (const rootSelector of iteratorConfig.selectors) {
           const rootElements = await page.$$(rootSelector);
-          const iteratorDef: IdentifiableIterator = method.iterator;
+          const iteratorDef: IdentifiableIterator =
+            await this.findIteratorDefinition(
+              methodIterators,
+              iteratorConfig.name
+            );
 
           if (rootElements && rootElements.length) {
             for (const [index, rootElem] of rootElements.entries()) {
@@ -118,23 +142,26 @@ export default class Runner {
           }
         }
       } else {
-        throw new Error(`Missing iterator config for ${iteratorName}`);
+        throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
       }
 
       if (prefix === '') {
         log(
-          `No root element found for ${iteratorName} for parameters ${JSON.stringify(
-            parameters
-          )}`
+          `No root element found for ${
+            iteratorConfig.name
+          } for parameters ${JSON.stringify(parameters)}`
         );
         return;
       }
     }
+
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator } = sequenceItem;
-      locator = `${prefix !== '' ? prefix : ''}${
-        prefix !== '' && locator ? ' ' : ''
-      }${locator || ''}`;
+      let { type, uid, op, isNumber, locator, iterator } = sequenceItem;
+      locator = iterator
+        ? `${prefix !== '' ? prefix : ''}${
+            prefix !== '' && locator ? ' ' : ''
+          }${locator || ''}`
+        : locator;
       log(`Executing sequence: [${type}]: ${locator}`);
       const element = await page.$(locator);
       if (!element) {
@@ -225,8 +252,6 @@ export default class Runner {
           (el: any) => el.textContent?.trim(),
           element
         );
-
-        console.log('#######');
 
         await element.screenshot({ path: 'example.png' });
         // const key = parameters[uid];

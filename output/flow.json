@@ -44,14 +44,14 @@
           "uid": "8b18dbfe-a45d-4c76-b3df-5ce380b623cc",
           "locator": "p.MuiTypography-body2",
           "details": "Payment-440579 Transaction Iterator",
-          "type": "click"
+          "type": "click",
+          "iterator": {
+            "name": "Transaction Iterator",
+            "identifier": ".MuiTypography-body2",
+            "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
+          }
         }
-      ],
-      "iterator": {
-        "name": "Transaction Iterator",
-        "identifier": ".MuiTypography-body2",
-        "uid": "50f68634-7d00-403d-ba3a-d37d995217bb"
-      }
+      ]
     },
     {
       "method": "Go To Bank Accounts",
@@ -85,14 +85,14 @@
           "uid": "137dd38a-eed6-4d36-99f1-9a865fe596c4",
           "locator": "span.MuiTypography-root",
           "details": "Edgar Johns Contact Iterator",
-          "type": "click"
+          "type": "click",
+          "iterator": {
+            "name": "Contact Iterator",
+            "identifier": ".MuiTypography-body1",
+            "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
+          }
         }
-      ],
-      "iterator": {
-        "name": "Contact Iterator",
-        "identifier": ".MuiTypography-body1",
-        "uid": "4d2fd344-cde2-4577-94d4-9431573705ab"
-      }
+      ]
     },
     {
       "method": "Create payment",
