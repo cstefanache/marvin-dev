@@ -53,6 +53,7 @@ export type Sequence = {
   uid: string;
   op?: string;
   isNumber?: boolean;
+  press?: boolean;
   store?: boolean;
   storeName?: string;
   locator: string;
