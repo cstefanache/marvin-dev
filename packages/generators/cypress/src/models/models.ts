@@ -20,6 +20,12 @@ export type Identifier = {
   key: string;
   value?: string;
   storeName?: string;
+  iterator?: Iterator;
+};
+
+export type Iterator = {
+  name: string;
+  identifier: string;
 };
 
 export type Test = {
@@ -45,15 +51,15 @@ export type Command = {
 export type MethodDefinition = {
   name: string;
   parameters?: Identifier[];
-  hasIterator?: boolean;
+  // hasIterator?: boolean;
   hasStore?: boolean;
   body: BodyDefinition[];
 };
 
 export type BodyDefinition = {
   element: Identifier;
-  iteratorName?: string;
-  iteratorLocator?: string;
+  // iteratorName?: string;
+  // iteratorLocator?: string;
   action: string;
   op?: string;
   isNumber?: boolean;

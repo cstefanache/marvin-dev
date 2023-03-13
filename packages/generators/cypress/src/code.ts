@@ -1,4 +1,5 @@
 import { ConfigModel, Iterator } from './models/config';
+import { Identifier } from './models/models';
 import * as constants from './utils/constants';
 import { getCheckTextCommand, sanitizeKey } from './utils/utils';
 import * as prettier from 'prettier';
@@ -67,16 +68,13 @@ export default class CypressCodeGenerator {
     return value.replace(/"/g, "'");
   }
 
-  private getIteratorItemCommand(
-    iterator: Iterator,
-    value: string = `${constants.ITERATOR_VALUE_KEY_WORD}`
-  ): string {
+  private getIteratorItemCommand(iterator: Iterator, key: string): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
     const identifier = iterator.identifier
       ? this.replaceDoubleQuotes(iterator.identifier)
       : '';
     const item = `"${parent} ${identifier}"`;
-    const command = `cy.contains(${item}, ${value})`;
+    const command = `cy.contains(${item}, ${sanitizeKey(key)})`;
     return command;
   }
 
@@ -88,15 +86,16 @@ export default class CypressCodeGenerator {
   }
 
   private getIteratorCommand(bodyItem: BodyDefinition) {
-    const { element, iteratorName, iteratorLocator, action } = bodyItem;
-    const { key, value, storeName } = element;
-    const iterator: Iterator = this.getIterator(iteratorName);
-    const commonPart: string = iteratorLocator
+    const { element, action } = bodyItem;
+    const { key, value, storeName, iterator } = element;
+    const it: Iterator = this.getIterator(iterator.name);
+    const commonPart: string = iterator.identifier
       ? `${this.getIteratorItemCommand(
-          iterator
+          it,
+          key
         )}.${this.getIteratorParentCommand(
-          iterator
-        )}.find("${this.replaceDoubleQuotes(iteratorLocator)}")`
+          it
+        )}.find("${this.replaceDoubleQuotes(iterator.identifier)}")`
       : undefined;
 
     return commonPart;
@@ -109,9 +108,9 @@ export default class CypressCodeGenerator {
 
   private getBody(body: BodyDefinition[]) {
     const bodyContent = body.map((b) => {
-      const { element, iteratorName, op, isNumber, action } = b;
-      const { key, value, storeName } = element;
-      if (!iteratorName) {
+      const { element, op, isNumber, action } = b;
+      const { key, value, storeName, iterator } = element;
+      if (!iterator) {
         if (action === constants.CLICK_ACTION) {
           return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
             key
@@ -180,16 +179,6 @@ export default class CypressCodeGenerator {
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
-    }
-    if (hasIterator) {
-      return (params = [...paramNames, constants.ITERATOR_VALUE_KEY_WORD]);
-    }
-    if (hasStore && hasIterator) {
-      return (params = [
-        ...paramNames,
-        constants.ITERATOR_VALUE_KEY_WORD,
-        constants.STORE_KEY_WORD,
-      ]);
     }
     return params;
   }
@@ -282,17 +271,6 @@ export default class CypressCodeGenerator {
       (v, i, a) =>
         a.findIndex((t) => t.key === v.key && t.value === v.value) === i
     );
-
-    //to remove duplicate constants that have the same names but different values
-    // for (const selector of filterDuplicateObjects) {
-    //   selector.key = this.replaceKeyWord(selector.key);
-    // }
-    // filterDuplicateObjects.findIndex((v, i, a) => {
-    //   if (a.findIndex((t) => t.key === v.key) !== i) {
-    //     v.key = `_${v.key}`;
-    //   }
-    // });
-
     return filterDuplicateObjects;
   }
 

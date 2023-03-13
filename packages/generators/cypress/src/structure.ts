@@ -210,7 +210,7 @@ export default class Structure {
     return action.iterator ? true : false;
   }
 
-  private getBodyDefinitions(sequence: any, iterator: string = undefined) {
+  private getBodyDefinitions(sequence: any) {
     const definitions: any[] = [];
     for (const step of sequence) {
       definitions.push({
@@ -221,9 +221,13 @@ export default class Structure {
           //   : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
+          iterator: step.iterator
+            ? {
+                name: step.iterator.name,
+                identifier: step.iterator.identifier,
+              }
+            : undefined,
         },
-        iteratorName: iterator,
-        iteratorLocator: iterator ? step.locator : undefined,
         action: step.type,
         op: step.op ? step.op : undefined,
         isNumber: step.isNumber ? step.isNumber : undefined,
@@ -241,26 +245,50 @@ export default class Structure {
     const { method, uid: methodUid } = action;
     const paramsOrder: string[] = [];
     for (const step of action.sequence) {
-      const { uid, locator, details } = step;
+      const { uid, locator, details, iterator } = step;
       const keyName = step.locator;
       // step.details.trim() === ''
       //   ? this.getNameFromLocator(locator)
       //   : this.toCamelCase(details);
       paramsOrder.push(uid);
-      if (
-        step.type === constants.CLEAR_AND_FILL_ACTION ||
-        step.type === constants.FILL_ACTION ||
-        step.type === constants.CHECK_ACTION
-      ) {
+      if (!step.iterator) {
+        if (
+          step.type === constants.CLEAR_AND_FILL_ACTION ||
+          step.type === constants.FILL_ACTION ||
+          step.type === constants.CHECK_ACTION
+        ) {
+          step.store
+            ? params.push({
+                key: keyName,
+                storeName: step.storeName ? step.storeName : undefined,
+                iterator: undefined,
+              })
+            : params.push({
+                key: keyName,
+                iterator: undefined,
+              });
+        }
+      } else {
         step.store
           ? params.push({
               key: keyName,
               storeName: step.storeName ? step.storeName : undefined,
+              iterator: {
+                name: step.iterator.name,
+                identifier: step.iterator.identifier,
+              },
             })
           : params.push({
               key: keyName,
+              iterator: {
+                name: step.iterator.name,
+                identifier: step.iterator.identifier,
+              },
             });
       }
+    }
+    if (action.iterator) {
+      paramsOrder.push(action.iterator.uid);
     }
     if (action.iterator) {
       paramsOrder.push(action.iterator.uid);
@@ -285,11 +313,8 @@ export default class Structure {
       methods.push({
         name: this.toCamelCase(action.method),
         parameters: [...this.getParameters(action)],
-        hasIterator: this.getIteratorFlag(action),
         hasStore: this.getStoreFlagValue(action.sequence),
-        body: this.getIteratorFlag(action)
-          ? [...this.getBodyDefinitions(action.sequence, action.iterator.name)]
-          : [...this.getBodyDefinitions(action.sequence)],
+        body: [...this.getBodyDefinitions(action.sequence)],
       });
     }
     return methods;
