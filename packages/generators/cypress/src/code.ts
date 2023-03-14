@@ -37,7 +37,14 @@ export default class CypressCodeGenerator {
       `${this.outputPath}/e2e`
     );
 
-    if (!fs.existsSync(this.localTestFolder)) {
+    if (!fs.existsSync(this.outputPath)) {
+      fs.mkdirSync(this.outputPath);
+    }
+
+    if (
+      !fs.existsSync(this.localTestFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localTestFolder);
     }
 
@@ -49,7 +56,10 @@ export default class CypressCodeGenerator {
       fs.rmdirSync(this.localTestFolder, { recursive: true });
     }
 
-    if (!fs.existsSync(this.localSupportFolder)) {
+    if (
+      !fs.existsSync(this.localSupportFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localSupportFolder);
       fs.mkdirSync(`${this.localSupportFolder}/commands`);
     }
@@ -297,9 +307,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
             : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
                 key
               )}`}).clear().type(${this.sanitizeKey(key)});
-             ${
-               constants.STORE_KEY_WORD
-             }["${storeName}"] = ${this.sanitizeKey(key)};`;
+             ${constants.STORE_KEY_WORD}["${storeName}"] = ${this.sanitizeKey(
+                key
+              )};`;
         }
 
         if (action === constants.CHECK_ACTION) {
