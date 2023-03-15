@@ -1,0 +1,55 @@
+ul,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+
+    * {
+        outline: none;
+        user-select: none;
+    }
+}
+
+ul.flow-tree-view {
+    display: flex;
+    flex-direction: column;
+    outline: none;
+
+    li {
+        outline: none;
+
+        .bp4-icon {
+            margin-right: 4px;
+            vertical-align: text-top;
+        }
+
+        & > div {
+            display: flex;
+            flex-direction: row;
+            padding: 4px 4px;
+            cursor: pointer;
+
+            .sequence {
+                flex-grow: 1;
+            }
+
+            .actions .bp4-icon {
+                opacity: 0;
+            }
+
+            &:hover {
+                background-color: rgb(87, 86, 92);
+
+                .actions .bp4-icon {
+                    opacity: 1;
+                    color: rgb(193, 193, 193);
+
+                    &:hover {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}

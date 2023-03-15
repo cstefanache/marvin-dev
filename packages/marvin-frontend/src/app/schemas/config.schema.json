@@ -27,6 +27,13 @@
       "title": "Default Timeout",
       "description": "Default timeout to wait for network idle"
     },
+    "delayedDiscovery": {
+      "type": "integer",
+      "size": { "xs": 12, "sm": 6 },
+      "uiType": "item",
+      "title": "Delayed Discovery",
+      "description": "Wait until performing discovery"
+    },
 
     "aliases": {
       "type": "object",
@@ -111,6 +118,20 @@
               "title": "Value",
               "size": { "xs": 12, "sm": 6 },
               "description": "Store value"
+            }
+          }
+        },
+        "hack": {
+          "title": "Hack",
+          "uiType": "tab",
+          "uiIndex": 7,
+          "description": "Inject JS at Runtime",
+          "type": "object",
+          "properties": {
+            "pre": {
+              "type": "string",
+              "title": "Pre-Render Script",
+              "size": { "xs": 12, "sm": 6 }
             }
           }
         }

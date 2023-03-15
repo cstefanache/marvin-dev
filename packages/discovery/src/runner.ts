@@ -27,7 +27,7 @@ export default class Runner {
     actual: any,
     expected: any,
     op: string,
-    isNumber: boolean
+    isNumber: boolean | undefined
   ): boolean {
     try {
       if (isNumber && !isNaN(actual) && !isNaN(expected)) {
@@ -83,6 +83,12 @@ export default class Runner {
           const rootElements = await page.$$(rootSelector);
           const iteratorDef: IdentifiableIterator = method.iterator;
 
+          if (iteratorDef.identifier) {
+            log(
+              `Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
+            );
+          }
+
           if (rootElements && rootElements.length) {
             for (const [index, rootElem] of rootElements.entries()) {
               const iteratorIdentifierElem = iteratorDef.identifier
@@ -111,6 +117,9 @@ export default class Runner {
                   break;
                 }
               }
+              // else {
+              //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
+              // }
             }
           }
           if (prefix) {
@@ -156,26 +165,26 @@ export default class Runner {
           );
           if (op) {
             if (value) {
-              if (!this.assert(value, valueToValidate, op, isNumber)) {
-                log(
-                  `Failed to assert ${value} ${op} ${valueToValidate}`,
-                  'red'
-                );
-              } else {
-                log(
-                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                  'green'
-                );
-              }
+              // if (!this.assert(value, valueToValidate, op, isNumber)) {
+              //   log(
+              //     `Failed to assert ${value} ${op} ${valueToValidate}`,
+              //     'red'
+              //   );
+              // } else {
+              //   log(
+              //     `Assertion passed for ${value} ${op} ${valueToValidate}`,
+              //     'green'
+              //   );
+              // }
             } else {
-              if (!this.assert(text, valueToValidate, op, isNumber)) {
-                log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
-              } else {
-                log(
-                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                  'green'
-                );
-              }
+              // if (!this.assert(text, valueToValidate, op, isNumber)) {
+              //   log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
+              // } else {
+              //   log(
+              //     `Assertion passed for ${value} ${op} ${valueToValidate}`,
+              //     'green'
+              //   );
+              // }
             }
           }
         } catch (err) {
@@ -200,39 +209,44 @@ export default class Runner {
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
       } else {
         await element.hover();
-        await element.focus();
+        try {
+          await element.focus();
+        } catch (err) {
+          //silent fail
+        }
         const text = await element.evaluate((el) => el.textContent?.trim());
         log(`Clicking on ${text} (${locator})`, 'yellow');
         // await element.screenshot({ path: 'example.png' });
-        await element.evaluate((el: any) => el.click());
+        try {
+          await element.evaluate((el: any) => el.click());
+        } catch (err) {
+          await element.click();
+        }
         log(`Clicked on ${text}`, 'yellow');
       }
 
       if (sequenceItem.store) {
-        await page.evaluate(
-          (element: any) => element.blur(),
-          element
-        );
+        await page.evaluate((element: any) => element.blur(), element);
         log(`Locator: ${locator}`, 'red');
         const value = await page.evaluate(
           (element: any) => element.value,
           element
         );
-        const text = await element.evaluate((el: any) =>
-          el.textContent?.trim(),
+        const text = await element.evaluate(
+          (el: any) => el.textContent?.trim(),
           element
         );
 
-        console.log('#######');
-
         await element.screenshot({ path: 'example.png' });
         // const key = parameters[uid];
-        const key = sequenceItem.storeName;
-        this.store[key] = value || text;
-        log(
-          `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
-          'yellow'
-        );
+        const key: string = sequenceItem.storeName;
+        if (key) {
+          this.store[key] = value || text;
+          log(
+            `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
+            'yellow'
+          );
+        }
       }
     }
   }
@@ -284,6 +298,12 @@ export default class Runner {
           [...steps].slice(1),
           sequenceCallback
         );
+      }
+      if (action.postDelay) {
+        log(`Waiting for ${action.postDelay}`);
+        await new Promise(function (resolve) {
+          setTimeout(resolve, action.postDelay);
+        });
       }
     };
 

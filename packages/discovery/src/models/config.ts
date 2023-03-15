@@ -6,6 +6,7 @@ export interface Config {
   exitUrl?: string;
   path: string;
   defaultTimeout: number;
+  delayedDiscovery?: number;
   output: string;
   outputPath: string;
   waitFor?: string;
@@ -14,6 +15,10 @@ export interface Config {
   discover: string[][];
   sequence: string[];
 }
+
+export type Hack = {
+  pre: string;
+};
 
 export type KeyValuePair = {
   key: string;
@@ -28,6 +33,7 @@ export type Aliases = {
   info: Alias[];
   iterators?: Alias[];
   store: KeyValuePair[];
+  hack: Hack;
 };
 
 export type Replacer = {
@@ -52,7 +58,7 @@ export type Alias = {
   uid?: string;
   skipOptimizer?: boolean;
   selectors: string[];
-  identifier?: ElementHandle<Element>;
+  identifier?: string | ElementHandle<Element>;
   elements?: {
     name: string;
     skipOptimizer?: boolean;

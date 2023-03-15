@@ -59,6 +59,13 @@ export default class Flow {
     page: Page,
     overwrite = false
   ): Promise<PageDiscoveryResult> {
+    if (this.config.delayedDiscovery) {
+      log(`Delaying discovery for ${this.config.delayedDiscovery}ms`)
+      await new Promise((res: Function) => {
+        setTimeout(() => res(), this.config.delayedDiscovery);
+      });
+    }
+
     let currentUrl = page.url();
     currentUrl = processUrl(
       currentUrl,
@@ -144,6 +151,13 @@ export default class Flow {
     log(`Navigating to ${url} ...`, 'blue');
     const page = await this.browser.newPage();
     await page.goto(url);
+    if (
+      this.config.aliases.hack &&
+      this.config.aliases.hack.pre &&
+      this.config.aliases.hack.pre.length
+    ) {
+      page.addScriptTag({ content: this.config.aliases.hack.pre });
+    }
     if (waitForNetworkIdle) {
       await page.waitForNetworkIdle({
         timeout: this.config.defaultTimeout,

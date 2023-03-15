@@ -66,7 +66,6 @@ export default function Workspace({
     setConfig(config);
     setActions(actions);
     setLoading(false);
-
   };
 
   const expandAll = () => {
@@ -262,11 +261,13 @@ export default function Workspace({
                   expandedIds={expandedIds}
                   onExpand={(prop) => {
                     const { element, treeState } = prop;
-                    const { children } = element;
-                    const expandedIdsList = Array.from(
-                      prop.treeState.expandedIds
-                    ).filter((item) => !children.includes(item));
-                    setExpandedIds(expandedIdsList);
+                    if (element) {
+                      const { children } = element;
+                      const expandedIdsList = Array.from(
+                        prop.treeState.expandedIds
+                      ).filter((item) => !children.includes(item));
+                      setExpandedIds(expandedIdsList);
+                    }
                   }}
                   nodeRenderer={({
                     element,

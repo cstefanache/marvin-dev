@@ -26,16 +26,17 @@ const defaultAliases = {
     },
   ],
   iterators: [
-    {
-      name: 'List Iterator',
-      selectors: ['ul', 'ol'],
-      elements: [
-        {
-          name: 'List Item',
-          selector: 'li',
-        },
-      ],
-    },
+    // {
+    //   name: 'List Iterator',
+    //   selectors: ['ul', 'ol'],
+    //   identifier: "li",
+    //   elements: [
+    //     {
+    //       name: 'List Item',
+    //       selector: 'li',
+    //     },
+    //   ],
+    // },
   ],
 };
 
@@ -69,6 +70,9 @@ export default class Discovery {
         ...(config.aliases?.iterators || []),
       ],
       store: [],
+      hack: {
+        pre: '',
+      },
     };
   }
 

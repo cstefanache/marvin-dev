@@ -7,7 +7,7 @@ export type IdentifiableElement = {
   base64Image?: string;
   type?: string | null;
   el?: ElementHandle<Element>;
-  identifier?: ElementHandle<Element>;
+  identifier?: ElementHandle<Element> | string;
   elements?: IdentifiableElement[];
   iteratorName?: string;
 };
@@ -46,6 +46,7 @@ export type ActionItem = {
   children: ActionItem[];
   exitUrl?: string;
   fullUrl?: string;
+  postDelay?: number;
 };
 
 export type Sequence = {

@@ -17,7 +17,6 @@ function debounce(func, timeout = 300) {
 }
 
 export default class Workspace {
-
   public config: Config;
   public flow: Models.FlowModel;
 
@@ -42,6 +41,7 @@ export default class Workspace {
         defaultTimeout: 3000,
         output: `${path}/output`,
         outputPath: `${path}/output/e2e`,
+
         aliases: {
           urlReplacers: [],
           optimizer: {
@@ -53,6 +53,9 @@ export default class Workspace {
           info: [],
           iterators: [],
           store: [],
+          hack: {
+            pre: '',
+          },
         },
         actions: {},
         discover: [],
@@ -159,7 +162,11 @@ export default class Workspace {
     const browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
-      args: [`--window-size=1920,2080`, "--proxy-server='direct://'", '--proxy-bypass-list=*'],
+      args: [
+        `--window-size=1920,2080`,
+        "--proxy-server='direct://'",
+        '--proxy-bypass-list=*',
+      ],
       defaultViewport: {
         width: 1920,
         height: 2080,
@@ -168,7 +175,9 @@ export default class Workspace {
 
     const flow = new Flow(this.config, browser);
     const page = await flow.navigateTo(this.config.rootUrl);
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36')
+    await page.setUserAgent(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+    );
     const state = new State(page);
     await page.setRequestInterception(true);
     await page.waitForNetworkIdle({ timeout: this.config.defaultTimeout });

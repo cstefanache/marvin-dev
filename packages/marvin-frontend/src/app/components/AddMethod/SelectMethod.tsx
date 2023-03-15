@@ -98,6 +98,10 @@ const SelectMethod = (props: any) => {
             default: 1,
             description: 'Number of times to loop this method',
           },
+          postDelay: {
+            type: 'integer',
+            title: 'Post Delay'
+          }
         },
       };
       setSchema(schema);
