@@ -2,6 +2,7 @@ import { ConfigModel, Iterator } from './models/config';
 import * as constants from './utils/constants';
 import * as regex from './utils/regex';
 import * as prettier from 'prettier';
+import * as shell from 'shelljs';
 import {
   Command,
   NewFlowModel,
@@ -18,6 +19,7 @@ export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
   private outputPath: string;
+  private workspacePath: string;
 
   constructor(
     private flow: NewFlowModel,
@@ -27,18 +29,31 @@ export default class CypressCodeGenerator {
     this.outputPath = forcedOutputPath
       ? forcedOutputPath
       : this.config.outputPath;
+
+    this.workspacePath = `${this.outputPath}/cypress`;
     this.localSupportFolder = path.join(
       forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/support`
+      `${this.workspacePath}/support`
     );
 
     this.localTestFolder = path.join(
       forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/e2e`
+      `${this.workspacePath}/e2e`
     );
 
     if (!fs.existsSync(this.outputPath)) {
       fs.mkdirSync(this.outputPath);
+    }
+
+    if (!fs.existsSync(this.workspacePath) && fs.existsSync(this.outputPath)) {
+      fs.mkdirSync(this.workspacePath);
+    }
+
+    if (fs.existsSync(this.workspacePath)) {
+      shell.exec(`cd ${this.outputPath} && npm init -y`);
+      if (!fs.existsSync(`${this.outputPath}/node_modules`)) {
+        shell.exec(`cd ${this.outputPath} && npm install cypress --save-dev`);
+      }
     }
 
     if (
@@ -384,7 +399,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateCommands(commands: Command[]) {
-    const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+    const e2eFile = `${this.localSupportFolder}/e2e.js`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     fs.appendFileSync(
       e2eFile,
@@ -408,7 +423,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
       );
       let importLocation: string = this.getRelativePath(
         `${this.localSupportFolder}/commands`,
-        `${this.localSupportFolder}/app.po.ts`
+        `${this.localSupportFolder}/app.po.js`
       );
       fs.writeFileSync(
         commandFile,
@@ -485,7 +500,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localSupportFolder}/app.po.ts`;
+    const selectorFile = `${this.localSupportFolder}/app.po.js`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
