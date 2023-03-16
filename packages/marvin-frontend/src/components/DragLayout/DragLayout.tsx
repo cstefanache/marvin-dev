@@ -1,5 +1,6 @@
 import './DragLayout.scss';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useRef, useState } from 'react';
+import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 
 export type LayoutOrientation =
   | 'horizontal'
@@ -13,14 +14,16 @@ interface DragLayoutProps {
   minSize?: number;
   orientation: LayoutOrientation;
   defaultSize?: number;
+  contextKey?: string;
 }
 
 export function DragLayout(props: DragLayoutProps) {
+  const workspaceContext = useContext(WorkspaceContext)
   const [size, setSize] = useState<number>(
-    props.fixedSize || props.defaultSize || 200
+    workspaceContext[props.contextKey] || props.fixedSize || props.defaultSize || 200
   );
   const [prevSize, setPrevSize] = useState<number>(
-    props.fixedSize || props.defaultSize || 200
+    workspaceContext[props.contextKey] || props.fixedSize || props.defaultSize || 200
   );
   const [dragging, setDragging] = useState<boolean>(false);
   const parentReference = useRef(null);
@@ -42,6 +45,7 @@ export function DragLayout(props: DragLayoutProps) {
 
   const endDragging = () => {
     setDragging(false);
+    workspaceContext[props.contextKey] = size;
   };
 
   const mouseMove = (evt: any) => {

@@ -2,39 +2,135 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Models } from '@marvin/discovery';
-import { DragLayout } from '../components/DragLayout/DragLayout';
-import { IconToolbarLayout } from '../components/IconToolbarLayout/IconToolbarLayout';
-import { Icon, InputGroup } from '@blueprintjs/core';
-import { Log } from '../app/components/Log';
-import { LeftNav } from './LeftNav';
-import { TitlePanel } from '../components/TitlePanel/TitlePanel';
+import { DragLayout } from '../components/dragLayout/DragLayout';
+import { IconToolbarLayout } from '../components/iconToolbarLayout/IconToolbarLayout';
+import { Icon, InputGroup, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
+import { Log } from '../components/log/Log';
+import { LeftNav } from './navigation/LeftNav';
+import { TitlePanel } from '../components/titlePanel/TitlePanel';
+import './WorkspaceRoot.scss';
+import Config from './config/Config';
+import { SequenceItemPanel, TreeItem } from './sequencePanel/SequenceItemPanel';
+import Methods from './methods/Methods';
+import Workspaces from '../workspaces/Workspaces';
 
 export function WorkspaceRoot() {
-  const [workspace, setWorkspace] = useState<{ name: string; path: string }>();
-  const [flow, setFlow] = useState<Models.FlowModel>();
- 
   const navigate = useNavigate();
+  const [workspace, setWorkspace] = useState<{ name: string; path: string }>();
+  const [selectedSequenceItem, setSelectedSequenceItem] = useState<
+    TreeItem | undefined
+  >(undefined);
+  const [flow, setFlow] = useState<Models.FlowModel>();
+  const [tab, setTab] = useState<string>('workspaces');
+  const [running, setRunning] = useState(false);
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
+  const [flowState, setFlowState] = useState<number>(Math.random());
+  const [path, setPath] = useState<string | undefined>(null);
+  const [subIds, setSubIds] = useState<any>([]);
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
 
-  useEffect(() => {
-    const asyncFn = async () => {
-      const workspace = await window.electron.getWorkspace();
+  const asyncLoadFn = async () => {
+    const workspace = await window.electron.getWorkspace();
+
+    if (workspace) {
+      const path = await window.electron.getWorkspacePath();
+      setPath(path);
+      setTab('mainLayout');
       const flow = await window.electron.getFlow();
       setFlow(flow);
-    };
-    asyncFn();
+      setFlowState(Math.random());
+    }
+  };
+  useEffect(() => {
+    asyncLoadFn();
   }, [navigate]);
+
+  function reloadWorkspace() {
+    asyncLoadFn();
+  }
+
+  const selectSequenceItem = (item: TreeItem) => {
+    setSelectedSequenceItem(item);
+  };
+
+  const deleteNode = async (deleteId: any) => {
+    // setSelectedNode(selectedNode.parentNode);
+    // setSelectedId(selectedNode.parentNode.id);
+    window.electron.cutBranch(deleteId);
+  };
+
+  const save = async (data: any, parentObject: any) => {
+    if (data.id) {
+      await window.electron.updateBranch(data);
+    } else {
+      const { id } = parentObject;
+      await window.electron.addBranch(id, data);
+    }
+    asyncLoadFn();
+  };
+
+  const changeParent = () => {
+    if (subIds.length === 0) {
+      const { currentNode } = selectedSequenceItem;
+      const { url } = currentNode;
+      //   const menuItems = flow.filter(
+      //     (item: any) => item.currentNode.exitUrl === url
+      //   );
+
+      //   setSubIds(menuItems.map((item: any) => item.currentNode.id));
+      // } else {
+      //   setSubIds([]);
+      // }
+    }
+  };
+
+  // const handleSave = (name: string) => {
+  //   save(
+  //     {
+  //       sequenceStep: name,
+  //       children: [],
+  //       url: selectedSequenceItem.currentNode.exitUrl,
+  //     },
+  //     selectedSequenceItem.currentNode
+  //   );
+  // };
+
+  window.ipcRender.receive('action-finished', (id: string) => {
+    // console.log('action-finished', id);
+    setLoadingIds((ids: any) => ids.filter((i: any) => i !== id));
+  });
+
+  window.ipcRender.receive('run-completed', async (id: string) => {
+    setLoadingIds([]);
+    reloadWorkspace();
+  });
+
+  const runDiscovery = async (element: any) => {
+    setRunning(true);
+    const localLoadingIds: any[] = [];
+    function addToSeq(element: any, sequence: string[]) {
+      const { currentNode, parentNode, skip } = element;
+
+      if (parentNode && parentNode.id > 0) {
+        addToSeq(parentNode, sequence);
+      }
+
+      sequence.push(currentNode.sequenceStep);
+      localLoadingIds.push(currentNode.id);
+      return sequence;
+    }
+
+    window.electron.runDiscovery(addToSeq(element, []));
+    setLoadingIds([
+      ...localLoadingIds,
+      localLoadingIds[localLoadingIds.length - 1] + '-discovery',
+    ]);
+  };
 
   const console = (
     <TitlePanel
       title="Console"
-      collapsible={
-        <InputGroup
-          leftIcon="filter"
-          placeholder="Filter"
-         
-        />
-      }
+      collapsible={<InputGroup leftIcon="filter" placeholder="Filter" />}
       suffix={
         mainLayoutHoriz
           ? [
@@ -57,11 +153,21 @@ export function WorkspaceRoot() {
     </TitlePanel>
   );
 
-  return (
+  const mainLayout = (
     <DragLayout
       orientation="horizontal"
       defaultSize={300}
-      left={<LeftNav flow={flow} />}
+      contextKey="navigationPanelHeight"
+      left={
+        <LeftNav
+          flow={flow}
+          runDiscovery={runDiscovery}
+          key={flowState}
+          loadingIds={loadingIds}
+          selectSequenceItem={selectSequenceItem}
+          selectedSequenceItem={selectedSequenceItem}
+        />
+      }
     >
       <DragLayout
         orientation={mainLayoutHoriz ? 'horizontal-reversed' : 'vertical'}
@@ -69,10 +175,56 @@ export function WorkspaceRoot() {
         minSize={20}
         left={console}
       >
-        <div>The actual main content</div>
+        {selectedSequenceItem ? (
+          <SequenceItemPanel
+            key={selectedSequenceItem.id}
+            deleteNode={deleteNode}
+            selectedSequenceItem={selectedSequenceItem}
+            changeParent={changeParent}
+            runDiscovery={runDiscovery}
+            save={save}
+            path={path}
+          />
+        ) : (
+          <NonIdealState
+            title="No node selected"
+            description="Select a node from the left navigation panel"
+            icon="info-sign"
+            iconSize={100}
+          />
+        )}
       </DragLayout>
     </DragLayout>
   );
-}
 
-export default WorkspaceRoot;
+  return (
+    <Tabs
+      id="workspace-tabs"
+      vertical={true}
+      onChange={(id: string) => setTab(id)}
+      selectedTabId={tab}
+    >
+      <Tab
+        id="workspaces"
+        title={<Icon icon="box" size={24} />}
+        panel={<Workspaces selectWorkspace={reloadWorkspace} />}
+      />
+      <Tab
+        id="mainLayout"
+        title={<Icon icon="panel-stats" size={24} />}
+        panel={mainLayout}
+      />
+      <Tab
+        id="config"
+        title={<Icon icon="cog" size={24} />}
+        panel={<Config />}
+      />
+
+      <Tab
+        id="methods"
+        title={<Icon icon="code" size={24} />}
+        panel={<Methods />}
+      />
+    </Tabs>
+  );
+}

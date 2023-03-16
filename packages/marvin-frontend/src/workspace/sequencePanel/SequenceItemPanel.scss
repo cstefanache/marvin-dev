@@ -1,0 +1,14 @@
+.sequence-tabs {
+    flex-direction: row-reverse;
+
+    .bp4-tab-panel {
+        height: 100%;
+        overflow: auto;
+        outline: none;
+
+        .image {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

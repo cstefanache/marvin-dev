@@ -1,16 +1,19 @@
 import { Icon } from '@blueprintjs/core';
 import { ReactElement, useEffect, useState } from 'react';
 import TreeView from 'react-accessible-treeview';
-import { localFlattenTree } from '../../app/utils';
+import { localFlattenTree } from '../../utils';
 import './FlowNavigator.scss';
 interface FlowNavigatorProps {
   highlightedMethod?: string;
   graph: any;
   focusId?: string;
   onSelect?: Function;
+  selectedId?: string;
   autoExpand?: boolean;
   actions?: Function;
+  loadingIds: string[];
   sequenceFilter?: string;
+  runDiscovery: Function;
 }
 
 export function FlowNavigator(props: FlowNavigatorProps) {
@@ -21,11 +24,12 @@ export function FlowNavigator(props: FlowNavigatorProps) {
     highlightedMethod,
     autoExpand,
     sequenceFilter,
+    loadingIds,
+    selectedId,
+    runDiscovery
   } = props;
   const [flow, setFlow] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState([]);
-  const [selectedId, setSelectedId] = useState<null | number>(null);
-  const [loadingIds, setLoadingIds] = useState<any>([]);
   const [subIds, setSubIds] = useState<any>([]);
   const [selectedNode, setSelectedNode] = useState<null | any>(null);
 
@@ -38,7 +42,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
     setExpandedIds([]);
     setFlow(localFlat);
     if (autoExpand) {
-      console.log('Executed')
+      console.log('Executed');
     }
   }, [graph[0].id]);
 
@@ -81,7 +85,6 @@ export function FlowNavigator(props: FlowNavigatorProps) {
 
   const selectElement = async (element: any) => {};
 
-  const runDiscovery = async (element: any) => {};
   return !flow ? (
     <div>No graph loaded</div>
   ) : (
@@ -119,7 +122,9 @@ export function FlowNavigator(props: FlowNavigatorProps) {
                 ? 'highlight'
                 : '') +
               ' ' +
-              (selectedId && selectedId === element.id ? 'selected' : '') +
+              (selectedId && selectedId === (element as any).currentNode.id
+                ? 'selected'
+                : '') +
               ' ' +
               (loadingIds.includes((element as any).currentNode.id)
                 ? 'running'
