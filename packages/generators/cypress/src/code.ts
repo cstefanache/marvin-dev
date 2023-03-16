@@ -2,6 +2,7 @@ import { ConfigModel, Iterator } from './models/config';
 import * as constants from './utils/constants';
 import * as regex from './utils/regex';
 import * as prettier from 'prettier';
+import * as shell from 'shelljs';
 import {
   Command,
   NewFlowModel,
@@ -18,6 +19,7 @@ export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
   private outputPath: string;
+  private workspacePath: string;
 
   constructor(
     private flow: NewFlowModel,
@@ -26,18 +28,47 @@ export default class CypressCodeGenerator {
   ) {
     this.outputPath = forcedOutputPath
       ? forcedOutputPath
-      : this.config.outputPath;
+      : path.join(process.cwd(), this.config.outputPath);
+
+    this.workspacePath = !this.outputPath.includes(
+      constants.DEFAULT_OUTPUT_PATH
+    )
+      ? `${this.outputPath}/cypress`
+      : undefined;
+
     this.localSupportFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/support`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/support`
+        : `${this.outputPath}/support`
     );
 
     this.localTestFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/e2e`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/e2e`
+        : `${this.outputPath}/e2e`
     );
 
-    if (!fs.existsSync(this.localTestFolder)) {
+    if (!fs.existsSync(this.outputPath)) {
+      fs.mkdirSync(this.outputPath);
+    }
+
+    if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
+      fs.mkdirSync(this.workspacePath);
+    }
+
+    if (fs.existsSync(this.workspacePath)) {
+      shell.exec(`cd ${this.outputPath} && npm init -y`);
+      if (!fs.existsSync(`${this.outputPath}/node_modules`)) {
+        shell.exec(`cd ${this.outputPath} && npm install cypress --save-dev`);
+      }
+    }
+
+    if (
+      !fs.existsSync(this.localTestFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localTestFolder);
     }
 
@@ -49,7 +80,10 @@ export default class CypressCodeGenerator {
       fs.rmdirSync(this.localTestFolder, { recursive: true });
     }
 
-    if (!fs.existsSync(this.localSupportFolder)) {
+    if (
+      !fs.existsSync(this.localSupportFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localSupportFolder);
       fs.mkdirSync(`${this.localSupportFolder}/commands`);
     }
@@ -297,9 +331,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
             : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
                 key
               )}`}).clear().type(${this.sanitizeKey(key)});
-             ${
-               constants.STORE_KEY_WORD
-             }["${storeName}"] = ${this.sanitizeKey(key)};`;
+             ${constants.STORE_KEY_WORD}["${storeName}"] = ${this.sanitizeKey(
+                key
+              )};`;
         }
 
         if (action === constants.CHECK_ACTION) {
@@ -374,7 +408,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateCommands(commands: Command[]) {
-    const e2eFile = `${this.localSupportFolder}/e2e.ts`;
+    const e2eFile = this.workspacePath
+      ? `${this.localSupportFolder}/e2e.js`
+      : `${this.localSupportFolder}/e2e.ts`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     fs.appendFileSync(
       e2eFile,
@@ -398,7 +434,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
       );
       let importLocation: string = this.getRelativePath(
         `${this.localSupportFolder}/commands`,
-        `${this.localSupportFolder}/app.po.ts`
+        `${this.localSupportFolder}/app.po.js`
       );
       fs.writeFileSync(
         commandFile,
@@ -475,7 +511,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localSupportFolder}/app.po.ts`;
+    const selectorFile = this.workspacePath
+      ? `${this.localSupportFolder}/app.po.js`
+      : `${this.localSupportFolder}/app.po.ts`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
