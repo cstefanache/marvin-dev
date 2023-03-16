@@ -28,24 +28,33 @@ export default class CypressCodeGenerator {
   ) {
     this.outputPath = forcedOutputPath
       ? forcedOutputPath
-      : this.config.outputPath;
+      : path.join(process.cwd(), this.config.outputPath);
 
-    this.workspacePath = `${this.outputPath}/cypress`;
+    this.workspacePath = !this.outputPath.includes(
+      constants.DEFAULT_OUTPUT_PATH
+    )
+      ? `${this.outputPath}/cypress`
+      : undefined;
+
     this.localSupportFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.workspacePath}/support`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/support`
+        : `${this.outputPath}/support`
     );
 
     this.localTestFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.workspacePath}/e2e`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/e2e`
+        : `${this.outputPath}/e2e`
     );
 
     if (!fs.existsSync(this.outputPath)) {
       fs.mkdirSync(this.outputPath);
     }
 
-    if (!fs.existsSync(this.workspacePath) && fs.existsSync(this.outputPath)) {
+    if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
       fs.mkdirSync(this.workspacePath);
     }
 
@@ -399,7 +408,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateCommands(commands: Command[]) {
-    const e2eFile = `${this.localSupportFolder}/e2e.js`;
+    const e2eFile = this.workspacePath
+      ? `${this.localSupportFolder}/e2e.js`
+      : `${this.localSupportFolder}/e2e.ts`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     fs.appendFileSync(
       e2eFile,
@@ -500,7 +511,9 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localSupportFolder}/app.po.js`;
+    const selectorFile = this.workspacePath
+      ? `${this.localSupportFolder}/app.po.js`
+      : `${this.localSupportFolder}/app.po.ts`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
