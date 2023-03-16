@@ -3,6 +3,7 @@ import { Identifier } from './models/models';
 import * as constants from './utils/constants';
 import { getCheckTextCommand, sanitizeKey } from './utils/utils';
 import * as prettier from 'prettier';
+import * as shell from 'shelljs';
 import {
   Command,
   NewFlowModel,
@@ -19,6 +20,7 @@ export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
   private outputPath: string;
+  private workspacePath: string;
 
   constructor(
     private flow: NewFlowModel,
@@ -27,18 +29,47 @@ export default class CypressCodeGenerator {
   ) {
     this.outputPath = forcedOutputPath
       ? forcedOutputPath
-      : this.config.outputPath;
+      : path.join(process.cwd(), this.config.outputPath);
+
+    this.workspacePath = !this.outputPath.includes(
+      constants.DEFAULT_OUTPUT_PATH
+    )
+      ? `${this.outputPath}/cypress`
+      : undefined;
+
     this.localSupportFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/${constants.SUPPORT_FOLDER}`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/support`
+        : `${this.outputPath}/support`
     );
 
     this.localTestFolder = path.join(
-      forcedOutputPath ? '' : process.cwd(),
-      `${this.outputPath}/${constants.SPEC_FOLDER}`
+      forcedOutputPath ? '' : '',
+      this.workspacePath
+        ? `${this.workspacePath}/e2e`
+        : `${this.outputPath}/e2e`
     );
 
-    if (!fs.existsSync(this.localTestFolder)) {
+    if (!fs.existsSync(this.outputPath)) {
+      fs.mkdirSync(this.outputPath);
+    }
+
+    if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
+      fs.mkdirSync(this.workspacePath);
+    }
+
+    if (fs.existsSync(this.workspacePath)) {
+      shell.exec(`cd ${this.outputPath} && npm init -y`);
+      if (!fs.existsSync(`${this.outputPath}/node_modules`)) {
+        shell.exec(`cd ${this.outputPath} && npm install cypress --save-dev`);
+      }
+    }
+
+    if (
+      !fs.existsSync(this.localTestFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localTestFolder);
     }
 
@@ -50,7 +81,10 @@ export default class CypressCodeGenerator {
       fs.rmdirSync(this.localTestFolder, { recursive: true });
     }
 
-    if (!fs.existsSync(this.localSupportFolder)) {
+    if (
+      !fs.existsSync(this.localSupportFolder) &&
+      fs.existsSync(this.outputPath)
+    ) {
       fs.mkdirSync(this.localSupportFolder);
       fs.mkdirSync(`${this.localSupportFolder}/${constants.COMMAND_FOLDER}`);
     }
@@ -196,7 +230,9 @@ export default class CypressCodeGenerator {
   }
 
   private async generateCommands(commands: Command[]) {
-    const e2eFile = `${this.localSupportFolder}/${constants.GLOBAL_SUPPORT_FILE_NAME}`;
+    const e2eFile = this.workspacePath
+      ? `${this.localSupportFolder}/e2e.js`
+      : `${this.localSupportFolder}/e2e.ts`;
     fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
     fs.appendFileSync(
       e2eFile,
@@ -219,8 +255,14 @@ export default class CypressCodeGenerator {
       `
       );
       let importLocation: string = this.getRelativePath(
-        `${this.localSupportFolder}/${constants.COMMAND_FOLDER}`,
-        `${this.localSupportFolder}/${constants.PAGE_FILE_NAME}`
+        `${this.localSupportFolder}/commands`,
+        `${this.localSupportFolder}/app.po.js`
+      );
+      fs.writeFileSync(
+        commandFile,
+        `
+  import * as locators from '${importLocation}';
+        `
       );
       if (methods.length > 0) {
         fs.writeFileSync(
@@ -275,7 +317,9 @@ export default class CypressCodeGenerator {
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = `${this.localSupportFolder}/${constants.PAGE_FILE_NAME}`;
+    const selectorFile = this.workspacePath
+      ? `${this.localSupportFolder}/app.po.js`
+      : `${this.localSupportFolder}/app.po.ts`;
     let fileContent: string = '';
     for (const selector of selectors) {
       fileContent = `
