@@ -131,7 +131,7 @@ export default class Runner {
       }
     }
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator } = sequenceItem;
+      let { type, uid, op, isNumber, locator, press } = sequenceItem;
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
@@ -198,6 +198,9 @@ export default class Runner {
           );
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
+        if (press) {
+          await page.keyboard.press(press);
+        }
       } else {
         await element.hover();
         await element.focus();
@@ -209,17 +212,14 @@ export default class Runner {
       }
 
       if (sequenceItem.store) {
-        await page.evaluate(
-          (element: any) => element.blur(),
-          element
-        );
+        await page.evaluate((element: any) => element.blur(), element);
         log(`Locator: ${locator}`, 'red');
         const value = await page.evaluate(
           (element: any) => element.value,
           element
         );
-        const text = await element.evaluate((el: any) =>
-          el.textContent?.trim(),
+        const text = await element.evaluate(
+          (el: any) => el.textContent?.trim(),
           element
         );
 
