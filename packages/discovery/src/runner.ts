@@ -199,7 +199,7 @@ export default class Runner {
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
         if (press) {
-          await page.keyboard.press('Enter');
+          await page.keyboard.press(press);
         }
       } else {
         await element.hover();
