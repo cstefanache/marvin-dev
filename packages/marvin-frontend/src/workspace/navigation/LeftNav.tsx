@@ -12,9 +12,10 @@ export function LeftNav(props: {
   selectSequenceItem: Function;
   selectedSequenceItem?: TreeItem;
   loadingIds: string[];
+  subIds: string[];
   runDiscovery: Function;
 }) {
-  const { selectedSequenceItem, loadingIds, runDiscovery } = props;
+  const { selectedSequenceItem, loadingIds, runDiscovery, subIds } = props;
   const workspaceContext = useContext(WorkspaceContext);
   const [focus, setFocus] = useState<any>(workspaceContext.focus);
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
@@ -33,6 +34,7 @@ export function LeftNav(props: {
           runDiscovery={(elem) => {
             console.log(elem);
           }}
+          subIds={subIds}
           key={focus ? focus.currentNode.id : props.flow.graph.id}
           graph={focus ? [focus.currentNode] : props.flow.graph}
           selectedId={selectedSequenceItem?.currentNode.id}
@@ -91,6 +93,7 @@ export function LeftNav(props: {
             runDiscovery={runDiscovery}
             graph={props.flow.graph}
             sequenceFilter={sequenceFilter}
+            subIds={subIds}
             autoExpand={true}
             loadingIds={loadingIds}
             selectedId={selectedSequenceItem?.currentNode.id}
@@ -101,7 +104,7 @@ export function LeftNav(props: {
                 size={12}
                 title="Show in focus window"
                 onClick={() => {
-                  console.log(elem)
+                  console.log(elem);
                   workspaceContext.focus = elem;
                   setFocus(elem);
                 }}

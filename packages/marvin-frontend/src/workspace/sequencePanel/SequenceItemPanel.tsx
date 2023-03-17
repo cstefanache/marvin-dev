@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import Summary from './summary/Summary';
 import { AddMethod } from './addMethod/AddMethod';
-import { Button, NonIdealState, Tab, Tabs } from '@blueprintjs/core';
+import { Button, Icon, NonIdealState, Tab, Tabs } from '@blueprintjs/core';
 import DiscoveredElements from './discovered/Discovered';
 import './SequenceItemPanel.scss';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
@@ -58,8 +58,16 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
               selectedElement={selectedSequenceItem}
               run={() => runDiscovery(selectedSequenceItem)}
               addBranch={() => setData(null)}
-              newFolder={() => {
-                console.log('new folder');
+              newFolder={(name: string) => {
+                // console.log('new folder');
+                save(
+                  {
+                    sequenceStep: name,
+                    children: [],
+                    url: selectedSequenceItem.currentNode.exitUrl,
+                  },
+                  selectedSequenceItem.currentNode
+                );
               }}
               deleteNode={deleteNode}
             />,
@@ -78,11 +86,25 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
       minSize={350}
     >
       <TitlePanel title="Execution Output">
-        {selectedSequenceItem.currentNode.exitUrl ? (
+        {selectedSequenceItem.currentNode.exitUrl === undefined ? (
+          <NonIdealState
+            title="Current node was not discovered yet."
+            description="Please run discover to perform discovery"
+            action={
+              <Button
+                title="Discover"
+                onClick={() => runDiscovery(selectedSequenceItem)}
+              >
+                Discover
+              </Button>
+            }
+          />
+        ) : (
           <Tabs
             id="seq-tabs"
             vertical={true}
             className="sequence-tabs"
+            renderActiveTabPanelOnly={true}
             onChange={(id: string) => {
               workspaceContext.selectedPanel = id;
               setTab(id);
@@ -91,7 +113,9 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
           >
             <Tab
               id="discovered"
-              title="Discovered"
+              title={
+                <Icon title="Discovered" icon="search-template" size={24} />
+              }
               panel={
                 <DiscoveredElements
                   exitUrl={selectedSequenceItem.currentNode.exitUrl}
@@ -100,7 +124,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
             />
             <Tab
               id="screenshot"
-              title="Screenshot"
+              title={<Icon title="Discovered" icon="camera" size={24} />}
               panel={
                 <div
                   className="image"
@@ -114,19 +138,6 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
               }
             />
           </Tabs>
-        ) : (
-          <NonIdealState
-            title="Current node was not discovered yet."
-            description="Please run discover to perform discovery"
-            action={
-              <Button
-                title="Discover"
-                onClick={() => runDiscovery(selectedSequenceItem)}
-              >
-                Discover
-              </Button>
-            }
-          />
         )}
       </TitlePanel>
     </DragLayout>

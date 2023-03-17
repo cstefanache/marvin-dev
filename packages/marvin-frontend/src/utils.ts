@@ -27,12 +27,31 @@ export const getActionIcon = (action: any) => {
   }
 };
 
-export function localFlattenTree(tree: any): any[] {
+export function getNodesForFilter(tree: any, filter: Function): any[] {
+  const list: any[] = [];
 
+  function traverse(node: any) {
+    if (filter(node)) {
+      list.push(node);
+    }
+
+    (node.children || []).forEach((childNode: any) => traverse(childNode));
+  }
+  console.log(tree)
+  traverse(tree)
+
+  return list;
+}
+
+export function localFlattenTree(tree: any): any[] {
   const flatTree: any[] = [];
   let currentId = 0;
 
-  function traverse(node: any, parent: any, localParentId: number | undefined): any {
+  function traverse(
+    node: any,
+    parent: any,
+    localParentId: number | undefined
+  ): any {
     const currentNode: any = {
       currentNode: node,
       parentNode: parent,
@@ -61,7 +80,7 @@ export function localFlattenTree(tree: any): any[] {
   //   children: traverse(tree, undefined, undefined),
   // });
 
-  traverse(tree, undefined, undefined)
+  traverse(tree, undefined, undefined);
 
   return flatTree;
 }

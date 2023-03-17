@@ -18,9 +18,11 @@ export default function Config() {
   const contextValue = useMemo(() => ({ tab, setTab }), [tab]);
   const toastRef = useRef(null);
   useEffect(() => {
+    console.log('using effect')
     const asyncFn = async () => {
       const config = await window.electron.getConfig();
       setConfig(config);
+      console.log(config)
     };
     asyncFn();
   }, []);

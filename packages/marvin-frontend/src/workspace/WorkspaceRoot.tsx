@@ -13,6 +13,7 @@ import Config from './config/Config';
 import { SequenceItemPanel, TreeItem } from './sequencePanel/SequenceItemPanel';
 import Methods from './methods/Methods';
 import Workspaces from '../workspaces/Workspaces';
+import { getNodesForFilter } from '../utils';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -49,14 +50,31 @@ export function WorkspaceRoot() {
     asyncLoadFn();
   }
 
-  const selectSequenceItem = (item: TreeItem) => {
-    setSelectedSequenceItem(item);
+  const selectSequenceItem = async (item: TreeItem) => {
+    if (subIds.includes(item.currentNode.id)) {
+      const newParent = item.currentNode;
+      const { currentNode, parentNode } = selectedSequenceItem;
+      const parentBranch = parentNode.currentNode;
+
+
+      parentBranch.children = parentBranch.children.filter(
+        (child: any) => child.id !== currentNode.id
+      );
+      await window.electron.updateBranch(parentBranch);
+      newParent.children.push(currentNode);
+      await window.electron.updateBranch(newParent);
+      asyncLoadFn();
+    } else {
+      setSelectedSequenceItem(item);
+    }
+    setSubIds([]);
   };
 
   const deleteNode = async (deleteId: any) => {
-    // setSelectedNode(selectedNode.parentNode);
-    // setSelectedId(selectedNode.parentNode.id);
+    setSelectedSequenceItem(selectedSequenceItem.parentNode);
+    // setSelectedId(selectedSequenceItem.parentNode.id);
     window.electron.cutBranch(deleteId);
+    asyncLoadFn();
   };
 
   const save = async (data: any, parentObject: any) => {
@@ -73,14 +91,16 @@ export function WorkspaceRoot() {
     if (subIds.length === 0) {
       const { currentNode } = selectedSequenceItem;
       const { url } = currentNode;
-      //   const menuItems = flow.filter(
-      //     (item: any) => item.currentNode.exitUrl === url
-      //   );
+      window.console.log('Changing parent', url);
 
-      //   setSubIds(menuItems.map((item: any) => item.currentNode.id));
-      // } else {
-      //   setSubIds([]);
-      // }
+      const ids = getNodesForFilter(
+        flow.graph[0],
+        (node: any) => node.exitUrl === url
+      ).map((elem: any) => elem.id);
+      window.console.log(ids);
+      setSubIds(ids);
+    } else {
+      setSubIds([]);
     }
   };
 
@@ -161,6 +181,7 @@ export function WorkspaceRoot() {
       left={
         <LeftNav
           flow={flow}
+          subIds={subIds}
           runDiscovery={runDiscovery}
           key={flowState}
           loadingIds={loadingIds}
@@ -202,6 +223,7 @@ export function WorkspaceRoot() {
       id="workspace-tabs"
       vertical={true}
       onChange={(id: string) => setTab(id)}
+      renderActiveTabPanelOnly={true}
       selectedTabId={tab}
     >
       <Tab

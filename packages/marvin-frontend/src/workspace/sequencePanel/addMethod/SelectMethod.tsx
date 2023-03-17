@@ -59,6 +59,10 @@ const SelectMethod = (props: any) => {
             type: 'string',
             title: 'Sequence Step Name',
           },
+          condition: {
+            type: 'string',
+            title: 'Condition',
+          },
           parameters: {
             type: 'object',
             title: 'Parameters',
@@ -167,8 +171,12 @@ const SelectMethod = (props: any) => {
 
       {schema && (
         <>
-          <pre><Tag>Url</Tag> {exitUrl}</pre>
-          <pre><Tag>Method</Tag> {method}</pre>
+          <pre>
+            <Tag>Url</Tag> {exitUrl}
+          </pre>
+          <pre>
+            <Tag>Method</Tag> {method}
+          </pre>
           {!propData && <Divider />}
           <SchemaForm
             schema={schema}

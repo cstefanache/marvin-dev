@@ -12,6 +12,7 @@ interface FlowNavigatorProps {
   autoExpand?: boolean;
   actions?: Function;
   loadingIds: string[];
+  subIds: string[];
   sequenceFilter?: string;
   runDiscovery: Function;
 }
@@ -23,15 +24,14 @@ export function FlowNavigator(props: FlowNavigatorProps) {
     actions,
     highlightedMethod,
     autoExpand,
+    subIds,
     sequenceFilter,
     loadingIds,
     selectedId,
-    runDiscovery
+    runDiscovery,
   } = props;
   const [flow, setFlow] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState([]);
-  const [subIds, setSubIds] = useState<any>([]);
-  const [selectedNode, setSelectedNode] = useState<null | any>(null);
 
   useEffect(() => {
     const localFlat = localFlattenTree({
@@ -75,12 +75,26 @@ export function FlowNavigator(props: FlowNavigatorProps) {
   };
 
   const getActionFor = (listNode: any, isExpanded: boolean) => {
-    if (
-      subIds.includes(listNode.id) &&
-      selectedNode.currentNode.id !== listNode.id
-    ) {
+    if (subIds.includes(listNode.id) && selectedId !== listNode.id) {
       return <Icon size={12} icon="inheritance" />;
     }
+  };
+
+  const getCustomIconsFor = (listNode: any, isExpanded: boolean) => {
+    const elems: ReactElement[] = [];
+
+    if (listNode.condition && listNode.condition.length > 0) {
+      elems.push(
+        <Icon
+          size={12}
+          icon="playbook"
+          title="Has condition"
+          style={{ color: '#FFCC00' }}
+        />
+      );
+    }
+
+    return elems;
   };
 
   const selectElement = async (element: any) => {};
@@ -150,6 +164,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             <span className="sequence" onClick={() => selectElement(element)}>
               {getIconFor((element as any).currentNode, isExpanded)}
               {getActionFor((element as any).currentNode, isExpanded)}
+              {getCustomIconsFor((element as any).currentNode, isExpanded)}
               {element.name}
             </span>
             <span className="actions">
