@@ -34,8 +34,8 @@ export class Logger {
 
 const logs: { [key: string]: Logger } = {};
 
-const marvinLogger = new Logger('marvin:discovery', 'yellow');
-logs['marvin:discovery'] = marvinLogger;
+const marvinLogger = new Logger('Runner', 'yellow');
+logs['Runner'] = marvinLogger;
 registerLogger(marvinLogger);
 
 export default function getLog(section: string, color = 'grey'): Logger {

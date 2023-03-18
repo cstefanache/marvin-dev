@@ -12,7 +12,7 @@ import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
 
-const logger = getLog('marvin:workspace');
+const logger = getLog('Workspace');
 
 const store = new Store();
 let workspace: Workspace;

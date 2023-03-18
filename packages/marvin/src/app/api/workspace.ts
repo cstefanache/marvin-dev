@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
 import App from '../app';
-const logger = getLog('marvin:workspace');
+const logger = getLog('Workspace');
 
 function debounce(func, timeout = 300) {
   let timer;
