@@ -108,6 +108,7 @@ const SelectMethod = (props: any) => {
           },
         },
       };
+      console.log(schema)
       setSchema(schema);
     }
   }, [selectedMethod]);

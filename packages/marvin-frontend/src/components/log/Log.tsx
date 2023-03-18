@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './LogStyles.scss';
 export function Log({ log }: { log: string }) {
-  const [messages, setMessages] = useState<string[]>([]);
-
+  const [messages, setMessages] = useState<any[]>([]);
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const logsRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,11 +13,13 @@ export function Log({ log }: { log: string }) {
     asyncFn();
 
     window.ipcRender.removeAllListeners('log');
-    window.ipcRender.receive('log', (section: string, message: string) => {
-      // console.log(section, message);
+    window.ipcRender.receive('log', (section: string, message: any[]) => {
       if (section === log) {
-        console.log('received log', section, message);
-        setMessages((messages) => [...messages, message].slice(-500));
+        setMessages((messages) => {
+          const newMessages = message[2] ? messages.slice(0, -1) : messages;
+
+          return [...newMessages, message];
+        });
         scrollToBottom();
       }
     });
@@ -28,23 +30,19 @@ export function Log({ log }: { log: string }) {
   }, [messages]);
 
   const scrollToBottom = () => {
-    // logsRef.current?.scrollIntoView({ behavior: "smooth" })
-    const element = logsRef.current;
-    if (element) {
-      const scrollHeight = element.scrollHeight;
-      const height = element.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      element.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-    }
+    messagesEndRef?.current?.scrollIntoView();
   };
 
   return (
     <div className="log-panel" ref={logsRef}>
       {messages.map((message: string, index: number) => (
-        <pre style={{ color: message[0] }} key={index}>
-          {message[1]}
-        </pre>
+        <pre
+          style={{ color: message[0] }}
+          key={index}
+          dangerouslySetInnerHTML={{ __html: message[1] }}
+        ></pre>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

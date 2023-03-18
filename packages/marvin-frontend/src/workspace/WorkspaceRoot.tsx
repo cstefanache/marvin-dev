@@ -14,6 +14,7 @@ import { SequenceItemPanel, TreeItem } from './sequencePanel/SequenceItemPanel';
 import Methods from './methods/Methods';
 import Workspaces from '../workspaces/Workspaces';
 import { getNodesForFilter } from '../utils';
+import Console from './console/Console';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -138,32 +139,6 @@ export function WorkspaceRoot() {
     ]);
   };
 
-  const console = (
-    <TitlePanel
-      title="Console"
-      collapsible={<InputGroup leftIcon="filter" placeholder="Filter" />}
-      suffix={
-        mainLayoutHoriz
-          ? [
-              <Icon
-                icon="vertical-distribution"
-                size={12}
-                onClick={() => setMainLayoutHoriz(false)}
-              />,
-            ]
-          : [
-              <Icon
-                icon="horizontal-distribution"
-                size={12}
-                onClick={() => setMainLayoutHoriz(true)}
-              />,
-            ]
-      }
-    >
-      <Log log="marvin:discovery" />
-    </TitlePanel>
-  );
-
   const mainLayout = (
     <DragLayout
       orientation="horizontal"
@@ -189,7 +164,12 @@ export function WorkspaceRoot() {
         }
         defaultSize={200}
         minSize={20}
-        left={console}
+        left={
+          <Console
+            mainLayoutHoriz={mainLayoutHoriz}
+            setMainLayoutHoriz={setMainLayoutHoriz}
+          />
+        }
       >
         {selectedSequenceItem ? (
           <SequenceItemPanel

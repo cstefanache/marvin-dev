@@ -73,7 +73,7 @@ export default class Runner {
     if (method.iterator && this.config.aliases.iterators) {
       const iteratorName = method.iterator.name;
       log(
-        `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
+        `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
       );
       const iteratorConfig = this.config.aliases.iterators.find(
         (configIterator) => configIterator.name === iteratorName
@@ -85,7 +85,7 @@ export default class Runner {
 
           if (iteratorDef.identifier) {
             log(
-              `Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
+              `   Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
             );
           }
 
@@ -108,7 +108,7 @@ export default class Runner {
                 log(
                   `${index
                     .toString()
-                    .padStart(3)}: |${resultEvaluation}|${text}|`,
+                    .padStart(4)}: |${resultEvaluation}|${text}|`,
                   'yellow'
                 );
                 // if (text === resultEvaluation) {
@@ -144,10 +144,10 @@ export default class Runner {
       locator = `${prefix !== '' ? prefix : ''}${
         prefix !== '' && locator ? ' ' : ''
       }${locator || ''}`;
-      log(`Executing sequence: [${type}]: ${locator}`);
+      log(`   [${type}]: ${locator}`);
       const element = await page.$(locator);
       if (!element) {
-        log(`Element ${locator} not found`, 'red');
+        log(`       Element ${locator} not found`, 'red');
         continue;
       }
       if (type === 'check') {
@@ -160,31 +160,32 @@ export default class Runner {
           const valueToValidate = this.evaluateExpression(parameters[uid]);
 
           log(
-            `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
-            'yellow'
+            ` [ ] Checking ${text} | ${op} | ${value} against ${valueToValidate} for (${locator})`,
+            'yellow', true
           );
+
           if (op) {
             if (value) {
-              // if (!this.assert(value, valueToValidate, op, isNumber)) {
-              //   log(
-              //     `Failed to assert ${value} ${op} ${valueToValidate}`,
-              //     'red'
-              //   );
-              // } else {
-              //   log(
-              //     `Assertion passed for ${value} ${op} ${valueToValidate}`,
-              //     'green'
-              //   );
-              // }
+              if (!this.assert(value, valueToValidate, op, isNumber)) {
+                log(
+                  `   [x] ${value} ${op} ${valueToValidate}`,
+                  'red', true, true
+                );
+              } else {
+                log(
+                  `   [✓] ${value} ${op} ${valueToValidate}`,
+                  'green', true, true
+                );
+              }
             } else {
-              // if (!this.assert(text, valueToValidate, op, isNumber)) {
-              //   log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
-              // } else {
-              //   log(
-              //     `Assertion passed for ${value} ${op} ${valueToValidate}`,
-              //     'green'
-              //   );
-              // }
+              if (!this.assert(text, valueToValidate, op, isNumber)) {
+                log(`   [x] ${text} ${op} ${valueToValidate}`, 'red', true, true);
+              } else {
+                log(
+                  `   [✓] ${value} ${op} ${valueToValidate}`,
+                  'green', true, true
+                );
+              }
             }
           }
         } catch (err) {
@@ -196,8 +197,8 @@ export default class Runner {
         parameters[uid]
       ) {
         log(
-          `Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
-          'yellow'
+          `   [ ] Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
+          'yellow', true
         );
         await page.focus(locator);
         if (type === 'clearAndFill') {
@@ -207,6 +208,10 @@ export default class Runner {
           );
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
+        log(
+          `   [#] Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
+          'yellow', true
+        );
       } else {
         await element.hover();
         try {
@@ -215,14 +220,14 @@ export default class Runner {
           //silent fail
         }
         const text = await element.evaluate((el) => el.textContent?.trim());
-        log(`Clicking on ${text} (${locator})`, 'yellow');
+        log(`   [ ] Clicking on ${text} (${locator})`, 'yellow', true);
         // await element.screenshot({ path: 'example.png' });
         try {
           await element.evaluate((el: any) => el.click());
         } catch (err) {
           await element.click();
         }
-        log(`Clicked on ${text}`, 'yellow');
+        log(`   [*] Clicked on ${text}`, 'yellow', true);
       }
 
       if (sequenceItem.store) {
@@ -271,7 +276,10 @@ export default class Runner {
       this.config.aliases.urlReplacers,
       this.config.rootUrl
     );
-    log(`Current path: ${url}`, 'yellow');
+    log('+----------------'+'-'.repeat(currentStepToExecute.length)+'--+', 'cyan')
+    log(`| Executing Step: ${currentStepToExecute} |`, 'cyan');
+    log('+----------------'+'-'.repeat(currentStepToExecute.length)+'--+', 'cyan')
+    log(`Current path: ${url.substring(0, 40)}`, 'yellow');
     if (executionSteps.length === 0) {
       return;
     }
@@ -318,10 +326,10 @@ export default class Runner {
         );
         if (method) {
           const loopTimes = loop || 1;
-          log(`Executing method ${methodName}, ${loopTimes} time(s)`);
+          log(` > Executing method ${methodName}, ${loopTimes} time(s)`);
           for (let i = 0; i < loopTimes; i++) {
             for (let j = 0; j < (methodLoop || 1); j++) {
-              log(`Executing method ${methodName}, iteration: ${i}, ${j}`);
+              log(`  >  Executing method ${methodName}, iteration: ${i}, ${j}`);
               await this.executeMethod(method, page, parameters);
             }
             try {

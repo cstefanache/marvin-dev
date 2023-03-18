@@ -9,8 +9,6 @@
             padding: 10px 0;
             align-items: center;
             text-align: center;
-            outline: none;
-            user-select: none;
 
             .bp4-icon {
                 vertical-align: middle;
@@ -26,4 +24,9 @@
         user-select: none;
         overflow: auto;
     }
+}
+
+.bp4-tab {
+    outline: none;
+    user-select: none;
 }

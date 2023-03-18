@@ -346,7 +346,6 @@ export default class Discovery {
     log('Capturing info aliases ...');
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
-
       for (const [index, element] of elements.entries()) {
         const text = (await element.evaluate((el) => el.textContent)) as string;
         info.push({
@@ -355,6 +354,7 @@ export default class Discovery {
           type: await element.evaluate((el) => el.getAttribute('type')),
           locator: await getLocatorForElement(infoSelector, index, element),
         });
+        log(`Captured ${infoSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
       }
     }
 
@@ -371,6 +371,7 @@ export default class Discovery {
           type: await element.evaluate((el) => el.getAttribute('type')),
           locator: await getLocatorForElement(inputSelector, index, element),
         });
+        log(`Captured ${inputSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
       }
     }
 
@@ -395,6 +396,7 @@ export default class Discovery {
           //silent
         }
         actions.push(item);
+        log(`Captured ${actionSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
       }
     }
 
@@ -409,11 +411,7 @@ export default class Discovery {
           `Elements found for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
         );
         if (iteratorRootSelectors.length) {
-          element = iteratorRootSelectors[0];
-          console.log('>>>>>>>', iteratorItem.selectors);
-          console.log(
-            (await element.evaluate((el) => el.textContent)) as string
-          );
+          element = iteratorRootSelectors[0];          
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {
@@ -448,6 +446,7 @@ export default class Discovery {
                         )
                       : iteratorElement.selector,
                 });
+                log(`Captured ${iteratorElement.name} (${index+1}/${elements.length}) `, 'yellow', true);
               }
             }
           }

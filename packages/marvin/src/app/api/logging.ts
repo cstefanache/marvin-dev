@@ -11,10 +11,13 @@ export class Logger {
     this.log(`Logger initialized for ${section}`)
   }
 
-  public log(message: string, col?: string): void {
+  public log(message: string, col?: string, overwriteLast: boolean = false): void {
     console.log(this.consoleLogFn(`[ ${this.section} ] ${message}`));
     if (App.mainWindow) {
-      App.mainWindow.webContents.send('log', this.section, [col, message]);
+      App.mainWindow.webContents.send('log', this.section, [col, message, overwriteLast]);
+    }
+    if (overwriteLast) {
+      this.logs.pop();
     }
     this.logs.push([col, message]);
   }
