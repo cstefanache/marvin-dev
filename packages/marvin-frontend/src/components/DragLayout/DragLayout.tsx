@@ -1,5 +1,11 @@
 import './DragLayout.scss';
-import React, { ReactElement, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  ReactElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 
 export type LayoutOrientation =
@@ -18,17 +24,27 @@ interface DragLayoutProps {
 }
 
 export function DragLayout(props: DragLayoutProps) {
-  const workspaceContext = useContext(WorkspaceContext)
+  const workspaceContext = useContext(WorkspaceContext);
   const [size, setSize] = useState<number>(
-    workspaceContext[props.contextKey] || props.fixedSize || props.defaultSize || 200
+    workspaceContext[props.contextKey] ||
+      props.fixedSize ||
+      props.defaultSize ||
+      200
   );
   const [prevSize, setPrevSize] = useState<number>(
-    workspaceContext[props.contextKey] || props.fixedSize || props.defaultSize || 200
+    workspaceContext[props.contextKey] ||
+      props.fixedSize ||
+      props.defaultSize ||
+      200
   );
   const [dragging, setDragging] = useState<boolean>(false);
   const parentReference = useRef(null);
   const isHorizontalLayout = props.orientation.indexOf('horizontal') !== -1;
   const isReversed = props.orientation.indexOf('reverse') !== -1;
+
+  useEffect(() => {
+    setSize(workspaceContext[props.contextKey]);
+  }, [props.contextKey]);
 
   const getStyle = (on: 'left' | 'main') => {
     return on === 'left'

@@ -37,7 +37,6 @@ export function getNodesForFilter(tree: any, filter: Function): any[] {
 
     (node.children || []).forEach((childNode: any) => traverse(childNode));
   }
-  console.log(tree)
   traverse(tree)
 
   return list;

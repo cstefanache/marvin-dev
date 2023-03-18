@@ -28,6 +28,9 @@ export function WorkspaceRoot() {
   const [flowState, setFlowState] = useState<number>(Math.random());
   const [path, setPath] = useState<string | undefined>(null);
   const [subIds, setSubIds] = useState<any>([]);
+  const [highlightedMethod, setHighlightedMethod] = useState<string | null>(
+    null
+  );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
 
   const asyncLoadFn = async () => {
@@ -55,7 +58,6 @@ export function WorkspaceRoot() {
       const newParent = item.currentNode;
       const { currentNode, parentNode } = selectedSequenceItem;
       const parentBranch = parentNode.currentNode;
-
 
       parentBranch.children = parentBranch.children.filter(
         (child: any) => child.id !== currentNode.id
@@ -104,17 +106,6 @@ export function WorkspaceRoot() {
     }
   };
 
-  // const handleSave = (name: string) => {
-  //   save(
-  //     {
-  //       sequenceStep: name,
-  //       children: [],
-  //       url: selectedSequenceItem.currentNode.exitUrl,
-  //     },
-  //     selectedSequenceItem.currentNode
-  //   );
-  // };
-
   window.ipcRender.receive('action-finished', (id: string) => {
     // console.log('action-finished', id);
     setLoadingIds((ids: any) => ids.filter((i: any) => i !== id));
@@ -155,14 +146,14 @@ export function WorkspaceRoot() {
         mainLayoutHoriz
           ? [
               <Icon
-                icon="horizontal-distribution"
+                icon="vertical-distribution"
                 size={12}
                 onClick={() => setMainLayoutHoriz(false)}
               />,
             ]
           : [
               <Icon
-                icon="vertical-distribution"
+                icon="horizontal-distribution"
                 size={12}
                 onClick={() => setMainLayoutHoriz(true)}
               />,
@@ -184,6 +175,7 @@ export function WorkspaceRoot() {
           subIds={subIds}
           runDiscovery={runDiscovery}
           key={flowState}
+          highlightedMethod={highlightedMethod}
           loadingIds={loadingIds}
           selectSequenceItem={selectSequenceItem}
           selectedSequenceItem={selectedSequenceItem}
@@ -192,6 +184,9 @@ export function WorkspaceRoot() {
     >
       <DragLayout
         orientation={mainLayoutHoriz ? 'horizontal-reversed' : 'vertical'}
+        contextKey={
+          mainLayoutHoriz ? 'consolePanelHeight' : 'consolePanelWidth'
+        }
         defaultSize={200}
         minSize={20}
         left={console}
@@ -245,7 +240,14 @@ export function WorkspaceRoot() {
       <Tab
         id="methods"
         title={<Icon icon="code" size={24} />}
-        panel={<Methods />}
+        panel={
+          <Methods
+            setHighlightedMethod={(id) => {
+              setHighlightedMethod(id);
+              setTab('mainLayout');
+            }}
+          />
+        }
       />
     </Tabs>
   );

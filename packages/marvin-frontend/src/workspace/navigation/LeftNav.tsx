@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
+import { localFlattenTree } from '../../utils';
 
 export function LeftNav(props: {
   flow: any;
@@ -14,8 +15,15 @@ export function LeftNav(props: {
   loadingIds: string[];
   subIds: string[];
   runDiscovery: Function;
+  highlightedMethod?: string;
 }) {
-  const { selectedSequenceItem, loadingIds, runDiscovery, subIds } = props;
+  const {
+    selectedSequenceItem,
+    loadingIds,
+    runDiscovery,
+    subIds,
+    highlightedMethod,
+  } = props;
   const workspaceContext = useContext(WorkspaceContext);
   const [focus, setFocus] = useState<any>(workspaceContext.focus);
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
@@ -32,9 +40,25 @@ export function LeftNav(props: {
       {props.flow ? (
         <FlowNavigator
           runDiscovery={(elem) => {
-            console.log(elem);
+            // console.log(elem);
+            const { currentNode } = elem;
+            const { id } = currentNode;
+
+            const localFlat = localFlattenTree({
+              sequenceStep: '[root] ',
+              skip: true,
+              children: props.flow.graph,
+            });
+
+            const executeOn = localFlat.find(
+              (item: any) => item.currentNode.id === id
+            );
+            if (executeOn) {
+              runDiscovery(executeOn);
+            }
           }}
           subIds={subIds}
+          highlightedMethod={highlightedMethod}
           key={focus ? focus.currentNode.id : props.flow.graph.id}
           graph={focus ? [focus.currentNode] : props.flow.graph}
           selectedId={selectedSequenceItem?.currentNode.id}
@@ -94,6 +118,7 @@ export function LeftNav(props: {
             graph={props.flow.graph}
             sequenceFilter={sequenceFilter}
             subIds={subIds}
+            highlightedMethod={highlightedMethod}
             autoExpand={true}
             loadingIds={loadingIds}
             selectedId={selectedSequenceItem?.currentNode.id}
