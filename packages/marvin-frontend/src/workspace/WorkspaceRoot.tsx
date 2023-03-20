@@ -15,6 +15,7 @@ import Methods from './methods/Methods';
 import Workspaces from '../workspaces/Workspaces';
 import { getNodesForFilter } from '../utils';
 import Console from './console/Console';
+import Generate from './generator/Generate';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -203,23 +204,23 @@ export function WorkspaceRoot() {
     >
       <Tab
         id="workspaces"
-        title={<Icon icon="box" size={24} />}
+        title={<Icon icon="box" size={24} title="Projects" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
       <Tab
         id="mainLayout"
-        title={<Icon icon="panel-stats" size={24} />}
+        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
         panel={mainLayout}
       />
       <Tab
         id="config"
-        title={<Icon icon="cog" size={24} />}
+        title={<Icon icon="cog" size={24} title="Config" />}
         panel={<Config />}
       />
 
       <Tab
         id="methods"
-        title={<Icon icon="code" size={24} />}
+        title={<Icon icon="code" size={24} title="Show Methods" />}
         panel={
           <Methods
             setHighlightedMethod={(id) => {
@@ -228,6 +229,12 @@ export function WorkspaceRoot() {
             }}
           />
         }
+      />
+
+      <Tab
+        id="generator"
+        title={<Icon icon="code-block" size={24} title="Generate Tests" />}
+        panel={<Generate />}
       />
     </Tabs>
   );
