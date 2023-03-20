@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import { Config, KeyValuePair } from './models/config';
+import { Config, KeyValuePair, Sequence, Alias } from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -64,24 +64,48 @@ export default class Runner {
     return eval('`' + exp + '`');
   }
 
+  private getFlowIterators(method: Actions): IdentifiableIterator[] {
+    const iterators: IdentifiableIterator[] = [];
+    for (const seq of method.sequence) {
+      if (seq.iterator) {
+        iterators.push(seq.iterator);
+      }
+    }
+    return iterators;
+  }
+
+  private async findIteratorDefinition(
+    iterators: IdentifiableIterator[],
+    name: string
+  ): Promise<IdentifiableIterator> {
+    return iterators.find((it) => it.name === name);
+  }
+
   private async executeMethod(
     method: Actions,
     page: Page,
     parameters: any
   ): Promise<void> {
     let prefix = '';
-    if (method.iterator && this.config.aliases.iterators) {
-      const iteratorName = method.iterator.name;
+    const methodIterators = this.getFlowIterators(method);
+    if (methodIterators.length > 0 && this.config.aliases.iterators) {
       log(
         `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
       );
-      const iteratorConfig = this.config.aliases.iterators.find(
-        (configIterator) => configIterator.name === iteratorName
-      );
+      let iteratorConfig: Alias | undefined;
+      for (const iterator of methodIterators) {
+        iteratorConfig = this.config.aliases.iterators.find(
+          (it) => it.name === iterator.name
+        );
+      }
       if (iteratorConfig) {
         for (const rootSelector of iteratorConfig.selectors) {
           const rootElements = await page.$$(rootSelector);
-          const iteratorDef: IdentifiableIterator = method.iterator;
+          const iteratorDef: IdentifiableIterator =
+            await this.findIteratorDefinition(
+              methodIterators,
+              iteratorConfig.name
+            );
 
           if (iteratorDef.identifier) {
             log(
@@ -127,23 +151,26 @@ export default class Runner {
           }
         }
       } else {
-        throw new Error(`Missing iterator config for ${iteratorName}`);
+        throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
       }
 
       if (prefix === '') {
         log(
-          `No root element found for ${iteratorName} for parameters ${JSON.stringify(
-            parameters
-          )}`
+          `No root element found for ${
+            iteratorConfig.name
+          } for parameters ${JSON.stringify(parameters)}`
         );
         return;
       }
     }
+
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator } = sequenceItem;
-      locator = `${prefix !== '' ? prefix : ''}${
-        prefix !== '' && locator ? ' ' : ''
-      }${locator || ''}`;
+      let { type, uid, op, isNumber, locator, iterator } = sequenceItem;
+      locator = iterator
+        ? `${prefix !== '' ? prefix : ''}${
+            prefix !== '' && locator ? ' ' : ''
+          }${locator || ''}`
+        : locator;
       log(`   [${type}]: ${locator}`);
       const element = await page.$(locator);
       if (!element) {
@@ -161,7 +188,8 @@ export default class Runner {
 
           log(
             ` [ ] Checking ${text} | ${op} | ${value} against ${valueToValidate} for (${locator})`,
-            'yellow', true
+            'yellow',
+            true
           );
 
           if (op) {
@@ -169,21 +197,32 @@ export default class Runner {
               if (!this.assert(value, valueToValidate, op, isNumber)) {
                 log(
                   `   [x] ${value} ${op} ${valueToValidate}`,
-                  'red', true, true
+                  'red',
+                  true,
+                  true
                 );
               } else {
                 log(
                   `   [✓] ${value} ${op} ${valueToValidate}`,
-                  'green', true, true
+                  'green',
+                  true,
+                  true
                 );
               }
             } else {
               if (!this.assert(text, valueToValidate, op, isNumber)) {
-                log(`   [x] ${text} ${op} ${valueToValidate}`, 'red', true, true);
+                log(
+                  `   [x] ${text} ${op} ${valueToValidate}`,
+                  'red',
+                  true,
+                  true
+                );
               } else {
                 log(
                   `   [✓] ${value} ${op} ${valueToValidate}`,
-                  'green', true, true
+                  'green',
+                  true,
+                  true
                 );
               }
             }
@@ -197,8 +236,11 @@ export default class Runner {
         parameters[uid]
       ) {
         log(
-          `   [ ] Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
-          'yellow', true
+          `   [ ] Filling ${locator} with ${this.evaluateExpression(
+            parameters[uid]
+          )}`,
+          'yellow',
+          true
         );
         await page.focus(locator);
         if (type === 'clearAndFill') {
@@ -209,25 +251,34 @@ export default class Runner {
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
         log(
-          `   [#] Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
-          'yellow', true
+          `   [#] Filling ${locator} with ${this.evaluateExpression(
+            parameters[uid]
+          )}`,
+          'yellow',
+          true
         );
       } else {
-        await element.hover();
-        try {
-          await element.focus();
-        } catch (err) {
-          //silent fail
+        const element = await page.$(locator);
+
+        if (element) {
+          await element.hover();
+          try {
+            await element.focus();
+          } catch (err) {
+            //silent fail
+          }
+          const text = await element.evaluate((el) => el.textContent?.trim());
+          log(`   [ ] Clicking on ${text} (${locator})`, 'yellow', true);
+          // await element.screenshot({ path: 'example.png' });
+          try {
+            await element.evaluate((el: any) => el.click());
+          } catch (err) {
+            await element.click();
+          }
+          log(`   [*] Clicked on ${text}`, 'yellow', true);
+        } else {
+          log(`Element ${locator} not found`, 'red');
         }
-        const text = await element.evaluate((el) => el.textContent?.trim());
-        log(`   [ ] Clicking on ${text} (${locator})`, 'yellow', true);
-        // await element.screenshot({ path: 'example.png' });
-        try {
-          await element.evaluate((el: any) => el.click());
-        } catch (err) {
-          await element.click();
-        }
-        log(`   [*] Clicked on ${text}`, 'yellow', true);
       }
 
       if (sequenceItem.store) {
@@ -276,9 +327,15 @@ export default class Runner {
       this.config.aliases.urlReplacers,
       this.config.rootUrl
     );
-    log('+----------------'+'-'.repeat(currentStepToExecute.length)+'--+', 'cyan')
+    log(
+      '+----------------' + '-'.repeat(currentStepToExecute.length) + '--+',
+      'cyan'
+    );
     log(`| Executing Step: ${currentStepToExecute} |`, 'cyan');
-    log('+----------------'+'-'.repeat(currentStepToExecute.length)+'--+', 'cyan')
+    log(
+      '+----------------' + '-'.repeat(currentStepToExecute.length) + '--+',
+      'cyan'
+    );
     log(`Current path: ${url.substring(0, 40)}`, 'yellow');
     if (executionSteps.length === 0) {
       return;
@@ -319,7 +376,10 @@ export default class Runner {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
       const { method: methodName, loop, methodLoop, parameters } = action;
-      const urlActions = actions[url];
+      const urlActions = actions.filter(
+        (item: Actions) =>
+          (!item.isGlobal && item.path === url) || item.isGlobal
+      );
       if (urlActions) {
         const method = urlActions.find(
           (item: Actions) => item.method === methodName

@@ -70,7 +70,7 @@ export default class Workspace {
 
     if (!fs.existsSync(`${path}/flow.json`)) {
       this.flow = {
-        actions: {},
+        actions: [],
         graph: [
           {
             id: uuid.v4(),
@@ -112,7 +112,7 @@ export default class Workspace {
           );
         } else {
           this.flow = {
-            actions: {},
+            actions: [],
             graph: [],
           };
         }

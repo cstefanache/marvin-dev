@@ -57,6 +57,7 @@ export type Sequence = {
   store?: boolean;
   storeName?: string;
   locator: string;
+  iterator?: IdentifiableIterator;
 };
 
 export type IdentifiableIterator = {
@@ -69,11 +70,12 @@ export type Actions = {
   method: string;
   uid: string;
   methodUid: string;
-  iterator?: IdentifiableIterator;
   sequence: Sequence[];
+  path: string;
+  isGlobal?: boolean;
 };
 
 export type FlowModel = {
   graph: ActionItem[];
-  actions: { [key: string]: Actions[] };
+  actions: Actions[];
 };

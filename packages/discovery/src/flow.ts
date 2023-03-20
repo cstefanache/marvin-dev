@@ -38,7 +38,7 @@ export default class Flow {
         fs.readFileSync(`${config.path}/flow.json`, 'utf8')
       );
     } else {
-      this.flow = { graph: [], actions: {} };
+      this.flow = { graph: [], actions: [] };
     }
   }
 
