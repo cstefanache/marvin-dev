@@ -76,7 +76,7 @@ export function LeftNav(props: {
     <DragLayout
       orientation="vertical"
       left={focusPanel}
-      defaultSize={window.document.body.clientHeight / 2}
+      contextKey="navigationPanelHeight"
     >
       <TitlePanel
         title={

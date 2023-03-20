@@ -28,4 +28,5 @@ export interface Property {
   properties?: any;
   enum?: any;
   inputType?: string;
+  iteratorRoot?: boolean;
 }

@@ -100,10 +100,13 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
+
+  console.log(props)
   const [items, setItems] = useState<any>(null);
-  const [iterator, setIterator] = useState<any>(null);
+  // const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
+  const [isGlobal, setIsGlobal] = useState<boolean>(false);
   const [uid, setUid] = useState<string>(uuid.v4());
 
   useEffect(() => {
@@ -133,16 +136,16 @@ const CreateMethod = (props: any) => {
               });
             });
 
-            if (!elements.length) {
-              memo.push({
-                from: 'iterable',
-                locator: item.locator,
-                details: iteratorName,
-                iterator: {
-                  name: iteratorName,
-                },
-              });
-            }
+            // if (!elements.length) {
+            //   memo.push({
+            //     from: 'iterable',
+            //     locator: item.locator,
+            //     details: iteratorName,
+            //     iterator: {
+            //       name: iteratorName,
+            //     },
+            //   });
+            // }
             return memo;
           }, []),
         ].filter(
@@ -157,24 +160,27 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      console.log(selectedMethod);
-      const { name, uid, sequence } = selectedMethod;
+      const { name, uid, sequence, isGlobal } = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
+      setIsGlobal(isGlobal);
     }
   }, []);
 
   async function doSave() {
     const saveObject: any = {
-      method: methodName,
       uid,
+      method: methodName,
+      path: exitUrl,
+      isGlobal,
       sequence,
     };
-    if (iterator) {
-      saveObject['iterator'] = iterator;
-    }
-    await window.electron.saveMethodForUrl(exitUrl, saveObject);
+    // if (iterator) {
+    //   saveObject['iterator'] = iterator;
+    // }
+    console.log(saveObject);
+    await window.electron.saveMethodForUrl(saveObject);
     props.closePanel();
   }
 
@@ -183,9 +189,9 @@ const CreateMethod = (props: any) => {
 
     const { iterator } = item;
 
-    if (item.iterator) {
-      setIterator({ ...iterator, uid: uuid.v4() });
-    }
+    // if (item.iterator) {
+    //   setIterator({ ...iterator, uid: uuid.v4() });
+    // }
 
     switch (item.from) {
       case 'info':
@@ -201,15 +207,18 @@ const CreateMethod = (props: any) => {
         type = 'unkown';
     }
 
-    setSequence([
-      ...sequence,
-      {
-        uid: uuid.v4(),
-        locator: item.locator,
-        details: `${item.text || ''} ${item.details || ''}`,
-        type,
-      },
-    ]);
+    const newSequence = {
+      uid: uuid.v4(),
+      locator: item.locator,
+      details: `${item.text || ''} ${item.details || ''}`,
+      type,
+    };
+
+    if (iterator) {
+      newSequence['iterator'] = { ...iterator, uid: uuid.v4() };
+    }
+
+    setSequence([...sequence, newSequence]);
   };
 
   const operatorItemRenderer: ItemRenderer<any> = (
@@ -242,12 +251,19 @@ const CreateMethod = (props: any) => {
         placeholder="Method name"
         onChange={(event: any) => setMethodName(event.target.value)}
       />
-      {iterator && (
+      {/* {iterator && (
         <div>
           <p>Iterator: {iterator.name}</p>
           <p>Identifier: {iterator.identifier}</p>
         </div>
-      )}
+      )} */}
+      <div>
+        <Checkbox
+          checked={isGlobal}
+          label="Global Method"
+          onChange={() => setIsGlobal(!isGlobal)}
+        />
+      </div>
       <h4>Sequence:</h4>
       <div className="sequence-container">
         {sequence.map((step: any, index: number) => {

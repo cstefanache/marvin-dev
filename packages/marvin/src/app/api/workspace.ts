@@ -145,7 +145,7 @@ export default class Workspace {
   }
 
   getMethodsForPath(path: string): any {
-    return this.flow.actions[path];
+    return this.flow.actions.filter((a) => a.isGlobal || a.path === path);
   }
 
   getDiscoveredForPath(path: string): any {
@@ -251,52 +251,45 @@ export default class Workspace {
     this.store();
   }
 
-  saveMethodForUrl(url: string, method: any): void {
-    if (!this.flow.actions[url]) {
-      this.flow.actions[url] = [];
-    }
-
+  saveMethodForUrl(method: any): void {
     const methodUid = method.uid || uuid.v4();
     let methodExists = false;
-    this.flow.actions[url] = this.flow.actions[url].reduce(
-      (memo: any, item: any) => {
-        if (
-          (method.uid && item.uid === method.uid) ||
-          (!method.uid && method.method === item.method)
-        ) {
-          memo.push(method);
-          methodExists = true;
+    this.flow.actions = this.flow.actions.reduce((memo: any, item: any) => {
+      if (
+        (method.uid && item.uid === method.uid) ||
+        (!method.uid && method.method === item.method)
+      ) {
+        memo.push(method);
+        methodExists = true;
 
-          const updateWithNewMethod = (children: any[]) => {
-            for (const child of children) {
-              if (
-                (method.uid &&
-                  child.methodUid &&
-                  child.methodUid === method.uid) ||
-                ((!method.uid || !child.methodUid) &&
-                  child.method === method.method)
-              ) {
-                child.method = method.method;
-                child.methodUid = methodUid;
-              }
-              if (child.children) {
-                updateWithNewMethod(child.children);
-              }
+        const updateWithNewMethod = (children: any[]) => {
+          for (const child of children) {
+            if (
+              (method.uid &&
+                child.methodUid &&
+                child.methodUid === method.uid) ||
+              ((!method.uid || !child.methodUid) &&
+                child.method === method.method)
+            ) {
+              child.method = method.method;
+              child.methodUid = methodUid;
             }
-          };
+            if (child.children) {
+              updateWithNewMethod(child.children);
+            }
+          }
+        };
 
-          updateWithNewMethod(this.flow.graph);
-        } else {
-          memo.push(item);
-        }
-        return memo;
-      },
-      []
-    );
+        updateWithNewMethod(this.flow.graph);
+      } else {
+        memo.push(item);
+      }
+      return memo;
+    }, []);
 
     method.uid = methodUid;
     if (!methodExists) {
-      this.flow.actions[url].push(method);
+      this.flow.actions.push(method);
     }
 
     this.store();

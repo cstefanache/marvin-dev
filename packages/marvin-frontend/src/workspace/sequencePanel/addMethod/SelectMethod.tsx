@@ -1,6 +1,13 @@
 import './AddMethodStyles.scss';
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, MenuItem, PanelStack2, Tag } from '@blueprintjs/core';
+import {
+  Button,
+  Divider,
+  Icon,
+  MenuItem,
+  PanelStack2,
+  Tag,
+} from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import {
@@ -50,7 +57,6 @@ const SelectMethod = (props: any) => {
         setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
       }
       const method = selectedMethod;
-      const { iterator } = method;
       const schema = {
         type: 'object',
         title: method.method,
@@ -68,16 +74,24 @@ const SelectMethod = (props: any) => {
             title: 'Parameters',
             description: 'List of parameters required by the selected method',
             properties: {
-              ...(iterator && {
-                [iterator.uid]: {
-                  type: 'string',
-                  title: iterator.name,
-                  description: iterator.locator,
-                },
-              }),
+              // ...(iterator && {
+              //   [iterator.uid]: {
+              //     type: 'string',
+              //     title: iterator.name,
+              //     description: iterator.locator,
+              //   },
+              // }),
               ...(method.sequence || [])
                 // .filter((s: any) => s.type === 'fill')
                 .reduce((memo: any, obj: any) => {
+                  if (obj.iterator) {
+                    memo[obj.iterator.uid] = {
+                      type: 'string',
+                      title: obj.iterator.name,
+                      description: obj.iterator.locator,
+                      iteratorRoot: true
+                    };
+                  }
                   memo[obj.uid] = {
                     type: 'string',
                     title: obj.locator,
@@ -85,7 +99,9 @@ const SelectMethod = (props: any) => {
                     inputType: obj.type,
                     store: obj.store,
                     storeName: obj.storeName,
+                    iterator: obj.iterator,
                   };
+
                   return memo;
                 }, {}),
             },
@@ -108,7 +124,6 @@ const SelectMethod = (props: any) => {
           },
         },
       };
-      console.log(schema)
       setSchema(schema);
     }
   }, [selectedMethod]);
@@ -125,7 +140,20 @@ const SelectMethod = (props: any) => {
       return null;
     }
     return (
-      <MenuItem key={method.id} text={method.method} onClick={handleClick} />
+      <MenuItem
+        key={method.id}
+        text={
+          <div>
+            <Icon
+              style={{ marginRight: 10 }}
+              icon={method.isGlobal ? 'globe' : 'map-marker'}
+              title={method.isGlobal ? 'Global Method' : 'Local Method'}
+            />
+            {method.method}{' '}
+          </div>
+        }
+        onClick={handleClick}
+      />
     );
   };
 

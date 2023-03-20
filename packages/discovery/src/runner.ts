@@ -375,45 +375,34 @@ export default class Runner {
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
-      const { method: methodName, loop, methodLoop, parameters } = action;
-      const urlActions = actions.filter(
-        (item: Actions) =>
-          (!item.isGlobal && item.path === url) || item.isGlobal
-      );
-      if (urlActions) {
-        const method = urlActions.find(
-          (item: Actions) => item.method === methodName
-        );
-        if (method) {
-          const loopTimes = loop || 1;
-          log(` > Executing method ${methodName}, ${loopTimes} time(s)`);
-          for (let i = 0; i < loopTimes; i++) {
-            for (let j = 0; j < (methodLoop || 1); j++) {
-              log(`  >  Executing method ${methodName}, iteration: ${i}, ${j}`);
-              await this.executeMethod(method, page, parameters);
-            }
-            try {
-              await page.waitForNetworkIdle({
-                timeout: this.config.defaultTimeout,
-              });
-            } catch (e) {
-              log('Network idle timeout. Runner will continue.', 'red');
-              if (this.state) {
-                this.state.reportOnPendingRequests();
-              }
-            }
+      const { methodUid, loop, methodLoop, parameters } = action;
 
-            await continueExecution(action);
+      const method = actions.find((item: Actions) => item.uid === methodUid);
+      if (method) {
+        const loopTimes = loop || 1;
+        log(` > Executing method ${method.method}, ${loopTimes} time(s)`);
+        for (let i = 0; i < loopTimes; i++) {
+          for (let j = 0; j < (methodLoop || 1); j++) {
+            log(
+              `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
+            );
+            await this.executeMethod(method, page, parameters);
           }
-        } else if (method === undefined) {
+          try {
+            await page.waitForNetworkIdle({
+              timeout: this.config.defaultTimeout,
+            });
+          } catch (e) {
+            log('Network idle timeout. Runner will continue.', 'red');
+            if (this.state) {
+              this.state.reportOnPendingRequests();
+            }
+          }
+
           await continueExecution(action);
-        } else {
-          throw new Error(`Method ${methodName} not found`);
         }
-      } else {
-        log(
-          `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
-        );
+      } else if (!method) {
+        log(`Method ${methodUid} not found. Continuing...`);
         await continueExecution(action);
       }
     } else {

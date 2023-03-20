@@ -15,13 +15,23 @@ import AddButton from '../CustomComponents/Buttons/AddButton';
 import { getActionIcon } from '../../../utils';
 import './WrapperStyles.scss';
 
-export const getInputIcon = (title?: string, inputType?: string) => {
+export const getInputIcon = (
+  title?: string,
+  inputType?: string,
+  isIteratorRoot?: boolean
+) => {
   if (inputType) {
     return <Icon icon={getActionIcon(inputType)} />;
   } else if (title) {
     const lowerName = title?.toLowerCase();
-
-    if (lowerName === 'name') {
+    console.log(lowerName);
+    if (isIteratorRoot) {
+      return <Icon icon="property" />;
+    } else if (lowerName === 'condition') {
+      return <Icon icon="flow-branch" />;
+    } else if (lowerName === 'sequence step name') {
+      return <Icon icon="id-number" />;
+    } else if (lowerName === 'name') {
       return <Icon icon="person" />;
     } else if (lowerName === 'selector' || lowerName === 'locator') {
       return <Icon icon="code" />;
@@ -37,6 +47,13 @@ export const getInputIcon = (title?: string, inputType?: string) => {
       return <Icon icon="list" />;
     } else if (lowerName === 'regex') {
       return <Icon icon="book" />;
+    } else if (
+      lowerName === 'sequence execution loop' ||
+      lowerName === 'method loop'
+    ) {
+      return <Icon icon="array" />;
+    } else if (lowerName === 'post delay') {
+      return <Icon icon="stopwatch" />;
     }
   }
 };
@@ -87,7 +104,8 @@ export function SelectMethodCustomWrapper({
   property,
   children,
 }: CustomWrapperProps) {
-  const { inputType, title, store, storeName } = property as any;
+  const { inputType, title, store, storeName, iterator } = property as any;
+
   if (
     inputType === undefined ||
     inputType === 'fill' ||
@@ -99,12 +117,21 @@ export function SelectMethodCustomWrapper({
       <div
         style={
           inputType !== undefined
-            ? { paddingLeft: 5, borderLeft: '4px solid #FFF', marginBottom: 10 }
-            : { marginBottom: 10}
+            ? {
+                paddingLeft: 5,
+                borderLeft: '4px solid #FFF',
+                marginBottom: 10,
+                marginLeft: iterator ? 10 : 0,
+              }
+            : { marginBottom: 10 }
         }
       >
         <Wrapper property={property}>{children}</Wrapper>
-        {store && <Tag minimal={true} icon="database">{storeName}</Tag>}
+        {store && (
+          <Tag minimal={true} icon="database">
+            {storeName}
+          </Tag>
+        )}
       </div>
     );
   } else {
@@ -114,6 +141,7 @@ export function SelectMethodCustomWrapper({
           marginBottom: 15,
           paddingLeft: 5,
           borderLeft: '4px solid #FFF',
+          marginLeft: iterator ? 10 : 0,
         }}
       >
         <Icon icon={getActionIcon(inputType)} />

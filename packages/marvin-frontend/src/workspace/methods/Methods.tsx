@@ -20,11 +20,12 @@ export default function Methods(props: any) {
     const config = await window.electron.getConfig();
     const { graph, actions } = flow;
 
-    const getCountForMethod = (url: string, method: string) => {
+    const getCountForMethod = (uid: string) => {
       let count = 0;
       const goInto = (children: any[]) => {
         children.forEach((item) => {
-          if (item.url === url && item.method === method) {
+          console.log(item, uid)
+          if (item.methodUid === uid) {
             count += 1;
           }
           goInto(item.children || []);
@@ -36,24 +37,46 @@ export default function Methods(props: any) {
       return count;
     };
 
-    const localMethodsGraph = Object.keys(actions).reduce(
+    const paths = actions.reduce(
       (memo: any, item) => {
-        memo.children.push({
-          name: item,
-          children: actions[item].map((action: any) => ({
-            name: action.method,
-            sequence: action.sequence,
-            useCount: getCountForMethod(item, action.method),
-            uid: action.uid,
-          })),
+        let { path } = item;
+
+        // if (item.isGlobal) {
+        //   path = 'Global';
+        // }
+
+        const groupPath = item.isGlobal ? 'Global' : path;
+
+        if (!memo[groupPath]) {
+          memo[path] = {
+            name: groupPath,
+            children: [],
+          };
+        }
+
+        memo[groupPath].children.push({
+          ...item,
+          name: item.method,
+          useCount: getCountForMethod(item.uid),
         });
+
         return memo;
       },
       {
-        name: config.name,
-        children: [],
+        Global: {
+          name: 'Global',
+          children: [],
+        },
       }
     );
+
+    const localMethodsGraph = {
+      name: 'root',
+      children: Object.keys(paths).map((key) => ({
+        name: key,
+        children: paths[key].children,
+      })),
+    };
     const flatten = localFlattenTree(localMethodsGraph);
     setExpandedIds(flatten.map((i: any) => i.id));
     setActions(flatten);
@@ -109,12 +132,9 @@ export default function Methods(props: any) {
                 <div
                   {...getNodeProps()}
                   onClick={() => {
-                    if (parentNode && parentNode.parentNode) {
-                      setExitUrl(parentNode.currentNode.name);
+                    if (currentNode.path) {
+                      setExitUrl(currentNode.path)
                       setSelectedMethod(element);
-                    } else {
-                      setExitUrl(currentNode.name);
-                      setSelectedMethod(null);
                     }
                   }}
                   style={{ paddingLeft: 20 * (level - 1) }}

@@ -18,8 +18,16 @@ interface Props {
 
 export default function CustomTextField(props: Props) {
   const { property, value, onChange } = props;
-  const { type, title, description, error, isRequired, readOnly, inputType } =
-    property;
+  const {
+    type,
+    title,
+    description,
+    error,
+    isRequired,
+    readOnly,
+    inputType,
+    iteratorRoot,
+  } = property;
 
   const handleChange = (event: any) => {
     if (type === 'integer') {
@@ -46,7 +54,7 @@ export default function CustomTextField(props: Props) {
           <InputGroup
             value={value ? `${value}` : undefined}
             onChange={handleChange}
-            leftElement={getInputIcon(title, inputType)}
+            leftElement={getInputIcon(title, inputType, iteratorRoot)}
           />
         );
       }
