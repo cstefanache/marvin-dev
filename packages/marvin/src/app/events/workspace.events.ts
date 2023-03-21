@@ -12,7 +12,7 @@ import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
 
-const logger = getLog('marvin:workspace');
+const logger = getLog('Workspace');
 
 const store = new Store();
 let workspace: Workspace;
@@ -64,8 +64,8 @@ ipcMain.handle('get-methods-for-path', (_, path) => {
   return workspace.getMethodsForPath(path);
 });
 
-ipcMain.handle('save-method-for-url', (_, url, method) => {
-  return workspace.saveMethodForUrl(url, method);
+ipcMain.handle('save-method-for-url', (_, method) => {
+  return workspace.saveMethodForUrl(method);
 });
 
 ipcMain.handle('add-branch', (_, id, data) => {

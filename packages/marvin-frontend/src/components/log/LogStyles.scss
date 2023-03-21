@@ -1,0 +1,14 @@
+.log-panel {
+    padding: 10px;
+    background-color: black;
+    flex-grow: 1;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 12px;
+    height: 100%;
+
+    pre {
+        margin: 0;
+        padding: 0;
+    }
+}

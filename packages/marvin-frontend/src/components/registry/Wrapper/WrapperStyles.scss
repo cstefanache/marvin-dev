@@ -1,0 +1,135 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+
+
+#bp4-tab-panel_configTabs_5 {
+  .ra-schema-form {
+    .ra-schema-form {
+      margin-left: 0;
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.ra-schema-form {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  flex-grow: 1;
+
+  .divider {
+    margin-bottom: 6px;
+    border: 1px solid;
+    border-color: $gray3;
+  }
+
+  .ra-add-button {
+    width: 100%;
+  }
+
+  .form-group,
+  .bp4-control-group {
+    width: 100%;
+  }
+
+  & > .ra-schema-form {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 10px;
+    width: calc(100% - 40px);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .ra-add-button {
+    margin: 10px 0;
+  }
+
+  .ra-remove-button {
+    width: 30px;
+    justify-content: center;
+    padding-top: 50px;
+    padding-right: 25px;
+    transition: all 200ms;
+
+    .bp4-icon {
+      cursor: pointer;
+      &:hover {
+        color: rgba(255, 0, 0, 1);
+      }
+    }
+  }
+
+  [data-wrapper-for="Selectors"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  [data-wrapper-for="Elements"] {
+    width: 100%;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+  }
+
+  [data-wrapper-for="Element"] {
+    flex-direction: row;
+    width: calc(100% - 40px);
+  }
+
+  [data-wrapper-for="Exclude"] {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+    & > .wrapper-container {
+      &.ra-remove-button {
+        flex-grow: 0;
+        width: 40px;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &.undefined {
+        flex-direction: column;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  [data-wrapper-for="Priority"] {
+    flex-direction: row-reverse;
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 40px);
+
+    .ra-remove-button {
+      flex-grow: 0;
+      width: 40px;
+      padding: 0;
+      margin: 0;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  [data-wrapper-for="Identifier"] {
+    min-width: 500px;
+  }
+}
+
+.wrapper-container {
+  display: flex;
+  padding-right: 10px;
+  flex-grow: 1;
+
+  .wrapper-description {
+    display: flex;
+    align-items: flex-end;
+    font-size: 18px;
+  }
+}

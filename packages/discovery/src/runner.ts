@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import Flow from './flow';
-import { Config, KeyValuePair } from './models/config';
+import { Config, KeyValuePair, Sequence, Alias } from './models/config';
 import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
@@ -27,7 +27,7 @@ export default class Runner {
     actual: any,
     expected: any,
     op: string,
-    isNumber: boolean
+    isNumber: boolean | undefined
   ): boolean {
     try {
       if (isNumber && !isNaN(actual) && !isNaN(expected)) {
@@ -64,24 +64,54 @@ export default class Runner {
     return eval('`' + exp + '`');
   }
 
+  private getFlowIterators(method: Actions): IdentifiableIterator[] {
+    const iterators: IdentifiableIterator[] = [];
+    for (const seq of method.sequence) {
+      if (seq.iterator) {
+        iterators.push(seq.iterator);
+      }
+    }
+    return iterators;
+  }
+
+  private async findIteratorDefinition(
+    iterators: IdentifiableIterator[],
+    name: string
+  ): Promise<IdentifiableIterator> {
+    return iterators.find((it) => it.name === name);
+  }
+
   private async executeMethod(
     method: Actions,
     page: Page,
     parameters: any
   ): Promise<void> {
     let prefix = '';
-    if (method.iterator && this.config.aliases.iterators) {
-      const iteratorName = method.iterator.name;
+    const methodIterators = this.getFlowIterators(method);
+    if (methodIterators.length > 0 && this.config.aliases.iterators) {
       log(
-        `Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
+        `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
       );
-      const iteratorConfig = this.config.aliases.iterators.find(
-        (configIterator) => configIterator.name === iteratorName
-      );
+      let iteratorConfig: Alias | undefined;
+      for (const iterator of methodIterators) {
+        iteratorConfig = this.config.aliases.iterators.find(
+          (it) => it.name === iterator.name
+        );
+      }
       if (iteratorConfig) {
         for (const rootSelector of iteratorConfig.selectors) {
           const rootElements = await page.$$(rootSelector);
-          const iteratorDef: IdentifiableIterator = method.iterator;
+          const iteratorDef: IdentifiableIterator =
+            await this.findIteratorDefinition(
+              methodIterators,
+              iteratorConfig.name
+            );
+
+          if (iteratorDef.identifier) {
+            log(
+              `   Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
+            );
+          }
 
           if (rootElements && rootElements.length) {
             for (const [index, rootElem] of rootElements.entries()) {
@@ -102,7 +132,7 @@ export default class Runner {
                 log(
                   `${index
                     .toString()
-                    .padStart(3)}: |${resultEvaluation}|${text}|`,
+                    .padStart(4)}: |${resultEvaluation}|${text}|`,
                   'yellow'
                 );
                 // if (text === resultEvaluation) {
@@ -111,6 +141,9 @@ export default class Runner {
                   break;
                 }
               }
+              // else {
+              //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
+              // }
             }
           }
           if (prefix) {
@@ -118,27 +151,30 @@ export default class Runner {
           }
         }
       } else {
-        throw new Error(`Missing iterator config for ${iteratorName}`);
+        throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
       }
 
       if (prefix === '') {
         log(
-          `No root element found for ${iteratorName} for parameters ${JSON.stringify(
-            parameters
-          )}`
+          `No root element found for ${
+            iteratorConfig.name
+          } for parameters ${JSON.stringify(parameters)}`
         );
         return;
       }
     }
+
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator, press } = sequenceItem;
-      locator = `${prefix !== '' ? prefix : ''}${
-        prefix !== '' && locator ? ' ' : ''
-      }${locator || ''}`;
-      log(`Executing sequence: [${type}]: ${locator}`);
+      let { type, uid, op, isNumber, locator, iterator, press } = sequenceItem;
+      locator = iterator
+        ? `${prefix !== '' ? prefix : ''}${
+            prefix !== '' && locator ? ' ' : ''
+          }${locator || ''}`
+        : locator;
+      log(`   [${type}]: ${locator}`);
       const element = await page.$(locator);
       if (!element) {
-        log(`Element ${locator} not found`, 'red');
+        log(`       Element ${locator} not found`, 'red');
         continue;
       }
       if (type === 'check') {
@@ -151,29 +187,42 @@ export default class Runner {
           const valueToValidate = this.evaluateExpression(parameters[uid]);
 
           log(
-            `Checking ${text} | ${value} against ${valueToValidate} for (${locator})`,
-            'yellow'
+            ` [ ] Checking ${text} | ${op} | ${value} against ${valueToValidate} for (${locator})`,
+            'yellow',
+            true
           );
+
           if (op) {
             if (value) {
               if (!this.assert(value, valueToValidate, op, isNumber)) {
                 log(
-                  `Failed to assert ${value} ${op} ${valueToValidate}`,
-                  'red'
+                  `   [x] ${value} ${op} ${valueToValidate}`,
+                  'red',
+                  true,
+                  true
                 );
               } else {
                 log(
-                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                  'green'
+                  `   [✓] ${value} ${op} ${valueToValidate}`,
+                  'green',
+                  true,
+                  true
                 );
               }
             } else {
               if (!this.assert(text, valueToValidate, op, isNumber)) {
-                log(`Failed to assert ${text} ${op} ${valueToValidate}`, 'red');
+                log(
+                  `   [x] ${text} ${op} ${valueToValidate}`,
+                  'red',
+                  true,
+                  true
+                );
               } else {
                 log(
-                  `Assertion passed for ${value} ${op} ${valueToValidate}`,
-                  'green'
+                  `   [✓] ${value} ${op} ${valueToValidate}`,
+                  'green',
+                  true,
+                  true
                 );
               }
             }
@@ -187,8 +236,11 @@ export default class Runner {
         parameters[uid]
       ) {
         log(
-          `Filling ${locator} with ${this.evaluateExpression(parameters[uid])}`,
-          'yellow'
+          `   [ ] Filling ${locator} with ${this.evaluateExpression(
+            parameters[uid]
+          )}`,
+          'yellow',
+          true
         );
         await page.focus(locator);
         if (type === 'clearAndFill') {
@@ -198,17 +250,38 @@ export default class Runner {
           );
         }
         await page.keyboard.type(this.evaluateExpression(parameters[uid]));
+        log(
+          `   [#] Filling ${locator} with ${this.evaluateExpression(
+            parameters[uid]
+          )}`,
+          'yellow',
+          true
+        );
         if (press) {
           await page.keyboard.press(press);
         }
       } else {
-        await element.hover();
-        await element.focus();
-        const text = await element.evaluate((el) => el.textContent?.trim());
-        log(`Clicking on ${text} (${locator})`, 'yellow');
-        // await element.screenshot({ path: 'example.png' });
-        await element.evaluate((el: any) => el.click());
-        log(`Clicked on ${text}`, 'yellow');
+        const element = await page.$(locator);
+
+        if (element) {
+          await element.hover();
+          try {
+            await element.focus();
+          } catch (err) {
+            //silent fail
+          }
+          const text = await element.evaluate((el) => el.textContent?.trim());
+          log(`   [ ] Clicking on ${text} (${locator})`, 'yellow', true);
+          // await element.screenshot({ path: 'example.png' });
+          try {
+            await element.evaluate((el: any) => el.click());
+          } catch (err) {
+            await element.click();
+          }
+          log(`   [*] Clicked on ${text}`, 'yellow', true);
+        } else {
+          log(`Element ${locator} not found`, 'red');
+        }
       }
 
       if (sequenceItem.store) {
@@ -223,16 +296,16 @@ export default class Runner {
           element
         );
 
-        console.log('#######');
-
         await element.screenshot({ path: 'example.png' });
         // const key = parameters[uid];
-        const key = sequenceItem.storeName;
-        this.store[key] = value || text;
-        log(
-          `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
-          'yellow'
-        );
+        const key: string = sequenceItem.storeName;
+        if (key) {
+          this.store[key] = value || text;
+          log(
+            `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
+            'yellow'
+          );
+        }
       }
     }
   }
@@ -257,7 +330,16 @@ export default class Runner {
       this.config.aliases.urlReplacers,
       this.config.rootUrl
     );
-    log(`Current path: ${url}`, 'yellow');
+    log(
+      '+----------------' + '-'.repeat(currentStepToExecute.length) + '--+',
+      'cyan'
+    );
+    log(`| Executing Step: ${currentStepToExecute} |`, 'cyan');
+    log(
+      '+----------------' + '-'.repeat(currentStepToExecute.length) + '--+',
+      'cyan'
+    );
+    log(`Current path: ${url.substring(0, 40)}`, 'yellow');
     if (executionSteps.length === 0) {
       return;
     }
@@ -285,47 +367,45 @@ export default class Runner {
           sequenceCallback
         );
       }
+      if (action.postDelay) {
+        log(`Waiting for ${action.postDelay}`);
+        await new Promise(function (resolve) {
+          setTimeout(resolve, action.postDelay);
+        });
+      }
     };
 
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
-      const { method: methodName, loop, methodLoop, parameters } = action;
-      const urlActions = actions[url];
-      if (urlActions) {
-        const method = urlActions.find(
-          (item: Actions) => item.method === methodName
-        );
-        if (method) {
-          const loopTimes = loop || 1;
-          log(`Executing method ${methodName}, ${loopTimes} time(s)`);
-          for (let i = 0; i < loopTimes; i++) {
-            for (let j = 0; j < (methodLoop || 1); j++) {
-              log(`Executing method ${methodName}, iteration: ${i}, ${j}`);
-              await this.executeMethod(method, page, parameters);
-            }
-            try {
-              await page.waitForNetworkIdle({
-                timeout: this.config.defaultTimeout,
-              });
-            } catch (e) {
-              log('Network idle timeout. Runner will continue.', 'red');
-              if (this.state) {
-                this.state.reportOnPendingRequests();
-              }
-            }
+      const { methodUid, loop, methodLoop, parameters } = action;
 
-            await continueExecution(action);
+      const method = actions.find((item: Actions) => item.uid === methodUid);
+      if (method) {
+        const loopTimes = loop || 1;
+        log(` > Executing method ${method.method}, ${loopTimes} time(s)`);
+        for (let i = 0; i < loopTimes; i++) {
+          for (let j = 0; j < (methodLoop || 1); j++) {
+            log(
+              `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
+            );
+            await this.executeMethod(method, page, parameters);
           }
-        } else if (method === undefined) {
+          try {
+            await page.waitForNetworkIdle({
+              timeout: this.config.defaultTimeout,
+            });
+          } catch (e) {
+            log('Network idle timeout. Runner will continue.', 'red');
+            if (this.state) {
+              this.state.reportOnPendingRequests();
+            }
+          }
+
           await continueExecution(action);
-        } else {
-          throw new Error(`Method ${methodName} not found`);
         }
-      } else {
-        log(
-          `Current path ${url} not found in flow. Please update your flow according to the latest discovered pages`
-        );
+      } else if (!method) {
+        log(`Method ${methodUid} not found. Continuing...`);
         await continueExecution(action);
       }
     } else {

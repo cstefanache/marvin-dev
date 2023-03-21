@@ -1,6 +1,7 @@
 import { ConfigModel, Iterator } from './models/config';
+import { Identifier } from './models/models';
 import * as constants from './utils/constants';
-import * as regex from './utils/regex';
+import { getCheckTextCommand, sanitizeKey } from './utils/utils';
 import * as prettier from 'prettier';
 import * as shell from 'shelljs';
 import {
@@ -77,7 +78,7 @@ export default class CypressCodeGenerator {
       fs.existsSync(this.outputPath)
     ) {
       fs.mkdirSync(this.localSupportFolder);
-      fs.mkdirSync(`${this.localSupportFolder}/commands`);
+      fs.mkdirSync(`${this.localSupportFolder}/${constants.COMMAND_FOLDER}`);
     }
   }
 
@@ -93,16 +94,13 @@ export default class CypressCodeGenerator {
     return value.replace(/"/g, "'");
   }
 
-  private getIteratorItemCommand(
-    iterator: Iterator,
-    value: string = `${constants.ITERATOR_VALUE_KEY_WORD}`
-  ): string {
+  private getIteratorItemCommand(iterator: Iterator, key: string): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
     const identifier = iterator.identifier
       ? this.replaceDoubleQuotes(iterator.identifier)
       : '';
     const item = `"${parent} ${identifier}"`;
-    const command = `cy.contains(${item}, ${value})`;
+    const command = `cy.contains(${item}, ${sanitizeKey(key)})`;
     return command;
   }
 
@@ -114,185 +112,19 @@ export default class CypressCodeGenerator {
   }
 
   private getIteratorCommand(bodyItem: BodyDefinition) {
-    const { element, iteratorName, iteratorLocator, action } = bodyItem;
-    const { key, value, storeName } = element;
-    const iterator: Iterator = this.getIterator(iteratorName);
-    const commonPart: string = iteratorLocator
+    const { element, action } = bodyItem;
+    const { key, value, storeName, iterator } = element;
+    const it: Iterator = this.getIterator(iterator.name);
+    const commonPart: string = iterator.identifier
       ? `${this.getIteratorItemCommand(
-          iterator
+          it,
+          key
         )}.${this.getIteratorParentCommand(
-          iterator
-        )}.find("${this.replaceDoubleQuotes(iteratorLocator)}")`
+          it
+        )}.find("${this.replaceDoubleQuotes(iterator.identifier)}")`
       : undefined;
 
     return commonPart;
-  }
-
-  private getCheckTextCommand(key: string, op: string, isNumber: boolean) {
-    switch (op) {
-      case 'eq':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-        if (val.trim() === '') {
-          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-            key
-          )}`}).invoke('text').then((text) => {
-              expect(text.trim()).to.eq(${this.sanitizeKey(key)});
-            });
-        } else {
-          cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-            key
-          )}`}).invoke('val').then((val) => {
-              expect(val.trim()).to.eq(${this.sanitizeKey(key)});
-            });
-          }
-      });`;
-      case 'neq':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    if (val.trim() === '') {
-      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-        key
-      )}`}).invoke('text').then((text) => {
-          expect(text.trim()).not.to.eq(${this.sanitizeKey(key)});
-        });
-    } else {
-      cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-        key
-      )}`}).invoke('val').then((val) => {
-          expect(val.trim()).not.to.eq(${this.sanitizeKey(key)});
-        });
-      }
-  });`;
-      case 'gt':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
-  });
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    expect(val.trim()).to.be.greaterThan(${this.sanitizeKey(key)});
-  });
-}
-});`;
-      case 'gte':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.least(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.at.least(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'lt':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.lessThan(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.lessThan(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'lte':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.most(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.at.most(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'contains':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.contain(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.contain(${this.sanitizeKey(key)});
-});
-}
-});`;
-      case 'ncontains':
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-expect(text.trim()).not.to.contain(${this.sanitizeKey(key)});
-});
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-expect(val.trim()).not.to.contain(${this.sanitizeKey(key)});
-});
-}
-});`;
-      default:
-        return `  cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-if (val.trim() === '') {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
-  });
-} else {
-cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
-          key
-        )}`}).invoke('val').then((val) => {
-    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
-  });
-}
-});`;
-    }
   }
 
   private formatFile(file: string) {
@@ -302,11 +134,11 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
 
   private getBody(body: BodyDefinition[]) {
     const bodyContent = body.map((b) => {
-      const { element, iteratorName, op, isNumber, action } = b;
-      const { key, value, storeName } = element;
-      if (!iteratorName) {
+      const { element, op, isNumber, action } = b;
+      const { key, value, storeName, iterator } = element;
+      if (!iterator) {
         if (action === constants.CLICK_ACTION) {
-          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+          return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
             key
           )}`}).click({force: true});
           cy.waitForNetworkIdle(1000);`;
@@ -317,20 +149,20 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
           action === constants.FILL_ACTION
         ) {
           return storeName === null
-            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            ? `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
-              )}`}).clear().type(${this.sanitizeKey(key)});`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+              )}`}).clear().type(${sanitizeKey(key)});`
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
-              )}`}).clear().type(${this.sanitizeKey(key)});
-             ${constants.STORE_KEY_WORD}["${storeName}"] = ${this.sanitizeKey(
+              )}`}).clear().type(${sanitizeKey(key)});
+             ${constants.STORE_KEY_WORD}["${storeName}"] = ${sanitizeKey(
                 key
               )};`;
         }
 
         if (action === constants.CHECK_ACTION) {
-          return this.getCheckTextCommand(
-            `${this.sanitizeKey(key)}`,
+          return getCheckTextCommand(
+            `${this.replaceKeyWord(key)}`,
             op,
             isNumber
           );
@@ -340,7 +172,7 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
           return this.getIteratorCommand(b)
             ? `${this.getIteratorCommand(b)}.click({force: true})
             cy.waitForNetworkIdle(1000);`
-            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
+            : `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
                 key
               )}`}).click({force: true});
               cy.waitForNetworkIdle(1000);`;
@@ -351,15 +183,15 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim()).to.eq(${this.sanitizeKey(key)});
+                    expect(text.trim()).to.eq(${sanitizeKey(key)});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim()).to.eq(${this.sanitizeKey(key)});
+                    expect(val.trim()).to.eq(${sanitizeKey(key)});
                   });
               }
               });`
-            : this.getCheckTextCommand(this.sanitizeKey(key), op, isNumber);
+            : getCheckTextCommand(sanitizeKey(key), op, isNumber);
         }
       }
     });
@@ -369,20 +201,10 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
 
   private getParams(method: any) {
     const { parameters, hasStore, hasIterator } = method;
-    const paramNames = parameters.map((p) => this.sanitizeKey(p.key));
+    const paramNames = parameters.map((p) => sanitizeKey(p.key));
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
-    }
-    if (hasIterator) {
-      return (params = [...paramNames, constants.ITERATOR_VALUE_KEY_WORD]);
-    }
-    if (hasStore && hasIterator) {
-      return (params = [
-        ...paramNames,
-        constants.ITERATOR_VALUE_KEY_WORD,
-        constants.STORE_KEY_WORD,
-      ]);
     }
     return params;
   }
@@ -438,29 +260,30 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
     }
     for (const command of commands) {
       const { file, methods } = command;
-      const commandFile = `${this.localSupportFolder}/commands/${file}`;
+      const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
+
+      fs.appendFileSync(
+        e2eFile,
+        `import './${constants.COMMAND_FOLDER}/${file}';
+      `
+      );
       let importLocation: string = this.getRelativePath(
         `${this.localSupportFolder}/commands`,
         `${this.localSupportFolder}/app.po.js`
       );
-
-      const commandData = fs.existsSync(commandFile)
-        ? fs.readFileSync(commandFile, 'utf8')
-        : undefined;
-
-      if (
-        commandData &&
-        commandData.includes(constants.MARVIN_GENERATED_COMMENT)
-      ) {
-        fs.unlinkSync(commandFile);
-      }
-
-      if (!fs.existsSync(commandFile)) {
+      fs.writeFileSync(
+        commandFile,
+        `
+        ${constants.MARVIN_GENERATED_COMMENT} \n\r
+        import * as locators from '${importLocation}';
+        `
+      );
+      if (methods.length > 0) {
         fs.writeFileSync(
           commandFile,
           `
           ${constants.MARVIN_GENERATED_COMMENT} \n\r
-    import * as locators from '${importLocation}';
+          import * as locators from '${importLocation}';
           `
         );
         for (const method of methods) {
@@ -504,55 +327,39 @@ cy.get(${`${constants.LOCATOR_KEY_WORD}.${this.sanitizeKey(
       (v, i, a) =>
         a.findIndex((t) => t.key === v.key && t.value === v.value) === i
     );
-
-    //to remove duplicate constants that have the same names but different values
-    // for (const selector of filterDuplicateObjects) {
-    //   selector.key = this.replaceKeyWord(selector.key);
-    // }
-    // filterDuplicateObjects.findIndex((v, i, a) => {
-    //   if (a.findIndex((t) => t.key === v.key) !== i) {
-    //     v.key = `_${v.key}`;
-    //   }
-    // });
-
     return filterDuplicateObjects;
   }
 
-  private sanitizeKey(key: string): string {
-    let finalKey = key.replace(/\./g, '').replace(/[> #\/\[\]=":\-\(\)]/g, '');
-
-    if (/^\d/.test(finalKey)) {
-      finalKey = `_${finalKey}`;
-    }
-
-    if (['delete', 'new'].find((k) => k === finalKey)) {
-      finalKey = `_${finalKey}`;
-    }
-    return finalKey;
-  }
-
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = this.workspacePath
-      ? `${this.localSupportFolder}/app.po.js`
-      : `${this.localSupportFolder}/app.po.ts`;
+    const selectorFile = `${this.localSupportFolder}/app.po.${
+      this.workspacePath ? 'js' : 'ts'
+    }`;
     let fileContent: string = '';
+
     const data = fs.existsSync(selectorFile)
       ? fs.readFileSync(selectorFile, 'utf8')
       : undefined;
     if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
       fs.unlinkSync(selectorFile);
     }
+    
+    for (const selector of selectors) {
+      fileContent = `
+export const ${sanitizeKey(selector.key)} = '${selector.value}';
+      `;
+      fs.appendFileSync(selectorFile, fileContent);
 
-    if (!fs.existsSync(selectorFile)) {
-      fs.appendFileSync(
-        selectorFile,
-        `${constants.MARVIN_GENERATED_COMMENT} \n\r`
-      );
-      for (const selector of selectors) {
-        fileContent = `
-  export const ${this.sanitizeKey(selector.key)} = '${selector.value}';
+      if (!fs.existsSync(selectorFile)) {
+        fs.appendFileSync(
+          selectorFile,
+          `${constants.MARVIN_GENERATED_COMMENT} \n\r`
+        );
+        for (const selector of selectors) {
+          fileContent = `
+  export const ${sanitizeKey(selector.key)} = '${selector.value}';
         `;
-        fs.appendFileSync(selectorFile, fileContent);
+          fs.appendFileSync(selectorFile, fileContent);
+        }
       }
     }
   }

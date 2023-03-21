@@ -1,0 +1,109 @@
+ul,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+
+    * {
+        outline: none;
+        user-select: none;
+    }
+}
+
+ul.flow-tree-view {
+    display: flex;
+    flex-direction: column;
+    outline: none;
+
+    &.processing {
+        ul li {
+            color: rgb(163, 163, 163);
+
+            & > div:hover {
+                .bp4-icon-play {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    .selected {
+        color: rgb(255, 179, 0);
+    }
+
+    .highlight {
+        background-color: rgb(4, 255, 0, 0.2);
+    }
+
+    .running {
+        color: rgb(136, 255, 140) !important;
+        .bp4-icon-cog {
+            animation: rotation 2s infinite linear;
+        }
+    }
+
+    .discovery {
+        color: rgb(136, 255, 140) !important;
+
+        .bp4-icon-search-template {
+            animation: orbit 5s infinite linear;
+        }
+    }
+
+    li {
+        outline: none;
+
+        .bp4-icon {
+            margin-right: 4px;
+            vertical-align: text-top;
+        }
+
+        & > div {
+            display: flex;
+            flex-direction: row;
+            padding: 4px 4px;
+            cursor: pointer;
+
+            .sequence {
+                flex-grow: 1;
+            }
+
+            .actions .bp4-icon {
+                opacity: 0;
+            }
+
+            &:hover {
+                background-color: rgb(87, 86, 92);
+
+                .actions .bp4-icon {
+                    opacity: 1;
+                    color: rgb(193, 193, 193);
+
+                    &:hover {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotate(0deg) translateX(4px) rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg) translateX(4px) rotate(360deg);
+    }
+}

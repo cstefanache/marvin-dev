@@ -11,10 +11,13 @@ export class Logger {
     this.log(`Logger initialized for ${section}`)
   }
 
-  public log(message: string, col?: string): void {
+  public log(message: string, col?: string, overwriteLast: boolean = false): void {
     console.log(this.consoleLogFn(`[ ${this.section} ] ${message}`));
     if (App.mainWindow) {
-      App.mainWindow.webContents.send('log', this.section, [col, message]);
+      App.mainWindow.webContents.send('log', this.section, [col, message, overwriteLast]);
+    }
+    if (overwriteLast) {
+      this.logs.pop();
     }
     this.logs.push([col, message]);
   }
@@ -31,8 +34,8 @@ export class Logger {
 
 const logs: { [key: string]: Logger } = {};
 
-const marvinLogger = new Logger('marvin:discovery', 'yellow');
-logs['marvin:discovery'] = marvinLogger;
+const marvinLogger = new Logger('Runner', 'yellow');
+logs['Runner'] = marvinLogger;
 registerLogger(marvinLogger);
 
 export default function getLog(section: string, color = 'grey'): Logger {

@@ -7,7 +7,7 @@ export type IdentifiableElement = {
   base64Image?: string;
   type?: string | null;
   el?: ElementHandle<Element>;
-  identifier?: ElementHandle<Element>;
+  identifier?: ElementHandle<Element> | string;
   elements?: IdentifiableElement[];
   iteratorName?: string;
 };
@@ -46,6 +46,7 @@ export type ActionItem = {
   children: ActionItem[];
   exitUrl?: string;
   fullUrl?: string;
+  postDelay?: number;
 };
 
 export type Sequence = {
@@ -57,6 +58,7 @@ export type Sequence = {
   store?: boolean;
   storeName?: string;
   locator: string;
+  iterator?: IdentifiableIterator;
 };
 
 export type IdentifiableIterator = {
@@ -69,11 +71,12 @@ export type Actions = {
   method: string;
   uid: string;
   methodUid: string;
-  iterator?: IdentifiableIterator;
   sequence: Sequence[];
+  path: string;
+  isGlobal?: boolean;
 };
 
 export type FlowModel = {
   graph: ActionItem[];
-  actions: { [key: string]: Actions[] };
+  actions: Actions[];
 };
