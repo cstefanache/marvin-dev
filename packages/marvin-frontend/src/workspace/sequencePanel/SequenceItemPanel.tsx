@@ -1,5 +1,5 @@
-import { DragLayout } from '../../components/dragLayout/DragLayout';
-import { TitlePanel } from '../../components/titlePanel/TitlePanel';
+import { DragLayout } from '../../components/DragLayout/DragLayout';
+import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { useContext, useEffect, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import Summary from './summary/Summary';

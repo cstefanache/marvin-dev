@@ -2,12 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Models } from '@marvin/discovery';
-import { DragLayout } from '../components/dragLayout/DragLayout';
-import { IconToolbarLayout } from '../components/iconToolbarLayout/IconToolbarLayout';
+import { DragLayout } from '../components/DragLayout/DragLayout';
 import { Icon, InputGroup, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
-import { Log } from '../components/log/Log';
 import { LeftNav } from './navigation/LeftNav';
-import { TitlePanel } from '../components/titlePanel/TitlePanel';
 import './WorkspaceRoot.scss';
 import Config from './config/Config';
 import { SequenceItemPanel, TreeItem } from './sequencePanel/SequenceItemPanel';
