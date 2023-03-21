@@ -2,7 +2,7 @@ import './Console.scss';
 import { Icon, InputGroup, Tab, Tabs } from '@blueprintjs/core';
 
 import { Log } from '../../components/log/Log';
-import { TitlePanel } from '../../components/titlePanel/TitlePanel';
+import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { useEffect, useState } from 'react';
 
 export default function Console(props: any) {

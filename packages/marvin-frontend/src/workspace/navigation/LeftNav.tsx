@@ -1,7 +1,7 @@
-import { DragLayout } from '../../components/dragLayout/DragLayout';
+import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { Button, Icon, InputGroup } from '@blueprintjs/core';
-import { TitlePanel } from '../../components/titlePanel/TitlePanel';
-import { FlowNavigator } from '../../components/flowNavigator/FlowNavigator';
+import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
+import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import { useContext, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
