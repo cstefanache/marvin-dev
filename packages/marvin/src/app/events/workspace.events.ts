@@ -64,8 +64,8 @@ ipcMain.handle('get-methods-for-path', (_, path) => {
   return workspace.getMethodsForPath(path);
 });
 
-ipcMain.handle('save-method-for-url', (_, url, method) => {
-  return workspace.saveMethodForUrl(url, method);
+ipcMain.handle('save-method-for-url', (_, method) => {
+  return workspace.saveMethodForUrl(method);
 });
 
 ipcMain.handle('add-branch', (_, id, data) => {
