@@ -24,7 +24,6 @@ export const getInputIcon = (
     return <Icon icon={getActionIcon(inputType)} />;
   } else if (title) {
     const lowerName = title?.toLowerCase();
-    console.log(lowerName);
     if (isIteratorRoot) {
       return <Icon icon="property" />;
     } else if (lowerName === 'condition') {

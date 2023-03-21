@@ -22,7 +22,6 @@ const SelectMethod = (props: any) => {
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
   const { parent, save, data: propData } = props;
-  // const { exitUrl, sequenceStep } = parent || {};
   const { exitUrl } = props;
   const sequenceStep = '';
   const { method } = propData || {};
@@ -89,7 +88,7 @@ const SelectMethod = (props: any) => {
                       type: 'string',
                       title: obj.iterator.name,
                       description: obj.iterator.locator,
-                      iteratorRoot: true
+                      iteratorRoot: true,
                     };
                   }
                   memo[obj.uid] = {
@@ -227,6 +226,11 @@ const SelectMethod = (props: any) => {
                     props.parent
                   );
                 }
+                props.closePanel();
+                setSelectedMethod(undefined)
+                setData(undefined)
+                setSchema(undefined)
+                
               }
               // save({ method: selectedMethod.method, ...data }, props.parent)
             }

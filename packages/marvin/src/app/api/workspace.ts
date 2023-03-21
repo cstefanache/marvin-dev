@@ -243,7 +243,7 @@ export default class Workspace {
 
   deleteMethod(id: string): void {
     Object.keys(this.flow.actions).forEach((key) => {
-      this.flow.actions[key] = this.flow.actions[key].filter((item) => {
+      this.flow.actions = this.flow.actions.filter((item) => {
         return item.uid !== id;
       });
     });

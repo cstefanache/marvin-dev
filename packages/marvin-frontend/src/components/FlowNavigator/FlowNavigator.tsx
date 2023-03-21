@@ -40,10 +40,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
       children: graph,
     });
     setExpandedIds([]);
-    setFlow(localFlat);
-    if (autoExpand) {
-      console.log('Executed');
-    }
+    setFlow(localFlat);   
   }, [graph[0].id]);
 
   useEffect(() => {

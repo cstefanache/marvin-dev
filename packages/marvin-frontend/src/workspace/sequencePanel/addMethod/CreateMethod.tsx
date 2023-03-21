@@ -101,7 +101,6 @@ const DiscoveredSelect = (props: any) => {
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
 
-  console.log(props)
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
@@ -179,7 +178,6 @@ const CreateMethod = (props: any) => {
     // if (iterator) {
     //   saveObject['iterator'] = iterator;
     // }
-    console.log(saveObject);
     await window.electron.saveMethodForUrl(saveObject);
     props.closePanel();
   }

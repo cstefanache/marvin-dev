@@ -1,5 +1,5 @@
 import { DragLayout } from '../../components/dragLayout/DragLayout';
-import { Button, Icon, InputGroup } from '@blueprintjs/core';
+import { Button, Divider, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/titlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/flowNavigator/FlowNavigator';
 import { useContext, useState } from 'react';
@@ -33,6 +33,17 @@ export function LeftNav(props: {
     <TitlePanel
       title="Focus"
       suffix={[
+        focus ? (
+          <Icon
+            icon="filter-remove"
+            size={12}
+            title="Clear Filter"
+            onClick={() => {
+              setFocus(undefined);
+              workspaceContext.focus = undefined;
+            }}
+          />
+        ) : undefined,
         <Icon icon="expand-all" size={12} />,
         <Icon icon="collapse-all" size={12} />,
       ]}
@@ -40,7 +51,6 @@ export function LeftNav(props: {
       {props.flow ? (
         <FlowNavigator
           runDiscovery={(elem) => {
-            // console.log(elem);
             const { currentNode } = elem;
             const { id } = currentNode;
 
@@ -96,7 +106,7 @@ export function LeftNav(props: {
                 icon="delete"
                 minimal={true}
                 onClick={() => {
-                  setSequenceFilter(undefined);
+                  setSequenceFilter('');
                 }}
               />
             }
@@ -129,7 +139,6 @@ export function LeftNav(props: {
                 size={12}
                 title="Show in focus window"
                 onClick={() => {
-                  console.log(elem);
                   workspaceContext.focus = elem;
                   setFocus(elem);
                 }}

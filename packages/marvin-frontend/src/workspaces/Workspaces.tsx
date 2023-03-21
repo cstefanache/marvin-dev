@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Icon } from '@blueprintjs/core';
 import './WorkspacesStyles.scss';
+import { WorkspaceContext } from '../contexts/WorkspaceContext';
 
 interface Props {
   selectWorkspace: (fromNew?: boolean) => void;
@@ -9,6 +10,7 @@ interface Props {
 
 export default function Workspaces({ selectWorkspace }: Props) {
   const [workspaces, setWorkspaces] = useState([]);
+  const workspaceContext = useContext(WorkspaceContext);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -19,11 +21,13 @@ export default function Workspaces({ selectWorkspace }: Props) {
   }, []);
 
   const selectWorkspaceFolder = async () => {
+    workspaceContext.focus = undefined;
     await window.electron.selectNewWorkspaceFolder();
     selectWorkspace(true);
   };
 
   const selectExistingWorkspace = async (workspace: any) => {
+    workspaceContext.focus = undefined;
     await window.electron.selectWorkspace(workspace);
     selectWorkspace();
   };
@@ -35,7 +39,7 @@ export default function Workspaces({ selectWorkspace }: Props) {
       setWorkspaces(workspaces);
     };
     asyncFn();
-  }
+  };
 
   return (
     <div className="container">

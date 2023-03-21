@@ -3,7 +3,6 @@ import { ReactNode, useEffect, useState, useMemo, useRef } from 'react';
 import TreeView from 'react-accessible-treeview';
 import { localFlattenTree } from '../../utils';
 import './MethodsStyles.scss';
-// import '../../../workspace/SequenceItemPanel/AddMethod/AddMethodStyles.scss';
 import CreateMethod from '../sequencePanel/addMethod/CreateMethod';
 
 export default function Methods(props: any) {
@@ -24,7 +23,6 @@ export default function Methods(props: any) {
       let count = 0;
       const goInto = (children: any[]) => {
         children.forEach((item) => {
-          console.log(item, uid)
           if (item.methodUid === uid) {
             count += 1;
           }
@@ -40,10 +38,6 @@ export default function Methods(props: any) {
     const paths = actions.reduce(
       (memo: any, item) => {
         let { path } = item;
-
-        // if (item.isGlobal) {
-        //   path = 'Global';
-        // }
 
         const groupPath = item.isGlobal ? 'Global' : path;
 

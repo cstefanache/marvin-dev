@@ -91,17 +91,26 @@ export function WorkspaceRoot() {
     asyncLoadFn();
   };
 
+  const getMethodForUID = (uid: string) => {
+    const { actions } = flow;
+    if (actions) {
+      return actions.find((a: any) => a.uid === uid);
+    }
+  };
+
   const changeParent = () => {
     if (subIds.length === 0) {
       const { currentNode } = selectedSequenceItem;
       const { url } = currentNode;
-      window.console.log('Changing parent', url);
 
+      window.console.log('Changing parent', url);
+      const isGlobal = (
+        getMethodForUID(selectedSequenceItem.currentNode.methodUid) || {}
+      ).isGlobal;
       const ids = getNodesForFilter(
         flow.graph[0],
-        (node: any) => node.exitUrl === url
+        (node: any) => isGlobal || node.exitUrl === url
       ).map((elem: any) => elem.id);
-      window.console.log(ids);
       setSubIds(ids);
     } else {
       setSubIds([]);
