@@ -62,7 +62,9 @@ export default class CypressCodeGenerator {
     if (fs.existsSync(this.workspacePath)) {
       shell.exec(`cd ${this.outputPath} && npm init -y`);
       if (!fs.existsSync(`${this.outputPath}/node_modules`)) {
-        shell.exec(`cd ${this.outputPath} && npm install cypress --save-dev`);
+        shell.exec(
+          `cd ${this.outputPath} && npm install cypress cypress-localstorage-commands cypress-network-idle --save-dev`
+        );
       }
     }
 
@@ -121,7 +123,7 @@ export default class CypressCodeGenerator {
           key
         )}.${this.getIteratorParentCommand(
           it
-        )}.find("${this.replaceDoubleQuotes(iterator.identifier)}")`
+        )}.find("${this.replaceDoubleQuotes(key)}")`
       : undefined;
 
     return commonPart;
@@ -161,11 +163,7 @@ export default class CypressCodeGenerator {
         }
 
         if (action === constants.CHECK_ACTION) {
-          return getCheckTextCommand(
-            `${this.replaceKeyWord(key)}`,
-            op,
-            isNumber
-          );
+          return getCheckTextCommand(`${sanitizeKey(key)}`, op, isNumber);
         }
       } else {
         if (action === constants.CLICK_ACTION) {
@@ -249,47 +247,31 @@ export default class CypressCodeGenerator {
       `
       );
       for (const command of commands) {
-        const { file } = command;
+        const { file, methods } = command;
+        const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
+        let importLocation: string = this.getRelativePath(
+          `${this.localSupportFolder}/commands`,
+          `${this.localSupportFolder}/app.po.js`
+        );
         fs.appendFileSync(
           e2eFile,
           `import './commands/${file}';
           `
         );
-      }
-      this.formatFile(e2eFile);
-    }
-    for (const command of commands) {
-      const { file, methods } = command;
-      const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
-
-      fs.appendFileSync(
-        e2eFile,
-        `import './${constants.COMMAND_FOLDER}/${file}';
-      `
-      );
-      let importLocation: string = this.getRelativePath(
-        `${this.localSupportFolder}/commands`,
-        `${this.localSupportFolder}/app.po.js`
-      );
-      fs.writeFileSync(
-        commandFile,
-        `
-        ${constants.MARVIN_GENERATED_COMMENT} \n\r
-        import * as locators from '${importLocation}';
-        `
-      );
-      if (methods.length > 0) {
-        fs.writeFileSync(
-          commandFile,
-          `
+        if (methods.length > 0) {
+          fs.writeFileSync(
+            commandFile,
+            `
           ${constants.MARVIN_GENERATED_COMMENT} \n\r
           import * as locators from '${importLocation}';
           `
-        );
-        for (const method of methods) {
-          await this.writeMethod(commandFile, method);
+          );
+          for (const method of methods) {
+            await this.writeMethod(commandFile, method);
+          }
+          this.formatFile(commandFile);
         }
-        this.formatFile(commandFile);
+        this.formatFile(e2eFile);
       }
     }
   }
@@ -342,26 +324,38 @@ export default class CypressCodeGenerator {
     if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
       fs.unlinkSync(selectorFile);
     }
-    
-    for (const selector of selectors) {
-      fileContent = `
-export const ${sanitizeKey(selector.key)} = '${selector.value}';
-      `;
-      fs.appendFileSync(selectorFile, fileContent);
 
-      if (!fs.existsSync(selectorFile)) {
-        fs.appendFileSync(
-          selectorFile,
-          `${constants.MARVIN_GENERATED_COMMENT} \n\r`
-        );
-        for (const selector of selectors) {
-          fileContent = `
+    const customSelectorFile = `${this.localSupportFolder}/app.custom.po.${
+      this.workspacePath ? 'js' : 'ts'
+    }`;
+    if (!fs.existsSync(customSelectorFile)) {
+      fs.writeFileSync(
+        customSelectorFile,
+        `
+        // Add your custom selectors here
+      `
+      );
+    }
+
+    if (!fs.existsSync(selectorFile)) {
+      fs.appendFileSync(
+        selectorFile,
+        `${constants.MARVIN_GENERATED_COMMENT}
+        
+         export * from './app.custom.po';
+
+        `
+      );
+      for (const selector of selectors) {
+        fileContent = `
   export const ${sanitizeKey(selector.key)} = '${selector.value}';
         `;
-          fs.appendFileSync(selectorFile, fileContent);
-        }
+        fs.appendFileSync(selectorFile, fileContent);
       }
     }
+
+    this.formatFile(selectorFile);
+    this.formatFile(customSelectorFile);
   }
 
   private createGroupFolders(group: string) {
@@ -414,7 +408,6 @@ export const ${sanitizeKey(selector.key)} = '${selector.value}';
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
       return `
-      
       it('${name}', () => {
         cy.${name}(${params});
       });`;
@@ -477,13 +470,13 @@ export const ${sanitizeKey(selector.key)} = '${selector.value}';
             },
           };
 
-          beforeEach(() => {
-            Cypress.Cookies.defaults({
-              preserve: (cookie) => {
-                return true;
-              },
-            });
-          });
+          // beforeEach(() => {
+          //   Cypress.Cookies.defaults({
+          //     preserve: (cookie) => {
+          //       return true;
+          //     },
+          //   });
+          // });
           `;
         let endDescribeCommand = `})`;
         let beforeAllContent = `

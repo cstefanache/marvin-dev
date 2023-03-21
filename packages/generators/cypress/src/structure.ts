@@ -269,6 +269,7 @@ export default class Structure {
               });
         }
       } else {
+        paramsOrder.push(iterator.uid);
         step.store
           ? params.push({
               key: keyName,
@@ -287,12 +288,10 @@ export default class Structure {
             });
       }
     }
-    if (action.iterator) {
-      paramsOrder.push(action.iterator.uid);
-    }
-    if (action.iterator) {
-      paramsOrder.push(action.iterator.uid);
-    }
+    // if (action.iterator) {
+    //   paramsOrder.push(action.iterator.uid);
+    // }
+
     this.paramKeys[methodUid || method] = paramsOrder;
     return params;
   }
