@@ -1,4 +1,4 @@
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle, KeyInput } from 'puppeteer';
 
 export type IdentifiableElement = {
   text?: string;
@@ -54,6 +54,7 @@ export type Sequence = {
   uid: string;
   op?: string;
   isNumber?: boolean;
+  press?: KeyInput;
   store?: boolean;
   storeName?: string;
   locator: string;

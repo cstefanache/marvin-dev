@@ -165,7 +165,7 @@ export default class Runner {
     }
 
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator, iterator } = sequenceItem;
+      let { type, uid, op, isNumber, locator, iterator, press } = sequenceItem;
       locator = iterator
         ? `${prefix !== '' ? prefix : ''}${
             prefix !== '' && locator ? ' ' : ''
@@ -257,6 +257,9 @@ export default class Runner {
           'yellow',
           true
         );
+        if (press) {
+          await page.keyboard.press(press);
+        }
       } else {
         const element = await page.$(locator);
 

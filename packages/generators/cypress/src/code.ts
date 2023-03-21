@@ -73,14 +73,6 @@ export default class CypressCodeGenerator {
       fs.mkdirSync(this.localTestFolder);
     }
 
-    if (fs.existsSync(this.localSupportFolder)) {
-      fs.rmdirSync(this.localSupportFolder, { recursive: true });
-    }
-
-    if (fs.existsSync(this.localTestFolder)) {
-      fs.rmdirSync(this.localTestFolder, { recursive: true });
-    }
-
     if (
       !fs.existsSync(this.localSupportFolder) &&
       fs.existsSync(this.outputPath)
@@ -233,18 +225,39 @@ export default class CypressCodeGenerator {
     const e2eFile = this.workspacePath
       ? `${this.localSupportFolder}/e2e.js`
       : `${this.localSupportFolder}/e2e.ts`;
-    fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
-    fs.appendFileSync(
-      e2eFile,
+
+    const data = fs.existsSync(e2eFile)
+      ? fs.readFileSync(e2eFile, 'utf8')
+      : undefined;
+
+    if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
+      fs.unlinkSync(e2eFile);
+    }
+
+    if (!fs.existsSync(e2eFile)) {
+      fs.appendFileSync(e2eFile, `${constants.MARVIN_GENERATED_COMMENT} \r\n`);
+      fs.appendFileSync(e2eFile, `import 'cypress-network-idle';`);
+      fs.appendFileSync(
+        e2eFile,
+        `
+      Cypress.on('uncaught:exception', (err, runnable) => {
+        return false;
+      });
+      Cypress.on('load', (err, runnable) => {
+        return false;
+      });
       `
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false;
-    });
-    Cypress.on('load', (err, runnable) => {
-      return false;
-    });
-    `
-    );
+      );
+      for (const command of commands) {
+        const { file } = command;
+        fs.appendFileSync(
+          e2eFile,
+          `import './commands/${file}';
+          `
+        );
+      }
+      this.formatFile(e2eFile);
+    }
     for (const command of commands) {
       const { file, methods } = command;
       const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
@@ -261,14 +274,16 @@ export default class CypressCodeGenerator {
       fs.writeFileSync(
         commandFile,
         `
-  import * as locators from '${importLocation}';
+        ${constants.MARVIN_GENERATED_COMMENT} \n\r
+        import * as locators from '${importLocation}';
         `
       );
       if (methods.length > 0) {
         fs.writeFileSync(
           commandFile,
           `
-    import * as locators from '${importLocation}';
+          ${constants.MARVIN_GENERATED_COMMENT} \n\r
+          import * as locators from '${importLocation}';
           `
         );
         for (const method of methods) {
@@ -277,7 +292,6 @@ export default class CypressCodeGenerator {
         this.formatFile(commandFile);
       }
     }
-    this.formatFile(e2eFile);
   }
 
   private replaceKeyWord(selector: string): string {
@@ -317,15 +331,36 @@ export default class CypressCodeGenerator {
   }
 
   private async generateSelectors(selectors: any[]) {
-    const selectorFile = this.workspacePath
-      ? `${this.localSupportFolder}/app.po.js`
-      : `${this.localSupportFolder}/app.po.ts`;
+    const selectorFile = `${this.localSupportFolder}/app.po.${
+      this.workspacePath ? 'js' : 'ts'
+    }`;
     let fileContent: string = '';
+
+    const data = fs.existsSync(selectorFile)
+      ? fs.readFileSync(selectorFile, 'utf8')
+      : undefined;
+    if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
+      fs.unlinkSync(selectorFile);
+    }
+    
     for (const selector of selectors) {
       fileContent = `
 export const ${sanitizeKey(selector.key)} = '${selector.value}';
       `;
       fs.appendFileSync(selectorFile, fileContent);
+
+      if (!fs.existsSync(selectorFile)) {
+        fs.appendFileSync(
+          selectorFile,
+          `${constants.MARVIN_GENERATED_COMMENT} \n\r`
+        );
+        for (const selector of selectors) {
+          fileContent = `
+  export const ${sanitizeKey(selector.key)} = '${selector.value}';
+        `;
+          fs.appendFileSync(selectorFile, fileContent);
+        }
+      }
     }
   }
 
@@ -420,6 +455,13 @@ export const ${sanitizeKey(selector.key)} = '${selector.value}';
       for (const spec of specs) {
         const { file, beforeAll, tests } = spec;
         const specFile = `${groupFolder}/${file}`;
+        const data = fs.existsSync(specFile)
+          ? fs.readFileSync(specFile, 'utf8')
+          : undefined;
+
+        if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
+          fs.unlinkSync(specFile);
+        }
         let startDescribeCommand = `
         
         describe('${file}', () => {
@@ -457,14 +499,17 @@ export const ${sanitizeKey(selector.key)} = '${selector.value}';
         });`;
 
         const finalOutput =
+          `${constants.MARVIN_GENERATED_COMMENT}` +
           startDescribeCommand +
           beforeAllContent +
           this.getTestsBody(tests).join('\r\n') +
           endDescribeCommand;
-        fs.writeFileSync(
-          specFile,
-          prettier.format(finalOutput, { parser: 'typescript' })
-        );
+        if (!fs.existsSync(specFile)) {
+          fs.writeFileSync(
+            specFile,
+            prettier.format(finalOutput, { parser: 'typescript' })
+          );
+        }
       }
     }
   }
