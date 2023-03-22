@@ -469,24 +469,11 @@ export default class CypressCodeGenerator {
               },
             },
           };
-
-          // beforeEach(() => {
-          //   Cypress.Cookies.defaults({
-          //     preserve: (cookie) => {
-          //       return true;
-          //     },
-          //   });
-          // });
           `;
         let endDescribeCommand = `})`;
         let beforeAllContent = `
         
-        before( () => {   
-          cy.getCookies().then((cookies) => {
-            cookies.forEach((cookie) => {
-              cy.clearCookie(cookie.name);
-            });
-          });       
+        before( () => {        
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;
