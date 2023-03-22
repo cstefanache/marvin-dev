@@ -45,7 +45,17 @@ export default function CustomSelect(props: Props) {
   return (
     <FormGroup
       helperText={error}
-      label={title}
+      label={
+        <div>
+          {title}{' '}
+          <Button
+            icon="trash"
+            onClick={() => {
+              handleChange(undefined);
+            }}
+          ></Button>
+        </div>
+      }
       inline={false}
       labelInfo={isRequired && '(required)'}
       className="form-group"
@@ -53,6 +63,16 @@ export default function CustomSelect(props: Props) {
       <Select2
         items={list}
         fill={true}
+        createNewItemFromQuery={(query) => query}
+        createNewItemPosition="first"
+        createNewItemRenderer={(query, active, handleClick) => (
+          <MenuItem
+            icon="add"
+            text={`Create "${query}"`}
+            onClick={handleClick}
+            active={active}
+          />
+        )}
         itemRenderer={itemRenderer}
         onItemSelect={handleChange}
         noResults={

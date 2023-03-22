@@ -27,7 +27,7 @@ export const getInputIcon = (
     if (isIteratorRoot) {
       return <Icon icon="property" />;
     } else if (lowerName === 'condition') {
-      return <Icon icon="flow-branch" />;
+      return <Icon icon="playbook" />;
     } else if (lowerName === 'sequence step name') {
       return <Icon icon="id-number" />;
     } else if (lowerName === 'name') {
@@ -105,6 +105,12 @@ export function SelectMethodCustomWrapper({
 }: CustomWrapperProps) {
   const { inputType, title, store, storeName, iterator } = property as any;
 
+  const storeComponent = store && (
+    <Tag minimal={true} icon="database" title={`Store value to variable name ${storeName}`}>
+      {storeName}
+    </Tag>
+  )
+  
   if (
     inputType === undefined ||
     inputType === 'fill' ||
@@ -117,37 +123,49 @@ export function SelectMethodCustomWrapper({
         style={
           inputType !== undefined
             ? {
-                paddingLeft: 5,
-                borderLeft: '4px solid #FFF',
-                marginBottom: 10,
-                marginLeft: iterator ? 10 : 0,
+                marginBottom: 5,
+                padding: 5,
+                border: '1px solid rgba(255,255,255,.3)',
+                borderLeftWidth: 5,
+                borderLeftStyle: 'solid',
+                borderLeftColor: '#FFF',
               }
             : { marginBottom: 10 }
         }
       >
         <Wrapper property={property}>{children}</Wrapper>
-        {store && (
-          <Tag minimal={true} icon="database">
-            {storeName}
-          </Tag>
-        )}
+        {storeComponent}
       </div>
     );
   } else {
     return (
       <div
         style={{
-          marginBottom: 15,
-          paddingLeft: 5,
-          borderLeft: '4px solid #FFF',
+          padding: 5,
+          marginBottom: 5,
+          border: '1px solid rgba(255,255,255,.3)',
+          borderLeftWidth: 5,
+          borderLeftStyle: 'solid',
+          borderLeftColor: '#FFF',
+          display: 'flex',
+          flexDirection: 'column',
+          rowGap: 3,
           marginLeft: iterator ? 10 : 0,
         }}
       >
-        <Icon icon={getActionIcon(inputType)} />
-        <span style={{ margin: '0 5px', display: 'inline-block' }}>
-          [{inputType}]
-        </span>{' '}
-        <Tag minimal={true}>{title}</Tag>
+        <span>
+          <Icon icon={getActionIcon(inputType)} />
+          <span style={{ margin: '0 5px', display: 'inline-block' }}>
+            [{inputType}]
+          </span>{' '}
+        </span>
+        {/* <Tag  icon={getActionIcon(inputType)} minimal={true}>
+          {inputType}
+        </Tag> */}
+        <Tag icon="tag" minimal={true}>
+          {title}
+        </Tag>
+        {storeComponent}
       </div>
     );
   }

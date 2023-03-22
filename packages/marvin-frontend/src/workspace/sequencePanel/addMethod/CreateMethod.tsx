@@ -309,7 +309,7 @@ const CreateMethod = (props: any) => {
 
                   setSequence([...sequence]);
                 }}
-                options={['check', 'click', 'clearAndFill', 'fill']}
+                options={['check', 'click', 'clearAndFill', 'fill', 'noAction']}
               />
               {/* <p className="locator">{step.locator}</p> */}
               <InputGroup

@@ -91,6 +91,17 @@ export function FlowNavigator(props: FlowNavigatorProps) {
       );
     }
 
+    if (listNode.forEach && listNode.forEach.length > 0) {
+      elems.push(
+        <Icon
+          size={12}
+          icon="social-media"
+          title="Repeat for each element"
+          style={{ color: '#FFCC00' }}
+        />
+      );
+    }
+
     return elems;
   };
 

@@ -19,6 +19,7 @@ import CreateMethod from './CreateMethod';
 const SelectMethod = (props: any) => {
   const [selectedMethod, setSelectedMethod] = React.useState<any | undefined>();
   const [schema, setSchema] = React.useState<any>();
+  const [discovered, setDiscovered] = React.useState<any>();
   const [methods, setMethods] = useState<any>([]);
   const [data, setData] = useState<any>(null);
   const { parent, save, data: propData } = props;
@@ -31,6 +32,19 @@ const SelectMethod = (props: any) => {
       const methods = await window.electron.getMethodsForPath(
         exitUrl || parent.exitUrl
       );
+      const discovered = await window.electron.getDiscoveredForPath(exitUrl);
+      
+      if (discovered && discovered.items) {
+        const {
+          items: { info, input, actions, iterable },
+        } = discovered;
+        setDiscovered([
+          ...info.map((item: any) => item.locator),
+          ...input.map((item: any) => item.locator),
+          ...actions.map((item: any) => item.locator),
+          ...iterable.map((item: any) => item.locator),
+        ]);
+      }
       setMethods(methods || []);
 
       if (method && methods) {
@@ -104,6 +118,13 @@ const SelectMethod = (props: any) => {
                   return memo;
                 }, {}),
             },
+          },
+          forEach: {
+            type: 'string',
+            title: 'For Each Matched Element',
+            description:
+              'Run this step and its children for each matched element',
+            enum: discovered,
           },
           loop: {
             type: 'integer',
@@ -227,10 +248,9 @@ const SelectMethod = (props: any) => {
                   );
                 }
                 props.closePanel();
-                setSelectedMethod(undefined)
-                setData(undefined)
-                setSchema(undefined)
-                
+                setSelectedMethod(undefined);
+                setData(undefined);
+                setSchema(undefined);
               }
               // save({ method: selectedMethod.method, ...data }, props.parent)
             }

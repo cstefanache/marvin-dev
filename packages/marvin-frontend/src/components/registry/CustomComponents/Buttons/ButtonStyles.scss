@@ -13,7 +13,7 @@
 
   .submit-button {
     &.bp4-button {
-      background-color: #2B95D6;
+      background-color: #2b95d6;
 
       &:hover {
         background-color: #308dc7;
@@ -28,6 +28,13 @@
       &:hover {
         background-color: $lime4;
       }
+    }
+  }
+}
+.bp4-popover2-target {
+  .bp4-button {
+    .bp4-button-text {
+      flex-grow: 1;
     }
   }
 }

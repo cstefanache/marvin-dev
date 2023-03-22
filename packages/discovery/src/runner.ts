@@ -171,7 +171,9 @@ export default class Runner {
             prefix !== '' && locator ? ' ' : ''
           }${locator || ''}`
         : locator;
+      locator = this.evaluateExpression(locator);
       log(`   [${type}]: ${locator}`);
+
       const element = await page.$(locator);
       if (!element) {
         log(`       Element ${locator} not found`, 'red');
@@ -302,7 +304,7 @@ export default class Runner {
         if (key) {
           this.store[key] = value || text;
           log(
-            `Stored ${key} as ${this.store[key]} from ${value} ${text}`,
+            `Stored ${key} as ${this.store[key]} from ${value} || ${text}`,
             'yellow'
           );
         }
@@ -360,12 +362,20 @@ export default class Runner {
       await this.flow.stateScreenshot(page, action.id);
       this.lastActionId = action.id;
       if (action.children && action.children.length && steps.length > 1) {
-        await this.executeStep(
-          page,
-          action.children,
-          [...steps].slice(1),
-          sequenceCallback
-        );
+        let forEachElements = [];
+        if (action.forEach) {
+          forEachElements = await page.$$(action.forEach);
+        }
+        for (let index = 0; index < (forEachElements.length || 1); index++) {
+          this.store.index = index + 1;
+          await this.executeStep(
+            page,
+            action.children,
+            [...steps].slice(1),
+            sequenceCallback
+          );
+        }
+        this.store.index = undefined;
       }
       if (action.postDelay) {
         log(`Waiting for ${action.postDelay}`);
@@ -378,12 +388,12 @@ export default class Runner {
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
       action.url = url;
-      const { methodUid, loop, methodLoop, parameters } = action;
+      const { methodUid, loop, methodLoop, parameters, forEach } = action;
 
       const method = actions.find((item: Actions) => item.uid === methodUid);
       if (method) {
         const loopTimes = loop || 1;
-        log(` > Executing method ${method.method}, ${loopTimes} time(s)`);
+        log(` > Executing method ${method.method}; ${loopTimes} time(s)`);
         for (let i = 0; i < loopTimes; i++) {
           for (let j = 0; j < (methodLoop || 1); j++) {
             log(
@@ -436,5 +446,8 @@ export default class Runner {
       sequence.length > 1 ? sequenceCallback : undefined
     );
     log('Finished sequence execution', 'blue');
+
+    log('Store', 'white');
+    log(JSON.stringify(this.store, null, 2), 'white');
   }
 }

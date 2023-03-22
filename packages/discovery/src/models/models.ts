@@ -46,6 +46,7 @@ export type ActionItem = {
   children: ActionItem[];
   exitUrl?: string;
   fullUrl?: string;
+  forEach?: string;
   postDelay?: number;
 };
 
