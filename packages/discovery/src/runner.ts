@@ -262,7 +262,7 @@ export default class Runner {
         if (press) {
           await page.keyboard.press(press);
         }
-      } else {
+      } else if (type === 'click') {
         const element = await page.$(locator);
 
         if (element) {
@@ -325,6 +325,7 @@ export default class Runner {
     if (steps.length === 0) {
       return;
     }
+
     const { actions } = this.flow.flow;
     const currentStepToExecute = steps[0];
     let url = processUrl(
@@ -366,8 +367,16 @@ export default class Runner {
         if (action.forEach) {
           forEachElements = await page.$$(action.forEach);
         }
+
         for (let index = 0; index < (forEachElements.length || 1); index++) {
-          this.store.index = index + 1;
+          if (action.forEach) {
+            this.store.index = index + 1;
+          }
+
+          if (index === (forEachElements.length || 1) - 1) {
+            this.store.isLast = true;
+          }
+
           await this.executeStep(
             page,
             action.children,
@@ -376,6 +385,7 @@ export default class Runner {
           );
         }
         this.store.index = undefined;
+        this.store.isLast = undefined;
       }
       if (action.postDelay) {
         log(`Waiting for ${action.postDelay}`);
@@ -387,36 +397,43 @@ export default class Runner {
 
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
-      action.url = url;
-      const { methodUid, loop, methodLoop, parameters, forEach } = action;
+      if (
+        action.condition &&
+        !eval(this.evaluateExpression(action.condition))
+      ) {
+        log(`Condition not met. Skipping step: ${currentStepToExecute}`);
+      } else {
+        action.url = url;
+        const { methodUid, loop, methodLoop, parameters, forEach } = action;
 
-      const method = actions.find((item: Actions) => item.uid === methodUid);
-      if (method) {
-        const loopTimes = loop || 1;
-        log(` > Executing method ${method.method}; ${loopTimes} time(s)`);
-        for (let i = 0; i < loopTimes; i++) {
-          for (let j = 0; j < (methodLoop || 1); j++) {
-            log(
-              `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
-            );
-            await this.executeMethod(method, page, parameters);
-          }
-          try {
-            await page.waitForNetworkIdle({
-              timeout: this.config.defaultTimeout,
-            });
-          } catch (e) {
-            log('Network idle timeout. Runner will continue.', 'red');
-            if (this.state) {
-              this.state.reportOnPendingRequests();
+        const method = actions.find((item: Actions) => item.uid === methodUid);
+        if (method) {
+          const loopTimes = loop || 1;
+          log(` > Executing method ${method.method}; ${loopTimes} time(s)`);
+          for (let i = 0; i < loopTimes; i++) {
+            for (let j = 0; j < (methodLoop || 1); j++) {
+              log(
+                `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
+              );
+              await this.executeMethod(method, page, parameters);
             }
-          }
+            try {
+              await page.waitForNetworkIdle({
+                timeout: this.config.defaultTimeout,
+              });
+            } catch (e) {
+              log('Network idle timeout. Runner will continue.', 'red');
+              if (this.state) {
+                this.state.reportOnPendingRequests();
+              }
+            }
 
+            await continueExecution(action);
+          }
+        } else if (!method) {
+          log(`Method ${methodUid} not found. Continuing...`);
           await continueExecution(action);
         }
-      } else if (!method) {
-        log(`Method ${methodUid} not found. Continuing...`);
-        await continueExecution(action);
       }
     } else {
       throw new Error(`Action ${currentStepToExecute} not found in flow`);

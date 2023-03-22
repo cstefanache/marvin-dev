@@ -48,6 +48,7 @@ export type ActionItem = {
   fullUrl?: string;
   forEach?: string;
   postDelay?: number;
+  condition?: string;
 };
 
 export type Sequence = {
