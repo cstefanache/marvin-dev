@@ -5,9 +5,9 @@
   "scripts": {},
   "private": true,
   "dependencies": {
-    "@blueprintjs/core": "^4.13.0",
+    "@blueprintjs/core": "^4.17.7",
     "@blueprintjs/icons": "^4.11.0",
-    "@blueprintjs/select": "^4.8.12",
+    "@blueprintjs/select": "^4.9.11",
     "body-parser": "^1.20.1",
     "colors": "^1.4.0",
     "core-js": "^3.6.5",
