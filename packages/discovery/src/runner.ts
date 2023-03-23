@@ -386,6 +386,12 @@ export default class Runner {
 
     if (action) {
       log(`Executing sequence: ${currentStepToExecute}`);
+      if (action.condition) {
+        console.log(
+          this.evaluateExpression(action.condition),
+          eval(this.evaluateExpression(action.condition))
+        );
+      }
       if (
         action.condition &&
         !eval(this.evaluateExpression(action.condition))
