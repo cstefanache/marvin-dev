@@ -316,11 +316,12 @@ export default class Runner {
           for (const [name, value] of attributes) {
             if (name === attr) {
               this.store[attr] = value;
-              log(
+              console.log(
                 `Stored ${sequenceItem.storeAttribute} as ${value} from ${attr}`,
                 'yellow'
               );
             }
+            break;
           }
         }
 
