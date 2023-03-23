@@ -65,6 +65,22 @@ export default class CypressCodeGenerator {
         shell.exec(
           `cd ${this.outputPath} && npm install cypress cypress-localstorage-commands cypress-network-idle --save-dev`
         );
+        if (!fs.existsSync(`${this.outputPath}/cypress.config.js`)) {
+          const cypressConfigContent = `const { defineConfig } = require("cypress");
+
+          module.exports = defineConfig({
+            e2e: {
+              testIsolation: false,
+              setupNodeEvents(on, config) {
+                // implement node event listeners here
+              },
+            },
+          });`;
+          fs.writeFileSync(
+            `${this.outputPath}/cypress.config.js`,
+            prettier.format(cypressConfigContent, { parser: 'typescript' })
+          );
+        }
       }
     }
 
@@ -473,7 +489,12 @@ export default class CypressCodeGenerator {
         let endDescribeCommand = `})`;
         let beforeAllContent = `
         
-        before( () => {        
+        before( () => {  
+          cy.getCookies().then((cookies) => {
+            cookies.forEach((cookie) => {
+              cy.clearCookies(cookie.name);
+            });
+          });   
           cy.visit('${this.config.baseUrl}');
           ${this.getBeforeAllBody(beforeAll).join('\r\n')}
         });`;
