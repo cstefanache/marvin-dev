@@ -60,6 +60,7 @@ export type Sequence = {
   press?: KeyInput;
   store?: boolean;
   storeName?: string;
+  storeAttribute?: string;
   locator: string;
   iterator?: IdentifiableIterator;
 };
