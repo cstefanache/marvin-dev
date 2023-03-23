@@ -65,7 +65,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
             <Summary
               changeParent={changeParent}
               selectedElement={selectedSequenceItem}
-              run={() => runDiscovery(selectedSequenceItem)}
+              run={(skipDiscovery = false) => runDiscovery(selectedSequenceItem, skipDiscovery)}
               addBranch={() => setData(null)}
               newFolder={(name: string) => {
                 // console.log('new folder');

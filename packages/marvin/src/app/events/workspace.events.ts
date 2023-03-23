@@ -96,13 +96,20 @@ ipcMain.handle('update-branch', (_, data) => {
   workspace.updateBranch(data);
 });
 
-ipcMain.handle('run-discovery', async (event, sequence: string[]) => {
-  await workspace.run(sequence, (actionId: string) => {
-    console.log('sending back', actionId);
-    App.mainWindow.webContents.send('action-finished', actionId);
-  });
-  App.mainWindow.webContents.send('run-completed');
-});
+ipcMain.handle(
+  'run-discovery',
+  async (event, sequence: string[], skipDiscovery: boolean) => {
+    await workspace.run(
+      sequence,
+      (actionId: string) => {
+        console.log('sending back', actionId);
+        App.mainWindow.webContents.send('action-finished', actionId);
+      },
+      skipDiscovery
+    );
+    App.mainWindow.webContents.send('run-completed');
+  }
+);
 
 ipcMain.handle('get-discovered-paths', () => {
   return workspace.getDiscoveredPaths();
@@ -125,8 +132,12 @@ ipcMain.handle('generate-tests-in-folder', async () => {
     if (data.filePaths.length > 0) {
       const workspacePath = data.filePaths[0];
       const structure = new Structure(workspace.config.path);
-      const generator = new CypressCodeGenerator(structure.flow, structure.config, workspacePath);
-      generator.generate()
+      const generator = new CypressCodeGenerator(
+        structure.flow,
+        structure.config,
+        workspacePath
+      );
+      generator.generate();
     }
   });
 });

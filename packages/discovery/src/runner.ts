@@ -5,7 +5,6 @@ import { ActionItem, Actions, IdentifiableIterator } from './models/models';
 import { State } from './state';
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
-
 const library = {
   func: {
     random: (decimals = 1000000) => Math.floor(Math.random() * decimals),
@@ -211,12 +210,28 @@ export default class Runner {
                 true,
                 true
               );
+
+              log(
+                `   [x] ${toCheck} ${op} ${valueToValidate}`,
+                'red',
+                false,
+                false,
+                'Tests'
+              );
             } else {
               log(
                 `   [✓] ${toCheck} ${op} ${valueToValidate}`,
                 'green',
                 true,
                 true
+              );
+
+              log(
+                `   [✓] ${toCheck} ${op} ${valueToValidate}`,
+                'green',
+                false,
+                false,
+                'Tests'
               );
             }
           }
@@ -382,6 +397,18 @@ export default class Runner {
 
         const method = actions.find((item: Actions) => item.uid === methodUid);
         if (method) {
+          const hasCheck = method.sequence.find((seq) => seq.type === 'check');
+
+          if (hasCheck) {
+            log(
+              `Executing ${currentStepToExecute}::${method.method}`,
+              'yellow',
+              false,
+              false,
+              'Tests'
+            );
+          }
+
           const loopTimes = loop || 1;
           log(` > Executing method ${method.method}; ${loopTimes} time(s)`);
           let forEachElements = [];

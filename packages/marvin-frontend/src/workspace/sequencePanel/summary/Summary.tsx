@@ -34,7 +34,8 @@ export default function Summary(props: any) {
         onClick={props.changeParent}
       />
       <span className="divider" />
-      <Icon icon="play" onClick={run} title="Run" />
+      <Icon icon="play" onClick={() => run(true)} title="Run" />
+      <Icon icon="search-template" onClick={run} title="Run and Discover" />
       <Alert
         cancelButtonText="Cancel"
         confirmButtonText="Confirm"

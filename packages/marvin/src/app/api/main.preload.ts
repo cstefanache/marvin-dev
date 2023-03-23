@@ -24,14 +24,13 @@ contextBridge.exposeInMainWorld('electron', {
   deleteMethod: (id: string) => ipcRenderer.invoke('delete-method', id),
   updateBranch: (data: any) => ipcRenderer.invoke('update-branch', data),
   cutBranch: (id: string) => ipcRenderer.invoke('cut-branch', id),
-  runDiscovery: (sequence: any) =>
-    ipcRenderer.invoke('run-discovery', sequence),
+  runDiscovery: (sequence: any, skipDiscovery: boolean) =>
+    ipcRenderer.invoke('run-discovery', sequence, skipDiscovery),
   selectNewWorkspaceFolder: () =>
     ipcRenderer.invoke('select-new-workspace-folder'),
   selectWorkspace: (workspace: any) =>
     ipcRenderer.invoke('select-workspace', workspace),
-  generateTests: () =>
-    ipcRenderer.invoke('generate-tests-in-folder'),
+  generateTests: () => ipcRenderer.invoke('generate-tests-in-folder'),
   getLoggers: () => ipcRenderer.invoke('get-loggers'),
   getLogs: (section: string) => ipcRenderer.invoke('get-logs', section),
   // selectWorkspace: (workspace: { name: string, path: string }) => ipcRenderer.invoke('select-workspace', workspace),

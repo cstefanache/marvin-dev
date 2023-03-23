@@ -14,6 +14,7 @@ export function Log({ log }: { log: string }) {
 
     window.ipcRender.removeAllListeners('log');
     window.ipcRender.receive('log', (section: string, message: any[]) => {
+      console.log(section)
       if (section === log) {
         setMessages((messages) => {
           const newMessages = message[2] ? messages.slice(0, -1) : messages;

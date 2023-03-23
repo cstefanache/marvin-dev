@@ -6,7 +6,7 @@ export class Logger {
   private consoleLogFn: Function;
   private logs: string[][] = [];
 
-  constructor(private section: string, color: string) {
+  constructor(public section: string, color: string) {
     this.consoleLogFn = (colors as any)[color];
     this.log(`Logger initialized for ${section}`)
   }
@@ -37,6 +37,11 @@ export const logs: { [key: string]: Logger } = {};
 const marvinLogger = new Logger('Runner', 'yellow');
 logs['Runner'] = marvinLogger;
 registerLogger(marvinLogger);
+
+
+export const testLogger = new Logger('Tests', 'green');
+logs['Tests'] = testLogger;
+registerLogger(testLogger, 'Tests');
 
 export default function getLog(section: string, color = 'grey'): Logger {
   let log = logs[section];
