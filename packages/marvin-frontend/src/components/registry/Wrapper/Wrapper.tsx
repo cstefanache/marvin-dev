@@ -85,7 +85,19 @@ function Wrapper({ property, children }: CustomWrapperProps) {
             className={`wrapper-container ${className}`}
             data-wrapper-for={property.title}
           >
-            {/* {(property.type === 'object' || property.type === 'array') && <h4>{property.title}</h4>} */}
+            {(property.type === 'object' || property.type === 'array') &&
+              property.description &&
+              property.description.trim().length > 0 && (
+                <h4
+                  style={{
+                    flexGrow: 1,
+                    borderBottom: '1px solid rgba(255,255,255,.2)',
+                    padding: '5px 0',
+                  }}
+                >
+                  {property.description}
+                </h4>
+              )}
             {children}
           </div>
         );
@@ -106,11 +118,15 @@ export function SelectMethodCustomWrapper({
   const { inputType, title, store, storeName, iterator } = property as any;
 
   const storeComponent = store && (
-    <Tag minimal={true} icon="database" title={`Store value to variable name ${storeName}`}>
+    <Tag
+      minimal={true}
+      icon="database"
+      title={`Store value to variable name ${storeName}`}
+    >
       {storeName}
     </Tag>
-  )
-  
+  );
+
   if (
     inputType === undefined ||
     inputType === 'fill' ||

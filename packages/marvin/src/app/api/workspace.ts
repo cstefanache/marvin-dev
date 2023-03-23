@@ -197,9 +197,8 @@ export default class Workspace {
     App.mainWindow.webContents.send('running-discovery', this.flow);
     if (sequence.length === 0) {
       const exitUrl = await page.url();
-      console.log(exitUrl);
       this.config.exitUrl = flow.getUrl(exitUrl);
-      this.store();
+      this.store(true);
     }
     this.syncOutput();
     App.mainWindow.webContents.send('flow-updated', this.flow);
@@ -339,7 +338,7 @@ export default class Workspace {
     App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
-  store(): void {
+  store(skipFlow: boolean = false): void {
     if (this.config) {
       logger.log(`Storing workspace ${this.config.name}`);
       fs.writeFileSync(
@@ -347,10 +346,12 @@ export default class Workspace {
         JSON.stringify(this.config, null, 2)
       );
 
-      fs.writeFileSync(
-        `${this.config.path}/flow.json`,
-        JSON.stringify(this.flow, null, 2)
-      );
+      if (!skipFlow) {
+        fs.writeFileSync(
+          `${this.config.path}/flow.json`,
+          JSON.stringify(this.flow, null, 2)
+        );
+      }
     }
   }
 

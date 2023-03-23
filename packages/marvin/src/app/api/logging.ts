@@ -32,7 +32,7 @@ export class Logger {
   }
 }
 
-const logs: { [key: string]: Logger } = {};
+export const logs: { [key: string]: Logger } = {};
 
 const marvinLogger = new Logger('Runner', 'yellow');
 logs['Runner'] = marvinLogger;

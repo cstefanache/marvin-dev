@@ -84,88 +84,92 @@ export default class Runner {
   private async executeMethod(
     method: Actions,
     page: Page,
-    parameters: any
+    parameters: any,
+    forEachItem?: string
   ): Promise<void> {
-    let prefix = '';
-    const methodIterators = this.getFlowIterators(method);
-    if (methodIterators.length > 0 && this.config.aliases.iterators) {
-      log(
-        `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
-      );
-      let iteratorConfig: Alias | undefined;
-      for (const iterator of methodIterators) {
-        iteratorConfig = this.config.aliases.iterators.find(
-          (it) => it.name === iterator.name
+    let prefix = forEachItem;
+    if (!prefix || prefix.trim().length === 0) {
+      const methodIterators = this.getFlowIterators(method);
+      if (methodIterators.length > 0 && this.config.aliases.iterators) {
+        log(
+          `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
         );
-      }
-      if (iteratorConfig) {
-        for (const rootSelector of iteratorConfig.selectors) {
-          const rootElements = await page.$$(rootSelector);
-          const iteratorDef: IdentifiableIterator =
-            await this.findIteratorDefinition(
-              methodIterators,
-              iteratorConfig.name
-            );
+        let iteratorConfig: Alias | undefined;
+        for (const iterator of methodIterators) {
+          iteratorConfig = this.config.aliases.iterators.find(
+            (it) => it.name === iterator.name
+          );
+        }
+        if (iteratorConfig) {
+          for (const rootSelector of iteratorConfig.selectors) {
+            const rootElements = await page.$$(rootSelector);
+            const iteratorDef: IdentifiableIterator =
+              await this.findIteratorDefinition(
+                methodIterators,
+                iteratorConfig.name
+              );
 
-          if (iteratorDef.identifier) {
-            log(
-              `   Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
-            );
-          }
+            if (iteratorDef.identifier) {
+              log(
+                `   Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
+              );
+            }
 
-          if (rootElements && rootElements.length) {
-            for (const [index, rootElem] of rootElements.entries()) {
-              const iteratorIdentifierElem = iteratorDef.identifier
-                ? await rootElem.$(iteratorDef.identifier)
-                : rootElem;
+            if (rootElements && rootElements.length) {
+              for (const [index, rootElem] of rootElements.entries()) {
+                const iteratorIdentifierElem = iteratorDef.identifier
+                  ? await rootElem.$(iteratorDef.identifier)
+                  : rootElem;
 
-              const uid = iteratorDef ? iteratorDef.uid : 'root';
-              if (iteratorIdentifierElem) {
-                const text = (
-                  (await iteratorIdentifierElem.evaluate(
-                    (el) => el.textContent
-                  )) as string
-                ).trim();
-                const resultEvaluation = this.evaluateExpression(
-                  parameters[uid]
-                ).trim();
-                log(
-                  `${index
-                    .toString()
-                    .padStart(4)}: |${resultEvaluation}|${text}|`,
-                  'yellow'
-                );
-                // if (text === resultEvaluation) {
-                if (new RegExp(resultEvaluation).test(text)) {
-                  prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                  break;
+                const uid = iteratorDef ? iteratorDef.uid : 'root';
+                if (iteratorIdentifierElem) {
+                  const text = (
+                    (await iteratorIdentifierElem.evaluate(
+                      (el) => el.textContent
+                    )) as string
+                  ).trim();
+                  const resultEvaluation = this.evaluateExpression(
+                    parameters[uid]
+                  ).trim();
+                  log(
+                    `${index
+                      .toString()
+                      .padStart(4)}: |${resultEvaluation}|${text}|`,
+                    'yellow'
+                  );
+                  // if (text === resultEvaluation) {
+                  if (new RegExp(resultEvaluation).test(text)) {
+                    prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                    break;
+                  }
                 }
+                // else {
+                //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
+                // }
               }
-              // else {
-              //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
-              // }
+            }
+            if (prefix) {
+              break;
             }
           }
-          if (prefix) {
-            break;
-          }
+        } else {
+          throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
         }
-      } else {
-        throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
-      }
 
-      if (prefix === '') {
-        log(
-          `No root element found for ${
-            iteratorConfig.name
-          } for parameters ${JSON.stringify(parameters)}`
-        );
-        return;
+        if (prefix === '') {
+          log(
+            `No root element found for ${
+              iteratorConfig.name
+            } for parameters ${JSON.stringify(parameters)}`
+          );
+          return;
+        }
       }
     }
 
     for (const sequenceItem of method.sequence) {
-      let { type, uid, op, isNumber, locator, iterator, press } = sequenceItem;
+      let { type, uid, op, isNumber, locator, iterator, press, process } =
+        sequenceItem;
       locator = iterator
         ? `${prefix !== '' ? prefix : ''}${
             prefix !== '' && locator ? ' ' : ''
@@ -188,45 +192,32 @@ export default class Runner {
           );
           const valueToValidate = this.evaluateExpression(parameters[uid]);
 
+          let toCheck = value ? value : text;
+          if (process) {
+            toCheck = eval(this.evaluateExpression(`"${toCheck}"${process}`));
+          }
+
           log(
-            ` [ ] Checking ${text} | ${op} | ${value} against ${valueToValidate} for (${locator})`,
+            ` [ ] Checking ${toCheck} | ${op} | ${valueToValidate} for (${locator})`,
             'yellow',
             true
           );
 
           if (op) {
-            if (value) {
-              if (!this.assert(value, valueToValidate, op, isNumber)) {
-                log(
-                  `   [x] ${value} ${op} ${valueToValidate}`,
-                  'red',
-                  true,
-                  true
-                );
-              } else {
-                log(
-                  `   [✓] ${value} ${op} ${valueToValidate}`,
-                  'green',
-                  true,
-                  true
-                );
-              }
+            if (!this.assert(toCheck, valueToValidate, op, isNumber)) {
+              log(
+                `   [x] ${toCheck} ${op} ${valueToValidate}`,
+                'red',
+                true,
+                true
+              );
             } else {
-              if (!this.assert(text, valueToValidate, op, isNumber)) {
-                log(
-                  `   [x] ${text} ${op} ${valueToValidate}`,
-                  'red',
-                  true,
-                  true
-                );
-              } else {
-                log(
-                  `   [✓] ${value} ${op} ${valueToValidate}`,
-                  'green',
-                  true,
-                  true
-                );
-              }
+              log(
+                `   [✓] ${toCheck} ${op} ${valueToValidate}`,
+                'green',
+                true,
+                true
+              );
             }
           }
         } catch (err) {
@@ -363,29 +354,12 @@ export default class Runner {
       await this.flow.stateScreenshot(page, action.id);
       this.lastActionId = action.id;
       if (action.children && action.children.length && steps.length > 1) {
-        let forEachElements = [];
-        if (action.forEach) {
-          forEachElements = await page.$$(action.forEach);
-        }
-
-        for (let index = 0; index < (forEachElements.length || 1); index++) {
-          if (action.forEach) {
-            this.store.index = index + 1;
-          }
-
-          if (index === (forEachElements.length || 1) - 1) {
-            this.store.isLast = true;
-          }
-
-          await this.executeStep(
-            page,
-            action.children,
-            [...steps].slice(1),
-            sequenceCallback
-          );
-        }
-        this.store.index = undefined;
-        this.store.isLast = undefined;
+        await this.executeStep(
+          page,
+          action.children,
+          [...steps].slice(1),
+          sequenceCallback
+        );
       }
       if (action.postDelay) {
         log(`Waiting for ${action.postDelay}`);
@@ -410,26 +384,49 @@ export default class Runner {
         if (method) {
           const loopTimes = loop || 1;
           log(` > Executing method ${method.method}; ${loopTimes} time(s)`);
-          for (let i = 0; i < loopTimes; i++) {
-            for (let j = 0; j < (methodLoop || 1); j++) {
-              log(
-                `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
-              );
-              await this.executeMethod(method, page, parameters);
-            }
-            try {
-              await page.waitForNetworkIdle({
-                timeout: this.config.defaultTimeout,
-              });
-            } catch (e) {
-              log('Network idle timeout. Runner will continue.', 'red');
-              if (this.state) {
-                this.state.reportOnPendingRequests();
-              }
+          let forEachElements = [];
+          if (forEach) {
+            forEachElements = await page.$$(forEach);
+          }
+          for (let index = 0; index < (forEachElements.length || 1); index++) {
+            if (action.forEach) {
+              this.store.index = index + 1;
+              this.store.isFirst = index === 0;
+              this.store.isLast = index === (forEachElements.length || 1) - 1;
+              this.store.each = `${forEach}:nth-of-type(${index}) `;
             }
 
-            await continueExecution(action);
+            for (let i = 0; i < loopTimes; i++) {
+              for (let j = 0; j < (methodLoop || 1); j++) {
+                log(
+                  `  >  Executing method ${method.method}, iteration: ${i}, ${j}`
+                );
+                await this.executeMethod(
+                  method,
+                  page,
+                  parameters,
+                  this.store.each
+                );
+              }
+              try {
+                await page.waitForNetworkIdle({
+                  timeout: this.config.defaultTimeout,
+                });
+              } catch (e) {
+                log('Network idle timeout. Runner will continue.', 'red');
+                if (this.state) {
+                  this.state.reportOnPendingRequests();
+                }
+              }
+
+              await continueExecution(action);
+            }
           }
+
+          this.store.index = undefined;
+          this.store.isFirst = undefined;
+          this.store.isLast = undefined;
+          this.store.each = undefined;
         } else if (!method) {
           log(`Method ${methodUid} not found. Continuing...`);
           await continueExecution(action);

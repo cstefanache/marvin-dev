@@ -85,7 +85,7 @@ const SelectMethod = (props: any) => {
           parameters: {
             type: 'object',
             title: 'Parameters',
-            description: 'List of parameters required by the selected method',
+            // description: 'List of parameters required by the selected method',
             properties: {
               // ...(iterator && {
               //   [iterator.uid]: {
@@ -110,6 +110,7 @@ const SelectMethod = (props: any) => {
                     title: obj.locator,
                     description: obj.details,
                     inputType: obj.type,
+                    op: obj.op,
                     store: obj.store,
                     storeName: obj.storeName,
                     iterator: obj.iterator,

@@ -30,7 +30,15 @@ export function Log({ log }: { log: string }) {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef?.current?.scrollIntoView();
+    if (messagesEndRef?.current) {
+      if (
+        logsRef?.current.scrollTop > 
+        logsRef?.current.scrollHeight -
+        logsRef?.current.offsetHeight - 300
+      ) {
+        messagesEndRef?.current.scrollIntoView();
+      }
+    }
   };
 
   return (

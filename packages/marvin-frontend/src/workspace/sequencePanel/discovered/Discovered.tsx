@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { getIcon } from '../../../utils';
 
 export default function DiscoveredElements(props: any) {
-  const { exitUrl } = props;
+  const { exitUrl, filter } = props;
   const [discoveredElements, setDiscoveredElements] = useState<any[]>([]);
 
   useEffect(() => {
@@ -55,24 +55,30 @@ export default function DiscoveredElements(props: any) {
         setDiscoveredElements(items);
       }
     };
-    console.log('>>>', exitUrl);
     getElements(exitUrl);
   }, [exitUrl]);
 
   return (
     discoveredElements && (
       <span>
-        {discoveredElements.map((item: any) => (
-          <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
-            {item.text} | {item.details}
-            <div>
-              <Tag minimal={true}>{item.locator}</Tag>
-            </div>
-            {item.base64Image && (
-              <img src={`data:image/png;base64,${item.base64Image}`} />
-            )}
-          </Callout>
-        ))}
+        {discoveredElements
+          .filter(
+            (item) =>
+              filter.trim().length === 0 ||
+              (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
+              (item.details || '').toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((item: any) => (
+            <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
+              {item.text} | {item.details}
+              <div>
+                <Tag minimal={true}>{item.locator}</Tag>
+              </div>
+              {item.base64Image && (
+                <img src={`data:image/png;base64,${item.base64Image}`} />
+              )}
+            </Callout>
+          ))}
       </span>
     )
   );

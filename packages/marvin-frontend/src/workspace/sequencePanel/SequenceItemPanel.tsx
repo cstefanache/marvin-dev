@@ -4,7 +4,15 @@ import { useContext, useEffect, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import Summary from './summary/Summary';
 import { AddMethod } from './addMethod/AddMethod';
-import { Button, Icon, NonIdealState, Tab, Tabs } from '@blueprintjs/core';
+import {
+  Button,
+  FormGroup,
+  Icon,
+  InputGroup,
+  NonIdealState,
+  Tab,
+  Tabs,
+} from '@blueprintjs/core';
 import DiscoveredElements from './discovered/Discovered';
 import './SequenceItemPanel.scss';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
@@ -37,6 +45,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
   const { currentNode, parentNode } = selectedSequenceItem;
   const workspaceContext = useContext(WorkspaceContext);
   const [data, setData] = useState<any | null>(null);
+  const [filter, setFilter] = useState<string>('');
   const [tab, setTab] = useState<string>(
     workspaceContext.selectedPanel || 'discovered'
   );
@@ -85,7 +94,19 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
       defaultSize={350}
       minSize={350}
     >
-      <TitlePanel title="Execution Output">
+      <TitlePanel
+        title="Execution Output"
+        suffix={[
+          <InputGroup
+            leftIcon="filter"
+            value={filter}
+            onChange={(evt) => setFilter(evt.target.value)}
+            rightElement={
+              <Icon icon="remove" onClick={() => setFilter('')} size={12} />
+            }
+          />,
+        ]}
+      >
         {selectedSequenceItem.currentNode.exitUrl === undefined ? (
           <NonIdealState
             title="Current node was not discovered yet."
@@ -118,6 +139,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
               }
               panel={
                 <DiscoveredElements
+                  filter={filter}
                   exitUrl={selectedSequenceItem.currentNode.exitUrl}
                 />
               }

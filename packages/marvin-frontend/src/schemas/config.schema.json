@@ -95,6 +95,7 @@
             },
             "priority": {
               "title": "Priority",
+              "description": "Priority",
               "type": "array",
               "items": { "title": "Priority", "type": "string" }
             }

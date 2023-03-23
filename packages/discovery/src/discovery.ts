@@ -11,17 +11,23 @@ import * as uuid from 'uuid';
 const defaultAliases = {
   info: [
     {
-      name: 'headers',
+      name: 'Headers',
       selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
   ],
   action: [
     {
-      selectors: ['button', 'a'],
+      name: 'Buttons',
+      selectors: ['button']
     },
+    {
+      name: 'Links',
+      selectors: ['a']
+    }
   ],
   input: [
     {
+      name: 'Form Elements',
       selectors: ['input', 'textarea'],
     },
   ],

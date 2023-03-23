@@ -55,6 +55,7 @@ export type Sequence = {
   type: string;
   uid: string;
   op?: string;
+  process?: string;
   isNumber?: boolean;
   press?: KeyInput;
   store?: boolean;

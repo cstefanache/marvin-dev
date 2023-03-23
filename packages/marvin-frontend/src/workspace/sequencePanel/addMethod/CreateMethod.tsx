@@ -333,31 +333,55 @@ const CreateMethod = (props: any) => {
                 />
               </div>
               {step.type === 'check' && (
-                <Select2
-                  fill={true}
-                  items={[
-                    { text: '=', value: 'eq' },
-                    { text: '!=', value: 'neq' },
-                    { text: '>', value: 'gt' },
-                    { text: '<', value: 'lt' },
-                    { text: '>=', value: 'gte' },
-                    { text: '<=', value: 'lte' },
-                    { text: 'contains', value: 'contains' },
-                    { text: 'does not contain', value: 'doesNotContain' },
-                  ]}
-                  onItemSelect={(item) => {
-                    step.op = item.value;
-                  }}
-                  itemRenderer={operatorItemRenderer}
-                >
-                  <Button
+                <div>
+                  <Select2
                     fill={true}
-                    text={`Operator: ${step.op}` || 'Select operator'}
-                    alignText="left"
-                    rightIcon="double-caret-vertical"
+                    items={[
+                      { text: '=', value: 'eq' },
+                      { text: '!=', value: 'neq' },
+                      { text: '>', value: 'gt' },
+                      { text: '<', value: 'lt' },
+                      { text: '>=', value: 'gte' },
+                      { text: '<=', value: 'lte' },
+                      { text: 'contains', value: 'contains' },
+                      { text: 'does not contain', value: 'doesNotContain' },
+                    ]}
+                    onItemSelect={(item) => {
+                      step.op = item.value;
+                      setSequence([...sequence]);
+                    }}
+                    itemRenderer={operatorItemRenderer}
+                  >
+                    <Button
+                      key={step.op}
+                      fill={true}
+                      text={`Operator: ${step.op}` || 'Select operator'}
+                      alignText="left"
+                      rightIcon="double-caret-vertical"
+                    />
+                  </Select2>
+                  <div>
+                    <Checkbox
+                      checked={step.isNumber}
+                      label="Is Number"
+                      onChange={() => {
+                        step.isNumber = !step.isNumber;
+                        setSequence([...sequence]);
+                      }}
+                    />
+                  </div>
+                  <InputGroup
+                    value={step.process}
+                    placeholder="Post process value"
+                    title='Post process value'
+                    onChange={(e) => {
+                      step.process = e.target.value;
+                      setSequence([...sequence]);
+                    }}
                   />
-                </Select2>
+                </div>
               )}
+
               {step.store && (
                 <InputGroup
                   value={step.storeName}
