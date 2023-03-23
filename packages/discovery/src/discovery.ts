@@ -394,13 +394,13 @@ export default class Discovery {
           locator: await getLocatorForElement(actionSelector, index, element),
         };
 
-        try {
-          item.base64Image = await (
-            await element.screenshot({ type: 'png', encoding: 'base64' })
-          ).toString();
-        } catch (err) {
-          //silent
-        }
+        // try {
+        //   item.base64Image = await (
+        //     await element.screenshot({ type: 'png', encoding: 'base64' })
+        //   ).toString();
+        // } catch (err) {
+        //   //silent
+        // }
         actions.push(item);
         log(`Captured ${actionSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
       }

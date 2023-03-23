@@ -124,7 +124,7 @@ export function WorkspaceRoot() {
     reloadWorkspace();
   });
 
-  const runDiscovery = async (element: any, skipDiscovery: boolean) => {
+  const runDiscovery = async (element: any, skipDiscovery: boolean = false) => {
     setRunning(true);
     const localLoadingIds: any[] = [];
     function addToSeq(element: any, sequence: string[]) {
@@ -138,8 +138,7 @@ export function WorkspaceRoot() {
       localLoadingIds.push(currentNode.id);
       return sequence;
     }
-
-    window.electron.runDiscovery(addToSeq(element, []), skipDiscovery);
+    window.electron.runDiscovery(addToSeq(element, []), skipDiscovery === true);
     setLoadingIds([
       ...localLoadingIds,
       localLoadingIds[localLoadingIds.length - 1] + '-discovery',
