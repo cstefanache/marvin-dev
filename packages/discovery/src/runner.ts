@@ -304,24 +304,24 @@ export default class Runner {
           element
         );
 
-        const attributes = await page.evaluate(
-          (element) =>
-            Array.from(element.attributes, ({ name, value }) => [name, value]),
-          element
-        );
-
-        const attr: string = sequenceItem.storeAttribute;
-
-        if (attr) {
-          for (const [name, value] of attributes) {
-            if (name === attr) {
-              this.store[attr] = value;
-              console.log(
-                `Stored ${sequenceItem.storeAttribute} as ${value} from ${attr}`,
-                'yellow'
-              );
-            }
-            break;
+        if (sequenceItem.storeAttribute) {
+          const attributes = await page.evaluate(
+            (element) =>
+              Array.from(element.attributes, ({ name, value }) => [
+                name,
+                value,
+              ]),
+            element
+          );
+          const attribute = attributes.find(
+            (item: any) => item[0] === sequenceItem.storeAttribute
+          );
+          if (attribute) {
+            this.store[attribute[0]] = attribute[1];
+            console.log(
+              `Stored ${sequenceItem.storeAttribute} as ${attribute[1]} from ${attribute[0]}`,
+              'yellow'
+            );
           }
         }
 
