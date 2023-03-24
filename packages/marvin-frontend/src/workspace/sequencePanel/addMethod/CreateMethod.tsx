@@ -322,7 +322,7 @@ const CreateMethod = (props: any) => {
               <div>
                 <Checkbox
                   checked={step.store}
-                  label="Store value"
+                  label="Store content or attribute value"
                   onChange={(e: any) => {
                     step.store = e.target.checked;
                     if (!step.store) {
@@ -373,7 +373,7 @@ const CreateMethod = (props: any) => {
                   <InputGroup
                     value={step.process}
                     placeholder="Post process value"
-                    title='Post process value'
+                    title="Post process value"
                     onChange={(e) => {
                       step.process = e.target.value;
                       setSequence([...sequence]);
@@ -383,14 +383,26 @@ const CreateMethod = (props: any) => {
               )}
 
               {step.store && (
-                <InputGroup
-                  value={step.storeName}
-                  placeholder="Store variable name"
-                  onChange={(e) => {
-                    step.storeName = e.target.value;
-                    setSequence([...sequence]);
-                  }}
-                />
+                <>
+                  <InputGroup
+                    value={step.storeName}
+                    placeholder="Variable name"
+                    leftIcon="tag"
+                    onChange={(e) => {
+                      step.storeName = e.target.value;
+                      setSequence([...sequence]);
+                    }}
+                  />
+                   <InputGroup
+                    value={step.storeAttribute}
+                    placeholder="Store value from attribute"
+                    leftIcon="array-string"
+                    onChange={(e) => {
+                      step.storeAttribute = e.target.value;
+                      setSequence([...sequence]);
+                    }}
+                  />
+                </>
               )}
               <p className="discovered-text">
                 Content at discovery time: <i>{step.details}</i>
