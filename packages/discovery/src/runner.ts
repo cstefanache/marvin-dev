@@ -304,6 +304,27 @@ export default class Runner {
           element
         );
 
+        if (sequenceItem.storeAttribute) {
+          const attributes = await page.evaluate(
+            (element) =>
+              Array.from(element.attributes, ({ name, value }) => [
+                name,
+                value,
+              ]),
+            element
+          );
+          const attribute = attributes.find(
+            (item: any) => item[0] === sequenceItem.storeAttribute
+          );
+          if (attribute) {
+            this.store[attribute[0]] = attribute[1];
+            console.log(
+              `Stored ${sequenceItem.storeAttribute} as ${attribute[1]} from ${attribute[0]}`,
+              'yellow'
+            );
+          }
+        }
+
         await element.screenshot({ path: 'example.png' });
         // const key = parameters[uid];
         const key: string = sequenceItem.storeName;
