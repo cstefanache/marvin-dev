@@ -353,7 +353,7 @@ export default class Runner {
       return;
     }
     let action = executionSteps.find(
-      (item: ActionItem) => item.sequenceStep === currentStepToExecute
+      (item: ActionItem) => item.id === currentStepToExecute
     );
 
     const continueExecution = async (action) => {
@@ -470,11 +470,22 @@ export default class Runner {
     }
   }
 
+  private findRootActionItem(from: ActionItem[], rootId: string): ActionItem {
+    let rootActionItem = from.find((item) => item.id === rootId);
+    if (!rootActionItem) {
+      from.forEach((item) => {
+        return this.findRootActionItem(item.children, rootId);
+      });
+    }
+    return rootActionItem;
+  }
+
   public async run(
     page: Page,
     sequence: string[],
     sequenceCallback?: Function
   ) {
+    console.log(sequence)
     const { graph } = this.flow.flow;
     if (this.config.aliases.store) {
       this.store = {
@@ -486,9 +497,11 @@ export default class Runner {
       };
       global.store = this.store;
     }
+
+    const root = this.findRootActionItem(graph, sequence[0]);
     await this.executeStep(
       page,
-      graph,
+      [root],
       sequence,
       sequence.length > 1 ? sequenceCallback : undefined
     );

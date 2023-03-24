@@ -134,7 +134,7 @@ export function WorkspaceRoot() {
         addToSeq(parentNode, sequence);
       }
 
-      sequence.push(currentNode.sequenceStep);
+      sequence.push(currentNode.id);
       localLoadingIds.push(currentNode.id);
       return sequence;
     }

@@ -186,7 +186,10 @@ export default class Workspace {
 
     callback(undefined);
     const runner = new Runner(this.config, flow, state);
+   
+    // for (const sequence of sequences) {
     await runner.run(page, sequence, callback);
+    // }
     
     if (!skipDiscovery) {
       logger.log(`Finished running sequence. Discovering...`);
