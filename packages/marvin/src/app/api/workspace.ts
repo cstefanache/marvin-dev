@@ -193,24 +193,24 @@ export default class Workspace {
       await runner.run(page, seq, callback);
     }
 
-    // if (!skipDiscovery) {
-    //   logger.log(`Finished running sequence. Discovering...`);
-    //   await flow.discover(page, true);
-    //   logger.log(`Discovery finished.`);
-    //   await runner.performScreenshotForLastAction(page);
-    //   await flow.export();
-    //   logger.log('Export finished.');
-    //   this.flow = flow.flow;
-    //   App.mainWindow.webContents.send('running-discovery', this.flow);
+    if (!skipDiscovery) {
+      logger.log(`Finished running sequence. Discovering...`);
+      await flow.discover(page, true);
+      logger.log(`Discovery finished.`);
+      await runner.performScreenshotForLastAction(page);
+      await flow.export();
+      logger.log('Export finished.');
+      this.flow = flow.flow;
+      App.mainWindow.webContents.send('running-discovery', this.flow);
 
-    //   if (sequence.length === 0) {
-    //     const exitUrl = await page.url();
-    //     this.config.exitUrl = flow.getUrl(exitUrl);
-    //     this.store(true);
-    //   }
-    //   this.syncOutput();
-    // }
-    // App.mainWindow.webContents.send('flow-updated', this.flow);
+      if (sequence.length === 0) {
+        const exitUrl = await page.url();
+        this.config.exitUrl = flow.getUrl(exitUrl);
+        this.store(true);
+      }
+      this.syncOutput();
+    }
+    App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
   close(): void {

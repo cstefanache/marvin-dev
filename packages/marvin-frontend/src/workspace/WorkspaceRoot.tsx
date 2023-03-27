@@ -150,7 +150,7 @@ export function WorkspaceRoot() {
   };
 
   const runSequence = async (sequence: string[][]) => {
-    window.electron.runDiscovery(sequence, true);
+    window.electron.runDiscovery(sequence, false);
   };
 
   const mainLayout = (
