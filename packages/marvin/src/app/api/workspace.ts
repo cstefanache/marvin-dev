@@ -79,6 +79,7 @@ export default class Workspace {
             url,
           },
         ],
+        blocks: [],
       };
       fs.writeFileSync(`${path}/flow.json`, JSON.stringify(this.flow, null, 2));
     }
@@ -114,6 +115,7 @@ export default class Workspace {
           this.flow = {
             actions: [],
             graph: [],
+            blocks: [],
           };
         }
 
@@ -156,8 +158,8 @@ export default class Workspace {
     return Object.keys(this.output.discovered);
   }
 
-  async run(sequence: string[], callback: Function, skipDiscovery?: boolean) {
-    logger.log(`Running sequence ${sequence.join(',')}`);
+  async run(sequence: string[][], callback: Function, skipDiscovery?: boolean) {
+    console.log(`Running sequence`, sequence);
     logger.log(`Skipping discovery: ${skipDiscovery}`);
 
     const browser = await puppeteer.launch({
@@ -186,29 +188,29 @@ export default class Workspace {
 
     callback(undefined);
     const runner = new Runner(this.config, flow, state);
-   
-    // for (const sequence of sequences) {
-    await runner.run(page, sequence, callback);
-    // }
-    
-    if (!skipDiscovery) {
-      logger.log(`Finished running sequence. Discovering...`);
-      await flow.discover(page, true);
-      logger.log(`Discovery finished.`);
-      await runner.performScreenshotForLastAction(page);
-      await flow.export();
-      logger.log('Export finished.');
-      this.flow = flow.flow;
-      App.mainWindow.webContents.send('running-discovery', this.flow);
 
-      if (sequence.length === 0) {
-        const exitUrl = await page.url();
-        this.config.exitUrl = flow.getUrl(exitUrl);
-        this.store(true);
-      }
-      this.syncOutput();
+    for (const seq of sequence) {
+      await runner.run(page, seq, callback);
     }
-    App.mainWindow.webContents.send('flow-updated', this.flow);
+
+    // if (!skipDiscovery) {
+    //   logger.log(`Finished running sequence. Discovering...`);
+    //   await flow.discover(page, true);
+    //   logger.log(`Discovery finished.`);
+    //   await runner.performScreenshotForLastAction(page);
+    //   await flow.export();
+    //   logger.log('Export finished.');
+    //   this.flow = flow.flow;
+    //   App.mainWindow.webContents.send('running-discovery', this.flow);
+
+    //   if (sequence.length === 0) {
+    //     const exitUrl = await page.url();
+    //     this.config.exitUrl = flow.getUrl(exitUrl);
+    //     this.store(true);
+    //   }
+    //   this.syncOutput();
+    // }
+    // App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
   close(): void {

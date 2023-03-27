@@ -80,7 +80,13 @@ export type Actions = {
   isGlobal?: boolean;
 };
 
+export type Block = {
+  name: string;
+  sequences: string[][];
+};
+
 export type FlowModel = {
   graph: ActionItem[];
   actions: Actions[];
+  blocks: Block[];
 };

@@ -506,7 +506,6 @@ export default class Runner {
     sequence: string[],
     sequenceCallback?: Function
   ) {
-    console.log(sequence)
     const { graph } = this.flow.flow;
     if (this.config.aliases.store) {
       this.store = {

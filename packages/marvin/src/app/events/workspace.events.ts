@@ -98,7 +98,7 @@ ipcMain.handle('update-branch', (_, data) => {
 
 ipcMain.handle(
   'run-discovery',
-  async (event, sequence: string[], skipDiscovery: boolean) => {
+  async (event, sequence: string[][], skipDiscovery: boolean) => {
     await workspace.run(
       sequence,
       (actionId: string) => {

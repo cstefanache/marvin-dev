@@ -1,6 +1,7 @@
 import * as puppeteer from 'puppeteer';
-
+import * as fs from 'fs';
 import { Flow, Discovery, Runner, State } from '@marvin/discovery';
+import { log } from 'packages/discovery/src/utils/logger';
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -11,64 +12,10 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
       height: 2080,
     },
   });
-  const config = {
-    path: 'output',
-    defaultTimeout: 1000,
-    rootUrl: 'http://localhost:4200/',
-    aliases: {
-      urlReplacers: [
-        {
-          regex: '/[0-9]+',
-          alias: '/:id',
-        },
-      ],
-      info: [
-        {
-          name: 'Headers',
-          selectors: ['.card-title', '.title'],
-        },
-      ],
-      optimizer: {
-        priority: ['name', 'placeholder', 'role', 'type', 'href'],
-        exclude: [
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: [':[a-z0-9]+:'],
-          },
-          {
-            type: 'attribute',
-            name: 'id',
-            regex: ['mui-[0-9]+'],
-          },
-        ],
-      },
-      iterators: [
-        {
-          name: 'Card Iterator',
-          selectors: ['.grid-card'],
-          identifier: '.MuiTypography-h5',
-          elements: [
-            {
-              name: 'Open Button',
-              selector: 'a',
-            },
-            {
-              name: 'Delete Button',
-              selector: 'button',
-            },
-          ],
-        },
-      ],
-    },
-    sequence: [
-      'Login as user',
-      'Create new list',
-      'Add three items',
-      'Save List',
-      'Delete Newly Created List',
-    ],
-  } as any;
+
+  const config = JSON.parse(
+    fs.readFileSync(`./tmp/aboutyou/config.json`, 'utf8')
+  );
   const flow = new Flow(config, browser);
   const page = await flow.navigateTo(config.rootUrl);
   const state = new State(page);
@@ -79,11 +26,28 @@ import { Flow, Discovery, Runner, State } from '@marvin/discovery';
   await page.waitForNetworkIdle({ timeout: config.defaultTimeout });
 
   const runner = new Runner(config, flow, state);
-  await runner.run(page, config.sequence);
+  const sequences = [
+    [
+      '8124a3df-42ca-465c-85e3-09545d243fbd',
+      '9e0d52dc-05ce-4db2-9c1a-7f4482b24a08',
+      '38cd6b18-b901-4d04-a007-23beed128837',
+      'e44bb8b2-b912-448d-9fad-f329f12116d8',
+    ],
+    [
+      '8124a3df-42ca-465c-85e3-09545d243fbd',
+      '7d07fddf-474f-423d-925a-ed08471b1620',
+    ],
+  ];
 
-  // log('Taking screenshot', 'yellow');
-  await flow.discover(page, true);
+  sequences.forEach(async (sequence) => {
+    log(`Running sequence ${sequence}`, 'yellow');
+    await runner.run(page, sequence);
+
+  });
+
+  // // log('Taking screenshot', 'yellow');
+  // await flow.discover(page, true);
   await flow.stateScreenshot(page, 'runstate');
 
-  flow.export();
+  // flow.export();
 })();

@@ -13,6 +13,7 @@ import Workspaces from '../workspaces/Workspaces';
 import { getNodesForFilter } from '../utils';
 import Console from './console/Console';
 import Generate from './generator/Generate';
+import { SequencesPanel } from './sequences/SequencesPanel';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export function WorkspaceRoot() {
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);
-      setTab('mainLayout');
+      setTab('mainLayout'); // sequences
       const flow = await window.electron.getFlow();
       setFlow(flow);
       setFlowState(Math.random());
@@ -138,11 +139,18 @@ export function WorkspaceRoot() {
       localLoadingIds.push(currentNode.id);
       return sequence;
     }
-    window.electron.runDiscovery(addToSeq(element, []), skipDiscovery === true);
+    window.electron.runDiscovery(
+      [addToSeq(element, [])],
+      skipDiscovery === true
+    );
     setLoadingIds([
       ...localLoadingIds,
       localLoadingIds[localLoadingIds.length - 1] + '-discovery',
     ]);
+  };
+
+  const runSequence = async (sequence: string[][]) => {
+    window.electron.runDiscovery(sequence, true);
   };
 
   const mainLayout = (
@@ -234,6 +242,12 @@ export function WorkspaceRoot() {
             }}
           />
         }
+      />
+
+      <Tab
+        id="sequences"
+        title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
+        panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
       />
 
       <Tab
