@@ -343,6 +343,25 @@ export default class Runner {
     await this.flow.stateScreenshot(page, this.lastActionId);
   }
 
+  private getActionItemFromGraph(id: string, root?: ActionItem[]): ActionItem {
+    const graph = root || this.flow.flow.graph;
+
+    const actionItem = graph.find((item) => item.id === id);
+
+    if (!actionItem) {
+      for (const item of graph) {
+        if (item.children) {
+          const child = this.getActionItemFromGraph(id, item.children);
+          if (child) {
+            return child;
+          }
+        }
+      }
+    }
+
+    return actionItem;
+  }
+
   private async executeStep(
     page: Page,
     executionSteps: ActionItem[],
@@ -373,9 +392,11 @@ export default class Runner {
     if (executionSteps.length === 0) {
       return;
     }
-    let action = executionSteps.find(
-      (item: ActionItem) => item.id === currentStepToExecute
-    );
+    // let action = executionSteps.find(
+    //   (item: ActionItem) => item.id === currentStepToExecute
+    // );
+
+    let action = this.getActionItemFromGraph(currentStepToExecute)
 
     const continueExecution = async (action) => {
       if (sequenceCallback) {

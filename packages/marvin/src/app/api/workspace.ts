@@ -249,6 +249,11 @@ export default class Workspace {
     this.store();
   }
 
+  setBlocks(blocks: any): void {
+    this.flow.blocks = blocks;
+    this.store();
+  }
+
   deleteMethod(id: string): void {
     Object.keys(this.flow.actions).forEach((key) => {
       this.flow.actions = this.flow.actions.filter((item) => {

@@ -14,7 +14,7 @@ interface FlowNavigatorProps {
   loadingIds: string[];
   subIds: string[];
   sequenceFilter?: string;
-  runDiscovery: Function;
+  runDiscovery?: Function;
 }
 
 export function FlowNavigator(props: FlowNavigatorProps) {
@@ -40,7 +40,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
       children: graph,
     });
     setExpandedIds([]);
-    setFlow(localFlat);   
+    setFlow(localFlat);
   }, [graph[0].id]);
 
   useEffect(() => {
@@ -177,11 +177,13 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             </span>
             <span className="actions">
               {actions && actions(element)}
-              <Icon
-                size={12}
-                icon="play"
-                onClick={() => runDiscovery(element)}
-              />
+              {runDiscovery && (
+                <Icon
+                  size={12}
+                  icon="play"
+                  onClick={() => runDiscovery(element)}
+                />
+              )}
             </span>
           </div>
         )

@@ -15,5 +15,23 @@
             padding: 5px;
             align-items: center;
         }
+
+        .sequenceAction {
+            .bp4-icon-cut {
+                display: none;
+            }
+
+
+            &:hover {
+                cursor: pointer;
+                .bp4-icon-cut {
+                    display: inline-block;
+                }
+
+                .bp4-icon-chevron-right {
+                    display: none;
+                }
+            }
+        }
     }
 }

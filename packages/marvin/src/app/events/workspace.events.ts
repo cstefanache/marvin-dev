@@ -60,6 +60,10 @@ ipcMain.handle('get-flow', () => {
   return workspace.getFlow();
 });
 
+ipcMain.handle('set-blocks', (_, data:any) => {
+  return workspace.setBlocks(data);
+})
+
 ipcMain.handle('get-methods-for-path', (_, path) => {
   return workspace.getMethodsForPath(path);
 });
