@@ -25,7 +25,7 @@ const SelectMethod = (props: any) => {
   const { parent, save, data: propData } = props;
   const { exitUrl } = props;
   const sequenceStep = '';
-  const { method } = propData || {};
+  const { method, methodUid } = propData || {};
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -47,8 +47,8 @@ const SelectMethod = (props: any) => {
       }
       setMethods(methods || []);
 
-      if (method && methods) {
-        const selectedMethod = methods.find((m: any) => m.method === method);
+      if (methodUid && methods) {
+        const selectedMethod = methods.find((m: any) => m.uid === methodUid);
         setData(propData);
         setSelectedMethod(selectedMethod);
       }
