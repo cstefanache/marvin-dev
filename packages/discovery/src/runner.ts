@@ -396,7 +396,7 @@ export default class Runner {
     //   (item: ActionItem) => item.id === currentStepToExecute
     // );
 
-    let action = this.getActionItemFromGraph(currentStepToExecute)
+    let action = this.getActionItemFromGraph(currentStepToExecute);
 
     const continueExecution = async (action) => {
       if (sequenceCallback) {
@@ -423,6 +423,16 @@ export default class Runner {
         await new Promise(function (resolve) {
           setTimeout(resolve, action.postDelay);
         });
+        try {
+          await page.waitForNetworkIdle({
+            timeout: this.config.defaultTimeout,
+          });
+        } catch (e) {
+          log('Network idle timeout. Runner will continue.', 'red');
+          if (this.state) {
+            this.state.reportOnPendingRequests();
+          }
+        }
       }
     };
 
