@@ -151,7 +151,9 @@ export default class Workspace {
   }
 
   getDiscoveredForPath(path: string): any {
-    return this.output.discovered[path];
+    if (this.output && this.output.discovered) {
+      return this.output.discovered[path];
+    } else return null;
   }
 
   getDiscoveredPaths(): string[] {
@@ -172,7 +174,7 @@ export default class Workspace {
       ],
       defaultViewport: {
         width: 1920,
-        height: 2080,
+        height: 1080,
       },
     });
 
@@ -197,8 +199,7 @@ export default class Workspace {
       logger.log(`Finished running sequence. Discovering...`);
       await flow.discover(page, true);
       logger.log(`Discovery finished.`);
-      await runner.performScreenshotForLastAction(page);
-      await flow.export();
+     
       logger.log('Export finished.');
       this.flow = flow.flow;
       App.mainWindow.webContents.send('running-discovery', this.flow);
@@ -210,6 +211,9 @@ export default class Workspace {
       }
       this.syncOutput();
     }
+
+    await runner.performScreenshotForLastAction(page);
+    await flow.export();
     App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 

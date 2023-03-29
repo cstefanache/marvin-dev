@@ -126,7 +126,7 @@ export default function Methods(props: any) {
                 <div
                   {...getNodeProps()}
                   onClick={() => {
-                    if (currentNode.path) {
+                    if (currentNode.path !== undefined) {
                       setExitUrl(currentNode.path)
                       setSelectedMethod(element);
                     }

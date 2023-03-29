@@ -10,26 +10,26 @@ import * as uuid from 'uuid';
 
 const defaultAliases = {
   info: [
-    {
-      name: 'Headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-    },
+    // {
+    //   name: 'Headers',
+    //   selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    // },
   ],
   action: [
-    {
-      name: 'Buttons',
-      selectors: ['button']
-    },
-    {
-      name: 'Links',
-      selectors: ['a']
-    }
+    // {
+    //   name: 'Buttons',
+    //   selectors: ['button'],
+    // },
+    // {
+    //   name: 'Links',
+    //   selectors: ['a'],
+    // },
   ],
   input: [
-    {
-      name: 'Form Elements',
-      selectors: ['input', 'textarea'],
-    },
+    // {
+    //   name: 'Form Elements',
+    //   selectors: ['input', 'textarea'],
+    // },
   ],
   iterators: [
     // {
@@ -349,38 +349,69 @@ export default class Discovery {
         ? `${actionSelector.selectors.join(', ')}:nth-of-type(${index + 1})`
         : (await this.getLocator(element, page, parent)).trim();
 
+    const infoPromises = [];
     log('Capturing info aliases ...');
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
       for (const [index, element] of elements.entries()) {
         const text = (await element.evaluate((el) => el.textContent)) as string;
-        info.push({
+        const item: any = {
           text,
           details: await element.evaluate((el) => el.textContent?.trim()),
           type: await element.evaluate((el) => el.getAttribute('type')),
-          locator: await getLocatorForElement(infoSelector, index, element),
+        };
+
+        const locatorPomise = getLocatorForElement(
+          infoSelector,
+          index,
+          element
+        );
+        infoPromises.push(locatorPomise);
+        locatorPomise.then((locator) => {
+          item.locator = locator;
+          info.push(item);
         });
-        log(`Captured ${infoSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
+
+        log(
+          `Captured ${infoSelector.name} (${index + 1}/${elements.length}) `,
+          'yellow',
+          true
+        );
       }
     }
 
+    await Promise.all(infoPromises);
+
+    const inputPromises = [];
     log('Capturing input aliases ...');
     for (const inputSelector of this.aliases.input) {
       const elements = await rootElement.$$(inputSelector.selectors.join(', '));
       for (const [index, element] of elements.entries()) {
         const text = (await element.evaluate((el) => el.textContent)) as string;
-        input.push({
+        const item: any = {
           text,
           details: await element.evaluate(
             (el) => `${(el as any).value}  ${el.getAttribute('placeholder')}`
           ),
           type: await element.evaluate((el) => el.getAttribute('type')),
-          locator: await getLocatorForElement(inputSelector, index, element),
+        };
+
+        const promise = getLocatorForElement(inputSelector, index, element);
+        promise.then((locator) => {
+          (item.locator = locator), input.push(item);
+          log(
+            `Captured ${inputSelector.name} (${index + 1}/${elements.length}) `,
+            'yellow',
+            true
+          );
         });
-        log(`Captured ${inputSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
+        inputPromises.push(promise);
       }
     }
 
+    await Promise.all(inputPromises);
+
+    const promises = [];
     log('Capturing action aliases ...');
     for (const actionSelector of this.aliases.action) {
       const elements = await rootElement.$$(
@@ -391,8 +422,22 @@ export default class Discovery {
         const text = (await element.evaluate((el) => el.textContent)) as string;
         const item: any = {
           text,
-          locator: await getLocatorForElement(actionSelector, index, element),
         };
+
+        const promise = getLocatorForElement(actionSelector, index, element);
+        promise.then((locator) => {
+          item.locator = locator;
+          actions.push(item);
+          log(
+            `Captured ${actionSelector.name} (${index + 1}/${
+              elements.length
+            }) `,
+            'yellow',
+            true
+          );
+        });
+
+        promises.push(promise);
 
         // try {
         //   item.base64Image = await (
@@ -401,10 +446,12 @@ export default class Discovery {
         // } catch (err) {
         //   //silent
         // }
-        actions.push(item);
-        log(`Captured ${actionSelector.name} (${index+1}/${elements.length}) `, 'yellow', true);
       }
     }
+
+    log('Waiting for promises to complete ...');
+    await Promise.all(promises);
+    log('Promises completed ...');
 
     log('Capturing iterators ...');
     if (this.aliases.iterators && this.aliases.iterators.length) {
@@ -417,7 +464,7 @@ export default class Discovery {
           `Elements found for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
         );
         if (iteratorRootSelectors.length) {
-          element = iteratorRootSelectors[0];          
+          element = iteratorRootSelectors[0];
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {
@@ -452,7 +499,13 @@ export default class Discovery {
                         )
                       : iteratorElement.selector,
                 });
-                log(`Captured ${iteratorElement.name} (${index+1}/${elements.length}) `, 'yellow', true);
+                log(
+                  `Captured ${iteratorElement.name} (${index + 1}/${
+                    elements.length
+                  }) `,
+                  'yellow',
+                  true
+                );
               }
             }
           }

@@ -11,30 +11,30 @@ export class State {
     constructor(private readonly page: Page) {
         const logRequests = false;
 
-        page.on(
-            "request",
-            (interceptedRequest: HTTPRequest) => {
-                const url = interceptedRequest.url();
-                if (logRequests) {
-                    log(`Request: ${url}`, 'yellow');
-                }
-                if (this.netowrkRequests[url]) {
-                    log(`Request ${url} already exists`, 'red');
-                }
+        // page.on(
+        //     "request",
+        //     (interceptedRequest: HTTPRequest) => {
+        //         const url = interceptedRequest.url();
+        //         if (logRequests) {
+        //             log(`Request: ${url}`, 'yellow');
+        //         }
+        //         if (this.netowrkRequests[url]) {
+        //             log(`Request ${url} already exists`, 'red');
+        //         }
 
-                this.netowrkRequests[url] = new Date().getTime();
+        //         this.netowrkRequests[url] = new Date().getTime();
 
-                interceptedRequest.continue();
-            }
-        );
+        //         interceptedRequest.continue();
+        //     }
+        // );
 
-        page.on("response", (response: HTTPResponse) => {
-            const url = response.url();
-            if (logRequests) {
-                log(`Response: ${url}`, 'yellow');
-            }
-            delete this.netowrkRequests[url];
-        });
+        // page.on("response", (response: HTTPResponse) => {
+        //     const url = response.url();
+        //     if (logRequests) {
+        //         log(`Response: ${url}`, 'yellow');
+        //     }
+        //     delete this.netowrkRequests[url];
+        // });
     }
 
     public reportOnPendingRequests() {
