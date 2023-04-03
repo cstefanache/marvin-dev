@@ -10,39 +10,39 @@ import * as uuid from 'uuid';
 
 const defaultAliases = {
   info: [
-    // {
-    //   name: 'Headers',
-    //   selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-    // },
+    {
+      name: 'Headers',
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    },
   ],
   action: [
-    // {
-    //   name: 'Buttons',
-    //   selectors: ['button'],
-    // },
-    // {
-    //   name: 'Links',
-    //   selectors: ['a'],
-    // },
+    {
+      name: 'Buttons',
+      selectors: ['button'],
+    },
+    {
+      name: 'Links',
+      selectors: ['a'],
+    },
   ],
   input: [
-    // {
-    //   name: 'Form Elements',
-    //   selectors: ['input', 'textarea'],
-    // },
+    {
+      name: 'Form Elements',
+      selectors: ['input', 'textarea'],
+    },
   ],
   iterators: [
-    // {
-    //   name: 'List Iterator',
-    //   selectors: ['ul', 'ol'],
-    //   identifier: "li",
-    //   elements: [
-    //     {
-    //       name: 'List Item',
-    //       selector: 'li',
-    //     },
-    //   ],
-    // },
+    {
+      name: 'List Iterator',
+      selectors: ['ul', 'ol'],
+      identifier: 'li',
+      elements: [
+        {
+          name: 'List Item',
+          selector: 'li',
+        },
+      ],
+    },
   ],
 };
 
@@ -150,7 +150,13 @@ export default class Discovery {
     if (!locator || locator.trim() === '') {
       return false;
     }
-    const elements = await parent.$$(locator);
+    let elements;
+    try {
+      elements = await parent.$$(locator);
+    } catch (err) {
+      log(`Locator ${locator} is not valid.`, 'red');
+      return false;
+    }
 
     // if (elements.length > 1 && shouldBe === true) {
     //   log(`Locator ${locator} is not unique.`);
