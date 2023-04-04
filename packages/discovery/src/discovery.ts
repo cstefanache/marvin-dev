@@ -170,13 +170,6 @@ export default class Discovery {
     return elements.length === 1;
   }
 
-  async getElementsForLocator(
-    locator: string,
-    page: Page
-  ): Promise<ElementHandle[]> {
-    return await page.$$(locator);
-  }
-
   async getLocator(
     element: ElementHandle<Element>,
     page: Page,
@@ -209,7 +202,7 @@ export default class Discovery {
     let id: any = await element.evaluate((el) => el.id);
 
     // if id is a number, it's not a valid id
-    if (!Number.isNaN(parseInt(id))) {
+    if (!Number.isNaN(parseInt(id)) || id.indexOf(':') !== -1) {
       id = undefined;
     }
     if (id && !this.matchesAnyRule('id', id, 'attribute', excludeRules)) {
