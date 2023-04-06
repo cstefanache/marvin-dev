@@ -18,11 +18,13 @@ import {
   Divider,
   Dialog,
   DialogBody,
+  DialogFooter,
 } from '@blueprintjs/core';
 import './SequencesPanel.scss';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { getIcon } from '../../utils';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
+import Console from '../console/Console';
 
 export interface TreeItem {
   id: number;
@@ -138,6 +140,10 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [selectedBlock, setSelectedBlock] = useState<Models.Block>(null);
   const [blocks, setBlocks] = useState<Models.Block[]>(null);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
+  const [isDefineNewOpen, setIsDefineNewOpen] = useState<boolean>(false);
+  const [newSequenceName, setNewSequenceName] =
+    useState<string>('New Sequence');
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   useEffect(() => {
     if (flow) {
@@ -169,6 +175,22 @@ export function SequencesPanel(props: SequencesPanelProps) {
       ...selectedBlock,
       sequences: [...selectedBlock.sequences],
     });
+  };
+
+  const save = () => {
+    const blocks = [
+      ...props.flow.blocks,
+      {
+        name: newSequenceName,
+        sequences: [],
+      },
+    ];
+    blocks[selectedBlockIndex] = selectedBlock;
+    setBlocks(blocks);
+    window.electron.setBlocks(blocks);
+
+    setNewSequenceName('New Sequence');
+    setIsDefineNewOpen(false);
   };
 
   const moveSequence = (index: number, up: boolean) => {
@@ -210,7 +232,12 @@ export function SequencesPanel(props: SequencesPanelProps) {
           orientation="horizontal"
           contextKey="methodPanelWidth"
           left={
-            <TitlePanel title="Method">
+            <TitlePanel
+              title="Method"
+              suffix={[
+                <Icon icon="add" onClick={() => setIsDefineNewOpen(true)} />,
+              ]}
+            >
               <Menu>
                 {blocks.map((block, blockIndex) => (
                   <MenuItem
@@ -230,55 +257,104 @@ export function SequencesPanel(props: SequencesPanelProps) {
           minSize={350}
         >
           <TitlePanel title="Sequences">
-            <div className="sequences">
-              {selectedBlock ? (
-                <>
-                  <h4 className="bp4-heading">
-                    <InputGroup
-                      value={selectedBlock.name}
-                      fill={false}
-                      large={false}
-                      onChange={(evt) =>
-                        setSelectedBlock({
-                          ...selectedBlock,
-                          name: evt.target.value,
-                        })
-                      }
-                    />
-                    <Button icon="floppy-disk" minimal onClick={saveBlocks} />
-                    <Button
-                      icon="play"
-                      minimal
-                      onClick={() => props.runSequence(selectedBlock.sequences)}
-                    />
-                  </h4>
-                  <div className="sequences-list">
-                    {selectedBlock.sequences.map((sequence, index) => (
-                      <SequencesBlock
-                        index={index}
-                        isFirst={index === 0}
-                        isLast={index === selectedBlock.sequences.length - 1}
-                        deleteSequence={() => setDeleteIndex(index)}
-                        moveSequence={(up) => moveSequence(index, up)}
-                        cutAtIndex={(subIndex) =>
-                          cutSequenceAtIndex(index, subIndex)
+            <DragLayout
+              orientation={mainLayoutHoriz ? 'horizontal-reversed' : 'vertical'}
+              contextKey={
+                mainLayoutHoriz ? 'consolePanelHeight' : 'consolePanelWidth'
+              }
+              defaultSize={200}
+              minSize={20}
+              left={
+                <Console
+                  mainLayoutHoriz={mainLayoutHoriz}
+                  setMainLayoutHoriz={setMainLayoutHoriz}
+                />
+              }
+            >
+              <div className="sequences">
+                {selectedBlock ? (
+                  <>
+                    <h4 className="bp4-heading">
+                      <InputGroup
+                        value={selectedBlock.name}
+                        fill={false}
+                        large={false}
+                        onChange={(evt) =>
+                          setSelectedBlock({
+                            ...selectedBlock,
+                            name: evt.target.value,
+                          })
                         }
-                        key={index}
-                        sequence={sequence}
-                        flow={flow}
                       />
-                    ))}
-                    <Button fill={true} onClick={() => setIsAddOpen(true)}>
-                      Add new sequence
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <NonIdealState icon="gantt-chart" title="No block selected" />
-              )}
-            </div>
+                      <Button icon="floppy-disk" minimal onClick={saveBlocks} />
+                      <Button
+                        icon="play"
+                        minimal
+                        onClick={() =>
+                          props.runSequence(selectedBlock.sequences)
+                        }
+                      />
+                    </h4>
+                    <div className="sequences-list">
+                      {selectedBlock.sequences.map((sequence, index) => (
+                        <SequencesBlock
+                          index={index}
+                          isFirst={index === 0}
+                          isLast={index === selectedBlock.sequences.length - 1}
+                          deleteSequence={() => setDeleteIndex(index)}
+                          moveSequence={(up) => moveSequence(index, up)}
+                          cutAtIndex={(subIndex) =>
+                            cutSequenceAtIndex(index, subIndex)
+                          }
+                          key={index}
+                          sequence={sequence}
+                          flow={flow}
+                        />
+                      ))}
+                      <Button fill={true} onClick={() => setIsAddOpen(true)}>
+                        Add new sequence
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <NonIdealState icon="gantt-chart" title="No block selected" />
+                )}
+              </div>
+            </DragLayout>
           </TitlePanel>
         </DragLayout>
+        <Dialog
+          title="Define new sequence"
+          isOpen={isDefineNewOpen}
+          onClose={() => setIsDefineNewOpen(false)}
+        >
+          <DialogBody>
+            <InputGroup
+              placeholder="Enter Name"
+              value={newSequenceName}
+              onChange={(evt) => {
+                setNewSequenceName(evt.target.value);
+              }}
+            />
+          </DialogBody>
+          <DialogFooter
+            actions={
+              <>
+                <Button
+                  onClick={() => {
+                    setNewSequenceName('New Sequence');
+                    setIsDefineNewOpen(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button intent="primary" onClick={save}>
+                  Save
+                </Button>
+              </>
+            }
+          ></DialogFooter>
+        </Dialog>
         <Dialog
           title="Add Sequence"
           isOpen={isAddOpen}
