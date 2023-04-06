@@ -33,6 +33,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
   const [flow, setFlow] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState([]);
 
+  const lookFor = graph && graph.length ? graph[0].id : undefined;
   useEffect(() => {
     const localFlat = localFlattenTree({
       sequenceStep: '[root] ',
@@ -41,7 +42,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
     });
     setExpandedIds([]);
     setFlow(localFlat);
-  }, [graph[0].id]);
+  }, [lookFor]);
 
   useEffect(() => {
     if (flow && autoExpand) {

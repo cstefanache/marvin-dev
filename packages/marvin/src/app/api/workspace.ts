@@ -143,6 +143,23 @@ export default class Workspace {
   }
 
   getFlow(): Models.FlowModel {
+    if (!this.flow.graph || this.flow.graph.length === 0) {
+      const graph: any = [
+        {
+          id: uuid.v4(),
+          sequenceStep: this.config.name,
+          children: [],
+          url: this.config.rootUrl,
+        },
+      ];
+
+      this.flow.graph = graph;
+      fs.writeFileSync(
+        `${this.config.path}/flow.json`,
+        JSON.stringify(this.flow, null, 2)
+      );
+    }
+
     return this.flow;
   }
 
@@ -199,7 +216,7 @@ export default class Workspace {
       logger.log(`Finished running sequence. Discovering...`);
       await flow.discover(page, true);
       logger.log(`Discovery finished.`);
-     
+
       logger.log('Export finished.');
       this.flow = flow.flow;
       App.mainWindow.webContents.send('running-discovery', this.flow);
