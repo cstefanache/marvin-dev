@@ -112,6 +112,10 @@ export default class CypressCodeGenerator {
     return value.replace(/"/g, "'");
   }
 
+  private replaceSingleQuotes(value: string) {
+    return value.replace(/'/g, '"');
+  }
+
   private getIteratorItemCommand(iterator: Iterator, key: string): string {
     const parent = this.replaceDoubleQuotes(iterator.parent);
     const identifier = iterator.identifier
@@ -267,7 +271,7 @@ export default class CypressCodeGenerator {
         const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
         let importLocation: string = this.getRelativePath(
           `${this.localSupportFolder}/commands`,
-          `${this.localSupportFolder}/app.po.js`
+          `${this.localSupportFolder}/app.po.ts`
         );
         fs.appendFileSync(
           e2eFile,
@@ -290,6 +294,10 @@ export default class CypressCodeGenerator {
         this.formatFile(e2eFile);
       }
     }
+  }
+
+  private sanitizeValue(str: string): string {
+    return this.replaceSingleQuotes(str);
   }
 
   private replaceKeyWord(selector: string): string {
@@ -363,8 +371,11 @@ export default class CypressCodeGenerator {
         `
       );
       for (const selector of selectors) {
+        console.log(selector.value);
         fileContent = `
-  export const ${sanitizeKey(selector.key)} = '${selector.value}';
+  export const ${sanitizeKey(selector.key)} = '${this.sanitizeValue(
+          selector.value
+        )}';
         `;
         fs.appendFileSync(selectorFile, fileContent);
       }
@@ -506,10 +517,15 @@ export default class CypressCodeGenerator {
           this.getTestsBody(tests).join('\r\n') +
           endDescribeCommand;
         if (!fs.existsSync(specFile)) {
-          fs.writeFileSync(
-            specFile,
-            prettier.format(finalOutput, { parser: 'typescript' })
-          );
+          try {
+            fs.writeFileSync(
+              specFile,
+              prettier.format(finalOutput, { parser: 'typescript' })
+            );
+          } catch (err) {
+            console.error('Error wring file: ' + specFile);
+            fs.writeFileSync(specFile, finalOutput);
+          }
         }
       }
     }

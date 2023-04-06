@@ -96,6 +96,10 @@ export default class Structure {
     }
   }
 
+  private replaceSingleQuotes(value: string) {
+    return value.replace(/'/g, '"');
+  }
+
   private getTest(actionItem: ActionItem): Test {
     let paramValuesQueue: string[] = [];
     const { method, methodUid } = actionItem;
@@ -112,7 +116,8 @@ export default class Structure {
           paramValuesQueue.push(param.replace(new RegExp("'", 'g'), '`'));
         }
         if (this.getParamType(actionItem.parameters[paramKey]) === 'string') {
-          paramValuesQueue.push(`'${actionItem.parameters[paramKey]}'`);
+          const parsedValue = this.replaceSingleQuotes(`${actionItem.parameters[paramKey]}`)
+          paramValuesQueue.push(`'${parsedValue}'`);
         }
 
         if (this.getParamType(actionItem.parameters[paramKey]) === 'number') {
