@@ -122,7 +122,7 @@ export default class CypressCodeGenerator {
       ? this.replaceDoubleQuotes(iterator.identifier)
       : '';
     const item = `"${parent} ${identifier}"`;
-    const command = `cy.contains(${item}, ${sanitizeKey(key)})`;
+    const command = `cy.contains(${item}, ${sanitizeKey(iterator.name)})`;
     return command;
   }
 
@@ -157,7 +157,7 @@ export default class CypressCodeGenerator {
   private getBody(body: BodyDefinition[]) {
     const bodyContent = body.map((b) => {
       const { element, op, isNumber, action } = b;
-      const { key, value, storeName, iterator } = element;
+      const { key, value, storeName, iterator, process } = element;
       if (!iterator) {
         if (action === constants.CLICK_ACTION) {
           return `cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -201,11 +201,11 @@ export default class CypressCodeGenerator {
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim()).to.eq(${sanitizeKey(key)});
+                    expect(text.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim()).to.eq(${sanitizeKey(key)});
+                    expect(val.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
                   });
               }
               });`
@@ -219,11 +219,20 @@ export default class CypressCodeGenerator {
 
   private getParams(method: any) {
     const { parameters, hasStore, hasIterator } = method;
-    const paramNames = parameters.map((p) => sanitizeKey(p.key));
+    console.log('##### ' + method.name);
+    const paramNames = parameters.reduce((memo, p) => {
+      if (p.iterator) {
+        memo.push(sanitizeKey(p.iterator.name));
+      }
+      memo.push(sanitizeKey(p.key));
+      
+      return memo;
+    }, []);
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
     }
+    console.log(params);
     return params;
   }
 

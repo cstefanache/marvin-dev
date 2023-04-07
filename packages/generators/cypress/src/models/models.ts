@@ -20,6 +20,7 @@ export type Identifier = {
   key: string;
   value?: string;
   storeName?: string;
+  process?: string;
   iterator?: Iterator;
 };
 

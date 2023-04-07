@@ -86,87 +86,89 @@ export default class Runner {
     parameters: any,
     forEachItem?: string
   ): Promise<void> {
-    let prefix = forEachItem;
-    if (!prefix || prefix.trim().length === 0) {
-      const methodIterators = this.getFlowIterators(method);
-      if (methodIterators.length > 0 && this.config.aliases.iterators) {
-        log(
-          `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
-        );
-        let iteratorConfig: Alias | undefined;
-        for (const iterator of methodIterators) {
+    // const methodIterators = this.getFlowIterators(method);
+    for (const sequenceItem of method.sequence) {
+      let prefix = forEachItem;
+      if (!prefix || prefix.trim().length === 0) {
+        const { iterator } = sequenceItem
+        if (iterator) {
+          log(
+            `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
+          );
+          let iteratorConfig: Alias | undefined;
           iteratorConfig = this.config.aliases.iterators.find(
             (it) => it.name === iterator.name
           );
-        }
-        if (iteratorConfig) {
-          for (const rootSelector of iteratorConfig.selectors) {
-            const rootElements = await page.$$(rootSelector);
-            const iteratorDef: IdentifiableIterator =
-              await this.findIteratorDefinition(
-                methodIterators,
-                iteratorConfig.name
-              );
+          if (iteratorConfig) {
+            for (const rootSelector of iteratorConfig.selectors) {
+              const rootElements = await page.$$(rootSelector);
 
-            if (iteratorDef.identifier) {
-              log(
-                `   Trying to read identifier from ${rootSelector} ${iteratorDef.identifier} for each found root element`
-              );
-            }
+              // const iteratorDef: IdentifiableIterator =
+              //   await this.findIteratorDefinition(
+              //     methodIterators,
+              //     iteratorConfig.name
+              //   );
 
-            if (rootElements && rootElements.length) {
-              for (const [index, rootElem] of rootElements.entries()) {
-                const iteratorIdentifierElem = iteratorDef.identifier
-                  ? await rootElem.$(iteratorDef.identifier)
-                  : rootElem;
+              if (iterator.identifier) {
+                log(
+                  `   Trying to read identifier from ${rootSelector} ${iterator.identifier} for each found root element`
+                );
+              }
 
-                const uid = iteratorDef ? iteratorDef.uid : 'root';
-                if (iteratorIdentifierElem) {
-                  const text = (
-                    (await iteratorIdentifierElem.evaluate(
-                      (el) => el.textContent
-                    )) as string
-                  ).trim();
-                  const resultEvaluation = this.evaluateExpression(
-                    parameters[uid]
-                  ).trim();
-                  log(
-                    `${index
-                      .toString()
-                      .padStart(4)}: |${resultEvaluation}|${text}|`,
-                    'yellow'
-                  );
-                  // if (text === resultEvaluation) {
-                  if (new RegExp(resultEvaluation).test(text)) {
-                    prefix = `${rootSelector}:nth-of-type(${index + 1})`;
-                    break;
+              if (rootElements && rootElements.length) {
+                for (const [index, rootElem] of rootElements.entries()) {
+                  const iteratorIdentifierElem = iterator.identifier
+                    ? await rootElem.$(iterator.identifier)
+                    : rootElem;
+
+                  const uid = iterator ? iterator.uid : 'root';
+                  if (iteratorIdentifierElem) {
+                    const text = (
+                      (await iteratorIdentifierElem.evaluate(
+                        (el) => el.textContent
+                      )) as string
+                    ).trim();
+                    const resultEvaluation = this.evaluateExpression(
+                      parameters[uid]
+                    ).trim();
+                    log(
+                      `${index
+                        .toString()
+                        .padStart(4)}: |${resultEvaluation}|${text}|`,
+                      'yellow'
+                    );
+                    // if (text === resultEvaluation) {
+                    if (new RegExp(resultEvaluation).test(text)) {
+                      prefix = `${rootSelector}:nth-of-type(${index + 1})`;
+                      break;
+                    }
                   }
+                  // else {
+                  //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
+                  // }
                 }
-                // else {
-                //   log(`Missing iterator identifier element for ${iteratorDef.identifier ? iteratorDef.identifier : rootSelector}`)
-                // }
+              }
+              if (prefix) {
+                break;
               }
             }
-            if (prefix) {
-              break;
-            }
+          } else {
+            throw new Error(
+              `Missing iterator config for ${iteratorConfig.name}`
+            );
           }
-        } else {
-          throw new Error(`Missing iterator config for ${iteratorConfig.name}`);
-        }
 
-        if (prefix === '') {
-          log(
-            `No root element found for ${
-              iteratorConfig.name
-            } for parameters ${JSON.stringify(parameters)}`
-          );
-          return;
+          if (prefix === '') {
+            log(
+              `No root element found for ${
+                iteratorConfig.name
+              } for parameters ${JSON.stringify(parameters)}`
+            );
+            return;
+          }
         }
       }
-    }
 
-    for (const sequenceItem of method.sequence) {
       let { type, uid, op, isNumber, locator, iterator, press, process } =
         sequenceItem;
       locator = iterator
@@ -191,9 +193,15 @@ export default class Runner {
           );
           const valueToValidate = this.evaluateExpression(parameters[uid]);
 
-          let toCheck = value ? value : text;
+          let toCheck = ((value ? value : text) || '').replace(/\n/g, ' ');
           if (process) {
-            toCheck = eval(this.evaluateExpression(`"${toCheck}"${process}`));
+            const expression = this.evaluateExpression(
+              `"${toCheck}"${process}`
+            );
+            log(
+              `evaluating expression ${expression}, based on ${toCheck} and ${process}`
+            );
+            toCheck = eval(expression);
           }
 
           log(
@@ -236,6 +244,7 @@ export default class Runner {
             }
           }
         } catch (err) {
+          console.log(err);
           log(`Error on checking`, 'red');
         }
       } else if (

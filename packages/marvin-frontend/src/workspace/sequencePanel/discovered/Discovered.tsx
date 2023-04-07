@@ -47,11 +47,11 @@ export default function DiscoveredElements(props: any) {
             }
             return memo;
           }, []),
-        ].filter(
-          (value, index, self) =>
-            index === self.findIndex((t) => t.locator === value.locator)
-        );
-
+        ]
+        // .filter(
+        //   (value, index, self) =>
+        //     index === self.findIndex((t) => t.locator === value.locator)
+        // );
         setDiscoveredElements(items);
       }
     };

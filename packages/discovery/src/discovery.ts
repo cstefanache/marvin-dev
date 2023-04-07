@@ -460,10 +460,14 @@ export default class Discovery {
           iteratorItem.selectors.join(', ')
         );
         log(
-          `Elements found for ${iteratorItem.name}: ${iteratorRootSelectors.length}`
+          `Elements found for ${iteratorItem.name}: ${
+            iteratorRootSelectors.length
+          } [${iteratorItem.selectors.join(', ')}]`
         );
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
+          const text = await element.evaluate((el) => el.textContent);
+          console.log(text)
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {

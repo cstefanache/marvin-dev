@@ -226,6 +226,7 @@ export default class Structure {
           //   : this.toCamelCase(step.details),
           value: step.locator,
           storeName: step.storeName ? step.storeName : null,
+          process: step.process,
           iterator: step.iterator
             ? {
                 name: step.iterator.name,
@@ -255,7 +256,7 @@ export default class Structure {
       // step.details.trim() === ''
       //   ? this.getNameFromLocator(locator)
       //   : this.toCamelCase(details);
-      paramsOrder.push(uid);
+      
       if (!step.iterator) {
         if (
           step.type === constants.CLEAR_AND_FILL_ACTION ||
@@ -292,6 +293,7 @@ export default class Structure {
               },
             });
       }
+      paramsOrder.push(uid);
     }
     // if (action.iterator) {
     //   paramsOrder.push(action.iterator.uid);
