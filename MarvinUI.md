@@ -27,7 +27,7 @@ Fill in the rootURL of the application under test:
 
 #### Config page - URL Replacers section
 
-You have the possibility to replace the application resources with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin allows you to define replacer rules (regex or exact match) for application URLs.
+You have the possibility to replace the application resources with some generic aliases, in order to be able to address that page generically. For this, Marvin allows you to define replacer rules (regex or exact match) for application URLs.
 
 `Eg: An URL in the application under test could be: `https://localhost:4200/articles/2423453254354356465` -> for the Article details page. We want to refer the Article details page for any article from the application. In this case we want to have something like this: `https://localhost:4200/articles/{articleId}`. `
 
@@ -35,7 +35,7 @@ You have the possibility to replace the application resources with some generic 
 
 #### Config page - Info Selectors section
 
-You have the possibility to extend the default info selectors that are configured in the source code. 
+You can extend the default info selectors that are configured in the source code. 
 
 `Eg: span, p are not included in the default info selectors`
 
@@ -43,7 +43,7 @@ You have the possibility to extend the default info selectors that are configure
 
 #### Config page - Action Selectors section
 
-You have the possibility to extend the default action selectors that are configured in the source code. 
+You can extend the default action selectors that are configured in the source code.
 
 `Eg: .button is not included in the default action selectors.`
 
@@ -51,21 +51,21 @@ You have the possibility to extend the default action selectors that are configu
 
 #### Config page - Input Selectors section
 
-You have the possibility to extend the default input selectors that are configured in the source code. 
+You can extend the default input selectors that are configured in the source code. 
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231104377-308d4892-ebfa-4df8-9ad1-9e6bb120a0a3.png">
 
 #### Config page - Iterators section
 
-You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
+You have the possibility to define some rules to uniquely identify an item from a list/table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231104757-0fff0a77-67d2-49da-9469-ad71dfe3be45.png">
 
 #### Config page - Optimizer section
 
-You have the possibility to change the default priority that is used to determine an unique locator for each element from the current page. The default order for defining an unique locator is: tag, id, attribute, class.
+You have the possibility to change the default priority that is used to determine a unique locator for each element from the current page. The default order for defining a unique locator is: by tag, id, attribute, and by class.
 
-Also you have the possibility to exclude some tag / id / attribute / class, by defining a regex and/or an exact value.
+Also, you have the possibility to exclude some tag/id/attribute/class, by defining a regex and/or an exact value.
 
 #### Config page - Store section
 
