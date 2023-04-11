@@ -103,17 +103,17 @@ Selecting a method from the list, you will be able to define values for the meth
 > 🚩 **Note**
 > After defining a method execution, a new step is inserted in the flow:
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434883-6e5e8ed9-ea4f-490b-b519-02e49eb85e00.png">
+<img width="900" alt="image" src="https://user-images.githubusercontent.com/15820565/231143932-ce7bb418-d963-4e5a-958c-00fb0282d207.png">
 
 #### Execute a step from the graph
 
 Clicking on 'play' button for a step from the graph, the corresponding branch will be executed ul to the current step.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215436370-875a42ff-6ef2-4951-9f9b-d31d2156afcd.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215436370-875a42ff-6ef2-4951-9f9b-d31d2156afcd.png">
 
 The execution is highlighted:
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215436509-5c87d451-548d-4605-acac-3921534125bd.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231144179-dfad6470-a581-4250-8eb5-d7fd30c9095d.png">
 
 #### View locators list
 
