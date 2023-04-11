@@ -23,7 +23,7 @@ Recent projects:
 
 Fill in the rootURL of the application under test:
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215423279-5945ec08-cc12-40e2-9095-3b5ebeb728f7.png">
+<img width="1791" alt="image" src="https://user-images.githubusercontent.com/15820565/231102582-fa8aa530-6429-4bd8-9ba3-2f6791bf3916.png">
 
 #### Config page - URL Replacers section
 
@@ -31,7 +31,7 @@ You have the possibility to replace the application resources with some generic 
 
 `Eg: An URL in the application under test could be: `https://localhost:4200/articles/2423453254354356465` -> for the Article details page. We want to refer the Article details page for any article from the application. In this case we want to have something like this: `https://localhost:4200/articles/{articleId}`. `
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215424951-959598db-4a12-4888-85a4-a4588d0d7a8b.png">
+<img width="1787" alt="image" src="https://user-images.githubusercontent.com/15820565/231103566-1f5ef95f-304d-4ba1-ae3f-e819d54b70d6.png">
 
 #### Config page - Info Selectors section
 
@@ -39,7 +39,7 @@ You have the possibility to extend the default info selectors that are configure
 
 `Eg: span, p are not included in the default info selectors`
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215425852-901cc9c0-6914-401d-baee-f99762ef83e1.png">
+<img width="900" alt="image" src="https://user-images.githubusercontent.com/15820565/231103826-e5241d16-318b-464f-9ce7-238dbf7e57ff.png">
 
 #### Config page - Action Selectors section
 
@@ -53,14 +53,13 @@ You have the possibility to extend the default action selectors that are configu
 
 You have the possibility to extend the default input selectors that are configured in the source code. 
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426501-9289ebb4-e379-48fe-a7da-32d404e07be1.png">
+<img width="1784" alt="image" src="https://user-images.githubusercontent.com/15820565/231104377-308d4892-ebfa-4df8-9ad1-9e6bb120a0a3.png">
 
 #### Config page - Iterators section
 
 You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426748-9d273f41-a90c-476d-9a97-720de1f55fca.png">
-
+<img width="1777" alt="image" src="https://user-images.githubusercontent.com/15820565/231104757-0fff0a77-67d2-49da-9469-ad71dfe3be45.png">
 
 #### Config page - Optimizer section
 
@@ -72,7 +71,7 @@ Also you have the possibility to exclude some tag / id / attribute / class, by d
 
 You have the possibility to define run parameters (eg: username and password) for the application under test, to use them in the execution flows.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215430155-0a1b78c9-6d49-43ca-9bd7-7625a1cd76eb.png">
+<img width="1787" alt="image" src="https://user-images.githubusercontent.com/15820565/231105557-fa474fd9-7392-48ce-976b-ec9660e6666f.png">
 
 ### Execution workflow tab
 
