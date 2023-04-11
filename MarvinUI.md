@@ -19,14 +19,13 @@ Recent projects:
 
 <img width="1785" alt="image" src="https://user-images.githubusercontent.com/15820565/231083998-aa1b58cb-127d-43df-8ed4-10116cdb9d5f.png">
 
-
 ### Config page
 
 Fill in the rootURL of the application under test:
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215423279-5945ec08-cc12-40e2-9095-3b5ebeb728f7.png">
 
-#### Config tab - URL Replacers section
+#### Config page - URL Replacers section
 
 You have the possibility to replace the application resources with some generic aliases, in order to be able to address that page in a generic manner. For this, Marvin allows you to define replacer rules (regex or exact match) for application URLs.
 
@@ -34,7 +33,7 @@ You have the possibility to replace the application resources with some generic 
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215424951-959598db-4a12-4888-85a4-a4588d0d7a8b.png">
 
-#### Config tab - Info Selectors section
+#### Config page - Info Selectors section
 
 You have the possibility to extend the default info selectors that are configured in the source code. 
 
@@ -42,7 +41,7 @@ You have the possibility to extend the default info selectors that are configure
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215425852-901cc9c0-6914-401d-baee-f99762ef83e1.png">
 
-#### Config tab - Action Selectors section
+#### Config page - Action Selectors section
 
 You have the possibility to extend the default action selectors that are configured in the source code. 
 
@@ -50,20 +49,20 @@ You have the possibility to extend the default action selectors that are configu
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215425931-b2cf060a-ed41-474a-ac6f-17cbfb8b32f4.png">
 
-#### Config tab - Input Selectors section
+#### Config page - Input Selectors section
 
 You have the possibility to extend the default input selectors that are configured in the source code. 
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426501-9289ebb4-e379-48fe-a7da-32d404e07be1.png">
 
-#### Config tab - Iterators section
+#### Config page - Iterators section
 
 You have the posibility to define some rules to uniquely identify an item from a list / table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215426748-9d273f41-a90c-476d-9a97-720de1f55fca.png">
 
 
-#### Config tab - Optimizer section
+#### Config page - Optimizer section
 
 You have the possibility to change the default priority that is used to determine an unique locator for each element from the current page. The default order for defining an unique locator is: tag, id, attribute, class.
 
