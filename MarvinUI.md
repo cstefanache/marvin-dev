@@ -81,23 +81,23 @@ You have the possibility to define methods for each page from the application un
 
 Clicking on the '+' sign, a side panel is displayed where the user can create a new method or select an existing one.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215433069-58b45421-d774-4e6a-83bb-1034a3e31507.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215433069-58b45421-d774-4e6a-83bb-1034a3e31507.png">
 
  A. **Create new method**
 
 Clicking on the 'Create a new method' button, a side panel is displayed where you can select all the needed elements.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434519-c71274cc-b8cf-4c1e-ae21-16eec177135e.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215434519-c71274cc-b8cf-4c1e-ae21-16eec177135e.png">
 
  B. **Select an existing method**
  
 Clicking on the 'Select method' dropdown a list of existing methods for the current page is displayed.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434660-76947671-1471-41c8-ab43-d09b1e0083fe.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215434660-76947671-1471-41c8-ab43-d09b1e0083fe.png">
 
 Selecting a method from the list, you will be able to define values for the method parameters (in case the selected method has 'fillAndClear' elements).
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434781-4df280eb-1108-4119-9619-1170db16f05d.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215434781-4df280eb-1108-4119-9619-1170db16f05d.png">
 
 
 > 🚩 **Note**
