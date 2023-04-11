@@ -20,7 +20,7 @@ Recent projects:
 <img width="1785" alt="image" src="https://user-images.githubusercontent.com/15820565/231083998-aa1b58cb-127d-43df-8ed4-10116cdb9d5f.png">
 
 
-### Config tab
+### Config page
 
 Fill in the rootURL of the application under test:
 
