@@ -107,11 +107,7 @@ Selecting a method from the list, you will be able to define values for the meth
 
 #### Execute a step from the graph
 
-Clicking on 'play' button for a step from the graph, the corresponding branch will be executed ul to the current step.
-
-<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215436370-875a42ff-6ef2-4951-9f9b-d31d2156afcd.png">
-
-The execution is highlighted:
+The corresponding branch will be executed up to the current step by clicking on the ‘play’ button for a step from the graph. The execution is highlighted:
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231144179-dfad6470-a581-4250-8eb5-d7fd30c9095d.png">
 
