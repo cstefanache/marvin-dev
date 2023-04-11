@@ -67,7 +67,7 @@ You have the possibility to change the default priority that is used to determin
 
 Also you have the possibility to exclude some tag / id / attribute / class, by defining a regex and/or an exact value.
 
-#### Config tab - Store section
+#### Config page - Store section
 
 You have the possibility to define run parameters (eg: username and password) for the application under test, to use them in the execution flows.
 
