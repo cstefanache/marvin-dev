@@ -1,4 +1,4 @@
-### Workspace tab
+### Workspace page
 
 Create a new workspace:
 
