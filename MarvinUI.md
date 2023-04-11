@@ -1,21 +1,21 @@
-### Workspace page
+### Projects page
 
-Create a new workspace:
+Create a new project:
 
 - to start a new project from scratch select an empty folder - where Marvin will generate all the files (discovery output - output.json file, configuration file - config.json file, execution workflow - flow.json file and screenshots folder)
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231079936-1dda1862-46ae-4a22-a446-a9ddcdb05ce2.png">
 
-Open an existing workspace:
+Open an existing project:
 
 - to open an existing project select a folder where you already have the generated files (output.json, config.json, flow.json)
 
 <img width="910" alt="image" src="https://user-images.githubusercontent.com/15820565/231080570-f76ddec6-3645-49cd-8ee7-1d3103fdc19f.png">
 
-Recent workspaces:
+Recent projects:
 
-- from the recent workspace list you can select a specific workspace by clicking on the corresponding item
-- to clear a recent workspace you need to click on the 'trash' icon for the corresponding workspace
+- from the recent projects you can select a specific project by clicking on the corresponding item
+- to clear the recent projects list click on the 'trash' icon for the corresponding project
 
 <img width="1785" alt="image" src="https://user-images.githubusercontent.com/15820565/231083998-aa1b58cb-127d-43df-8ed4-10116cdb9d5f.png">
 
