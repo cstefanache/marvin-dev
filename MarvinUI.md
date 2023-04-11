@@ -73,11 +73,11 @@ You have the possibility to define run parameters (eg: username and password) fo
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231105557-fa474fd9-7392-48ce-976b-ec9660e6666f.png">
 
-### Execution workflow tab
+### Workspace page
 
-You have the possibility to define methods for each page from the application under test, to execute them with different parameters and to run the entire flow or a partial flow. At each step from the flow, all the elements from the current page are automatically discovered and when step execution is completed, a screenshot is taken to see the current result. 
+You have the possibility to define methods for each page from the application under test. You have the possibility to execute these methods with different parameters, across a partial flow or across a whole flow. At each step of the flow, all the elements from the current page are automatically discovered. A screenshot is performed after each step is finished.
 
-#### Add a new step in the graph
+#### Add a new step in the flow
 
 Clicking on the '+' sign, a side panel is displayed where the user can create a new method or select an existing one.
 
@@ -101,7 +101,7 @@ Selecting a method from the list, you will be able to define values for the meth
 
 
 > 🚩 **Note**
-> After defining a method execution, a new step is inserted in the graph:
+> After defining a method execution, a new step is inserted in the flow:
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215434883-6e5e8ed9-ea4f-490b-b519-02e49eb85e00.png">
 
