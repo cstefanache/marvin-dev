@@ -1,13 +1,13 @@
 ### Workspace tab
 
-Browse for a folder:
-- to start a new project from scratch select an empty folder - where Marvin will generate all the files from scratch (discovery output - output.json file, configuration file - config.json file and execution workflow - flow.json file)
+Create a new workspace:
+- to start a new project from scratch select an empty folder - where Marvin will generate all the files (discovery output - output.json file, configuration file - config.json file, execution workflow - flow.json file and screenshots folder)
 
-OR
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231079936-1dda1862-46ae-4a22-a446-a9ddcdb05ce2.png">
+
+Open an existing workspace:
 
 - to open an existing project select a folder where you already have the generated files (output.json, config.json or flow.json)
-
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215472668-02778139-7870-48ac-a0d2-d4110218ad0f.png">
 
 ### Config tab
 
