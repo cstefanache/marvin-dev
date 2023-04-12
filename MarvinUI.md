@@ -113,19 +113,19 @@ The corresponding branch will be executed up to the current step by clicking on 
 
 #### View locators list
 
-After running a step from the graph, the view locators list button is available. Clicking on it a side panelis displayed, where all discovered locators are listed.
+After running a step from the flow, the view locators list button is available. Clicking on it, the locator list is displayed.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437332-4bc6e370-0293-40ad-978c-e145b2c1b25b.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231386690-5f4c5747-7196-424c-81a3-707000ce7a84.png">
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437415-d9d9bf9a-c095-4ece-b8fc-770db7a52abc.png">
+The user can search for a specific locator in the list.
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231387226-70d407ff-13da-43b2-a772-4a43eaa11f12.png">
 
 #### View screenshot
 
-After running a step from the graph, the view screenshot button is available. Clicking on it a screenshot of the actual step execution result is displayed.
+After running a step from the flow, the view screenshot button is available. Clicking on it, the screenshot is displayed.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437504-877c9535-b30c-44a6-a8c7-d383e4e396e9.png">
-
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215437548-fba90c74-02df-48b1-8859-95b1b76cefa0.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231387994-9bd6c985-1833-4afe-add8-6356496042c9.png">
 
 #### Delete a step from the graph
 
