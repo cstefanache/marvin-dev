@@ -181,6 +181,18 @@ On the Sequences page the user can define custom flows by clicking on 'Add new s
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231477681-32446c9f-b0f2-4ab8-ad44-7ef100765346.png">
 
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231479866-6cda890e-3ca6-4780-bd77-409ddadffdde.png">
+
+The defined sequences are sequentially executed by clicking on the ‘play’ button in the upper menu.
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231480576-7f38bee7-b778-4e58-bf35-ea0179aaa29f.png">
+
+
+
+
+
+
+
 
 
 
