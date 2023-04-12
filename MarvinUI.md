@@ -103,7 +103,7 @@ Selecting a method from the list, you will be able to define values for the meth
 > 🚩 **Note**
 > After defining a method execution, a new step is inserted in the flow:
 
-<img width="900" alt="image" src="https://user-images.githubusercontent.com/15820565/231143932-ce7bb418-d963-4e5a-958c-00fb0282d207.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231143932-ce7bb418-d963-4e5a-958c-00fb0282d207.png">
 
 #### Execute a step from the graph
 
