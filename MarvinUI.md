@@ -175,6 +175,14 @@ Clicking on the ‘highlight’ icon, the workspace page is displayed where the 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231455049-8ee174e0-8eae-4939-89fd-701c684375ed.png">
 
 
+### Sequences page
+
+On the Sequences page the user can define custom flows by clicking on 'Add new sequence' button and select execution methdos from the list.
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231477681-32446c9f-b0f2-4ab8-ad44-7ef100765346.png">
+
+
+
 
 
 
