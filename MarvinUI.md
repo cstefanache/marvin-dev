@@ -177,19 +177,27 @@ Clicking on the ‘highlight’ icon, the workspace page is displayed where the 
 
 ### Sequences page
 
-On the Sequences page the user can define custom flows by clicking on 'Add new sequence' button and select execution methdos from the list.
+On the Sequences page the user can define custom blocks by clicking on 'Add new sequence' button and select execution methdos from the list.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231477681-32446c9f-b0f2-4ab8-ad44-7ef100765346.png">
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231479866-6cda890e-3ca6-4780-bd77-409ddadffdde.png">
 
-The defined sequences are sequentially executed by clicking on the ‘play’ button in the upper menu.
+The defined sequences in a block are sequentially executed by clicking on the ‘play’ button in the upper menu.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231480576-7f38bee7-b778-4e58-bf35-ea0179aaa29f.png">
 
 The predefined sequences can be customized by using the ‘cut’ icon that appears between every two steps from a sequence, by mouse hovering on the arrow, then clicking on the ‘cut’ icon. 
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231484092-e7a4a1ef-9361-4ee6-910c-a8876e0773bc.png">
+
+Every sequence from the block can be removed by clicking on the corresponding 'trash' icon.
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231489244-0a08350a-e508-48a0-b942-84a3d388e9b2.png">
+
+
+
+
 
 
 
