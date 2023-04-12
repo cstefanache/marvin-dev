@@ -127,16 +127,24 @@ After running a step from the flow, the view screenshot button is available. Cli
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231387994-9bd6c985-1833-4afe-add8-6356496042c9.png">
 
-#### Delete a step from the graph
+#### Delete a step from the flow
 
-Clicking on 'Delete icon' for a step from the graph will remove that step execution from the graph.
+Clicking on 'Delete icon' for a step from the flow will remove that step execution from the tree.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215438039-e014b3c3-cb1b-459d-878a-223670cd2971.png">
-
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215438234-3c529b3e-ac4c-4ef4-ab14-9780b324a2d1.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231388348-80e29e44-a45e-45e0-9f03-9ac017701d75.png">
 
 It deletes only the method execution. The method definition is still available in the list and can be used with different parameter values.
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215438740-dc74f959-4b94-4470-b20b-511f27e8caed.png">
+#### Move a step in the tree
 
-<img width="906" alt="image" src="https://user-images.githubusercontent.com/15820565/215438673-999a26ea-68b9-4854-af28-81558579fa03.png">
+The steps which are on the same level can be moved in the tree, by clicking on the ‘Move’ icon.
+In the tree click on the step that you want to move, then click on the ‘Move’ icon in the upper menu. After this, the move icon is displayed also in the tree and it indicates to the user the allowed positions. Click on an allowed position in the tree and the step will be moved accordingly. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231393598-2b810cb9-07d8-46dd-ae76-a85cc38c867d.png">
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231393664-3d0fd5e4-9698-4220-a28c-9f02f57d1570.png">
+
+
+
+
+
