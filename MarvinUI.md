@@ -206,7 +206,7 @@ By clicking on the ‘Generate Cypress Tests’ button, a browse window is displ
 
 The output folder contains the cypress structure (specs, commands, po files)
 
-<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231493828-28c9d0dc-e1ac-4d98-9c61-66d82b29b346.png">
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231495410-3e1cc9c4-b5d5-48ae-a772-8fcfafc16292.png">
 
 
 
