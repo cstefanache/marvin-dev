@@ -156,5 +156,34 @@ By default, the whole tree is displayed in the focus area.
 
 ### Methods page
 
+The method page contains all the created methods grouped by the path. The global methods are grouped under ‘global’. Each method has a number that indicates how many places this method is used. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231453128-21be05ac-d2a5-41df-a17b-467c692064fd.png">
+
+You can filter the methods by name:
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231453424-9fb761e9-1ab6-4844-b3aa-2adfa25a2856.png">
+
+The method body is displayed by clicking on the method name in the list. Here you can update the method. (delete elementd, add new elements, update elements).
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231454387-efcf1855-a227-4d0b-80ea-878e9879a171.png">
+
+Clicking on the ‘highlight’ icon, the workspace page is displayed where the executions for that method are highlighted in the execution tree. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231454986-dfa61bcf-bcf0-4124-9e4c-e578a940f1aa.png">
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231455049-8ee174e0-8eae-4939-89fd-701c684375ed.png">
+
+
+
+
+
+
+
+
+
+
+
+
 
 
