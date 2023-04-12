@@ -187,6 +187,14 @@ The defined sequences are sequentially executed by clicking on the ‘play’ bu
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231480576-7f38bee7-b778-4e58-bf35-ea0179aaa29f.png">
 
+The predefined sequences can be customized by using the ‘cut’ icon that appears between every two steps from a sequence, by mouse hovering on the arrow, then clicking on the ‘cut’ icon. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231484092-e7a4a1ef-9361-4ee6-910c-a8876e0773bc.png">
+
+
+
+
+
 
 
 
