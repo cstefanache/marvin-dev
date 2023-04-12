@@ -144,7 +144,15 @@ In the tree click on the step that you want to move, then click on the ‘Move�
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231393664-3d0fd5e4-9698-4220-a28c-9f02f57d1570.png">
 
+#### Focus on a specific part from the tree
 
+In case the tree is getting too long, the user can focus on a specific part, by clicking on the ‘focus’ icon for the desired step from the tree. In this way, the selected step (with its children if this is the case) from the tree is displayed in the focus area at the bottom of the left side panel. 
+By default, the whole tree is displayed in the focus area. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231396426-2643c3a9-e73f-4885-ba02-f4ed9181edd4.png">
+
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231396597-44851548-78d8-4a6f-ae3b-aae42556f3b4.png">
 
 
 
