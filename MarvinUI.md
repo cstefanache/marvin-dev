@@ -154,5 +154,7 @@ By default, the whole tree is displayed in the focus area.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231396597-44851548-78d8-4a6f-ae3b-aae42556f3b4.png">
 
+### Methods page
+
 
 
