@@ -1,4 +1,4 @@
-### Projects page
+### Projects Page
 
 Create a new project:
 
@@ -19,13 +19,13 @@ Recent projects:
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231083998-aa1b58cb-127d-43df-8ed4-10116cdb9d5f.png">
 
-### Config page
+### Config Page
 
 Fill in the rootURL of the application under test:
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231102582-fa8aa530-6429-4bd8-9ba3-2f6791bf3916.png">
 
-#### Config page - URL Replacers section
+#### Config Page - URL Replacers section
 
 You have the possibility to replace the application resources with some generic aliases, in order to be able to address that page generically. For this, Marvin allows you to define replacer rules (regex or exact match) for application URLs.
 
@@ -33,7 +33,7 @@ You have the possibility to replace the application resources with some generic 
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231103566-1f5ef95f-304d-4ba1-ae3f-e819d54b70d6.png">
 
-#### Config page - Info Selectors section
+#### Config Page - Info Selectors section
 
 You can extend the default info selectors that are configured in the source code. 
 
@@ -41,7 +41,7 @@ You can extend the default info selectors that are configured in the source code
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231103826-e5241d16-318b-464f-9ce7-238dbf7e57ff.png">
 
-#### Config page - Action Selectors section
+#### Config Page - Action Selectors section
 
 You can extend the default action selectors that are configured in the source code.
 
@@ -49,31 +49,31 @@ You can extend the default action selectors that are configured in the source co
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/215425931-b2cf060a-ed41-474a-ac6f-17cbfb8b32f4.png">
 
-#### Config page - Input Selectors section
+#### Config Page - Input Selectors section
 
 You can extend the default input selectors that are configured in the source code. 
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231104377-308d4892-ebfa-4df8-9ad1-9e6bb120a0a3.png">
 
-#### Config page - Iterators section
+#### Config Page - Iterators section
 
 You have the possibility to define some rules to uniquely identify an item from a list/table. This iterator will allow you to perform actions (eg: delete, edit) on a specific item from the list, that satisfies some rules (eg: you want to delete an article from the list that has a specific tile, defined in `identifier` element of the iterator configuration)
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231104757-0fff0a77-67d2-49da-9469-ad71dfe3be45.png">
 
-#### Config page - Optimizer section
+#### Config Page - Optimizer section
 
 You have the possibility to change the default priority that is used to determine a unique locator for each element from the current page. The default order for defining a unique locator is: by tag, id, attribute, and by class.
 
 Also, you have the possibility to exclude some tag/id/attribute/class, by defining a regex and/or an exact value.
 
-#### Config page - Store section
+#### Config Page - Store section
 
 You have the possibility to define run parameters (eg: username and password) for the application under test, to use them in the execution flows.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231105557-fa474fd9-7392-48ce-976b-ec9660e6666f.png">
 
-### Workspace page
+### Workspace Page
 
 You have the possibility to define methods for each page from the application under test. You have the possibility to execute these methods with different parameters, across a partial flow or across a whole flow. At each step of the flow, all the elements from the current page are automatically discovered. A screenshot is performed after each step is finished.
 
@@ -154,7 +154,7 @@ By default, the whole tree is displayed in the focus area.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231396597-44851548-78d8-4a6f-ae3b-aae42556f3b4.png">
 
-### Methods page
+### Methods Page
 
 The method page contains all the created methods grouped by the path. The global methods are grouped under ‘global’. Each method has a number that indicates how many places this method is used. 
 
@@ -175,7 +175,7 @@ Clicking on the ‘highlight’ icon, the workspace page is displayed where the 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231455049-8ee174e0-8eae-4939-89fd-701c684375ed.png">
 
 
-### Sequences page
+### Sequences Page
 
 On the Sequences page the user can define custom blocks by clicking on 'Add new sequence' button and select execution methdos from the list.
 
@@ -194,6 +194,22 @@ The predefined sequences can be customized by using the ‘cut’ icon that appe
 Every sequence from the block can be removed by clicking on the corresponding 'trash' icon.
 
 <img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231489244-0a08350a-e508-48a0-b942-84a3d388e9b2.png">
+
+### Generate Tests Page
+
+At the moment, only Cypress Tests are supported.
+By clicking on the ‘Generate Cypress Tests’ button, a browse window is displayed to select a folder (or create a new one) where the Cypress Tests should be saved. 
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231493020-fd32d7b9-e3dd-47a2-a096-6aed8a9cc7f6.png">
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231493275-c768a0c1-db10-489d-a7d4-d5379ed77e3a.png">
+
+The output folder contains the cypress structure (specs, commands, po files)
+
+<img width="1790" alt="image" src="https://user-images.githubusercontent.com/15820565/231493828-28c9d0dc-e1ac-4d98-9c61-66d82b29b346.png">
+
+
+
 
 
 
