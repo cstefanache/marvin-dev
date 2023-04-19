@@ -43,6 +43,15 @@ Let's say the default selectors for info aliases are these:
   
  #### Configurations - Iterators
  
+ <ins>Details</ins>
+ 
+ While the lists/tables require more specific CSS selectors to uniquely identify a specific item, the Iterators configurations shall allow defining such specific rules to automatically discover a specific item from the list, based on its text content.
+ 
+ <ins>Example</ins>
+ 
+ 
+ <ins>Affects</ins> <br />
+  Execution Output (discovery) <br /> 
  
 
 
