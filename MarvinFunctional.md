@@ -38,7 +38,7 @@ Let's say the default selectors for info aliases are these:
  In this way, also `span` and `p` elements are automatically discovered in the discovery phase.
  
  <ins>Affects</ins> <br />
- - Execution Output (discovery) <br />
+  Execution Output (discovery) <br />
 
 
  
