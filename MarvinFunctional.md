@@ -11,7 +11,7 @@ URL Replacers: <br />
 Alias: `'{articleId}'` <br />
 Regex: `'(?<=articles/)[A-Za-z0-9-]+'` OR Exact Match: `'2423453254354356465'` <br />
    
-<ins>Affects</ins>
+<ins>Affects</ins> <br />
 Execution Output (discovery) <br />
 Method Creation and Execution <br />
 
@@ -37,7 +37,7 @@ Let's say the default selectors for info aliases are these:
  
  In this way, also `span` and `p` elements are automatically discovered in the discovery phase.
  
- <ins>Affects</ins>
+ <ins>Affects</ins> <br />
  - Execution Output (discovery) <br />
 
 
