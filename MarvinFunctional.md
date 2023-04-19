@@ -19,7 +19,7 @@ Method Creation and Execution <br />
 
 <ins>Details</ins>
 
-While the default info / action / input selectors are defined directly in coe in the discovery package (discovery.ts file), when accessing a page from the application under test, the Info / Action / Input Selectors configurations shall allow extending the default selectors in the autodiscovery phase.
+While the default info / action / input selectors are defined directly in code in the discovery package (discovery.ts file), when accessing a page from the application under test, the Info / Action / Input Selectors configurations shall allow extending the default selectors in the autodiscovery phase.
 
 <ins>Example</ins>
 
@@ -39,6 +39,11 @@ Let's say the default selectors for info aliases are these:
  
  <ins>Affects</ins> <br />
   Execution Output (discovery) <br />
+  
+  
+ #### Configurations - Iterators
+ 
+ 
 
 
  
