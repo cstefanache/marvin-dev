@@ -1,4 +1,4 @@
-#### Configurations - URL Replacers
+### Configurations - URL Replacers
 
 <ins>Details</ins>
 
@@ -15,7 +15,7 @@ Regex: `'(?<=articles/)[A-Za-z0-9-]+'` OR Exact Match: `'2423453254354356465'` <
 Execution Output (discovery) <br />
 Method Creation and Execution <br />
 
-#### Configurations - Info / Action / Input Selectors
+### Configurations - Info / Action / Input Selectors
 
 <ins>Details</ins>
 
@@ -41,7 +41,7 @@ Let's say the default selectors for info aliases are these:
   Execution Output (discovery) <br />
   
   
- #### Configurations - Iterators
+ ### Configurations - Iterators
  
  <ins>Details</ins>
  
