@@ -100,6 +100,7 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
+  const [keyEvent, setKeyEvent] = useState('');
 
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
@@ -172,11 +173,12 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      const { name, uid, sequence, isGlobal } = selectedMethod;
+      const { name, uid, sequence, isGlobal, keyEvent } = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
       setIsGlobal(isGlobal);
+      setKeyEvent(keyEvent);
     }
   }, []);
 
@@ -187,6 +189,7 @@ const CreateMethod = (props: any) => {
       path: exitUrl,
       isGlobal,
       sequence,
+      keyEvent: keyEvent,
     };
     // if (iterator) {
     //   saveObject['iterator'] = iterator;
@@ -354,6 +357,7 @@ const CreateMethod = (props: any) => {
                 ]}
               />
               {/* <p className="locator">{step.locator}</p> */}
+<<<<<<< HEAD
               {step.type === 'keyEvent' && (
                 <Select2
                   fill={true}
@@ -372,6 +376,17 @@ const CreateMethod = (props: any) => {
                     rightIcon="double-caret-vertical"
                   />
                 </Select2>
+=======
+              {(step.type === 'clearAndFill' || step.type === 'fill') && (
+                <InputGroup
+                  placeholder="Key event"
+                  value={step.keyEvent}
+                  onChange={(e) => {
+                    step.keyEvent = e.target.value
+                    setSequence([...sequence]);
+                  }}
+                />
+>>>>>>> 6977e0b (WIP: add keyEvent field)
               )}
               <InputGroup
                 value={step.locator}
