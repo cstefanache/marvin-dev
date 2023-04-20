@@ -63,6 +63,14 @@ Let's say the default selectors for info aliases are these:
   Execution Output (discovery) <br />
   Method Creation and Execution <br />
   
+  ### Workspace - Root Folder
+  
+  <ins>Details</ins>
+  While the base URL of the application under test is defined in the configuration section and is loaded directly from the code using Puppeteer, when creating a Marvin workspace from the scratch or changing the base URL in the configuration page, the root folder shall allow loading the base URL from the Marvin UI by pressing the run button next to the root folder. 
+  
+  
+  
+  
   
   
   
