@@ -76,18 +76,19 @@ Let's say the default selectors for info aliases are these:
   While the discovery is finished, when the user wants to navigate to another page in the application under test, the create method functionality shall allow adding new methods (steps) in the execution tree, by clicking on 'Add button' ('+' sign) and then by clicking on 'Create a new method' button. 
   
   > 🚩 **Note**
-  > For the sequence, the user can select multiple locators.
-  > The supported actions for a locator are: check, click, clearAndFill, fill, noAction.
-  > 'fill' and 'clearandFill' should be used for input elements
-  > 'check' can be used for any elements and performs a comparison between the text content of the current element and the value provided at method execution
-  > For 'check' action, the available operators are: eq (equal), neq (not equal), gt (greater than), lt (less than), gte (greater than or equal), lte (less then or equal), contains, doesNotContain
-  > For 'check' action, the default comparison is 'by string' but there is also the posibility to define a number comparison by checking 'Is Number'
-  > For 'check' action, text content of the current element can be processed before the comparison is performed, by defining a string processing using javascript code inside the 'Post Process value' field
-  > For any action, by checking 'Store content or attribute value' the user can define a 'Variable Name' - where to store the text content of the current element, or can store an attribute value by defining an element attribute 
-  > 
+  > For the sequence, the user can select multiple locators. <br />
+  > The supported actions for a locator are: check, click, clearAndFill, fill, noAction. <br />
+  > 'fill' and 'clearandFill' should be used for input elements <br />
+  > 'check' can be used for any elements and performs a comparison between the text content of the current element and the value provided at method execution <br />
+  > For 'check' action, the available operators are: eq (equal), neq (not equal), gt (greater than), lt (less than), gte (greater than or equal), lte (less then or equal), contains, doesNotContain <br />
+  > For 'check' action, the default comparison is 'by string' but there is also the posibility to define a number comparison by checking 'Is Number' <br />
+  > For 'check' action, text content of the current element can be processed before the comparison is performed, by defining a string processing using javascript code inside the 'Post Process value' field <br />
+  > For any action, by checking 'Store content or attribute value' the user can define a 'Variable Name' - where to store the text content of the current element, or can store an attribute value of the current element by specifying the attribute name in 'Store value from attribute' field <br />
+  > By default, any method is local - meaning that the method is accessible only on the specified URL (the one used at method creation time) <br />
+  > By checking 'Global Method' the method becomes global - meaning that the method is accessible from any page of the application under test <br />
+
+
   ### Workspace - Create a method execution
-  
-  
   
   
   ### Workspace - Execute a step
