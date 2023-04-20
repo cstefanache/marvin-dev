@@ -48,24 +48,21 @@ Let's say the default selectors for info aliases are these:
  While the lists/tables require defining more specific CSS selectors to uniquely identify an item, when accessing a page from the application under test that contains a list of items, the Iterators configurations shall allow defining such specific rules to automatically discover a specific item from the list, based on its text content.
  
  <ins>Example</ins>
-  "iterators": [
-      {
-        "elements": [
-          {
-            "name": "Button",
-            "selector": ".btn-block"
-          }
-        ],
-        "name": "Card List Iterator",
-        "selectors": [
-          "div[itemtype='http://schema.org/LocalBusiness']"
-        ],
-        "identifier": "h2"
-      }
-    ],
+ Let's say we have a web page that contains a list of items and each item has a title and a button. We want to click on the button for an item that has a specific title. <br />
+ In this case, we should define an iterator like below: 
+ 
+ Alias name: '<iterator_name>' -> iterator_name - a name of the iterator <br />
+ CSS Selector: '<root_item_CSS_selector>' -> roor_item_CSS_selector is a valid selector that uniquely identify an item from the list <br />
+ (eg: `div[itemtype='http://schema.org/LocalBusiness']`) <br />
+ Identifier: '<iterator_identifier_CSS_selector>' - iterator_identifier_CSS_selector is a valid selector that identifies the item's title. It is calculated relative to the root_item_CSS_selector (eg: `h2`) <br />
+ Elements: <br /> - here you can define multiple elements <br />
+    Name: '<element_name>' -> element_name - a name for the element (eg: 'Button') <br />
+    Selector: '<element_selector>' -> element_selector is a valid selector that identifies the item's button. It is calculated relative to the root_item_CSS_selector (eg: `.btn-block`) <br />
  
  <ins>Affects</ins> <br />
-  Execution Output (discovery) <br /> 
+  Execution Output (discovery) <br />
+  
+  
  
 
 
