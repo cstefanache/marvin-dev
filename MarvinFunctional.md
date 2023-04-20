@@ -61,6 +61,7 @@ Let's say the default selectors for info aliases are these:
  
  <ins>Affects</ins> <br />
   Execution Output (discovery) <br />
+  Method Creation and Execution <br />
   
   
  
