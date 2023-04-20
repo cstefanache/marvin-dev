@@ -36,7 +36,7 @@ export function WorkspaceRoot() {
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
     setWorkspace(workspace);
-    
+
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);
@@ -226,11 +226,13 @@ export function WorkspaceRoot() {
         title={<Icon icon="panel-stats" size={24} title="Workspace" />}
         panel={mainLayout}
       />
-      {workspace? <Tab
-        id="config"
-        title={<Icon icon="cog" size={24} title="Config" />}
-        panel={<Config />}
-      />: null}
+      {workspace && (
+        <Tab
+          id="config"
+          title={<Icon icon="cog" size={24} title="Config" />}
+          panel={<Config />}
+        />
+      )}
 
       <Tab
         id="methods"
