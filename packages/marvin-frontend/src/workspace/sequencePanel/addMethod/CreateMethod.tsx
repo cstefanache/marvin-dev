@@ -100,6 +100,7 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
+  const [keyEvent, setKeyEvent] = useState('');
 
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
@@ -115,7 +116,7 @@ const CreateMethod = (props: any) => {
         const {
           items: { info, input, actions, iterable },
         } = discovered;
-        let items = [
+        const items = [
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
@@ -147,7 +148,7 @@ const CreateMethod = (props: any) => {
             // }
             return memo;
           }, []),
-        ]
+        ];
         // .filter(
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
@@ -160,11 +161,12 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      const { name, uid, sequence, isGlobal } = selectedMethod;
+      const { name, uid, sequence, isGlobal, keyEvent } = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
       setIsGlobal(isGlobal);
+      setKeyEvent(keyEvent);
     }
   }, []);
 
@@ -175,6 +177,7 @@ const CreateMethod = (props: any) => {
       path: exitUrl,
       isGlobal,
       sequence,
+      keyEvent: keyEvent,
     };
     // if (iterator) {
     //   saveObject['iterator'] = iterator;
@@ -313,6 +316,16 @@ const CreateMethod = (props: any) => {
                 options={['check', 'click', 'clearAndFill', 'fill', 'noAction']}
               />
               {/* <p className="locator">{step.locator}</p> */}
+              {(step.type === 'clearAndFill' || step.type === 'fill') && (
+                <InputGroup
+                  placeholder="Key event"
+                  value={step.keyEvent}
+                  onChange={(e) => {
+                    step.keyEvent = e.target.value
+                    setSequence([...sequence]);
+                  }}
+                />
+              )}
               <InputGroup
                 value={step.locator}
                 onChange={(e) => {
@@ -394,7 +407,7 @@ const CreateMethod = (props: any) => {
                       setSequence([...sequence]);
                     }}
                   />
-                   <InputGroup
+                  <InputGroup
                     value={step.storeAttribute}
                     placeholder="Store value from attribute"
                     leftIcon="array-string"
