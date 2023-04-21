@@ -88,8 +88,8 @@ Let's say the default selectors for info aliases are these:
   - By checking 'Global Method' the method becomes global - meaning that the method is accessible from any page of the application under test <br />
   - After selecting an element from the list, the user can customize the locator because the field is editable <br />
 
-
   ### Workspace - Create a method execution
+
   
   
   ### Workspace - Execute a step
