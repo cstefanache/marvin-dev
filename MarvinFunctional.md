@@ -86,6 +86,7 @@ Let's say the default selectors for info aliases are these:
   - For any action, by checking 'Store content or attribute value' the user can define a 'Variable Name' - where to store the text content of the current element, or can store an attribute value of the current element by specifying the attribute name in 'Store value from attribute' field <br />
   - By default, any method is local - meaning that the method is accessible only on the specified URL (the one used at method creation time) <br />
   - By checking 'Global Method' the method becomes global - meaning that the method is accessible from any page of the application under test <br />
+  - After selecting an element from the list, the user can customize the locator because the field is editable <br />
 
 
   ### Workspace - Create a method execution
