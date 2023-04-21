@@ -1,7 +1,7 @@
 import './AddMethodStyles.scss';
 import { useEffect, useState } from 'react';
 import * as uuid from 'uuid';
-
+import { KeyInput } from 'puppeteer';
 import {
   Button,
   Checkbox,
@@ -20,12 +20,19 @@ export interface Discovered {
   details?: string;
   from: string;
   iteratorName?: string;
+  keyEvent?:KeyInput;
 }
 
 export interface DiscoveredItem extends Discovered {
   elements: Discovered[];
 }
-
+type NewSequence = {
+  uid:string;
+  locator:string;
+  details:string;
+  type:string;
+  keyEvent:KeyInput;
+}
 const filterItems: ItemPredicate<DiscoveredItem> = (
   query,
   item,
@@ -100,7 +107,6 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
-  const [keyEvent, setKeyEvent] = useState('');
 
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
@@ -161,12 +167,11 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      const { name, uid, sequence, isGlobal, keyEvent } = selectedMethod;
+      const { name, uid, sequence, isGlobal} = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
       setIsGlobal(isGlobal);
-      setKeyEvent(keyEvent);
     }
   }, []);
 
@@ -177,7 +182,6 @@ const CreateMethod = (props: any) => {
       path: exitUrl,
       isGlobal,
       sequence,
-      keyEvent: keyEvent,
     };
     // if (iterator) {
     //   saveObject['iterator'] = iterator;
@@ -209,11 +213,12 @@ const CreateMethod = (props: any) => {
         type = 'unkown';
     }
 
-    const newSequence = {
+    const newSequence:NewSequence = {
       uid: uuid.v4(),
       locator: item.locator,
       details: `${item.text || ''} ${item.details || ''}`,
       type,
+      keyEvent: item.keyEvent,
     };
 
     if (iterator) {
@@ -321,7 +326,7 @@ const CreateMethod = (props: any) => {
                   placeholder="Key event"
                   value={step.keyEvent}
                   onChange={(e) => {
-                    step.keyEvent = e.target.value
+                    step.keyEvent = e.target.value;
                     setSequence([...sequence]);
                   }}
                 />
