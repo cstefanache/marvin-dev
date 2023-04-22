@@ -20,19 +20,269 @@ export interface Discovered {
   details?: string;
   from: string;
   iteratorName?: string;
-  keyEvent?:KeyInput;
 }
 
+const keyInputType = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  'Power',
+  'Eject',
+  'Abort',
+  'Help',
+  'Backspace',
+  'Tab',
+  'Numpad5',
+  'NumpadEnter',
+  'Enter',
+  '\r',
+  '\n',
+  'ShiftLeft',
+  'ShiftRight',
+  'ControlLeft',
+  'ControlRight',
+  'AltLeft',
+  'AltRight',
+  'Pause',
+  'CapsLock',
+  'Escape',
+  'Convert',
+  'NonConvert',
+  'Space',
+  'Numpad9',
+  'PageUp',
+  'Numpad3',
+  'PageDown',
+  'End',
+  'Numpad1',
+  'Home',
+  'Numpad7',
+  'ArrowLeft',
+  'Numpad4',
+  'Numpad8',
+  'ArrowUp',
+  'ArrowRight',
+  'Numpad6',
+  'Numpad2',
+  'ArrowDown',
+  'Select',
+  'Open',
+  'PrintScreen',
+  'Insert',
+  'Numpad0',
+  'Delete',
+  'NumpadDecimal',
+  'Digit0',
+  'Digit1',
+  'Digit2',
+  'Digit3',
+  'Digit4',
+  'Digit5',
+  'Digit6',
+  'Digit7',
+  'Digit8',
+  'Digit9',
+  'KeyA',
+  'KeyB',
+  'KeyC',
+  'KeyD',
+  'KeyE',
+  'KeyF',
+  'KeyG',
+  'KeyH',
+  'KeyI',
+  'KeyJ',
+  'KeyK',
+  'KeyL',
+  'KeyM',
+  'KeyN',
+  'KeyO',
+  'KeyP',
+  'KeyQ',
+  'KeyR',
+  'KeyS',
+  'KeyT',
+  'KeyU',
+  'KeyV',
+  'KeyW',
+  'KeyX',
+  'KeyY',
+  'KeyZ',
+  'MetaLeft',
+  'MetaRight',
+  'ContextMenu',
+  'NumpadMultiply',
+  'NumpadAdd',
+  'NumpadSubtract',
+  'NumpadDivide',
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'F5',
+  'F6',
+  'F7',
+  'F8',
+  'F9',
+  'F10',
+  'F11',
+  'F12',
+  'F13',
+  'F14',
+  'F15',
+  'F16',
+  'F17',
+  'F18',
+  'F19',
+  'F20',
+  'F21',
+  'F22',
+  'F23',
+  'F24',
+  'NumLock',
+  'ScrollLock',
+  'AudioVolumeMute',
+  'AudioVolumeDown',
+  'AudioVolumeUp',
+  'MediaTrackNext',
+  'MediaTrackPrevious',
+  'MediaStop',
+  'MediaPlayPause',
+  'Semicolon',
+  'Equal',
+  'NumpadEqual',
+  'Comma',
+  'Minus',
+  'Period',
+  'Slash',
+  'Backquote',
+  'BracketLeft',
+  'Backslash',
+  'BracketRight',
+  'Quote',
+  'AltGraph',
+  'Props',
+  'Cancel',
+  'Clear',
+  'Shift',
+  'Control',
+  'Alt',
+  'Accept',
+  'ModeChange',
+  ' ',
+  'Print',
+  'Execute',
+  '\u0000',
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  'Meta',
+  '*',
+  '+',
+  '-',
+  '/',
+  ';',
+  '=',
+  ',',
+  '.',
+  '`',
+  '[',
+  '\\',
+  ']',
+  "'",
+  'Attn',
+  'CrSel',
+  'ExSel',
+  'EraseEof',
+  'Play',
+  'ZoomOut',
+  ')',
+  '!',
+  '@',
+  '#',
+  '$',
+  '%',
+  '^',
+  '&',
+  '(',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+  ':',
+  '<',
+  '_',
+  '>',
+  '?',
+  '~',
+  '{',
+  ',',
+  '}',
+  '"',
+  'SoftLeft',
+  'SoftRight',
+  'Camera',
+  'Call',
+  'EndCall',
+  'VolumeDown',
+  'VolumeUp',
+];
 export interface DiscoveredItem extends Discovered {
   elements: Discovered[];
 }
-type NewSequence = {
-  uid:string;
-  locator:string;
-  details:string;
-  type:string;
-  keyEvent:KeyInput;
-}
+
 const filterItems: ItemPredicate<DiscoveredItem> = (
   query,
   item,
@@ -114,6 +364,8 @@ const CreateMethod = (props: any) => {
   const [methodName, setMethodName] = useState<string>('');
   const [isGlobal, setIsGlobal] = useState<boolean>(false);
   const [uid, setUid] = useState<string>(uuid.v4());
+  const [keyEvent, setKeyEvent] = useState<KeyInput>();
+  const [keyEventError, setKeyEventError] = useState(false);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -167,13 +419,21 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      const { name, uid, sequence, isGlobal} = selectedMethod;
+      const { name, uid, sequence, isGlobal } = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
       setIsGlobal(isGlobal);
     }
   }, []);
+
+  useEffect(() => {
+    if (keyEvent && !keyInputType.includes(keyEvent)) {
+      setKeyEventError(true);
+    } else if (keyInputType.includes(keyEvent)) {
+      setKeyEventError(false);
+    }
+  }, [keyEvent]);
 
   async function doSave() {
     const saveObject: any = {
@@ -187,7 +447,9 @@ const CreateMethod = (props: any) => {
     //   saveObject['iterator'] = iterator;
     // }
     await window.electron.saveMethodForUrl(saveObject);
-    props.closePanel();
+    if (!keyEventError) {
+      props.closePanel();
+    }
   }
 
   const selectItem = (item: any) => {
@@ -213,12 +475,12 @@ const CreateMethod = (props: any) => {
         type = 'unkown';
     }
 
-    const newSequence:NewSequence = {
+    const newSequence = {
       uid: uuid.v4(),
       locator: item.locator,
       details: `${item.text || ''} ${item.details || ''}`,
       type,
-      keyEvent: item.keyEvent,
+      keyEvent: item.keyEvent as KeyInput,
     };
 
     if (iterator) {
@@ -322,14 +584,22 @@ const CreateMethod = (props: any) => {
               />
               {/* <p className="locator">{step.locator}</p> */}
               {(step.type === 'clearAndFill' || step.type === 'fill') && (
-                <InputGroup
-                  placeholder="Key event"
-                  value={step.keyEvent}
-                  onChange={(e) => {
-                    step.keyEvent = e.target.value;
-                    setSequence([...sequence]);
-                  }}
-                />
+                <>
+                  <InputGroup
+                    placeholder="Key event"
+                    value={step.keyEvent}
+                    onChange={(e) => {
+                      step.keyEvent = e.target.value;
+                      setKeyEvent(step.keyEvent);
+                      setSequence([...sequence]);
+                    }}
+                  />
+                  {keyEventError && (
+                    <div className="error">
+                      Please enter a valid key event type
+                    </div>
+                  )}
+                </>
               )}
               <InputGroup
                 value={step.locator}

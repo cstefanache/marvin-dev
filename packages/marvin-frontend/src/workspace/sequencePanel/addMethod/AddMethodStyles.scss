@@ -1,95 +1,99 @@
 .bp4-panel-stack2 {
-    height: 100%;
+  height: 100%;
 
-    .ra-schema-form {
-        flex-direction: column;
-    }
+  .ra-schema-form {
+    flex-direction: column;
+  }
 
-    .bp4-panel-stack-header {
-        background-color: transparent;
-        margin-bottom: 20px;
-    }
+  .bp4-panel-stack-header {
+    background-color: transparent;
+    margin-bottom: 20px;
+  }
 
-    .bp4-panel-stack-view {
-        padding: 10px;
-    }
+  .bp4-panel-stack-view {
+    padding: 10px;
+  }
 }
 
 .method-select {
-    width: 100%;
+  width: 100%;
 }
 
 .select-method-panel {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .bp4-divider {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .create-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 10px;
 }
 
 .sequence-container {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .sequence-item {
-    position: relative;
-    margin-bottom: 10px;
-    padding: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding-left: 40px;
+  position: relative;
+  margin-bottom: 10px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 40px;
 
-    .number {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 30px;
-        background-color: #d1d1d1;
-        color: black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-wrap: nowrap;
-        align-content: center;
-        justify-content: center;
-        gap: 10px;
-    }
+  .number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    background-color: #d1d1d1;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    gap: 10px;
+  }
 
-    .locator {
-        color: rgba(220, 220, 220, 1);
-        padding: 2px;
-        margin-top: 5px;
-        font-size: 0.8rem;
-        font-family: monospace;
-        background-color: #000;
-    }
+  .locator {
+    color: rgba(220, 220, 220, 1);
+    padding: 2px;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    background-color: #000;
+  }
 
-    .discovered-text {
-        color: rgba(220, 220, 220, 1);
-        padding: 2px;
-        font-size: 0.8rem;
-    }
+  .discovered-text {
+    color: rgba(220, 220, 220, 1);
+    padding: 2px;
+    font-size: 0.8rem;
+  }
 }
 
 .bp4-intent-success {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .create-container {
-    .bp4-input-group {
-        margin: 5px 0;
-    }
+  .bp4-input-group {
+    margin: 5px 0;
+  }
+}
+
+.error {
+  color: red;
 }
