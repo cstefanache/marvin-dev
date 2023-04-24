@@ -103,6 +103,16 @@ Let's say the default selectors for info aliases are these:
 <ins>Affects</ins><br />
 Method Execution<br />
 
+  ### Workspace - Method with 'check' type
+  
+  ### Workspace - Method with 'clearAndFill' / 'fill' types
+  
+  ### Workspace - Method with 'click' type
+  
+  ### Workspace - Method with 'noAction' type
+  
+  
+
   ### Workspace - Execute a step
   
   
