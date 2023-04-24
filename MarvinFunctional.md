@@ -89,8 +89,6 @@ Let's say the default selectors for info aliases are these:
   - After selecting an element from the list, the user can customize the locator because the field is editable <br />
 
   ### Workspace - Create a method execution
-
-  #### 'clearAndFill' and 'fill' types
   
   <ins>Details</ins><br />
   
@@ -104,8 +102,10 @@ Let's say the default selectors for info aliases are these:
 
 <ins>Affects</ins><br />
 Method Execution<br />
-  
+
   ### Workspace - Execute a step
+  
+  
   
   
   
