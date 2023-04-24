@@ -103,7 +103,7 @@ Let's say the default selectors for info aliases are these:
  - fill in username and password values for the input fields
 
 <ins>Affects</ins><br />
-Execution Output (discovery) <br />
+Method Execution<br />
   
   ### Workspace - Execute a step
   
