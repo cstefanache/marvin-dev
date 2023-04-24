@@ -102,18 +102,32 @@ Let's say the default selectors for info aliases are these:
 
 <ins>Affects</ins><br />
 Method Execution<br />
-
-  ### Workspace - Method with 'check' type
-  
-  ### Workspace - Method with 'clearAndFill' / 'fill' types
-  
-  ### Workspace - Method with 'click' type
-  
-  ### Workspace - Method with 'noAction' type
   
   
-
   ### Workspace - Execute a step
+  
+  
+  ### Workspace - How to use store in a method
+  
+  
+  ### Workspace - Define a method with sequence
+  
+  
+  ### Workspace - Define a method with condition
+  
+  
+  ### Methods 
+  
+  
+  ### Sequences
+  
+  
+  ### Generate Cypress Tests
+  
+  
+  
+  
+  
   
   
   
