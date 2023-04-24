@@ -106,6 +106,7 @@ Method Execution<br />
   
   ### Workspace - Execute a step
   
+  While the step (method) is already added in the tree, when the user wants to execute a specific flow from the tree, the play functionality shall allow executing a flow (from the root up to the current step) by clicking on a step from the tree and clicking on the 'play' button.
   
   ### Workspace - How to use store in a method
   
