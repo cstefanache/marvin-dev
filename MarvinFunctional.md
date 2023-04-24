@@ -47,7 +47,7 @@ Let's say the default selectors for info aliases are these:
  
  While the lists/tables require defining more specific CSS selectors to uniquely identify an item, when accessing a page from the application under test that contains a list of items, the Iterators configurations shall allow defining such specific rules to automatically discover a specific item from the list, based on its text content.
  
- <ins>Example</ins>
+ <ins>Example</ins><br />
  Let's say we have a web page that contains a list of items and each item has a title and a button. We want to click on the button for an item that has a specific title. <br />
  In this case, we should define an iterator like below: 
  
@@ -59,7 +59,7 @@ Let's say the default selectors for info aliases are these:
     Name: '<element_name>' -> element_name - a name for the element (eg: 'Button') <br />
     Selector: '<element_selector>' -> element_selector is a valid selector that identifies the item's button. It is calculated relative to the root_item_CSS_selector (eg: `.btn-block`) <br />
  
- <ins>Affects</ins> <br />
+ <ins>Affects</ins><br />
   Execution Output (discovery) <br />
   Method Creation and Execution <br />
   
@@ -73,7 +73,7 @@ Let's say the default selectors for info aliases are these:
   
   <ins>Details</ins> <br />
   
-  While the discovery is finished, when the user wants to navigate to another page in the application under test, the create method functionality shall allow adding new methods (steps) in the execution tree, by clicking on 'Add button' ('+' sign) and then by clicking on 'Create a new method' button. 
+  While the discovery is finished, when the user wants to navigate to another page in the application under test, the create method functionality shall allow adding new methods, by clicking on 'Add button' ('+' sign) and then by clicking on 'Create a new method' button. 
   
   > 🚩 **Note**
   - For the sequence, the user can select multiple locators. <br />
@@ -90,7 +90,20 @@ Let's say the default selectors for info aliases are these:
 
   ### Workspace - Create a method execution
 
+  #### 'clearAndFill' and 'fill' types
   
+  <ins>Details</ins><br />
+  
+ While the method is already created, when the user wants to define a method execution, the create method execution functionality shall allow adding new execution (step) in the tree by clicking on the 'Add button' ('+' sign) and then selecting an existing method from the dropdown, defining values for input parameters and saving the execution by clicking on 'Submit' button.
+ 
+ <ins>Example</ins><br />
+ Let's say the login page of the application under test is loaded in the browser. To log in the application using Marvin, these steps are necessary:
+ - create a new method using (eg: Login) that has: 'username' input - clearAndFill type, 'password' input - clearAndFill type and 'Sign In' button - click type
+ - select the 'Login' method from the dropdown 
+ - fill in username and password values for the input fields
+
+<ins>Affects</ins><br />
+Execution Output (discovery) <br />
   
   ### Workspace - Execute a step
   
