@@ -103,18 +103,20 @@ Let's say the default selectors for info aliases are these:
 <ins>Affects</ins><br />
 Method Execution<br />
   
-  
   ### Workspace - Execute a step
   
   While the step (method) is already added in the tree, when the user wants to execute a specific flow from the tree, the play functionality shall allow executing a flow (from the root up to the current step) by clicking on a step from the tree and clicking on the 'play' button.
   
-  ### Workspace - How to use store in a method
+  ### Workspace - How to use memory store and random values in flow
+  
+  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123. Than search for that specific transaction (test-123) to check the transaction details.
   
   
-  ### Workspace - Define a method with sequence
+  
+  ### Workspace - How to define loops
   
   
-  ### Workspace - Define a method with condition
+  ### Workspace - How to define conditions
   
   
   ### Methods 
