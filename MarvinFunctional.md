@@ -109,7 +109,7 @@ Method Execution<br />
   
   ### Workspace - How to use memory store random values in flow
   
-  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123. Then search for that specific transaction (test-123) to check the transaction details. In this situation we need to create this flow in Marvin:
+  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123`. Then search for that specific transaction (test-123) to check the transaction details. In this situation we need to create this flow in Marvin:
   - a login method
   - a method that navigates to the new transaction page
   - a method that clicks on the 'Create' button
