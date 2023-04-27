@@ -107,10 +107,15 @@ Method Execution<br />
   
   While the step (method) is already added in the tree, when the user wants to execute a specific flow from the tree, the play functionality shall allow executing a flow (from the root up to the current step) by clicking on a step from the tree and clicking on the 'play' button.
   
-  ### Workspace - How to use memory store and random values in flow
+  ### Workspace - How to use memory store random values in flow
   
-  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123. Then search for that specific transaction (test-123) to check the transaction details. 
-  
+  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123. Then search for that specific transaction (test-123) to check the transaction details. In this situation we need to create this flow in Marvin:
+  - a login method
+  - a method that navigates to the new transaction page
+  - a method that clicks on the 'Create' button
+  - a method that fills in all the details for a bancking transaction (amount, payment details). 'Amount' and 'payment datials' are 'clearAndFill' elements. For payment details element you have to check 'stote' option and provide a name for tha global variable where you want to store the payment details value - eg: `paymentDetails` the name of the variable and the value `Test-${library.func.random()}` meaning that it will generate a random value at runtime, somtehing like this: `paymentDetails = Test-5667767878788`
+  - a method that navigates to the transaction list
+  - a method that clicks on the created transction - it should click on a specific transaction that matches the value stored in `paymentDetails` variable. eg: `${store.paymentDetails}`
   
   ### Workspace - How to define loops
   
