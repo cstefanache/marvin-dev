@@ -109,7 +109,7 @@ Method Execution<br />
   
   ### Workspace - How to use memory store random values in flow
   
-  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123`. Then search for that specific transaction (test-123) to check the transaction details. In this situation we need to create this flow in Marvin:
+  Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123`. Then search for that specific transaction (test-123) to check the transaction details. Below is an example for a Marvin flow for this situation:
   - a login method
   - a method that navigates to the new transaction page
   - a method that clicks on the 'Create' button
@@ -117,10 +117,10 @@ Method Execution<br />
   - a method that navigates to the transaction list
   - a method that clicks on the created transction - it should click on a specific transaction that matches the value stored in `paymentDetails` variable. eg: `${store.paymentDetails}`
   
-  ### Workspace - How to define loops
+  ### Workspace - How to define loops and conditions
   
-  
-  ### Workspace - How to define conditions
+  Let's say we have an online shop application. We want to iterate through all the products and add to favorites only the ones from a specific brand (eg: Nike). Below is an example for a Marvin flow for this situation:
+  - a method that iterates through all the products 
   
   
   ### Methods 
