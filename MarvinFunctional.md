@@ -120,7 +120,17 @@ Method Execution<br />
   ### Workspace - How to define loops and conditions
   
   Let's say we have an online shop application. We want to iterate through all the products and add to favorites only the ones from a specific brand (eg: Nike). Below is an example for a Marvin flow for this situation:
-  - a method that iterates through all the products. When you select the element that corresponds to the 'brand name' you have to select 'noAction' type. After that, in ‘For Each Matched Element’ dropdown you have to select the parent element (the one that identifies a product item from the list). 
+  - a method that iterates through all the products:
+            - select the 'brand name' element and select for it 'noAction' type
+            - check 'store' and fill in a variable name where to keep the brand name value - eg: `brandName`
+            - in ‘For Each Matched Element’ dropdown select the parent element (the one that identifies a product item from the list)
+           
+  - a method that clicks on 'Add to Favorites' button based on a condition on `brandName`
+            - select the 'Add to Favorites' element with type 'click'
+            - in 'Condition' field fill in `'${store.brandName}'==='NIKE'`
+
+   > 🚩 **Note**
+   When the user executes a method that contains a loop means that it executes all children in the same loop. 
   
   ### Methods 
   
