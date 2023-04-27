@@ -130,7 +130,8 @@ Method Execution<br />
             - in 'Condition' field fill in `'${store.brandName}'==='NIKE'`
 
    > 🚩 **Note**
-   When the user executes a method that contains a loop means that it executes all children in the same loop. 
+    When the user executes a method that contains a loop it executes all the children within that loop. 
+    
   
   ### Methods 
   
