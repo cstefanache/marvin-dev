@@ -120,8 +120,7 @@ Method Execution<br />
   ### Workspace - How to define loops and conditions
   
   Let's say we have an online shop application. We want to iterate through all the products and add to favorites only the ones from a specific brand (eg: Nike). Below is an example for a Marvin flow for this situation:
-  - a method that iterates through all the products 
-  
+  - a method that iterates through all the products. When you select the element that corresponds to the 'brand name' you have to select 'noAction' type. After that, in ‘For Each Matched Element’ dropdown you have to select the parent element (the one that identifies a product item from the list). 
   
   ### Methods 
   
