@@ -135,6 +135,15 @@ Method Execution<br />
   
   ### Methods 
   
+  All the methods are listed under the 'Methods' page. 
+  Are grouped by:
+      - URL - in case the method is local
+      - global - in case the method is global
+      
+  In case the method is used in the workspace tree, the 'highlight' icon is displayed with a number of executions next to the method name, otherwise the 'trash' icon is displayed without any number.
+  Clicking on the method name, the method body is displayed on the right side and the user can update the method. 
+  Clicking on the highghlight icon, the user is redirected to the workspace tree and that specific method is highlighted with green in the tree.
+  Clicking on the 'trash' icon the method is deleted. 
   
   ### Sequences
   
