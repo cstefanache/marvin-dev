@@ -136,9 +136,9 @@ Method Execution<br />
   ### Methods 
   
   All the methods are listed under the 'Methods' page. 
-  Are grouped by:
-      - URL - in case the method is local
-      - global - in case the method is global
+  Are grouped by:<br />
+      - URL - in case the method is local<br />
+      - global - in case the method is global<br />
       
   In case the method is used in the workspace tree, the 'highlight' icon is displayed with a number of executions next to the method name, otherwise the 'trash' icon is displayed without any number.
   Clicking on the method name, the method body is displayed on the right side and the user can update the method. 
