@@ -147,8 +147,13 @@ Method Execution<br />
   
   ### Sequences
   
+  Under Sequences the user can define complex flows by clicking on 'Add new sequence' button. The sequences are cronologically executed by clicking on 'Play' button.<br />
+  To define a new sequence, click on 'Add new sequence' button and select a flow from the popup window. After the sequence was added the user can adjust it by clicking on 'cut' icon. To delete a sequence, click on 'trash' icon.
   
   ### Generate Cypress Tests
+  
+  The user can generate Cypress tests by clicking on the 'Generate Cypress tests' button and specify a folder where the tests would be generated. 
+  The tests are generated from the workspace tree. A Cypress project is generated from scratch and the test can be executed immediately.
   
   
   
