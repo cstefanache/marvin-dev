@@ -153,7 +153,7 @@ Method Execution<br />
   ### Generate Cypress Tests
   
   The user can generate Cypress tests by clicking on the 'Generate Cypress tests' button and specify a folder where the tests would be generated. 
-  The tests are generated from the workspace tree. A Cypress project is generated from scratch and the test can be executed immediately.
+  The tests are generated from the workspace tree. A Cypress project is generated from scratch and the tests can be immediately executed.
   
   
   
