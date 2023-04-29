@@ -109,7 +109,7 @@ Method Execution<br />
   
   While the step (method) is already added in the tree, when the user wants to execute a specific flow from the tree, the play functionality shall allow executing a flow (from the root up to the current step) by clicking on a step from the tree and clicking on the 'play' button.
   
-  ### Workspace - How to use memory store random values in flow
+  ### Workspace - How to use memory store and random values in flow
   
   Let's say we have a banking application. We want to create a new transaction with some details - eg: 'test-123`. Then search for that specific transaction (test-123) to check the transaction details. Below is an example for a Marvin flow for this situation:
   - a login method
