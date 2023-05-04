@@ -17,7 +17,7 @@ export function sanitizeKey(key: string): string {
 export function getCheckTextCommand(
   key: string,
   op: string,
-  isNumber: boolean
+  process: string
 ) {
   switch (op) {
     case 'eq':
@@ -28,7 +28,7 @@ export function getCheckTextCommand(
           cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
             key
           )}`}).invoke('text').then((text) => {
-              expect(text.trim()).to.eq(${sanitizeKey(key)});
+              expect(text.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
             });
         } else {
           cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -46,7 +46,7 @@ export function getCheckTextCommand(
       cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-          expect(text.trim()).not.to.eq(${sanitizeKey(key)});
+          expect(text.trim().replace(/\\n/g, ' ')${process}).not.to.eq(${sanitizeKey(key)});
         });
     } else {
       cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -64,7 +64,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.be.greaterThan(${sanitizeKey(key)});
+    expect(text.trim().replace(/\\n/g, ' ')${process}).to.be.greaterThan(${sanitizeKey(key)});
   });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -82,13 +82,13 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.least(${sanitizeKey(key)});
+expect(text.trim().replace(/\\n/g, ' ')${process}).to.be.at.least(${sanitizeKey(key)});
 });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('val').then((val) => {
-expect(val.trim()).to.be.at.least(${sanitizeKey(key)});
+expect(val.trim().replace(/\\n/g, ' ')${process}).to.be.at.least(${sanitizeKey(key)});
 });
 }
 });`;
@@ -100,7 +100,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.lessThan(${sanitizeKey(key)});
+expect(text.trim().replace(/\\n/g, ' ')${process}).to.be.lessThan(${sanitizeKey(key)});
 });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -118,7 +118,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.be.at.most(${sanitizeKey(key)});
+expect(text.trim().replace(/\\n/g, ' ')${process}).to.be.at.most(${sanitizeKey(key)});
 });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -136,7 +136,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-expect(text.trim()).to.contain(${sanitizeKey(key)});
+expect(text.trim().replace(/\\n/g, ' ')${process}).to.contain(${sanitizeKey(key)});
 });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -154,7 +154,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-expect(text.trim()).not.to.contain(${sanitizeKey(key)});
+expect(text.trim().replace(/\\n/g, ' ')${process}).not.to.contain(${sanitizeKey(key)});
 });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
@@ -172,7 +172,7 @@ if (val.trim() === '') {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(
         key
       )}`}).invoke('text').then((text) => {
-    expect(text.trim()).to.eq(${sanitizeKey(key)});
+    expect(text.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
   });
 } else {
 cy.get(${`${constants.LOCATOR_KEY_WORD}.${sanitizeKey(

@@ -349,7 +349,7 @@ export default class Discovery {
         : (await this.getLocator(element, page, parent)).trim();
 
     const infoPromises = [];
-    log('Capturing info aliases ...');
+    log('Capturing info aliases ...', 'white');
     for (const infoSelector of this.aliases.info) {
       const elements = await rootElement.$$(infoSelector.selectors.join(', '));
       for (const [index, element] of elements.entries()) {
@@ -370,7 +370,6 @@ export default class Discovery {
           item.locator = locator;
           info.push(item);
         });
-
         log(
           `Captured ${infoSelector.name} (${index + 1}/${elements.length}) `,
           'yellow',
@@ -382,7 +381,7 @@ export default class Discovery {
     await Promise.all(infoPromises);
 
     const inputPromises = [];
-    log('Capturing input aliases ...');
+    log('Capturing input aliases ...', 'white');
     for (const inputSelector of this.aliases.input) {
       const elements = await rootElement.$$(inputSelector.selectors.join(', '));
       for (const [index, element] of elements.entries()) {
@@ -398,12 +397,12 @@ export default class Discovery {
         const promise = getLocatorForElement(inputSelector, index, element);
         promise.then((locator) => {
           (item.locator = locator), input.push(item);
-          log(
-            `Captured ${inputSelector.name} (${index + 1}/${elements.length}) `,
-            'yellow',
-            true
-          );
         });
+        log(
+          `Captured ${inputSelector.name} (${index + 1}/${elements.length}) `,
+          'yellow',
+          true
+        );
         inputPromises.push(promise);
       }
     }
@@ -411,7 +410,7 @@ export default class Discovery {
     await Promise.all(inputPromises);
 
     const promises = [];
-    log('Capturing action aliases ...');
+    log('Capturing action aliases ...', 'white');
     for (const actionSelector of this.aliases.action) {
       const elements = await rootElement.$$(
         actionSelector.selectors.join(', ')
@@ -427,15 +426,12 @@ export default class Discovery {
         promise.then((locator) => {
           item.locator = locator;
           actions.push(item);
-          log(
-            `Captured ${actionSelector.name} (${index + 1}/${
-              elements.length
-            }) `,
-            'yellow',
-            true
-          );
         });
-
+        log(
+          `Captured ${actionSelector.name} (${index + 1}/${elements.length}) `,
+          'yellow',
+          true
+        );
         promises.push(promise);
 
         // try {
@@ -448,11 +444,8 @@ export default class Discovery {
       }
     }
 
-    log('Waiting for promises to complete ...');
     await Promise.all(promises);
-    log('Promises completed ...');
 
-    log('Capturing iterators ...');
     if (this.aliases.iterators && this.aliases.iterators.length) {
       log('Capturing iterators ...');
       for (const iteratorItem of this.aliases.iterators) {
@@ -467,7 +460,7 @@ export default class Discovery {
         if (iteratorRootSelectors.length) {
           element = iteratorRootSelectors[0];
           const text = await element.evaluate((el) => el.textContent);
-          console.log(text)
+          console.log(text);
           const elements: IdentifiableElement[] = [];
           if (iteratorItem.elements) {
             for (const iteratorElement of iteratorItem.elements) {

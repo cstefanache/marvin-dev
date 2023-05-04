@@ -183,7 +183,7 @@ export default class CypressCodeGenerator {
         }
 
         if (action === constants.CHECK_ACTION) {
-          return getCheckTextCommand(`${sanitizeKey(key)}`, op, isNumber);
+          return getCheckTextCommand(`${sanitizeKey(key)}`, op, process || '');
         }
       } else {
         if (action === constants.CLICK_ACTION) {
@@ -209,7 +209,7 @@ export default class CypressCodeGenerator {
                   });
               }
               });`
-            : getCheckTextCommand(sanitizeKey(key), op, isNumber);
+            : getCheckTextCommand(sanitizeKey(key), op, process || '');
         }
       }
     });

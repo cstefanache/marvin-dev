@@ -226,11 +226,12 @@ export default class Workspace {
         this.config.exitUrl = flow.getUrl(exitUrl);
         this.store(true);
       }
-      this.syncOutput();
+      
     }
 
     await runner.performScreenshotForLastAction(page);
     await flow.export();
+    await this.syncOutput();
     App.mainWindow.webContents.send('flow-updated', this.flow);
   }
 
