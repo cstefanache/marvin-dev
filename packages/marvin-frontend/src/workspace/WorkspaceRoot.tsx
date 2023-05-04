@@ -149,8 +149,8 @@ export function WorkspaceRoot() {
     ]);
   };
 
-  const runSequence = async (sequence: string[][]) => {
-    window.electron.runDiscovery(sequence, false);
+  const runSequence = async (sequence: string[][], skipDiscovery = false) => {
+    window.electron.runDiscovery(sequence, skipDiscovery);
   };
 
   const mainLayout = (

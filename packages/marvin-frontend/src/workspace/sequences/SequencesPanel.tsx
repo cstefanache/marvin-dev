@@ -1,6 +1,12 @@
 import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
-import { MouseEventHandler, useContext, useEffect, useState } from 'react';
+import {
+  MouseEventHandler,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Models } from '@marvin/discovery';
 import {
   Button,
@@ -25,6 +31,11 @@ import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { getIcon } from '../../utils';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import Console from '../console/Console';
+import { SchemaForm } from '@ascentcore/react-schema-form';
+import {
+  CustomRegistry,
+  CustomWrapper,
+} from '../../components/registry/Wrapper/Wrapper';
 
 export interface TreeItem {
   id: number;
@@ -73,9 +84,10 @@ function Block(props: { id: string; flow: Models.FlowModel }) {
 }
 
 function SequencesBlock(props: {
-  sequence: string[];
+  sequence: Models.SequenceItem;
   flow: Models.FlowModel;
   deleteSequence: MouseEventHandler;
+  addVariable: Function;
   moveSequence: Function;
   cutAtIndex: Function;
   isFirst: boolean;
@@ -94,43 +106,75 @@ function SequencesBlock(props: {
   } = props;
 
   return (
-    <div className="sequences-block">
-      <Tag className="bp4-round" intent="primary">
-        {index + 1}
-      </Tag>
-      <Icon
-        icon="trash"
-        title="Delete from sequence"
-        onClick={deleteSequence}
-      />
-      {!isFirst && (
+    <div className="sequences-wrapper">
+      <div className="sequences-wrapper-controls">
+        <Tag className="bp4-round" intent="primary">
+          {index + 1}
+        </Tag>
         <Icon
-          icon="chevron-up"
-          title="Move up"
-          onClick={() => moveSequence(index, true)}
+          icon="trash"
+          title="Delete from sequence"
+          onClick={deleteSequence}
         />
-      )}
-      {!isLast && (
+        {!isFirst && (
+          <Icon
+            icon="chevron-up"
+            title="Move up"
+            onClick={() => moveSequence(index, true)}
+          />
+        )}
+        {!isLast && (
+          <Icon
+            icon="chevron-down"
+            title="Move down"
+            onClick={() => moveSequence(index, false)}
+          />
+        )}
+        <span className="divider"></span>
+        Variables
         <Icon
-          icon="chevron-down"
-          title="Move down"
-          onClick={() => moveSequence(index, false)}
+          icon="add"
+          title="Add variable"
+          onClick={() => props.addVariable()}
         />
-      )}
-      {sequence.map((step, index) => (
-        <>
-          <Block id={step} flow={flow} />
-          {index < sequence.length - 1 && (
-            <span className="sequenceAction">
-              <Icon icon="chevron-right" />
-              <Icon icon="cut" onClick={() => cutAtIndex(index + 1)} />
-            </span>
-          )}
-        </>
-      ))}
+        {(sequence.store || []).map((item) => (
+          <span className="variable">
+            <span className="variable-key">{item.key}</span> {item.value}
+            <Icon icon="trash" size={12} />
+          </span>
+        ))}
+      </div>
+      <div className="sequences-block">
+        {sequence.sequences.map((step, index) => (
+          <>
+            <Block id={step} flow={flow} />
+            {index < sequence.sequences.length - 1 && (
+              <span className="sequenceAction">
+                <Icon icon="chevron-right" />
+                <Icon icon="cut" onClick={() => cutAtIndex(index + 1)} />
+              </span>
+            )}
+          </>
+        ))}
+      </div>
     </div>
   );
 }
+
+const variableSchema = {
+  type: 'object',
+  properties: {
+    key: {
+      type: 'string',
+      title: 'Key',
+    },
+    value: {
+      type: 'string',
+      title: 'Value',
+    },
+  },
+  required: ['key', 'value'],
+};
 
 export function SequencesPanel(props: SequencesPanelProps) {
   const { flow } = props;
@@ -140,6 +184,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [selectedBlock, setSelectedBlock] = useState<Models.Block>(null);
   const [blocks, setBlocks] = useState<Models.Block[]>(null);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [addVarToSeq, setAddVarToSeq] = useState<any>(null);
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
   const [isDefineNewOpen, setIsDefineNewOpen] = useState<boolean>(false);
   const [newSequenceName, setNewSequenceName] =
@@ -154,13 +199,13 @@ export function SequencesPanel(props: SequencesPanelProps) {
         window.electron.setBlocks([]);
         setSelectedBlock({
           name: 'New Sequence Block',
-          sequences: [[]],
+          items: [],
         });
       } else {
         if (blocks.length === 0) {
           setSelectedBlock({
             name: 'New Sequence Block',
-            sequences: [],
+            items: [],
           });
         } else {
           setSelectedBlock(blocks[0]);
@@ -170,52 +215,51 @@ export function SequencesPanel(props: SequencesPanelProps) {
   }, [flow]);
 
   const deleteSequence = (index: number) => {
-    selectedBlock.sequences.splice(index, 1);
-    setSelectedBlock({
-      ...selectedBlock,
-      sequences: [...selectedBlock.sequences],
-    });
+    // selectedBlock.sequences.splice(index, 1);
+    // setSelectedBlock({
+    //   ...selectedBlock,
+    //   sequences: [...selectedBlock.sequences],
+    // });
   };
 
   const save = () => {
-    const blocks = [
-      ...props.flow.blocks,
-      {
-        name: newSequenceName,
-        sequences: [],
-      },
-    ];
-    blocks[selectedBlockIndex] = selectedBlock;
-    setBlocks(blocks);
-    window.electron.setBlocks(blocks);
-
-    setNewSequenceName('New Sequence');
-    setIsDefineNewOpen(false);
+    // const blocks = [
+    //   ...props.flow.blocks,
+    //   {
+    //     name: newSequenceName,
+    //     sequences: [],
+    //   },
+    // ];
+    // blocks[selectedBlockIndex] = selectedBlock;
+    // setBlocks(blocks);
+    // window.electron.setBlocks(blocks);
+    // setNewSequenceName('New Sequence');
+    // setIsDefineNewOpen(false);
   };
 
   const moveSequence = (index: number, up: boolean) => {
-    const sequences = [...selectedBlock.sequences];
-    const sequence = sequences[index];
-    sequences.splice(index, 1);
-    sequences.splice(up ? index - 1 : index + 1, 0, sequence);
-    setSelectedBlock({
-      ...selectedBlock,
-      sequences,
-    });
+    // const sequences = [...selectedBlock.sequences];
+    // const sequence = sequences[index];
+    // sequences.splice(index, 1);
+    // sequences.splice(up ? index - 1 : index + 1, 0, sequence);
+    // setSelectedBlock({
+    //   ...selectedBlock,
+    //   sequences,
+    // });
   };
 
   const cutSequenceAtIndex = (sequenceIndex: number, index: number) => {
-    const sequences = [...selectedBlock.sequences];
-    const previous = sequences[sequenceIndex];
-    const first = previous.slice(0, index);
-    const second = previous.slice(index);
-    sequences[sequenceIndex] = first;
-    sequences.splice(sequenceIndex + 1, 0, second);
-    // sequences[sequenceIndex] = sequences[sequenceIndex].slice(index);
-    setSelectedBlock({
-      ...selectedBlock,
-      sequences,
-    });
+    // const sequences = [...selectedBlock.sequences];
+    // const previous = sequences[sequenceIndex];
+    // const first = previous.slice(0, index);
+    // const second = previous.slice(index);
+    // sequences[sequenceIndex] = first;
+    // sequences.splice(sequenceIndex + 1, 0, second);
+    // // sequences[sequenceIndex] = sequences[sequenceIndex].slice(index);
+    // setSelectedBlock({
+    //   ...selectedBlock,
+    //   sequences,
+    // });
   };
 
   const saveBlocks = () => {
@@ -291,21 +335,25 @@ export function SequencesPanel(props: SequencesPanelProps) {
                         icon="play"
                         minimal
                         onClick={() =>
-                          props.runSequence(selectedBlock.sequences)
+                          props.runSequence(selectedBlock.items, true)
                         }
                       />
                     </h4>
                     <div className="sequences-list">
-                      {selectedBlock.sequences.map((sequence, index) => (
+                      {(selectedBlock.items || []).map((sequence, index) => (
                         <SequencesBlock
                           index={index}
                           isFirst={index === 0}
-                          isLast={index === selectedBlock.sequences.length - 1}
+                          isLast={index === selectedBlock.items.length - 1}
                           deleteSequence={() => setDeleteIndex(index)}
                           moveSequence={(up) => moveSequence(index, up)}
                           cutAtIndex={(subIndex) =>
                             cutSequenceAtIndex(index, subIndex)
                           }
+                          addVariable={() => {
+                            console.log(sequence);
+                            setAddVarToSeq(sequence);
+                          }}
                           key={index}
                           sequence={sequence}
                           flow={flow}
@@ -368,24 +416,24 @@ export function SequencesPanel(props: SequencesPanelProps) {
                 autoExpand={true}
                 loadingIds={[]}
                 onSelect={(element) => {
-                  function addToSeq(element: any, sequence: string[]) {
+                  function addToSeq(
+                    element: any,
+                    sequence: Models.SequenceItem
+                  ) {
                     const { currentNode, parentNode, skip } = element;
-
                     if (parentNode && parentNode.id > 0) {
                       addToSeq(parentNode, sequence);
                     }
-
-                    sequence.push(currentNode.id);
+                    sequence.sequences.push(currentNode.id);
                     return sequence;
                   }
-
-                  const seq = [];
+                  const seq = { store: [], sequences: [] };
                   addToSeq(element, seq);
-                  const sequences = [...selectedBlock.sequences];
+                  const sequences = [...selectedBlock.items];
                   sequences.push(seq);
                   setSelectedBlock({
                     ...selectedBlock,
-                    sequences,
+                    items: sequences,
                   });
                   setIsAddOpen(false);
                 }}
@@ -393,6 +441,26 @@ export function SequencesPanel(props: SequencesPanelProps) {
             )}
           </DialogBody>
         </Dialog>
+        <Dialog
+          title="Add Variable"
+          isOpen={addVarToSeq !== null}
+          onClose={() => setAddVarToSeq(undefined)}
+        >
+          <DialogBody>
+            <SchemaForm
+              className="variable-form"
+              wrapper={CustomWrapper as unknown as ReactNode}
+              config={{ registry: CustomRegistry }}
+              schema={variableSchema}
+              onSubmit={(data) => {
+                addVarToSeq.store.push(data);
+                console.log(addVarToSeq.store)
+                setAddVarToSeq(null);
+              }}
+            />
+          </DialogBody>
+        </Dialog>
+
         <Alert
           cancelButtonText="Cancel"
           confirmButtonText="Delete"

@@ -177,8 +177,12 @@ export default class Workspace {
     return Object.keys(this.output.discovered);
   }
 
-  async run(sequence: string[][], callback: Function, skipDiscovery?: boolean) {
-    console.log(`Running sequence`, sequence);
+  async run(
+    sequence: Models.SequenceItem[],
+    callback: Function,
+    skipDiscovery?: boolean
+  ) {
+    console.log(`Running sequence: `, sequence);
     logger.log(`Skipping discovery: ${skipDiscovery}`);
 
     const browser = await puppeteer.launch({
@@ -207,9 +211,9 @@ export default class Workspace {
 
     callback(undefined);
     const runner = new Runner(this.config, flow, state);
-
     for (const seq of sequence) {
-      await runner.run(page, seq, callback);
+      const { store } = seq;
+      await runner.run(page, seq.sequences, callback, store);
     }
 
     if (!skipDiscovery) {
@@ -226,7 +230,6 @@ export default class Workspace {
         this.config.exitUrl = flow.getUrl(exitUrl);
         this.store(true);
       }
-      
     }
 
     await runner.performScreenshotForLastAction(page);

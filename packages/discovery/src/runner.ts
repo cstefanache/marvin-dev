@@ -544,12 +544,13 @@ export default class Runner {
   public async run(
     page: Page,
     sequence: string[],
-    sequenceCallback?: Function
+    sequenceCallback?: Function,
+    sequenceStore: KeyValuePair[] = []
   ) {
     const { graph } = this.flow.flow;
     if (this.config.aliases.store) {
       this.store = {
-        ...this.config.aliases.store.reduce((memo: any, item: KeyValuePair) => {
+        ...[...this.config.aliases.store, ...sequenceStore].reduce((memo: any, item: KeyValuePair) => {
           memo[item.key] = item.value;
           return memo;
         }, {}),

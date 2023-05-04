@@ -78,8 +78,6 @@ function Wrapper({ property, children }: CustomWrapperProps) {
       case 'tab':
         return <TabPanel index={uiIndex || 0}>{children}</TabPanel>;
       default:
-        // TODO: check how to use the size property with Blueprint
-        // return (<Grid item {...(size || { xs: 12 })} sx={{ pl: 1, mt: 1 }}>{children}</Grid>);
         return (
           <div
             className={`wrapper-container ${className}`}
@@ -103,7 +101,6 @@ function Wrapper({ property, children }: CustomWrapperProps) {
         );
     }
   };
-
   return <>{renderWrapperElements()}</>;
 }
 

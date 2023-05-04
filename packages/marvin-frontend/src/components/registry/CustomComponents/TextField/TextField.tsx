@@ -67,7 +67,7 @@ export default function CustomTextField(props: Props) {
     </p>
   ) : (
     <FormGroup
-      helperText={error}
+      helperText={error ? error[0].message : undefined}
       label={title}
       inline={false}
       labelInfo={isRequired && '(required)'}

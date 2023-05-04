@@ -80,9 +80,20 @@ export type Actions = {
   isGlobal?: boolean;
 };
 
+export type KeyValuePair = {
+  key: string;
+  value: string;
+};
+
+
+export type SequenceItem = {
+  store?: KeyValuePair[];
+  sequences: string[];
+}
+
 export type Block = {
   name: string;
-  sequences: string[][];
+  items: SequenceItem[];  
 };
 
 export type FlowModel = {

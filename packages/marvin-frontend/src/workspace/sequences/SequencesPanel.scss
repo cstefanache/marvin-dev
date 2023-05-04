@@ -1,26 +1,87 @@
+.variable-form {
+    &.ra-schema-form {
+        flex-direction: column;
+    }
+}
+
 .sequences {
     padding: 10px;
+
     .sequences-list {
         display: flex;
         flex-direction: column;
         row-gap: 10px;
 
-        .sequences-block {
+        .sequences-wrapper {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            column-gap: 5px;
-            row-gap: 5px;
+            flex-direction: column;
             background-color: rgba(255, 255, 255, 0.1);
             padding: 5px;
-            align-items: center;
+            row-gap: 5px;
+
+            .sequences-wrapper-controls {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                column-gap: 5px;
+                row-gap: 5px;
+                align-items: center;
+
+                .divider {
+                    width: 1px;
+                    height: 20px;
+                    margin: 0 4px;
+                    background-color: rgba(255, 255, 255, 0.3);
+                    display: inline-block;
+                }
+
+                .variable {
+                    display: inline-block;
+                    background-color: rgb(95, 98, 186);                    
+                    padding: 0 20px 0 0;
+                    border-radius: 2px;
+                    position: relative;
+                    border: 1px solid rgba(255,255,255,.3);
+
+                    .variable-key {
+                        background-color: rgba(0, 0, 0, .3);
+                        display: inline-block;
+                        padding: 4px;
+                    }
+
+                    .bp4-icon-trash {
+                        position: absolute;
+                        right: 4px;
+                        top: 6px;
+                        visibility: hidden;
+                    }
+
+                    &:hover {
+                        
+                        .bp4-icon-trash {
+                            visibility: visible;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            .sequences-block {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                column-gap: 5px;
+                row-gap: 5px;
+                align-items: center;
+                border-top: 1px solid rgba(255,255,255,.3);
+                padding-top: 5px;
+            }
         }
 
         .sequenceAction {
             .bp4-icon-cut {
                 display: none;
             }
-
 
             &:hover {
                 cursor: pointer;
