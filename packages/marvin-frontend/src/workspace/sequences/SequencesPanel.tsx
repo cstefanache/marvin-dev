@@ -452,10 +452,11 @@ export function SequencesPanel(props: SequencesPanelProps) {
               wrapper={CustomWrapper as unknown as ReactNode}
               config={{ registry: CustomRegistry }}
               schema={variableSchema}
-              onSubmit={(data) => {
-                addVarToSeq.store.push(data);
-                console.log(addVarToSeq.store)
-                setAddVarToSeq(null);
+              onSubmit={(data, err) => {
+                if (!err || err.length === 0) {
+                  addVarToSeq.store.push(data);
+                  setAddVarToSeq(null);
+                }
               }}
             />
           </DialogBody>
