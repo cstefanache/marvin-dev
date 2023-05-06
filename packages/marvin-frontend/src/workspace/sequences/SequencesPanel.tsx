@@ -3,32 +3,25 @@ import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import {
   MouseEventHandler,
   ReactNode,
-  useContext,
   useEffect,
   useState,
 } from 'react';
 import { Models } from '@marvin/discovery';
 import {
   Button,
-  FormGroup,
   Icon,
   InputGroup,
   Menu,
   MenuItem,
   NonIdealState,
-  Tab,
   Tag,
-  Tabs,
   Alert,
   Intent,
-  Divider,
   Dialog,
   DialogBody,
   DialogFooter,
 } from '@blueprintjs/core';
 import './SequencesPanel.scss';
-import { WorkspaceContext } from '../../contexts/WorkspaceContext';
-import { getIcon } from '../../utils';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import Console from '../console/Console';
 import { SchemaForm } from '@ascentcore/react-schema-form';
@@ -88,6 +81,7 @@ function SequencesBlock(props: {
   flow: Models.FlowModel;
   deleteSequence: MouseEventHandler;
   addVariable: Function;
+  deleteVariable: Function;
   moveSequence: Function;
   cutAtIndex: Function;
   isFirst: boolean;
@@ -120,14 +114,14 @@ function SequencesBlock(props: {
           <Icon
             icon="chevron-up"
             title="Move up"
-            onClick={() => moveSequence(index, true)}
+            onClick={() => moveSequence(true)}
           />
         )}
         {!isLast && (
           <Icon
             icon="chevron-down"
             title="Move down"
-            onClick={() => moveSequence(index, false)}
+            onClick={() => moveSequence(false)}
           />
         )}
         <span className="divider"></span>
@@ -137,10 +131,14 @@ function SequencesBlock(props: {
           title="Add variable"
           onClick={() => props.addVariable()}
         />
-        {(sequence.store || []).map((item) => (
+        {(sequence.store || []).map((item, index) => (
           <span className="variable">
             <span className="variable-key">{item.key}</span> {item.value}
-            <Icon icon="trash" size={12} />
+            <Icon
+              icon="trash"
+              size={12}
+              onClick={() => props.deleteVariable(index)}
+            />
           </span>
         ))}
       </div>
@@ -167,6 +165,7 @@ const variableSchema = {
     key: {
       type: 'string',
       title: 'Key',
+      pattern: '^[a-zA-Z_$][a-zA-Z_$0-9]*$',
     },
     value: {
       type: 'string',
@@ -179,7 +178,6 @@ const variableSchema = {
 export function SequencesPanel(props: SequencesPanelProps) {
   const { flow } = props;
 
-  // const workspaceContext = useContext(WorkspaceContext);
   const [selectedBlockIndex, setSelectedBlockIndex] = useState<number>(0);
   const [selectedBlock, setSelectedBlock] = useState<Models.Block>(null);
   const [blocks, setBlocks] = useState<Models.Block[]>(null);
@@ -190,6 +188,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [newSequenceName, setNewSequenceName] =
     useState<string>('New Sequence');
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [deleteVarIndices, setDeleteVarIndices] = useState<any[] | null>(null);
   useEffect(() => {
     if (flow) {
       const { blocks } = flow;
@@ -215,51 +214,55 @@ export function SequencesPanel(props: SequencesPanelProps) {
   }, [flow]);
 
   const deleteSequence = (index: number) => {
-    // selectedBlock.sequences.splice(index, 1);
-    // setSelectedBlock({
-    //   ...selectedBlock,
-    //   sequences: [...selectedBlock.sequences],
-    // });
+    selectedBlock.items.splice(index, 1);
+    setSelectedBlock({
+      ...selectedBlock,
+      items: [...selectedBlock.items],
+    });
   };
 
   const save = () => {
-    // const blocks = [
-    //   ...props.flow.blocks,
-    //   {
-    //     name: newSequenceName,
-    //     sequences: [],
-    //   },
-    // ];
-    // blocks[selectedBlockIndex] = selectedBlock;
-    // setBlocks(blocks);
-    // window.electron.setBlocks(blocks);
-    // setNewSequenceName('New Sequence');
-    // setIsDefineNewOpen(false);
+    const blocks = [
+      ...props.flow.blocks,
+      {
+        name: newSequenceName,
+        items: [],
+      },
+    ];
+    blocks[selectedBlockIndex] = selectedBlock;
+    setBlocks(blocks);
+    window.electron.setBlocks(blocks);
+    setNewSequenceName(newSequenceName);
+    setIsDefineNewOpen(false);
   };
 
   const moveSequence = (index: number, up: boolean) => {
-    // const sequences = [...selectedBlock.sequences];
-    // const sequence = sequences[index];
-    // sequences.splice(index, 1);
-    // sequences.splice(up ? index - 1 : index + 1, 0, sequence);
-    // setSelectedBlock({
-    //   ...selectedBlock,
-    //   sequences,
-    // });
+    const items = [...selectedBlock.items];
+    const sequence = items[index];
+    items.splice(index, 1);
+    items.splice(up ? index - 1 : index + 1, 0, sequence);
+    setSelectedBlock({
+      ...selectedBlock,
+      items,
+    });
   };
 
   const cutSequenceAtIndex = (sequenceIndex: number, index: number) => {
-    // const sequences = [...selectedBlock.sequences];
-    // const previous = sequences[sequenceIndex];
-    // const first = previous.slice(0, index);
-    // const second = previous.slice(index);
-    // sequences[sequenceIndex] = first;
-    // sequences.splice(sequenceIndex + 1, 0, second);
-    // // sequences[sequenceIndex] = sequences[sequenceIndex].slice(index);
-    // setSelectedBlock({
-    //   ...selectedBlock,
-    //   sequences,
-    // });
+    const selectedItem = selectedBlock.items[sequenceIndex];
+    const topCut = {
+      store: [...selectedItem.store],
+      sequences: [...selectedItem.sequences.slice(0, index)],
+    };
+    const bottomCut = {
+      store: [...selectedItem.store],
+      sequences: [...selectedItem.sequences.slice(index)],
+    };
+
+    selectedBlock.items.splice(sequenceIndex, 1, topCut, bottomCut);
+    setSelectedBlock({
+      ...selectedBlock,
+      items: [...selectedBlock.items],
+    });
   };
 
   const saveBlocks = () => {
@@ -267,6 +270,21 @@ export function SequencesPanel(props: SequencesPanelProps) {
     blocks[selectedBlockIndex] = selectedBlock;
     setBlocks(blocks);
     window.electron.setBlocks(blocks);
+  };
+
+  const deleteVariable = (itemIndex: number, varIndex: number) => {
+    const variable = selectedBlock.items[itemIndex].store[varIndex];
+    setDeleteVarIndices([variable.key, variable.value, itemIndex, varIndex]);
+  };
+
+  const confirmDeleteVariable = () => {
+    const [key, value, itemIndex, varIndex] = deleteVarIndices;
+    selectedBlock.items[itemIndex].store.splice(varIndex, 1);
+    setSelectedBlock({
+      ...selectedBlock,
+      items: [...selectedBlock.items],
+    });
+    setDeleteVarIndices(null);
   };
 
   if (blocks) {
@@ -351,9 +369,11 @@ export function SequencesPanel(props: SequencesPanelProps) {
                             cutSequenceAtIndex(index, subIndex)
                           }
                           addVariable={() => {
-                            console.log(sequence);
                             setAddVarToSeq(sequence);
                           }}
+                          deleteVariable={(varIndex) =>
+                            deleteVariable(index, varIndex)
+                          }
                           key={index}
                           sequence={sequence}
                           flow={flow}
@@ -444,7 +464,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
         <Dialog
           title="Add Variable"
           isOpen={addVarToSeq !== null}
-          onClose={() => setAddVarToSeq(undefined)}
+          onClose={() => setAddVarToSeq(null)}
         >
           <DialogBody>
             <SchemaForm
@@ -475,6 +495,21 @@ export function SequencesPanel(props: SequencesPanelProps) {
           }}
         >
           <p>Are you sure you want to delete this sequence?</p>
+        </Alert>
+        <Alert
+          cancelButtonText="Cancel"
+          confirmButtonText="Delete"
+          icon="trash"
+          intent={Intent.DANGER}
+          isOpen={deleteVarIndices !== null}
+          onCancel={() => setDeleteVarIndices(null)}
+          onConfirm={() => confirmDeleteVariable()}
+        >
+          <p>
+            Are you sure you want to delete variable{' '}
+            <b>{deleteVarIndices ? deleteVarIndices[0] : ''}</b> having value
+            {deleteVarIndices ? deleteVarIndices[1] : ''}?
+          </p>
         </Alert>
       </span>
     );

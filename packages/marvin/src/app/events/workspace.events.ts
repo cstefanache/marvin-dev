@@ -11,6 +11,7 @@ import { Structure, CypressCodeGenerator } from '@marvin/generators/cypress';
 import App from '../app';
 import Workspace from '../api/workspace';
 import getLog from '../api/logging';
+import { SequenceItem } from 'packages/discovery/src/models/models';
 
 const logger = getLog('Workspace');
 
@@ -102,7 +103,7 @@ ipcMain.handle('update-branch', (_, data) => {
 
 ipcMain.handle(
   'run-discovery',
-  async (event, sequence: string[][], skipDiscovery: boolean) => {
+  async (event, sequence: SequenceItem[], skipDiscovery: boolean) => {
     await workspace.run(
       sequence,
       (actionId: string) => {
