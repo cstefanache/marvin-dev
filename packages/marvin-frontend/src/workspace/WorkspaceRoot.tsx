@@ -35,6 +35,7 @@ export function WorkspaceRoot() {
 
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
+    setWorkspace(workspace);
 
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
@@ -125,7 +126,7 @@ export function WorkspaceRoot() {
     reloadWorkspace();
   });
 
-  const runDiscovery = async (element: any, skipDiscovery: boolean = false) => {
+  const runDiscovery = async (element: any, skipDiscovery = false) => {
     setRunning(true);
     const localLoadingIds: any[] = [];
     function addToSeq(element: any, sequence: string[]) {
@@ -225,11 +226,13 @@ export function WorkspaceRoot() {
         title={<Icon icon="panel-stats" size={24} title="Workspace" />}
         panel={mainLayout}
       />
-      <Tab
-        id="config"
-        title={<Icon icon="cog" size={24} title="Config" />}
-        panel={<Config />}
-      />
+      {workspace && (
+        <Tab
+          id="config"
+          title={<Icon icon="cog" size={24} title="Config" />}
+          panel={<Config />}
+        />
+      )}
 
       <Tab
         id="methods"
