@@ -141,7 +141,7 @@ export function WorkspaceRoot() {
       return sequence;
     }
     window.electron.runDiscovery(
-      [addToSeq(element, [])],
+      [{ sequences: addToSeq(element, []) }],
       skipDiscovery === true
     );
     setLoadingIds([
