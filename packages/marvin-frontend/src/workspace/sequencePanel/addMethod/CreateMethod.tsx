@@ -107,8 +107,6 @@ const CreateMethod = (props: any) => {
   const [methodName, setMethodName] = useState<string>('');
   const [isGlobal, setIsGlobal] = useState<boolean>(false);
   const [uid, setUid] = useState<string>(uuid.v4());
-  const [keyEvent, setKeyEvent] = useState<KeyInput>();
-  const [keyEventError, setKeyEventError] = useState(false);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -170,14 +168,6 @@ const CreateMethod = (props: any) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (keyEvent && !keyInputType.includes(keyEvent)) {
-      setKeyEventError(true);
-    } else if (keyInputType.includes(keyEvent)) {
-      setKeyEventError(false);
-    }
-  }, [keyEvent]);
-
   async function doSave() {
     const saveObject: any = {
       uid,
@@ -190,9 +180,8 @@ const CreateMethod = (props: any) => {
     //   saveObject['iterator'] = iterator;
     // }
     await window.electron.saveMethodForUrl(saveObject);
-    if (!keyEventError) {
-      props.closePanel();
-    }
+
+    props.closePanel();
   }
 
   const selectItem = (item: any) => {
@@ -358,15 +347,15 @@ const CreateMethod = (props: any) => {
                   fill={true}
                   items={keyInputType}
                   onItemSelect={(item) => {
-                    step.op = item;
+                    step.keyItem = item;
                     setSequence([...sequence]);
                   }}
                   itemRenderer={keyEventItemRenderer}
                 >
                   <Button
-                    key={step.op}
+                    key={step.keyItem}
                     fill={true}
-                    text={`KeyEvent: ${step.op}` || 'Select key event'}
+                    text={`KeyEvent: ${step.keyItem}` || 'Select key event'}
                     alignText="left"
                     rightIcon="double-caret-vertical"
                   />
