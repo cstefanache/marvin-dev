@@ -29,7 +29,7 @@
   "definitions": {
     "SequenceItem": {
       "type": "object",
-      "title": "Sequence Item",      
+      "title": "Sequence Item",
 
       "properties": {
         "type": {
@@ -44,8 +44,14 @@
           "title": "Locator",
           "uiType": "item",
           "size": { "xs": 12, "sm": 8 }
+        },
+        "keyItem": {
+          "type": "string",
+          "title": "KeyItem",
+          "uiType": "item"
         }
       }
     }
-  }
+  },
+  "required": ["method"]
 }

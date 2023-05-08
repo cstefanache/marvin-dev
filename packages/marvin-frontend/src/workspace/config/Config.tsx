@@ -25,7 +25,8 @@ export default function Config() {
     asyncFn();
   }, []);
 
-  const saveConfig = (data: JSONObject) => {
+  const saveConfig = (data: JSONObject, errorList: any[]) => {
+    console.log(errorList);
     try {
       window.electron.setConfig(data);
       setConfig(data);

@@ -13,7 +13,12 @@ import {
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { getIcon } from '../../../utils';
 import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
-
+import CreateSchema from '../../../schemas/method.schema.json';
+import { SchemaForm } from '@ascentcore/react-schema-form';
+import {
+  CustomRegistry,
+  CustomWrapper,
+} from '../../../components/registry/Wrapper/Wrapper';
 export interface Discovered {
   text: string;
   locator: string;
@@ -115,7 +120,7 @@ const CreateMethod = (props: any) => {
         const {
           items: { info, input, actions, iterable },
         } = discovered;
-        let items = [
+        const items = [
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
@@ -147,7 +152,7 @@ const CreateMethod = (props: any) => {
             // }
             return memo;
           }, []),
-        ]
+        ];
         // .filter(
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
@@ -239,6 +244,17 @@ const CreateMethod = (props: any) => {
       />
     );
   };
+  return (
+    <div>
+      <div>
+        <SchemaForm
+          schema={CreateSchema}
+          wrapper={CustomWrapper as unknown as React.ReactNode}
+          config={{ registry: CustomRegistry }}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <div className="create-container">
@@ -394,7 +410,7 @@ const CreateMethod = (props: any) => {
                       setSequence([...sequence]);
                     }}
                   />
-                   <InputGroup
+                  <InputGroup
                     value={step.storeAttribute}
                     placeholder="Store value from attribute"
                     leftIcon="array-string"
