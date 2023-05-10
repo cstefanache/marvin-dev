@@ -49,6 +49,7 @@ export type ActionItem = {
   forEach?: string;
   postDelay?: number;
   condition?: string;
+  internalStore?: KeyValuePair[];
 };
 
 export type Sequence = {

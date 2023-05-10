@@ -17,10 +17,7 @@ export default class Runner {
     private readonly config: Config,
     private readonly flow: Flow,
     private readonly state: State | undefined
-  ) {
-    this.store = { library };
-    global.store = this.store;
-  }
+  ) {}
 
   private assert(
     actual: any,
@@ -90,7 +87,7 @@ export default class Runner {
     for (const sequenceItem of method.sequence) {
       let prefix = forEachItem;
       if (!prefix || prefix.trim().length === 0) {
-        const { iterator } = sequenceItem
+        const { iterator } = sequenceItem;
         if (iterator) {
           log(
             `   Starting iterator for ${this.config.aliases.iterators.length} iterator definitions`
@@ -548,16 +545,44 @@ export default class Runner {
     sequenceStore: KeyValuePair[] = []
   ) {
     const { graph } = this.flow.flow;
-    if (this.config.aliases.store) {
+
+    if (sequenceStore && sequenceStore.length) {
+      sequenceStore.forEach((item) => {
+        log(`Setting store ${item.key} to ${item.value}`);
+      });
+    }
+
+    if (!this.store) {
       this.store = {
-        ...[...this.config.aliases.store, ...sequenceStore].reduce((memo: any, item: KeyValuePair) => {
+        library,
+        ...this.config.aliases.store.reduce((memo: any, item: KeyValuePair) => {
+          console.log(item)
           memo[item.key] = item.value;
           return memo;
         }, {}),
-        library,
       };
       global.store = this.store;
     }
+
+    for (const seqStore of sequenceStore) {
+      this.store[seqStore.key] = seqStore.value;
+    }
+
+    // if (this.config.aliases.store) {
+    // this.store = {
+    //   ...[...this.config.aliases.store, ...sequenceStore].reduce(
+    //     (memo: any, item: KeyValuePair) => {
+    //       memo[item.key] = item.value;
+    //       return memo;
+    //     },
+    //     {}
+    //   ),
+    //   library,
+    // };
+    // global.store = this.store;
+    // }
+    console.log('%%%%%%%%%');
+    console.log(this.store);
 
     const root = this.findRootActionItem(graph, sequence[0]);
     await this.executeStep(

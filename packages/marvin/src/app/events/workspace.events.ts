@@ -128,7 +128,7 @@ ipcMain.handle('select-workspace', async (event, data) => {
   workspace.initialize(data.path, data.name);
 });
 
-ipcMain.handle('generate-tests-in-folder', async () => {
+ipcMain.handle('generate-tests-in-folder', async (_, fromSequences: boolean) => {
   const promise = dialog.showOpenDialog({
     properties: ['openDirectory', 'createDirectory'],
   });
@@ -136,7 +136,7 @@ ipcMain.handle('generate-tests-in-folder', async () => {
   promise.then((data) => {
     if (data.filePaths.length > 0) {
       const workspacePath = data.filePaths[0];
-      const structure = new Structure(workspace.config.path);
+      const structure = new Structure(workspace.config.path, fromSequences);
       const generator = new CypressCodeGenerator(
         structure.flow,
         structure.config,

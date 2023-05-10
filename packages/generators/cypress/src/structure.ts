@@ -15,6 +15,7 @@ import {
   Test,
   Identifier,
   MethodDefinition,
+  StoreValue,
 } from './models/models';
 import { ConfigModel } from './models/config';
 
@@ -39,7 +40,7 @@ export default class Structure {
     commandsFolder: '',
   };
 
-  constructor(private inputPath: string) {
+  constructor(private inputPath: string, private fromBlocks: boolean = false) {
     if (fs.existsSync(`${this.inputPath}/${constants.CONFIG_FILE_NAME}`)) {
       log('Previous config file found, loading ...', 'green');
       this.rawConfig = JSON.parse(
@@ -116,7 +117,9 @@ export default class Structure {
           paramValuesQueue.push(param.replace(new RegExp("'", 'g'), '`'));
         }
         if (this.getParamType(actionItem.parameters[paramKey]) === 'string') {
-          const parsedValue = this.replaceSingleQuotes(`${actionItem.parameters[paramKey]}`)
+          const parsedValue = this.replaceSingleQuotes(
+            `${actionItem.parameters[paramKey]}`
+          );
           paramValuesQueue.push(`'${parsedValue}'`);
         }
 
@@ -128,6 +131,7 @@ export default class Structure {
 
     return {
       name: this.toCamelCase(actionItem.sequenceStep),
+      store: actionItem.internalStore,
       method: {
         name: this.toCamelCase(actionItem.method),
         paramValues: [...paramValuesQueue],
@@ -143,46 +147,19 @@ export default class Structure {
     return tests;
   }
 
-  private getFunctionalities(
-    graph: ActionItem[],
-    groups: Functionality[] = [],
-    parentTests: Test[] = [],
-    currentTestsFromParent: Test[] = [],
-    lastGroupName: string = ''
-  ) {
-    for (const actionItem of graph) {
-      const currentTests: Test[] = [
-        ...currentTestsFromParent,
-        ...this.getTests(actionItem),
-      ];
-      const currentLastGroupName = actionItem.method
-        ? lastGroupName
-        : `${lastGroupName}/${this.toCamelCase(actionItem.sequenceStep)}`;
+  private getActionItemById(root: ActionItem[], id: string): ActionItem {
+    for (const action of root) {
+      if (action.id == id) {
+        return action;
+      }
 
-      this.getFunctionalities(
-        actionItem.children,
-        groups,
-        actionItem.method ? parentTests : [...parentTests, ...currentTests],
-        actionItem.method ? currentTests : [],
-        currentLastGroupName
-      );
-
-      if (actionItem.children.length === 0) {
-        groups.push({
-          group: currentLastGroupName,
-          specs: [
-            {
-              file:
-                this.toCamelCase(actionItem.sequenceStep) +
-                `${constants.SPEC_SUFFIX}`,
-              beforeAll: parentTests,
-              tests: currentTests,
-            },
-          ],
-        });
+      if (action.children && action.children.length > 0) {
+        const result = this.getActionItemById(action.children, id);
+        if (result) {
+          return result;
+        }
       }
     }
-    return groups;
   }
 
   private getSelectorIdentifiers(sequence: any) {
@@ -256,7 +233,7 @@ export default class Structure {
       // step.details.trim() === ''
       //   ? this.getNameFromLocator(locator)
       //   : this.toCamelCase(details);
-      
+
       if (!step.iterator) {
         if (
           step.type === constants.CLEAR_AND_FILL_ACTION ||
@@ -358,10 +335,12 @@ export default class Structure {
       ? [...this.getUniquePaths(actions), constants.COMMON_FILE_NAME]
       : [...this.getUniquePaths(actions)];
     for (const path of paths) {
-      commands.push({
-        file: this.getCommandFileName(path) + '.js',
-        methods: [...this.getMethods(this.getMethodsByPath(actions, path))],
-      });
+      if (path !== '') {
+        commands.push({
+          file: this.getCommandFileName(path) + '.js',
+          methods: [...this.getMethods(this.getMethodsByPath(actions, path))],
+        });
+      }
     }
     return commands;
   }
@@ -392,11 +371,102 @@ export default class Structure {
     return array;
   }
 
+  private getFunctionalities(
+    graph: ActionItem[],
+    groups: Functionality[] = [],
+    parentTests: Test[] = [],
+    currentTestsFromParent: Test[] = [],
+    lastGroupName: string = ''
+  ) {
+    for (const actionItem of graph) {
+      const currentTests: Test[] = [
+        ...currentTestsFromParent,
+        ...this.getTests(actionItem),
+      ];
+      const currentLastGroupName = actionItem.method
+        ? lastGroupName
+        : `${lastGroupName}/${this.toCamelCase(actionItem.sequenceStep)}`;
+
+      this.getFunctionalities(
+        actionItem.children,
+        groups,
+        actionItem.method ? parentTests : [...parentTests, ...currentTests],
+        actionItem.method ? currentTests : [],
+        currentLastGroupName
+      );
+
+      if (actionItem.children.length === 0) {
+        groups.push({
+          group: currentLastGroupName,
+          specs: [
+            {
+              file:
+                this.toCamelCase(actionItem.sequenceStep) +
+                `${constants.SPEC_SUFFIX}`,
+              beforeAll: parentTests,
+              tests: currentTests,
+            },
+          ],
+        });
+      }
+    }
+    return groups;
+  }
+
+  private getSequenceFunctionalities(name: string, graph: ActionItem[]) {
+    const groups: Functionality[] = [];
+
+    const tests = graph.map((actionItem) => this.getTests(actionItem)).flat();
+
+    groups.push({
+      group: '',
+      specs: [
+        {
+          file: `${this.toCamelCase(name)}${constants.SPEC_SUFFIX}`,
+          beforeAll: [],
+          tests,
+        },
+      ],
+    });
+
+    return groups;
+  }
+
   public prepareStructure() {
     this.flow.selectors = this.getSelectors();
     this.config.iterators = this.getIterators();
     this.flow.commands = this.getCommands();
-    this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
+
+    if (this.fromBlocks) {
+      for (const block of this.rawFlow.blocks) {
+        const actionItems = [];
+        const { name, items } = block;
+        for (const item of items) {
+          const { store, sequences } = item;
+          for (const sequence of sequences) {
+            const actionItem = this.getActionItemById(
+              this.rawFlow.graph,
+              sequence
+            );
+
+            actionItem.internalStore = store;
+
+            if (actionItem) {
+              actionItems.push(actionItem);
+            }
+          }
+        }
+        this.flow.functionalities = [
+          ...this.flow.functionalities,
+          ...this.getSequenceFunctionalities(name, actionItems),
+        ];
+      }
+    } else {
+      this.flow.functionalities = this.getFunctionalities(this.rawFlow.graph);
+    }
+
+    // console.log(JSON.stringify(this.flow.functionalities, null, 2));
+
     this.config.baseUrl = this.rawConfig.rootUrl;
     this.config.outputPath =
       !this.rawConfig.outputPath || this.rawConfig.outputPath.trim() === ''

@@ -16,6 +16,11 @@ export type Spec = {
   tests: Test[];
 };
 
+export type StoreValue = {
+  key: string;
+  value?: string;
+};
+
 export type Identifier = {
   key: string;
   value?: string;
@@ -31,6 +36,7 @@ export type Iterator = {
 
 export type Test = {
   name: string;
+  store?: StoreValue[];
   method: MethodExecution;
 };
 

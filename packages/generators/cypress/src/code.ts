@@ -3,7 +3,8 @@ import { Identifier } from './models/models';
 import * as constants from './utils/constants';
 import { getCheckTextCommand, sanitizeKey } from './utils/utils';
 import * as prettier from 'prettier';
-import * as shell from 'shelljs';
+// import * as shell from 'shelljs';
+import * as childProcess from 'child_process';
 import {
   Command,
   NewFlowModel,
@@ -16,11 +17,13 @@ import {
 import * as fs from 'fs';
 import * as process from 'process';
 import * as path from 'path';
+import { log } from 'packages/discovery/src/utils/logger';
 export default class CypressCodeGenerator {
   private localSupportFolder: string;
   private localTestFolder: string;
   private outputPath: string;
   private workspacePath: string;
+  private jsOutput: boolean = true;
 
   constructor(
     private flow: NewFlowModel,
@@ -58,13 +61,30 @@ export default class CypressCodeGenerator {
     if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
       fs.mkdirSync(this.workspacePath);
     }
+    this.initialize();
+  }
 
+  private async initialize(): Promise<void> {
     if (fs.existsSync(this.workspacePath)) {
-      shell.exec(`cd ${this.outputPath} && npm init -y`);
+      log('Cypress workspace already exists', 'white', false);
+      await new Promise((res) =>
+        childProcess.exec(`npm init -y`, { cwd: this.outputPath }, () => {
+          res(true);
+        })
+      );
+
       if (!fs.existsSync(`${this.outputPath}/node_modules`)) {
-        shell.exec(
-          `cd ${this.outputPath} && npm install cypress cypress-localstorage-commands cypress-network-idle --save-dev`
+        log('Initializing node modules', 'white', false);
+        await new Promise((res) =>
+          childProcess.exec(
+            `npm install cypress cypress-localstorage-commands cypress-network-idle --save-dev`,
+            { cwd: this.outputPath },
+            () => {
+              res(true);
+            }
+          )
         );
+
         if (!fs.existsSync(`${this.outputPath}/cypress.config.js`)) {
           const cypressConfigContent = `const { defineConfig } = require("cypress");
 
@@ -201,11 +221,15 @@ export default class CypressCodeGenerator {
             ? `${this.getIteratorCommand(b)}.invoke('val').then((val) => {
               if (val.trim() === '') {
                 ${this.getIteratorCommand(b)}.invoke('text').then((text) => {
-                    expect(text.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
+                    expect(text.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(
+                key
+              )});
                   });
               } else {
                 ${this.getIteratorCommand(b)}.invoke('val').then((val) => {
-                    expect(val.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(key)});
+                    expect(val.trim().replace(/\\n/g, ' ')${process}).to.eq(${sanitizeKey(
+                key
+              )});
                   });
               }
               });`
@@ -219,20 +243,18 @@ export default class CypressCodeGenerator {
 
   private getParams(method: any) {
     const { parameters, hasStore, hasIterator } = method;
-    console.log('##### ' + method.name);
     const paramNames = parameters.reduce((memo, p) => {
       if (p.iterator) {
         memo.push(sanitizeKey(p.iterator.name));
       }
       memo.push(sanitizeKey(p.key));
-      
+
       return memo;
     }, []);
     let params = paramNames.length > 0 ? paramNames : [];
     if (hasStore) {
       return (params = [...paramNames, constants.STORE_KEY_WORD]);
     }
-    console.log(params);
     return params;
   }
 
@@ -280,7 +302,7 @@ export default class CypressCodeGenerator {
         const commandFile = `${this.localSupportFolder}/${constants.COMMAND_FOLDER}/${file}`;
         let importLocation: string = this.getRelativePath(
           `${this.localSupportFolder}/commands`,
-          `${this.localSupportFolder}/app.po.ts`
+          `${this.localSupportFolder}/app.po.js`
         );
         fs.appendFileSync(
           e2eFile,
@@ -347,7 +369,7 @@ export default class CypressCodeGenerator {
 
   private async generateSelectors(selectors: any[]) {
     const selectorFile = `${this.localSupportFolder}/app.po.${
-      this.workspacePath ? 'js' : 'ts'
+      this.jsOutput ? 'js' : 'ts'
     }`;
     let fileContent: string = '';
 
@@ -359,7 +381,7 @@ export default class CypressCodeGenerator {
     }
 
     const customSelectorFile = `${this.localSupportFolder}/app.custom.po.${
-      this.workspacePath ? 'js' : 'ts'
+      this.jsOutput ? 'js' : 'ts'
     }`;
     if (!fs.existsSync(customSelectorFile)) {
       fs.writeFileSync(
@@ -380,7 +402,6 @@ export default class CypressCodeGenerator {
         `
       );
       for (const selector of selectors) {
-        console.log(selector.value);
         fileContent = `
   export const ${sanitizeKey(selector.key)} = '${this.sanitizeValue(
           selector.value
@@ -437,14 +458,20 @@ export default class CypressCodeGenerator {
 
   private getTestsBody(tests: Test[]) {
     const fileContent = tests.map((t) => {
-      const { method } = t;
+      const { method, store } = t;
       let { name, paramValues } = method;
       this.getMethodDefinitionStoreFlag(name)
         ? (paramValues = [...paramValues, `${constants.STORE_KEY_WORD}`])
         : (paramValues = [...paramValues]);
       const params = paramValues.length > 0 ? paramValues.join(', ') : '';
+      const storeOverride = store
+        ? store.reduce((memo, item) => {
+            return memo + `store["${item.key}"] = "${item.value}";\r\n`;
+          }, '')
+        : '';
       return `
       it('${name}', () => {
+        ${storeOverride}
         cy.${name}(${params});
       });`;
     });
@@ -488,6 +515,7 @@ export default class CypressCodeGenerator {
           ? fs.readFileSync(specFile, 'utf8')
           : undefined;
 
+        console.log(specFile);
         if (data && data.includes(constants.MARVIN_GENERATED_COMMENT)) {
           fs.unlinkSync(specFile);
         }
