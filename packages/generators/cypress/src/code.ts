@@ -54,13 +54,28 @@ export default class CypressCodeGenerator {
         : `${this.outputPath}/e2e`
     );
 
+    if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
+      fs.mkdirSync(this.workspacePath);
+    }
+
+    if (!fs.existsSync(this.localTestFolder)) {
+      fs.mkdirSync(this.localTestFolder);
+    }
+
+    if (!fs.existsSync(this.localSupportFolder)) {
+      fs.mkdirSync(this.localSupportFolder);
+    }
+
+    if (
+      !fs.existsSync(`${this.localSupportFolder}/${constants.COMMAND_FOLDER}`)
+    ) {
+      fs.mkdirSync(`${this.localSupportFolder}/${constants.COMMAND_FOLDER}`);
+    }
+
     if (!fs.existsSync(this.outputPath)) {
       fs.mkdirSync(this.outputPath);
     }
 
-    if (this.workspacePath && !fs.existsSync(this.workspacePath)) {
-      fs.mkdirSync(this.workspacePath);
-    }
     this.initialize();
   }
 
