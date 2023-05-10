@@ -1,11 +1,6 @@
 import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
-import {
-  MouseEventHandler,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
+import { MouseEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Models } from '@marvin/discovery';
 import {
   Button,
@@ -187,6 +182,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [isDefineNewOpen, setIsDefineNewOpen] = useState<boolean>(false);
   const [newSequenceName, setNewSequenceName] =
     useState<string>('New Sequence');
+  const [deleteBlockIndex, setDeleteBlockIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [deleteVarIndices, setDeleteVarIndices] = useState<any[] | null>(null);
   useEffect(() => {
@@ -234,6 +230,15 @@ export function SequencesPanel(props: SequencesPanelProps) {
     window.electron.setBlocks(blocks);
     setNewSequenceName(newSequenceName);
     setIsDefineNewOpen(false);
+  };
+
+  const deleteSequenceBlock = () => {
+    const blocks = [...props.flow.blocks];
+    blocks.splice(deleteBlockIndex, 1);
+    setBlocks(blocks);
+    window.electron.setBlocks(blocks);
+    setDeleteBlockIndex(null);
+    setSelectedBlock(null);
   };
 
   const moveSequence = (index: number, up: boolean) => {
@@ -310,7 +315,18 @@ export function SequencesPanel(props: SequencesPanelProps) {
                       setSelectedBlockIndex(blockIndex);
                       setSelectedBlock(block);
                     }}
-                  />
+                  >
+                    <MenuItem
+                      text="Delete"
+                      icon="trash"
+                      onClick={() => setDeleteBlockIndex(blockIndex)}
+                    />
+                    <MenuItem
+                      text="Run"
+                      icon="play"
+                      onClick={() => props.runSequence(block.items, true)}
+                    />
+                  </MenuItem>
                 ))}
               </Menu>
             </TitlePanel>
@@ -495,6 +511,19 @@ export function SequencesPanel(props: SequencesPanelProps) {
           }}
         >
           <p>Are you sure you want to delete this sequence?</p>
+        </Alert>
+        <Alert
+          cancelButtonText="Cancel"
+          confirmButtonText="Delete"
+          icon="trash"
+          intent={Intent.DANGER}
+          isOpen={deleteBlockIndex !== null}
+          onCancel={() => setDeleteBlockIndex(null)}
+          onConfirm={() => {
+            deleteSequenceBlock();
+          }}
+        >
+          <p>Are you sure you want to delete this sequence block?</p>
         </Alert>
         <Alert
           cancelButtonText="Cancel"

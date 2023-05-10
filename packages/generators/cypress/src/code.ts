@@ -324,21 +324,19 @@ export default class CypressCodeGenerator {
           `import './commands/${file}';
           `
         );
-        if (methods.length > 0) {
-          fs.writeFileSync(
-            commandFile,
-            `
+        fs.writeFileSync(
+          commandFile,
+          `
           ${constants.MARVIN_GENERATED_COMMENT} \n\r
           import * as locators from '${importLocation}';
           `
-          );
-          for (const method of methods) {
-            await this.writeMethod(commandFile, method);
-          }
-          this.formatFile(commandFile);
+        );
+        for (const method of methods) {
+          await this.writeMethod(commandFile, method);
         }
-        this.formatFile(e2eFile);
+        this.formatFile(commandFile);
       }
+      this.formatFile(e2eFile);
     }
   }
 

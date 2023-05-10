@@ -22,7 +22,7 @@ export function WorkspaceRoot() {
     TreeItem | undefined
   >(undefined);
   const [flow, setFlow] = useState<Models.FlowModel>();
-  const [tab, setTab] = useState<string>('workspaces');
+  const [tab, setTab] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [flowState, setFlowState] = useState<number>(Math.random());
@@ -40,7 +40,10 @@ export function WorkspaceRoot() {
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);
-      setTab('mainLayout'); // sequences
+      // setTab((tab) => {
+      //   console.log('setting tab to ', tab);
+      //   return tab === null ? 'mainLayout' : tab;
+      // });
       const flow = await window.electron.getFlow();
       setFlow(flow);
       setFlowState(Math.random());

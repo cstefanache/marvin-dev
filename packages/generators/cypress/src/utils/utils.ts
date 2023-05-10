@@ -1,7 +1,7 @@
 import * as constants from './constants';
 
 export function sanitizeKey(key: string): string {
-  let finalKey = key.replace(/\./g, '').replace(/[> *#'\/\[\]=":\-\(\)]/g, '');
+  let finalKey = key.replace(/\./g, '').replace(/[> *#'\/\[\]=?%":\-\(\)]/g, '');
   finalKey = finalKey[0].toLowerCase() + finalKey.substring(1);
 
   if (/^\d/.test(finalKey)) {
