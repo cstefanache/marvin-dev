@@ -14,6 +14,8 @@ import { getNodesForFilter } from '../utils';
 import Console from './console/Console';
 import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
+import { DialogComponent } from '../components/Dialog/DialogComponent';
+import { JSONObject } from '../types/Types';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ export function WorkspaceRoot() {
     null
   );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(true);
+  const [config, setConfig] = useState<JSONObject | undefined>();
 
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
@@ -154,6 +158,22 @@ export function WorkspaceRoot() {
     window.electron.runDiscovery(sequence, skipDiscovery);
   };
 
+  useEffect(() => {
+    const asyncFn = async () => {
+      const config = await window.electron.getConfig();
+      setConfig(config);
+    };
+    asyncFn();
+    if (!config?.rootUrl) {
+      setOpenDialog(true);
+    }
+  }, [config]);
+  // useEffect(() => {
+  //   if (config?.rootUrl) {
+  //     setOpenDialog(false);
+  //   }
+  // }, [config]);
+
   const mainLayout = (
     <DragLayout
       orientation="horizontal"
@@ -197,12 +217,22 @@ export function WorkspaceRoot() {
             path={path}
           />
         ) : (
-          <NonIdealState
-            title="No node selected"
-            description="Select a node from the left navigation panel"
-            icon="info-sign"
-            iconSize={100}
-          />
+          <>
+            {openDialog && (
+              <DialogComponent
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                config={config}
+                setConfig={setConfig}
+              />
+            )}
+            <NonIdealState
+              title="No node selected"
+              description="Select a node from the left navigation panel"
+              icon="info-sign"
+              iconSize={100}
+            />
+          </>
         )}
       </DragLayout>
     </DragLayout>
