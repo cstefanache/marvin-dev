@@ -8,18 +8,18 @@ import { JSONObject } from '../../types/Types';
 export interface DialogProps {
   onClose: () => void;
   open: boolean;
-  config: any;
-  setConfig: Function;
+  config: object;
+  setConfig: (boolean) => void;
 }
 const variableSchema = {
   type: 'object',
   properties: {
-    url: {
+    rootUrl: {
       type: 'string',
       title: 'URL',
     },
   },
-  required: ['url'],
+  required: ['rootUrl'],
 };
 export function DialogComponent(props: DialogProps) {
   const { onClose, open, config, setConfig } = props;
@@ -28,7 +28,7 @@ export function DialogComponent(props: DialogProps) {
   const saveConfig = (data: JSONObject) => {
     try {
       window.electron.setConfig(data);
-      // console.log(data);
+      console.log(data);
       setConfig(data);
       if (toastRef.current) {
         (toastRef.current as Toaster).show({
@@ -42,7 +42,6 @@ export function DialogComponent(props: DialogProps) {
       console.log(e);
     }
   };
-  console.log(config);
 
   return (
     <Dialog
@@ -64,45 +63,3 @@ export function DialogComponent(props: DialogProps) {
     </Dialog>
   );
 }
-
-// <div>
-//   <div className="darkBG">
-//     <div className="centered">
-//       <div className="modal">
-//         <div className="modal-header">
-//           <h1 className="heading">Insert URL</h1>
-//         </div>
-//         <div className="modal-content">
-//           <SchemaForm
-//             className="input-content"
-//             schema={{
-//               type: 'object',
-//               title: 'Insert URL',
-//               required: ['rootUrl'],
-//               properties: {
-//                 rootUrl: {
-//                   type: 'string',
-//                 },
-//               },
-//             }}
-//             // config={{ registry: CustomRegistry }}
-//             // data={config}
-//             // onSubmit={saveConfig}
-//           />
-//         </div>
-//         <div className="modal-actions">
-//           <div className="actions-container">
-//             <Button className="cancel-button" onClick={() => onClose()}>
-//               Cancel
-//             </Button>
-//             {/* {submit && (
-//               <Button className="submit-button" onClick={() => onClose()}>
-//                 Submit
-//               </Button>
-//             )} */}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </div>

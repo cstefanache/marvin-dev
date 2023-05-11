@@ -162,15 +162,16 @@ export function WorkspaceRoot() {
     const asyncFn = async () => {
       const config = await window.electron.getConfig();
       setConfig(config);
+      if (!config?.rootUrl) {
+        setOpenDialog(true);
+      }
     };
     asyncFn();
-    if (!config?.rootUrl) {
-      setOpenDialog(true);
-    }
   }, [config]);
+
   // useEffect(() => {
-  //   if (config?.rootUrl) {
-  //     setOpenDialog(false);
+  //   if (!config?.rootUrl) {
+  //     setOpenDialog(true);
   //   }
   // }, [config]);
 
