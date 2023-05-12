@@ -9,7 +9,8 @@ export interface DialogProps {
   onClose: () => void;
   open: boolean;
   config: object;
-  setConfig: (boolean) => void;
+  setConfig: (val?: object) => void;
+  title: string;
 }
 const variableSchema = {
   type: 'object',
@@ -22,13 +23,12 @@ const variableSchema = {
   required: ['rootUrl'],
 };
 export function DialogComponent(props: DialogProps) {
-  const { onClose, open, config, setConfig } = props;
+  const { onClose, open, config, setConfig, title } = props;
   const toastRef = useRef(null);
 
   const saveConfig = (data: JSONObject) => {
     try {
       window.electron.setConfig(data);
-      console.log(data);
       setConfig(data);
       if (toastRef.current) {
         (toastRef.current as Toaster).show({
@@ -45,7 +45,7 @@ export function DialogComponent(props: DialogProps) {
 
   return (
     <Dialog
-      title="Insert URL"
+      title={title}
       isOpen={open}
       onClose={() => onClose()}
       className="modal"

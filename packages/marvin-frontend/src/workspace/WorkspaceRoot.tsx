@@ -34,7 +34,7 @@ export function WorkspaceRoot() {
     null
   );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
-  const [openDialog, setOpenDialog] = useState<boolean>(true);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [config, setConfig] = useState<JSONObject | undefined>();
 
   const asyncLoadFn = async () => {
@@ -162,18 +162,16 @@ export function WorkspaceRoot() {
     const asyncFn = async () => {
       const config = await window.electron.getConfig();
       setConfig(config);
-      if (!config?.rootUrl) {
-        setOpenDialog(true);
-      }
     };
     asyncFn();
   }, [config]);
 
-  // useEffect(() => {
-  //   if (!config?.rootUrl) {
-  //     setOpenDialog(true);
-  //   }
-  // }, [config]);
+  useEffect(() => {
+    if (!config?.rootUrl) {
+      setOpenDialog(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace]);
 
   const mainLayout = (
     <DragLayout
@@ -219,14 +217,13 @@ export function WorkspaceRoot() {
           />
         ) : (
           <>
-            {openDialog && (
-              <DialogComponent
-                open={openDialog}
-                onClose={() => setOpenDialog(false)}
-                config={config}
-                setConfig={setConfig}
-              />
-            )}
+            <DialogComponent
+              open={openDialog}
+              onClose={() => setOpenDialog(false)}
+              config={config}
+              setConfig={setConfig}
+              title="Insert URL"
+            />
             <NonIdealState
               title="No node selected"
               description="Select a node from the left navigation panel"
