@@ -1,4 +1,4 @@
-import { DialogBody, Dialog, Toaster } from '@blueprintjs/core';
+import { DialogBody, Dialog, Toaster, Position } from '@blueprintjs/core';
 import './DialogComponent.scss';
 import { SchemaForm } from '@ascentcore/react-schema-form';
 import { ReactNode, useRef } from 'react';
@@ -44,22 +44,25 @@ export function DialogComponent(props: DialogProps) {
   };
 
   return (
-    <Dialog
-      title={title}
-      isOpen={open}
-      onClose={() => onClose()}
-      className="modal"
-    >
-      <DialogBody className="modal-content">
-        <SchemaForm
-          className="input-content"
-          wrapper={CustomWrapper as unknown as ReactNode}
-          config={{ registry: CustomRegistry }}
-          schema={variableSchema}
-          data={config}
-          onSubmit={saveConfig}
-        />
-      </DialogBody>
-    </Dialog>
+    <>
+      <Toaster position={Position.TOP} ref={toastRef} />
+      <Dialog
+        title={title}
+        isOpen={open}
+        onClose={() => onClose()}
+        className="modal"
+      >
+        <DialogBody className="modal-content">
+          <SchemaForm
+            className="input-content"
+            wrapper={CustomWrapper as unknown as ReactNode}
+            config={{ registry: CustomRegistry }}
+            schema={variableSchema}
+            data={config}
+            onSubmit={saveConfig}
+          />
+        </DialogBody>
+      </Dialog>
+    </>
   );
 }
