@@ -145,6 +145,21 @@
     "ExcludeItem": {
       "type": "object",
       "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Search type",
+          "enum": ["tag", "attribute"],
+          "uiType": "item",
+          "size": { "xs": 12, "sm": 2 }
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "uiType": "item",
+          "size": { "xs": 12, "sm": 5 },
+          "description": "Name for the attribute or tag to ignore"
+        },
         "regex": {
           "type": "string",
           "size": { "xs": 12, "sm": 5 },
@@ -159,20 +174,6 @@
             "type": "string",
             "minLength": 1
           }
-        },
-        "name": {
-          "type": "string",
-          "title": "Name",
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 5 },
-          "description": "Name for the attribute or tag to ignore"
-        },
-        "type": {
-          "type": "string",
-          "title": "Type",
-          "enum": ["tag", "attribute"],
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 2 }
         }
       }
     },

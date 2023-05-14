@@ -294,253 +294,252 @@ export function SequencesPanel(props: SequencesPanelProps) {
 
   if (blocks) {
     return (
-      <span>
-        <DragLayout
-          orientation="horizontal"
-          contextKey="methodPanelWidth"
-          left={
-            <TitlePanel
-              title="Method"
-              suffix={[
-                <Icon icon="add" onClick={() => setIsDefineNewOpen(true)} />,
-              ]}
-            >
-              <Menu>
-                {blocks.map((block, blockIndex) => (
-                  <MenuItem
-                    title={block.name}
-                    text={block.name}
-                    icon="gantt-chart"
-                    onClick={() => {
-                      setSelectedBlockIndex(blockIndex);
-                      setSelectedBlock(block);
-                    }}
-                  >
-                    <MenuItem
-                      text="Delete"
-                      icon="trash"
-                      onClick={() => setDeleteBlockIndex(blockIndex)}
-                    />
-                    <MenuItem
-                      text="Run"
-                      icon="play"
-                      onClick={() => props.runSequence(block.items, true)}
-                    />
-                  </MenuItem>
-                ))}
-              </Menu>
-            </TitlePanel>
-          }
-          defaultSize={350}
-          minSize={350}
-        >
-          <TitlePanel title="Sequences">
-            <DragLayout
-              orientation={mainLayoutHoriz ? 'horizontal-reversed' : 'vertical'}
-              contextKey={
-                mainLayoutHoriz ? 'consolePanelHeight' : 'consolePanelWidth'
-              }
-              defaultSize={200}
-              minSize={20}
-              left={
-                <Console
-                  mainLayoutHoriz={mainLayoutHoriz}
-                  setMainLayoutHoriz={setMainLayoutHoriz}
-                />
-              }
-            >
-              <div className="sequences">
-                {selectedBlock ? (
-                  <>
-                    <h4 className="bp4-heading">
-                      <InputGroup
-                        value={selectedBlock.name}
-                        fill={false}
-                        large={false}
-                        onChange={(evt) =>
-                          setSelectedBlock({
-                            ...selectedBlock,
-                            name: evt.target.value,
-                          })
-                        }
-                      />
-                      <Button icon="floppy-disk" minimal onClick={saveBlocks} />
-                      <Button
-                        icon="play"
-                        minimal
-                        onClick={() =>
-                          props.runSequence(selectedBlock.items, true)
-                        }
-                      />
-                    </h4>
-                    <div className="sequences-list">
-                      {(selectedBlock.items || []).map((sequence, index) => (
-                        <SequencesBlock
-                          index={index}
-                          isFirst={index === 0}
-                          isLast={index === selectedBlock.items.length - 1}
-                          deleteSequence={() => setDeleteIndex(index)}
-                          moveSequence={(up) => moveSequence(index, up)}
-                          cutAtIndex={(subIndex) =>
-                            cutSequenceAtIndex(index, subIndex)
-                          }
-                          addVariable={() => {
-                            setAddVarToSeq(sequence);
-                          }}
-                          deleteVariable={(varIndex) =>
-                            deleteVariable(index, varIndex)
-                          }
-                          key={index}
-                          sequence={sequence}
-                          flow={flow}
-                        />
-                      ))}
-                      <Button fill={true} onClick={() => setIsAddOpen(true)}>
-                        Add new sequence
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <NonIdealState icon="gantt-chart" title="No block selected" />
-                )}
-              </div>
-            </DragLayout>
-          </TitlePanel>
-        </DragLayout>
-        <Dialog
-          title="Define new sequence"
-          isOpen={isDefineNewOpen}
-          onClose={() => setIsDefineNewOpen(false)}
-        >
-          <DialogBody>
-            <InputGroup
-              placeholder="Enter Name"
-              value={newSequenceName}
-              onChange={(evt) => {
-                setNewSequenceName(evt.target.value);
-              }}
-            />
-          </DialogBody>
-          <DialogFooter
-            actions={
-              <>
-                <Button
+      <DragLayout
+        orientation="horizontal"
+        contextKey="methodPanelWidth"
+        left={
+          <TitlePanel
+            title="Method"
+            suffix={[
+              <Icon icon="add" onClick={() => setIsDefineNewOpen(true)} />,
+            ]}
+          >
+            <Menu>
+              {blocks.map((block, blockIndex) => (
+                <MenuItem
+                  title={block.name}
+                  text={block.name}
+                  icon="gantt-chart"
                   onClick={() => {
-                    setNewSequenceName('New Sequence');
-                    setIsDefineNewOpen(false);
+                    setSelectedBlockIndex(blockIndex);
+                    setSelectedBlock(block);
                   }}
                 >
-                  Cancel
-                </Button>
-                <Button intent="primary" onClick={save}>
-                  Save
-                </Button>
-              </>
+                  <MenuItem
+                    text="Delete"
+                    icon="trash"
+                    onClick={() => setDeleteBlockIndex(blockIndex)}
+                  />
+                  <MenuItem
+                    text="Run"
+                    icon="play"
+                    onClick={() => props.runSequence(block.items, true)}
+                  />
+                </MenuItem>
+              ))}
+            </Menu>
+          </TitlePanel>
+        }
+        defaultSize={350}
+        minSize={350}
+      >
+        <TitlePanel title="Sequences">
+          <DragLayout
+            orientation={mainLayoutHoriz ? 'horizontal-reversed' : 'vertical'}
+            contextKey={
+              mainLayoutHoriz ? 'consolePanelHeight' : 'consolePanelWidth'
             }
-          ></DialogFooter>
-        </Dialog>
-        <Dialog
-          title="Add Sequence"
-          isOpen={isAddOpen}
-          onClose={() => setIsAddOpen(false)}
-        >
-          <DialogBody>
-            {props.flow && (
-              <FlowNavigator
-                graph={props.flow.graph}
-                subIds={[]}
-                autoExpand={true}
-                loadingIds={[]}
-                onSelect={(element) => {
-                  function addToSeq(
-                    element: any,
-                    sequence: Models.SequenceItem
-                  ) {
-                    const { currentNode, parentNode, skip } = element;
-                    if (parentNode && parentNode.id > 0) {
-                      addToSeq(parentNode, sequence);
-                    }
-                    sequence.sequences.push(currentNode.id);
-                    return sequence;
-                  }
-                  const seq = { store: [], sequences: [] };
-                  addToSeq(element, seq);
-                  const sequences = [...selectedBlock.items];
-                  sequences.push(seq);
-                  setSelectedBlock({
-                    ...selectedBlock,
-                    items: sequences,
-                  });
-                  setIsAddOpen(false);
-                }}
+            defaultSize={200}
+            minSize={20}
+            left={
+              <Console
+                mainLayoutHoriz={mainLayoutHoriz}
+                setMainLayoutHoriz={setMainLayoutHoriz}
               />
-            )}
-          </DialogBody>
-        </Dialog>
-        <Dialog
-          title="Add Variable"
-          isOpen={addVarToSeq !== null}
-          onClose={() => setAddVarToSeq(null)}
-        >
-          <DialogBody>
-            <SchemaForm
-              className="variable-form"
-              wrapper={CustomWrapper as unknown as ReactNode}
-              config={{ registry: CustomRegistry }}
-              schema={variableSchema}
-              onSubmit={(data, err) => {
-                if (!err || err.length === 0) {
-                  addVarToSeq.store.push(data);
-                  setAddVarToSeq(null);
-                }
-              }}
-            />
-          </DialogBody>
-        </Dialog>
+            }
+          >
+            <div className="sequences">
+              {selectedBlock ? (
+                <>
+                  <h4 className="bp4-heading">
+                    <InputGroup
+                      value={selectedBlock.name}
+                      fill={false}
+                      large={false}
+                      onChange={(evt) =>
+                        setSelectedBlock({
+                          ...selectedBlock,
+                          name: evt.target.value,
+                        })
+                      }
+                    />
+                    <Button icon="floppy-disk" minimal onClick={saveBlocks} />
+                    <Button
+                      icon="play"
+                      minimal
+                      onClick={() =>
+                        props.runSequence(selectedBlock.items, true)
+                      }
+                    />
+                  </h4>
+                  <div className="sequences-list">
+                    {(selectedBlock.items || []).map((sequence, index) => (
+                      <SequencesBlock
+                        index={index}
+                        isFirst={index === 0}
+                        isLast={index === selectedBlock.items.length - 1}
+                        deleteSequence={() => setDeleteIndex(index)}
+                        moveSequence={(up) => moveSequence(index, up)}
+                        cutAtIndex={(subIndex) =>
+                          cutSequenceAtIndex(index, subIndex)
+                        }
+                        addVariable={() => {
+                          setAddVarToSeq(sequence);
+                        }}
+                        deleteVariable={(varIndex) =>
+                          deleteVariable(index, varIndex)
+                        }
+                        key={index}
+                        sequence={sequence}
+                        flow={flow}
+                      />
+                    ))}
+                    <Button fill={true} onClick={() => setIsAddOpen(true)}>
+                      Add new sequence
+                    </Button>
+                  </div>
+                  <Dialog
+                    title="Define new sequence"
+                    isOpen={isDefineNewOpen}
+                    onClose={() => setIsDefineNewOpen(false)}
+                  >
+                    <DialogBody>
+                      <InputGroup
+                        placeholder="Enter Name"
+                        value={newSequenceName}
+                        onChange={(evt) => {
+                          setNewSequenceName(evt.target.value);
+                        }}
+                      />
+                    </DialogBody>
+                    <DialogFooter
+                      actions={
+                        <>
+                          <Button
+                            onClick={() => {
+                              setNewSequenceName('New Sequence');
+                              setIsDefineNewOpen(false);
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button intent="primary" onClick={save}>
+                            Save
+                          </Button>
+                        </>
+                      }
+                    ></DialogFooter>
+                  </Dialog>
+                  <Dialog
+                    title="Add Sequence"
+                    isOpen={isAddOpen}
+                    onClose={() => setIsAddOpen(false)}
+                  >
+                    <DialogBody>
+                      {props.flow && (
+                        <FlowNavigator
+                          graph={props.flow.graph}
+                          subIds={[]}
+                          autoExpand={true}
+                          loadingIds={[]}
+                          onSelect={(element) => {
+                            function addToSeq(
+                              element: any,
+                              sequence: Models.SequenceItem
+                            ) {
+                              const { currentNode, parentNode, skip } = element;
+                              if (parentNode && parentNode.id > 0) {
+                                addToSeq(parentNode, sequence);
+                              }
+                              sequence.sequences.push(currentNode.id);
+                              return sequence;
+                            }
+                            const seq = { store: [], sequences: [] };
+                            addToSeq(element, seq);
+                            const sequences = [...selectedBlock.items];
+                            sequences.push(seq);
+                            setSelectedBlock({
+                              ...selectedBlock,
+                              items: sequences,
+                            });
+                            setIsAddOpen(false);
+                          }}
+                        />
+                      )}
+                    </DialogBody>
+                  </Dialog>
+                  <Dialog
+                    title="Add Variable"
+                    isOpen={addVarToSeq !== null}
+                    onClose={() => setAddVarToSeq(null)}
+                  >
+                    <DialogBody>
+                      <SchemaForm
+                        className="variable-form"
+                        wrapper={CustomWrapper as unknown as ReactNode}
+                        config={{ registry: CustomRegistry }}
+                        schema={variableSchema}
+                        onSubmit={(data, err) => {
+                          if (!err || err.length === 0) {
+                            addVarToSeq.store.push(data);
+                            setAddVarToSeq(null);
+                          }
+                        }}
+                      />
+                    </DialogBody>
+                  </Dialog>
 
-        <Alert
-          cancelButtonText="Cancel"
-          confirmButtonText="Delete"
-          icon="trash"
-          intent={Intent.DANGER}
-          isOpen={deleteIndex !== null}
-          onCancel={() => setDeleteIndex(null)}
-          onConfirm={() => {
-            deleteSequence(deleteIndex);
-            setDeleteIndex(null);
-          }}
-        >
-          <p>Are you sure you want to delete this sequence?</p>
-        </Alert>
-        <Alert
-          cancelButtonText="Cancel"
-          confirmButtonText="Delete"
-          icon="trash"
-          intent={Intent.DANGER}
-          isOpen={deleteBlockIndex !== null}
-          onCancel={() => setDeleteBlockIndex(null)}
-          onConfirm={() => {
-            deleteSequenceBlock();
-          }}
-        >
-          <p>Are you sure you want to delete this sequence block?</p>
-        </Alert>
-        <Alert
-          cancelButtonText="Cancel"
-          confirmButtonText="Delete"
-          icon="trash"
-          intent={Intent.DANGER}
-          isOpen={deleteVarIndices !== null}
-          onCancel={() => setDeleteVarIndices(null)}
-          onConfirm={() => confirmDeleteVariable()}
-        >
-          <p>
-            Are you sure you want to delete variable{' '}
-            <b>{deleteVarIndices ? deleteVarIndices[0] : ''}</b> having value
-            {deleteVarIndices ? deleteVarIndices[1] : ''}?
-          </p>
-        </Alert>
-      </span>
+                  <Alert
+                    cancelButtonText="Cancel"
+                    confirmButtonText="Delete"
+                    icon="trash"
+                    intent={Intent.DANGER}
+                    isOpen={deleteIndex !== null}
+                    onCancel={() => setDeleteIndex(null)}
+                    onConfirm={() => {
+                      deleteSequence(deleteIndex);
+                      setDeleteIndex(null);
+                    }}
+                  >
+                    <p>Are you sure you want to delete this sequence?</p>
+                  </Alert>
+                  <Alert
+                    cancelButtonText="Cancel"
+                    confirmButtonText="Delete"
+                    icon="trash"
+                    intent={Intent.DANGER}
+                    isOpen={deleteBlockIndex !== null}
+                    onCancel={() => setDeleteBlockIndex(null)}
+                    onConfirm={() => {
+                      deleteSequenceBlock();
+                    }}
+                  >
+                    <p>Are you sure you want to delete this sequence block?</p>
+                  </Alert>
+                  <Alert
+                    cancelButtonText="Cancel"
+                    confirmButtonText="Delete"
+                    icon="trash"
+                    intent={Intent.DANGER}
+                    isOpen={deleteVarIndices !== null}
+                    onCancel={() => setDeleteVarIndices(null)}
+                    onConfirm={() => confirmDeleteVariable()}
+                  >
+                    <p>
+                      Are you sure you want to delete variable{' '}
+                      <b>{deleteVarIndices ? deleteVarIndices[0] : ''}</b>{' '}
+                      having value
+                      {deleteVarIndices ? deleteVarIndices[1] : ''}?
+                    </p>
+                  </Alert>
+                </>
+              ) : (
+                <NonIdealState icon="gantt-chart" title="No block selected" />
+              )}
+            </div>
+          </DragLayout>
+        </TitlePanel>
+      </DragLayout>
     );
   } else {
     return <NonIdealState icon="gantt-chart" title="Malformed Workspace?" />;
