@@ -41,6 +41,7 @@ export default function Selectors({ value, onChange }: Props) {
         inline={false}
         className="form-group"
       >
+        <p className="description">List of selectors to use for matching</p>
         <InputGroup
           value={addValue}
           onChange={(e) => setAddValue(e.target.value)}

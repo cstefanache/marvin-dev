@@ -1,6 +1,7 @@
 @import "~@blueprintjs/core/lib/scss/variables";
+@import "../../../variables";
 
-
+$item-bg-color: rgba(255, 255, 255, 0.2);
 
 #bp4-tab-panel_configTabs_5 {
   .ra-schema-form {
@@ -12,124 +13,98 @@
   }
 }
 
+.config-container {
+  .ra-schema-form {
+    row-gap: 20px;
+    & .ra-schema-form {
+      width: calc(100% - 40px);
+    }
+
+    & > .ra-schema-form {
+      border: 1px solid $item-bg-color;
+    }
+
+    .string-wrapper,
+    [data-registry="selectors"] {
+      padding: 5px;
+    }
+  }
+}
+
 .ra-schema-form {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  margin-top: 10px;
   flex-grow: 1;
 
-  .divider {
-    margin-bottom: 6px;
-    border: 1px solid;
-    border-color: $gray3;
-  }
-
-  .ra-add-button {
-    width: 100%;
-  }
-
-  .form-group,
-  .bp4-control-group {
-    width: 100%;
-  }
-
-  & > .ra-schema-form {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 2px;
-    background-color: rgba(255, 255, 255, 0.02);
-    padding: 10px;
-    width: calc(100% - 40px);
+  & .ra-schema-form {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  .ra-add-button {
-    margin: 10px 0;
+  .description {
+    color: rgb(174, 174, 174);
+  }
+
+  & > div {
+    flex-grow: 1;
+  }
+
+  .field-wrapper h3 {
+    width: 100%;
+    border-bottom: 1px solid $item-bg-color;
+    margin-right: 10px;
+    padding-bottom: 5px;
   }
 
   .ra-remove-button {
+    background-color: $item-bg-color;
+    padding-top: 12px;
+    text-align: center;
+
+    &:hover {
+      background-color: rgb(135, 131, 116);
+    }
+  }
+
+  [data-prop="Elements"] {
+    padding-left: 10px;
+  }
+
+  [data-registry="addButton"] {
+    margin-bottom: 10px;
+  }
+
+  [data-registry="removeButton"] {
     width: 30px;
-    justify-content: center;
-    padding-top: 50px;
-    padding-right: 25px;
-    transition: all 200ms;
-
-    .bp4-icon {
-      cursor: pointer;
-      &:hover {
-        color: rgba(255, 0, 0, 1);
-      }
-    }
   }
 
-  [data-wrapper-for="Selectors"] {
-    flex-direction: column;
-    align-items: flex-start;
+  .bp4-icon:hover {
+    cursor: pointer;
+    color: $action-color;
   }
 
-  [data-wrapper-for="Elements"] {
-    width: 100%;
-    flex-direction: row-reverse;
-    flex-wrap: wrap;
-  }
-
-  [data-wrapper-for="Element"] {
+  [data-registry="array"] {
+    width: calc(100% - 40px);
+    display: flex;
     flex-direction: row;
-    width: calc(100% - 40px);
-  }
-
-  [data-wrapper-for="Exclude"] {
-    flex-direction: row-reverse;
     flex-wrap: wrap;
-    flex-grow: 1;
-
-    & > .wrapper-container {
-      &.ra-remove-button {
-        flex-grow: 0;
-        width: 40px;
-        padding: 0;
-        margin: 0;
-        justify-content: center;
-        align-items: center;
-      }
-
-      &.undefined {
-        flex-direction: column;
-        flex-grow: 1;
-      }
-    }
+    row-gap: 10px;
   }
 
-  [data-wrapper-for="Priority"] {
-    flex-direction: row-reverse;
-    display: flex;
-    flex-wrap: wrap;
-    width: calc(100% - 40px);
+  // .array-wrapper {
+  //   display: flex;
+  //   flex-direction: row-reverse;
+  //   flex-wrap: wrap;
+  //   flex-grow: 1;
+  //   row-gap: 20px;
+  // }
 
-    .ra-remove-button {
-      flex-grow: 0;
-      width: 40px;
-      padding: 0;
-      margin: 0;
-      justify-content: center;
-      align-items: center;
-    }
+  .object-wrapper {
+    border: 1px solid $item-bg-color;
   }
-
-  [data-wrapper-for="Identifier"] {
-    min-width: 500px;
-  }
-}
-
-.wrapper-container {
-  display: flex;
-  padding-right: 10px;
-  flex-grow: 1;
-
-  .wrapper-description {
-    display: flex;
-    align-items: flex-end;
-    font-size: 18px;
-  }
+  // .object-wrapper {
+  //   flex-grow: 1;
+  //   background-color: $item-bg-color;
+  // }
 }

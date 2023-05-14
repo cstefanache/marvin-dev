@@ -7,7 +7,9 @@ interface Props {
   onChange: () => void;
   children?: JSX.Element | JSX.Element[];
 }
-export default function AddButton({ value, onChange, children }: Props) {
+export default function AddButton(props: any) {
+  const { value, onChange, children } = props
+  console.log(props)
   return (
     <div className="btn-container left">
       <Button  text={value} onClick={onChange}  icon="add">

@@ -5,6 +5,7 @@ import {
   Divider,
   Icon,
   MenuItem,
+  NonIdealState,
   PanelStack2,
   Tag,
 } from '@blueprintjs/core';
@@ -33,7 +34,7 @@ const SelectMethod = (props: any) => {
         exitUrl || parent.exitUrl
       );
       const discovered = await window.electron.getDiscoveredForPath(exitUrl);
-      
+
       if (discovered && discovered.items) {
         const {
           items: { info, input, actions, iterable },
@@ -178,43 +179,67 @@ const SelectMethod = (props: any) => {
     );
   };
 
+  console.log(props);
+
   return (
     <div className="select-method-panel">
+      {propData && !schema && (
+        <NonIdealState
+          title="Nothing attached to the element"
+          icon="info-sign"
+          action={
+            <Button
+              intent="primary"
+              onClick={() => {
+                props.addBranch();
+              }}
+            >
+              Click to add step
+            </Button>
+          }
+          iconSize={60}
+        />
+      )}
       {!propData && (
         <>
           <pre>Url: {exitUrl}</pre>
           <p>Add method execution after: "{sequenceStep}"</p>
-          <Select2
-            fill={true}
-            items={methods}
-            itemPredicate={filterMethod}
-            onItemSelect={setSelectedMethod}
-            noResults={
-              <MenuItem
-                disabled={true}
-                text="No results."
-                roleStructure="listoption"
-              />
-            }
-            itemRenderer={renderMethod}
-            popoverProps={{ matchTargetWidth: true, minimal: true }}
-          >
-            <Button
-              fill={true}
-              alignText="left"
-              text={selectedMethod?.method || 'Select a method'}
-              rightIcon="double-caret-vertical"
-            />
-          </Select2>
-          {!schema && (
+          {methods.length > 0 && (
             <>
+              <Select2
+                fill={true}
+                items={methods}
+                itemPredicate={filterMethod}
+                onItemSelect={setSelectedMethod}
+                noResults={
+                  <MenuItem
+                    disabled={true}
+                    text="No results."
+                    roleStructure="listoption"
+                  />
+                }
+                itemRenderer={renderMethod}
+                popoverProps={{ matchTargetWidth: true, minimal: true }}
+              >
+                <Button
+                  fill={true}
+                  alignText="left"
+                  text={
+                    selectedMethod?.method ||
+                    `Select a method (${methods.length})`
+                  }
+                  rightIcon="double-caret-vertical"
+                />
+              </Select2>
               <p className="text-center"> - or -</p>
-              <div className="text-center">
-                <Button className="bp4-intent-primary" onClick={openNewPanel}>
-                  Create a new method
-                </Button>
-              </div>
             </>
+          )}
+          {!schema && (
+            <div className="text-center">
+              <Button className="bp4-intent-primary" onClick={openNewPanel}>
+                Create a new method
+              </Button>
+            </div>
           )}
         </>
       )}

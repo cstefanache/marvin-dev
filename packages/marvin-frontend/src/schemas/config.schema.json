@@ -90,8 +90,9 @@
           "properties": {
             "exclude": {
               "title": "Exclude",
+              "description": "Exclude",
               "type": "array",
-              "items": { "$ref": "#/definitions/Exclude" }
+              "items": { "$ref": "#/definitions/ExcludeItem" }
             },
             "priority": {
               "title": "Priority",
@@ -141,8 +142,7 @@
     }
   },
   "definitions": {
-    "Exclude": {
-      "title": "Exclude",
+    "ExcludeItem": {
       "type": "object",
       "properties": {
         "regex": {
@@ -154,6 +154,8 @@
           "registryKey": "selectors",
           "uniqueItems": true,
           "items": {
+            "title": "Regular expression",
+            "description": "Regular Expression to match the tag/attribute",
             "type": "string",
             "minLength": 1
           }
@@ -163,7 +165,7 @@
           "title": "Name",
           "uiType": "item",
           "size": { "xs": 12, "sm": 5 },
-          "description": "Exclude name"
+          "description": "Name for the attribute or tag to ignore"
         },
         "type": {
           "type": "string",
@@ -224,7 +226,6 @@
           "size": { "xs": 12, "sm": 6 },
           "registryKey": "selectors",
           "title": "Selectors",
-          "description": "CSS Selector",
           "uniqueItems": true,
           "items": {
             "type": "string",
@@ -250,7 +251,6 @@
           "type": "array",
           "registryKey": "selectors",
           "title": "Selectors",
-          "description": "CSS Selector",
           "uniqueItems": true,
           "uiType": "item",
           "size": { "xs": 12, "sm": 6 },
@@ -262,16 +262,16 @@
         "identifier": {
           "type": "string",
           "title": "Identifier",
+          "description": "CSS Selector for the item used as iterable identifier",
           "uiType": "item",
-          "size": { "xs": 12 },
-          "description": "CSS Selector"
+          "size": { "xs": 12 }
         },
         "elements": {
           "type": "array",
           "uiType": "container",
           "size": { "xs": 12 },
           "title": "Elements",
-          "description": "Elements",
+          "description": "List of identifiable elements relative to the iterated parent",
           "items": { "$ref": "#/definitions/Identifier" }
         }
       }
@@ -283,19 +283,19 @@
       "required": ["name", "selector"],
       "uiType": "container",
       "properties": {
-        "selector": {
-          "type": "string",
-          "title": "Selector",
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 6 },
-          "description": "CSS Selector"
-        },
         "name": {
           "type": "string",
           "title": "Name",
           "uiType": "item",
           "size": { "xs": 12, "sm": 6 },
           "description": "Identifier name"
+        },
+        "selector": {
+          "type": "string",
+          "title": "Selector",
+          "description": "CSS Selector",
+          "uiType": "item",
+          "size": { "xs": 12, "sm": 6 }
         }
       }
     }

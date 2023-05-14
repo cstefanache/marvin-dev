@@ -86,6 +86,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
             exitUrl={data ? currentNode.url : currentNode.exitUrl}
             title={data?.method ? 'Edit Method Execution' : 'Add Method'}
             parent={data ? parentNode?.currentNode : currentNode}
+            addBranch={() => setData(null)}
             data={data}
             save={save}
           />

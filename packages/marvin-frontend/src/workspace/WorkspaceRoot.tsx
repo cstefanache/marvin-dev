@@ -40,10 +40,9 @@ export function WorkspaceRoot() {
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);
-      // setTab((tab) => {
-      //   console.log('setting tab to ', tab);
-      //   return tab === null ? 'mainLayout' : tab;
-      // });
+      setTab((tab) => {
+        return tab === null ? 'mainLayout' : tab;
+      });
       const flow = await window.electron.getFlow();
       setFlow(flow);
       setFlowState(Math.random());

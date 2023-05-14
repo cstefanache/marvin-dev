@@ -80,22 +80,13 @@ function Wrapper({ property, children }: CustomWrapperProps) {
       default:
         return (
           <div
-            className={`wrapper-container ${className}`}
-            data-wrapper-for={property.title}
+            data-prop={property.title}
+            data-registry={property.registryKey}
+            className={`${
+              property.type ? `${property.type}-` : ''
+            }wrapper field-wrapper ${property.className || ''}`}
           >
-            {(property.type === 'object' || property.type === 'array') &&
-              property.description &&
-              property.description.trim().length > 0 && (
-                <h4
-                  style={{
-                    flexGrow: 1,
-                    borderBottom: '1px solid rgba(255,255,255,.2)',
-                    padding: '5px 0',
-                  }}
-                >
-                  {property.description}
-                </h4>
-              )}
+            {property.description && property.type === 'array' && <h3>{property.description}</h3>}
             {children}
           </div>
         );
