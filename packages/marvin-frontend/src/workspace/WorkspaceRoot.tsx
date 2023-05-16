@@ -109,7 +109,7 @@ export function WorkspaceRoot() {
         getMethodForUID(selectedSequenceItem.currentNode.methodUid) || {}
       ).isGlobal;
       const ids = getNodesForFilter(
-        flow.graph[0],
+        flow?.graph?.[0],
         (node: any) => isGlobal || node.exitUrl === url
       ).map((elem: any) => elem.id);
       setSubIds(ids);
