@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
-import { Icon } from '@blueprintjs/core';
+import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import './WorkspacesStyles.scss';
 import { WorkspaceContext } from '../contexts/WorkspaceContext';
 
@@ -11,6 +11,8 @@ interface Props {
 export default function Workspaces({ selectWorkspace }: Props) {
   const [workspaces, setWorkspaces] = useState([]);
   const workspaceContext = useContext(WorkspaceContext);
+  const [filter, setFilter] = useState('');
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -41,16 +43,43 @@ export default function Workspaces({ selectWorkspace }: Props) {
     asyncFn();
   };
 
+  const fiteredData = useMemo(() => {
+    return filter && workspaces
+      ? workspaces?.filter(
+          (v) =>
+            !filter || v.name?.toLowerCase().indexOf(filter.toLowerCase()) > -1
+        )
+      : workspaces;
+  }, [workspaces, filter]);
+
   return (
     <div className="container">
       <div className="input">
-        <span>Workspace</span>
-        <button onClick={selectWorkspaceFolder}></button>
+        <span>Workspace label</span>
+        <button onClick={selectWorkspaceFolder} />
       </div>
+      {!showFilter ? (
+        <Icon icon="filter" size={14} onClick={() => setShowFilter(true)} />
+      ) : (
+        <InputGroup
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Filter by name"
+          rightElement={
+            <Button
+              icon="delete"
+              minimal={true}
+              onClick={() => {
+                setShowFilter(false);
+              }}
+            />
+          }
+        />
+      )}
       {workspaces && workspaces.length > 0 && (
         <ul className="list">
           <p>Recent:</p>
-          {workspaces.map((workspace: { path: string; name: string }) => {
+          {fiteredData.map((workspace: { path: string; name: string }) => {
             const workspaceName = workspace.name;
 
             return (
