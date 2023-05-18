@@ -223,11 +223,6 @@ export function WorkspaceRoot() {
         title={<Icon icon="box" size={24} title="Projects" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
-      <Tab
-        id="mainLayout"
-        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
-        panel={mainLayout}
-      />
       {workspace && (
         <Tab
           id="config"
@@ -235,7 +230,11 @@ export function WorkspaceRoot() {
           panel={<Config />}
         />
       )}
-
+      <Tab
+        id="mainLayout"
+        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
+        panel={mainLayout}
+      />
       <Tab
         id="methods"
         title={<Icon icon="code" size={24} title="Show Methods" />}
