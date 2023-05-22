@@ -248,11 +248,13 @@ export function WorkspaceRoot() {
         }
       />
 
-      <Tab
-        id="sequences"
-        title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
-        panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
-      />
+      {flow?.graph && (
+        <Tab
+          id="sequences"
+          title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
+          panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
+        />
+      )}
 
       <Tab
         id="generator"
