@@ -12,7 +12,6 @@ export default function Workspaces({ selectWorkspace }: Props) {
   const [workspaces, setWorkspaces] = useState([]);
   const workspaceContext = useContext(WorkspaceContext);
   const [filter, setFilter] = useState('');
-  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -58,9 +57,7 @@ export default function Workspaces({ selectWorkspace }: Props) {
         <span>Workspace label</span>
         <button onClick={selectWorkspaceFolder} />
       </div>
-      {!showFilter ? (
-        <Icon icon="filter" size={14} onClick={() => setShowFilter(true)} />
-      ) : (
+      <div className="filter-input">
         <InputGroup
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
@@ -70,32 +67,39 @@ export default function Workspaces({ selectWorkspace }: Props) {
               icon="delete"
               minimal={true}
               onClick={() => {
-                setShowFilter(false);
+                setFilter('');
               }}
             />
           }
         />
-      )}
+      </div>
       {workspaces && workspaces.length > 0 && (
         <ul className="list">
           <p>Recent:</p>
-          {fiteredData.map((workspace: { path: string; name: string }) => {
-            const workspaceName = workspace.name;
+          {fiteredData?.length ? (
+            fiteredData.map((workspace: { path: string; name: string }) => {
+              const workspaceName = workspace.name;
 
-            return (
-              <li key={workspace.path}>
-                <Icon icon="box" />
-                <div
-                  className="item-text"
-                  onClick={() => selectExistingWorkspace(workspace)}
-                >
-                  <p>{workspaceName}</p>
-                  <span>{workspace.path}</span>
-                </div>
-                <Icon icon="trash" onClick={() => deletePath(workspace.path)} />
-              </li>
-            );
-          })}
+              return (
+                <li key={workspace.path}>
+                  <Icon icon="box" />
+                  <div
+                    className="item-text"
+                    onClick={() => selectExistingWorkspace(workspace)}
+                  >
+                    <p>{workspaceName}</p>
+                    <span>{workspace.path}</span>
+                  </div>
+                  <Icon
+                    icon="trash"
+                    onClick={() => deletePath(workspace.path)}
+                  />
+                </li>
+              );
+            })
+          ) : (
+            <div>No items found</div>
+          )}
         </ul>
       )}
     </div>

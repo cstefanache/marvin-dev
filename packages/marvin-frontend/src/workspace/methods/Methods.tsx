@@ -1,4 +1,4 @@
-import { Alert, Icon, InputGroup, Intent } from '@blueprintjs/core';
+import { Alert, Button, Icon, InputGroup, Intent } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
 import TreeView from 'react-accessible-treeview';
 import { localFlattenTree } from '../../utils';
@@ -105,6 +105,16 @@ export default function Methods(props: any) {
             onChange={(e) => {
               setFilter(e.target.value);
             }}
+            rightElement={
+              <Button
+                icon="delete"
+                minimal={true}
+                onClick={() => {
+                  setFilter('');
+                }}
+              />
+            }
+            placeholder="Filter by name"
           />
           {actions && (
             <TreeView

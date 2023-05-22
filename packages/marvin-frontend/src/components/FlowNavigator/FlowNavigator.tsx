@@ -135,7 +135,9 @@ export function FlowNavigator(props: FlowNavigatorProps) {
       }) =>
         (!sequenceFilter ||
           sequenceFilter.length === 0 ||
-          element.name.includes(sequenceFilter)) && (
+          element.name
+            ?.toLowerCase()
+            .includes(sequenceFilter?.toLowerCase())) && (
           <div
             key={element.id}
             onClick={() => onSelect && onSelect(element)}
