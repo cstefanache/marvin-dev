@@ -1,74 +1,79 @@
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/scss/variables';
 
 .methods {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .methods__navigation {
+    width: 350px;
+    border-right: 2px solid rgba(255, 255, 255, 0.5);
+    margin-right: 2px;
     display: flex;
-    flex-direction: row;
-    width: 100%;
+    flex-direction: column;
+    height: calc(100vh - 50px);
 
-    .methods__navigation {
-        width: 350px;
-        border-right: 2px solid rgba(255, 255, 255, 0.5);
-        margin-right: 2px;
+    .filter-input {
+      margin-bottom: 5px;
+      padding: 0 2px;
+    }
+
+    .tree {
+      flex-grow: 1;
+      overflow: auto;
+
+      .tree-node {
         display: flex;
-        flex-direction: column;
-        height: calc(100vh - 50px);
-
-        .tree {
-            flex-grow: 1;
-            overflow: auto;
-
-            .tree-node {
-                display: flex;
-                flex-grow: 1;
-                flex-direction: row;
-                padding: 2px;
-
-                &:hover {
-                    background-color: rgb(87, 86, 92);
-
-                    .bp4-icon {
-                        color: rgba(255, 255, 255, 0.6);
-                        cursor: pointer;
-
-                        &:hover {
-                            color: rgba(255, 255, 255, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        .navigation-item {
-            margin-left: 10px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: row;
-            padding-right: 10px;
-
-            .filler {
-                flex-grow: 1;
-            }
-
-            .bp4-icon {
-                color: rgba(255, 255, 255, 0.2);
-            }
-        }
-
-        ul,
-        li {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            * {
-                outline: none;
-                user-select: none;
-            }
-        }
-    }
-
-    .methods__content {
-        padding: 10px;
         flex-grow: 1;
-        overflow: auto;
+        flex-direction: row;
+        padding: 2px;
+
+        &:hover {
+          background-color: rgb(87, 86, 92);
+
+          .bp4-icon {
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+
+            &:hover {
+              color: rgba(255, 255, 255, 1);
+            }
+          }
+        }
+      }
     }
+
+    .navigation-item {
+      margin-left: 10px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      padding-right: 10px;
+
+      .filler {
+        flex-grow: 1;
+      }
+
+      .bp4-icon {
+        color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    ul,
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      * {
+        outline: none;
+        user-select: none;
+      }
+    }
+  }
+
+  .methods__content {
+    padding: 10px;
+    flex-grow: 1;
+    overflow: auto;
+  }
 }
