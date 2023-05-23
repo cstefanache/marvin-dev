@@ -1,11 +1,24 @@
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/scss/variables';
 
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 50px);
+  padding-top: 15px;
+  background-color: #2f343c;
+
+  div:first-child {
+    background-color: transparent;
+    padding: 0;
+  }
+}
 .config-container {
   display: block;
   width: 100%;
-  padding: 12px 24px 36px;
+  padding-top: 12px;
   margin-bottom: 36px;
-  background-color: #2F343C;
+  background-color: #2f343c;
 
   & .disabled-text-container::last-of-type {
     background-color: red;
