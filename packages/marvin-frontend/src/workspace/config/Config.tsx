@@ -44,7 +44,7 @@ export default function Config() {
 
   return config ? (
     <div className="container">
-      <TitlePanel title="Config">
+      <TitlePanel title={<div className="input">Config</div>}>
         <TabContext.Provider value={contextValue}>
           <Toaster position={Position.TOP} ref={toastRef} />
           <SchemaForm

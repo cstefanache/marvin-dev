@@ -8,6 +8,15 @@
   padding-top: 15px;
   background-color: #2f343c;
 
+  .input {
+    display: flex;
+    border-bottom: 1px solid #fff;
+    background-color: transparent;
+    color: $gray5;
+    margin: 12px 0;
+    padding-bottom: 4px;
+  }
+
   div:first-child {
     background-color: transparent;
     padding: 0;
