@@ -299,7 +299,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
         contextKey="methodPanelWidth"
         left={
           <TitlePanel
-            title="Method"
+            title="Sequence"
             suffix={[
               <Icon icon="add" onClick={() => setIsDefineNewOpen(true)} />,
             ]}

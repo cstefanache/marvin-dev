@@ -65,7 +65,9 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
             <Summary
               changeParent={changeParent}
               selectedElement={selectedSequenceItem}
-              run={(skipDiscovery = false) => runDiscovery(selectedSequenceItem, skipDiscovery)}
+              run={(skipDiscovery = false) =>
+                runDiscovery(selectedSequenceItem, skipDiscovery)
+              }
               addBranch={() => setData(null)}
               newFolder={(name: string) => {
                 // console.log('new folder');
@@ -99,11 +101,18 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
         title="Execution Output"
         suffix={[
           <InputGroup
+            placeholder="Filter by name"
             leftIcon="filter"
             value={filter}
             onChange={(evt) => setFilter(evt.target.value)}
             rightElement={
-              <Icon icon="remove" onClick={() => setFilter('')} size={12} />
+              <Button
+                icon="delete"
+                minimal={true}
+                onClick={() => {
+                  setFilter('');
+                }}
+              />
             }
           />,
         ]}
