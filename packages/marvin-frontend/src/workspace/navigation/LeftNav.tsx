@@ -3,7 +3,6 @@ import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import { useContext, useState } from 'react';
-import { Models } from '@marvin/discovery';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
@@ -98,7 +97,12 @@ export function LeftNav(props: {
             'Navigation'
           )
         }
-        collapsible={
+        suffix={[
+          <Icon icon="expand-all" size={12} title="Expand All" />,
+          <Icon icon="collapse-all" size={12} title="Collapse All" />,
+        ]}
+      >
+        <div>
           <InputGroup
             leftIcon="filter"
             rightElement={
@@ -116,38 +120,33 @@ export function LeftNav(props: {
               setSequenceFilter(evt.target.value);
             }}
           />
-        }
-        suffix={[
-          <Icon icon="expand-all" size={12} title="Expand All" />,
-          <Icon icon="collapse-all" size={12} title="Collapse All" />,
-        ]}
-      >
-        {props.flow ? (
-          <FlowNavigator
-            runDiscovery={runDiscovery}
-            graph={props.flow.graph}
-            sequenceFilter={sequenceFilter}
-            subIds={subIds}
-            highlightedMethod={highlightedMethod}
-            autoExpand={true}
-            loadingIds={loadingIds}
-            selectedId={selectedSequenceItem?.currentNode.id}
-            onSelect={props.selectSequenceItem}
-            actions={(elem: any) => (
-              <Icon
-                icon="locate"
-                size={12}
-                title="Show in focus window"
-                onClick={() => {
-                  workspaceContext.focus = elem;
-                  setFocus(elem);
-                }}
-              />
-            )}
-          />
-        ) : (
-          <div>Loading</div>
-        )}
+          {props.flow ? (
+            <FlowNavigator
+              runDiscovery={runDiscovery}
+              graph={props.flow.graph}
+              sequenceFilter={sequenceFilter}
+              subIds={subIds}
+              highlightedMethod={highlightedMethod}
+              autoExpand={true}
+              loadingIds={loadingIds}
+              selectedId={selectedSequenceItem?.currentNode.id}
+              onSelect={props.selectSequenceItem}
+              actions={(elem: any) => (
+                <Icon
+                  icon="locate"
+                  size={12}
+                  title="Show in focus window"
+                  onClick={() => {
+                    workspaceContext.focus = elem;
+                    setFocus(elem);
+                  }}
+                />
+              )}
+            />
+          ) : (
+            <div>Loading</div>
+          )}
+        </div>
       </TitlePanel>
     </DragLayout>
   );
