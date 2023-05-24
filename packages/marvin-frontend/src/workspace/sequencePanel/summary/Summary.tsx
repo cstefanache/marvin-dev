@@ -45,7 +45,7 @@ export default function Summary(props: any) {
       </Tooltip2>
       <span className="divider" />
       <Tooltip2 content="Run" minimal position="bottom">
-        <Icon icon="play" onClick={() => run(true)} title="Run" />
+        <Icon icon="play" onClick={() => run(true)} title="Play" />
       </Tooltip2>
       <Tooltip2 content="Run and Discover" minimal>
         <Icon icon="search-template" onClick={run} title="Run and Discover" />
