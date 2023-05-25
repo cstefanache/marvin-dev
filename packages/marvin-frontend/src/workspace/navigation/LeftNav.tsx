@@ -2,7 +2,7 @@ import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';

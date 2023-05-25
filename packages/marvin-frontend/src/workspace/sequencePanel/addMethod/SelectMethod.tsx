@@ -31,7 +31,7 @@ const SelectMethod = (props: any) => {
   useEffect(() => {
     const asyncFn = async () => {
       const methods = await window.electron.getMethodsForPath(
-        exitUrl || parent.exitUrl
+        exitUrl || parent?.exitUrl
       );
       const discovered = await window.electron.getDiscoveredForPath(exitUrl);
 
@@ -197,7 +197,7 @@ const SelectMethod = (props: any) => {
               Click to add step
             </Button>
           }
-          iconSize={60}
+          iconSize={48}
         />
       )}
       {!propData && (

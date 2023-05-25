@@ -56,9 +56,8 @@ export function WorkspaceRoot() {
   const reloadWorkspace = () => {
     asyncLoadFn();
     setTab(null);
-    setSelectedSequenceItem(selectedSequenceItem);
   };
-  console.log(selectedSequenceItem);
+
   const selectSequenceItem = async (item: TreeItem) => {
     if (subIds.includes(item.currentNode.id)) {
       const newParent = item.currentNode;
