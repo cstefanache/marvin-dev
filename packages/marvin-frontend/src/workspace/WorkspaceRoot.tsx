@@ -169,8 +169,9 @@ export function WorkspaceRoot() {
   useEffect(() => {
     if (!config?.rootUrl) {
       setOpenDialog(true);
+    } else {
+      setOpenDialog(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace]);
 
   const mainLayout = (
@@ -205,33 +206,33 @@ export function WorkspaceRoot() {
           />
         }
       >
-        {selectedSequenceItem ? (
-          <SequenceItemPanel
-            key={selectedSequenceItem.id}
-            deleteNode={deleteNode}
-            selectedSequenceItem={selectedSequenceItem}
-            changeParent={changeParent}
-            runDiscovery={runDiscovery}
-            save={save}
-            path={path}
-          />
-        ) : (
-          <>
-            <DialogComponent
-              open={openDialog}
-              onClose={() => setOpenDialog(false)}
-              config={config}
-              setConfig={setConfig}
-              title="Insert URL"
+        <>
+          {selectedSequenceItem ? (
+            <SequenceItemPanel
+              key={selectedSequenceItem.id}
+              deleteNode={deleteNode}
+              selectedSequenceItem={selectedSequenceItem}
+              changeParent={changeParent}
+              runDiscovery={runDiscovery}
+              save={save}
+              path={path}
             />
+          ) : (
             <NonIdealState
               title="No node selected"
               description="Select a node from the left navigation panel"
               icon="info-sign"
               iconSize={100}
             />
-          </>
-        )}
+          )}
+          <DialogComponent
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            config={config}
+            setConfig={setConfig}
+            title="Configure setup project base URL"
+          />
+        </>
       </DragLayout>
     </DragLayout>
   );
