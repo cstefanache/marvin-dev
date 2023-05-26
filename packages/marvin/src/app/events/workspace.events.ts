@@ -35,7 +35,7 @@ export default class WorkspaceEvents {
 }
 
 ipcMain.handle('delete-path', async (_, path: string) => {
-  let workspaces = (store.get('workspaces') as any[]).filter(
+  const workspaces = (store.get('workspaces') as any[]).filter(
     (item) => item.path !== path
   );
   store.set('workspaces', workspaces);
@@ -61,9 +61,9 @@ ipcMain.handle('get-flow', () => {
   return workspace.getFlow();
 });
 
-ipcMain.handle('set-blocks', (_, data:any) => {
+ipcMain.handle('set-blocks', (_, data: any) => {
   return workspace.setBlocks(data);
-})
+});
 
 ipcMain.handle('get-methods-for-path', (_, path) => {
   return workspace.getMethodsForPath(path);
@@ -122,30 +122,40 @@ ipcMain.handle('get-discovered-paths', () => {
 
 ipcMain.handle('select-workspace', async (event, data) => {
   lastWorkspace = { path: data.path, name: data.name };
+  const workspaces = (store.get('workspaces') as any[]).filter(
+    (item) => item.path !== lastWorkspace.path
+  );
+
+  workspaces.unshift(lastWorkspace);
+  store.set('workspaces', workspaces);
+
   store.set('lastWorkspace', lastWorkspace);
   logger.log('Workspace selected ' + data.path);
   workspace = new Workspace();
   workspace.initialize(data.path, data.name);
 });
 
-ipcMain.handle('generate-tests-in-folder', async (_, fromSequences: boolean) => {
-  const promise = dialog.showOpenDialog({
-    properties: ['openDirectory', 'createDirectory'],
-  });
+ipcMain.handle(
+  'generate-tests-in-folder',
+  async (_, fromSequences: boolean) => {
+    const promise = dialog.showOpenDialog({
+      properties: ['openDirectory', 'createDirectory'],
+    });
 
-  promise.then((data) => {
-    if (data.filePaths.length > 0) {
-      const workspacePath = data.filePaths[0];
-      const structure = new Structure(workspace.config.path, fromSequences);
-      const generator = new CypressCodeGenerator(
-        structure.flow,
-        structure.config,
-        workspacePath
-      );
-      generator.generate();
-    }
-  });
-});
+    promise.then((data) => {
+      if (data.filePaths.length > 0) {
+        const workspacePath = data.filePaths[0];
+        const structure = new Structure(workspace.config.path, fromSequences);
+        const generator = new CypressCodeGenerator(
+          structure.flow,
+          structure.config,
+          workspacePath
+        );
+        generator.generate();
+      }
+    });
+  }
+);
 
 ipcMain.handle('select-new-workspace-folder', async (data) => {
   const promise = dialog.showOpenDialog({

@@ -19,7 +19,7 @@ export default function Workspaces({ selectWorkspace }: Props) {
       setWorkspaces(workspaces);
     };
     asyncFn();
-  }, []);
+  }, [selectWorkspace]);
 
   const selectWorkspaceFolder = async () => {
     workspaceContext.focus = undefined;
