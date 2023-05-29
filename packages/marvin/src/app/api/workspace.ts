@@ -5,6 +5,7 @@ import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
 import getLog from './logging';
 import App from '../app';
 const logger = getLog('Workspace');
+const path = `${process.cwd()}/output`
 
 function debounce(func, timeout = 300) {
   let timer;
@@ -137,7 +138,7 @@ export default class Workspace {
   setConfig(config: Config) {
     this.config = config;
     fs.writeFileSync(
-      `${this.config.path}/config.json`,
+      `${path}/config.json`,
       JSON.stringify(config, null, 2)
     );
   }
@@ -155,7 +156,7 @@ export default class Workspace {
 
       this.flow.graph = graph;
       fs.writeFileSync(
-        `${this.config.path}/flow.json`,
+        `${path}/flow.json`,
         JSON.stringify(this.flow, null, 2)
       );
     }
@@ -383,13 +384,13 @@ export default class Workspace {
     if (this.config) {
       logger.log(`Storing workspace ${this.config.name}`);
       fs.writeFileSync(
-        `${this.config.path}/config.json`,
+        `${path}/config.json`,
         JSON.stringify(this.config, null, 2)
       );
 
       if (!skipFlow) {
         fs.writeFileSync(
-          `${this.config.path}/flow.json`,
+          `${path}/flow.json`,
           JSON.stringify(this.flow, null, 2)
         );
       }
@@ -397,9 +398,9 @@ export default class Workspace {
   }
 
   syncOutput(): void {
-    if (fs.existsSync(`${this.config.path}/output.json`)) {
+    if (fs.existsSync(`${path}/output.json`)) {
       this.output = JSON.parse(
-        fs.readFileSync(`${this.config.path}/output.json`, 'utf8')
+        fs.readFileSync(`${path}/output.json`, 'utf8')
       );
     }
   }

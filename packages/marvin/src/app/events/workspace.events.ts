@@ -6,7 +6,7 @@
 import { ipcMain, dialog } from 'electron';
 import * as Store from 'electron-store';
 import * as fs from 'fs';
-import * as path from 'path';
+// import * as path from 'path';
 import { Structure, CypressCodeGenerator } from '@marvin/generators/cypress';
 import App from '../app';
 import Workspace from '../api/workspace';
@@ -14,6 +14,7 @@ import getLog from '../api/logging';
 import { SequenceItem } from 'packages/discovery/src/models/models';
 
 const logger = getLog('Workspace');
+const path = `${process.cwd()}/output`
 
 const store = new Store();
 let workspace: Workspace;
@@ -136,7 +137,7 @@ ipcMain.handle('generate-tests-in-folder', async (_, fromSequences: boolean) => 
   promise.then((data) => {
     if (data.filePaths.length > 0) {
       const workspacePath = data.filePaths[0];
-      const structure = new Structure(workspace.config.path, fromSequences);
+      const structure = new Structure(path, fromSequences);
       const generator = new CypressCodeGenerator(
         structure.flow,
         structure.config,

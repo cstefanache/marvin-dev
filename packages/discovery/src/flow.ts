@@ -12,6 +12,8 @@ import {
 import { log } from './utils/logger';
 import { processUrl } from './utils/processes';
 
+const path = `${process.cwd()}/output`
+
 export default class Flow {
   public flow: FlowModel;
   private output: Output;
@@ -22,20 +24,20 @@ export default class Flow {
     private readonly browser: Browser
   ) {
     this.discovery = new Discovery(config);
-    if (fs.existsSync(`${config.path}/output.json`)) {
+    if (fs.existsSync(`${path}/output.json`)) {
       log('Previous output file found, loading ...', 'green');
       this.output = JSON.parse(
-        fs.readFileSync(`${config.path}/output.json`, 'utf8')
+        fs.readFileSync(`${path}/output.json`, 'utf8')
       );
     } else {
       log('No previous output file found, creating new one', 'red');
       this.output = { discovered: {} };
     }
 
-    if (fs.existsSync(`${config.path}/flow.json`)) {
+    if (fs.existsSync(`${path}/flow.json`)) {
       log('Previous flow file found, loading ...', 'green');
       this.flow = JSON.parse(
-        fs.readFileSync(`${config.path}/flow.json`, 'utf8')
+        fs.readFileSync(`${path}/flow.json`, 'utf8')
       );
     } else {
       this.flow = { graph: [], actions: [], blocks: [] };
@@ -100,13 +102,13 @@ export default class Flow {
   public export(): void {
     log(`Exporting output ...`, 'yellow');
     fs.writeFileSync(
-      `${this.config.path}/output.json`,
+      `${path}/output.json`,
       JSON.stringify(this.output, null, 2)
     );
 
     log(`Exporting graph ...`, 'yellow');
     fs.writeFileSync(
-      `${this.config.path}/flow.json`,
+      `${path}/flow.json`,
       JSON.stringify(this.flow, null, 2)
     );
   }
@@ -134,7 +136,7 @@ export default class Flow {
    */
   public async stateScreenshot(page: Page, name = 'snapshot'): Promise<void> {
     await page.screenshot({
-      path: `${this.config.path}/screenshots/${name}.png`,
+      path: `${path}/screenshots/${name}.png`,
     });
   }
 

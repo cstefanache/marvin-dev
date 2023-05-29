@@ -4,11 +4,8 @@ export interface Config {
   name: string;
   rootUrl: string;
   exitUrl?: string;
-  path: string;
   defaultTimeout: number;
   delayedDiscovery?: number;
-  output: string;
-  outputPath: string;
   waitFor?: string;
   aliases: Aliases;
   actions: { [key: string]: Action[] };
