@@ -58,7 +58,7 @@ export default function Workspaces({ selectWorkspace }: Props) {
         title={
           <div className="input">
             <span>Workspace</span>
-            <button onClick={selectWorkspaceFolder}></button>
+            <button onClick={selectWorkspaceFolder} />
           </div>
         }
       >
