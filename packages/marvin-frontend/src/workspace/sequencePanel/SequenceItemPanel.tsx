@@ -6,7 +6,6 @@ import Summary from './summary/Summary';
 import { AddMethod } from './addMethod/AddMethod';
 import {
   Button,
-  FormGroup,
   Icon,
   InputGroup,
   NonIdealState,
@@ -108,10 +107,8 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
             rightElement={
               <Button
                 icon="delete"
+                onClick={() => setFilter('')}
                 minimal={true}
-                onClick={() => {
-                  setFilter('');
-                }}
               />
             }
           />,

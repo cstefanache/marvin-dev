@@ -2,7 +2,7 @@ import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
@@ -28,6 +28,7 @@ export function LeftNav(props: {
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
     undefined
   );
+
   const focusPanel = (
     <TitlePanel
       title="Focus"
@@ -114,7 +115,7 @@ export function LeftNav(props: {
                 }}
               />
             }
-            placeholder="Filter"
+            placeholder="Filter by name"
             value={sequenceFilter}
             onChange={(evt) => {
               setSequenceFilter(evt.target.value);

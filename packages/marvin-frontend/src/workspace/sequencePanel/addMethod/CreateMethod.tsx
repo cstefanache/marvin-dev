@@ -1,7 +1,7 @@
 import './AddMethodStyles.scss';
 import { useEffect, useState } from 'react';
 import * as uuid from 'uuid';
-
+import { KeyInput } from 'puppeteer';
 import {
   Button,
   Checkbox,
@@ -13,6 +13,7 @@ import {
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
 import { getIcon } from '../../../utils';
 import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
+import { keyInputType } from '../../../constants/keyConstants';
 
 export interface Discovered {
   text: string;
@@ -21,7 +22,6 @@ export interface Discovered {
   from: string;
   iteratorName?: string;
 }
-
 export interface DiscoveredItem extends Discovered {
   elements: Discovered[];
 }
@@ -115,7 +115,7 @@ const CreateMethod = (props: any) => {
         const {
           items: { info, input, actions, iterable },
         } = discovered;
-        let items = [
+        const items = [
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
@@ -147,7 +147,7 @@ const CreateMethod = (props: any) => {
             // }
             return memo;
           }, []),
-        ]
+        ];
         // .filter(
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
@@ -180,6 +180,7 @@ const CreateMethod = (props: any) => {
     //   saveObject['iterator'] = iterator;
     // }
     await window.electron.saveMethodForUrl(saveObject);
+
     props.closePanel();
   }
 
@@ -211,6 +212,7 @@ const CreateMethod = (props: any) => {
       locator: item.locator,
       details: `${item.text || ''} ${item.details || ''}`,
       type,
+      keyEvent: item.keyEvent as KeyInput,
     };
 
     if (iterator) {
@@ -236,6 +238,26 @@ const CreateMethod = (props: any) => {
         onFocus={handleFocus}
         roleStructure="listoption"
         text={item.value}
+      />
+    );
+  };
+
+  const keyEventItemRenderer: ItemRenderer<any> = (
+    item,
+    { handleClick, handleFocus, modifiers, query }
+  ) => {
+    if (!modifiers.matchesPredicate) {
+      return null;
+    }
+    return (
+      <MenuItem
+        active={modifiers.active}
+        disabled={modifiers.disabled}
+        key={item}
+        onClick={handleClick}
+        onFocus={handleFocus}
+        roleStructure="listoption"
+        text={item}
       />
     );
   };
@@ -310,9 +332,35 @@ const CreateMethod = (props: any) => {
 
                   setSequence([...sequence]);
                 }}
-                options={['check', 'click', 'clearAndFill', 'fill', 'noAction']}
+                options={[
+                  'check',
+                  'click',
+                  'clearAndFill',
+                  'fill',
+                  'noAction',
+                  'keyEvent',
+                ]}
               />
               {/* <p className="locator">{step.locator}</p> */}
+              {step.type === 'keyEvent' && (
+                <Select2
+                  fill={true}
+                  items={keyInputType}
+                  onItemSelect={(item) => {
+                    step.keyItem = item;
+                    setSequence([...sequence]);
+                  }}
+                  itemRenderer={keyEventItemRenderer}
+                >
+                  <Button
+                    key={step.keyItem}
+                    fill={true}
+                    text={`KeyEvent: ${step.keyItem}` || 'Select key event'}
+                    alignText="left"
+                    rightIcon="double-caret-vertical"
+                  />
+                </Select2>
+              )}
               <InputGroup
                 value={step.locator}
                 onChange={(e) => {
@@ -394,7 +442,7 @@ const CreateMethod = (props: any) => {
                       setSequence([...sequence]);
                     }}
                   />
-                   <InputGroup
+                  <InputGroup
                     value={step.storeAttribute}
                     placeholder="Store value from attribute"
                     leftIcon="array-string"

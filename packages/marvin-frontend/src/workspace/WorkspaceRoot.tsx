@@ -14,6 +14,8 @@ import { getNodesForFilter } from '../utils';
 import Console from './console/Console';
 import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
+import { DialogComponent } from '../components/Dialog/DialogComponent';
+import { JSONObject } from '../types/Types';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ export function WorkspaceRoot() {
     null
   );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [config, setConfig] = useState<JSONObject | undefined>();
 
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
@@ -158,6 +162,22 @@ export function WorkspaceRoot() {
     window.electron.runDiscovery(sequence, skipDiscovery);
   };
 
+  useEffect(() => {
+    const asyncFn = async () => {
+      const config = await window.electron.getConfig();
+      setConfig(config);
+    };
+    asyncFn();
+  }, [config]);
+
+  useEffect(() => {
+    if (!config?.rootUrl) {
+      setOpenDialog(true);
+    } else {
+      setOpenDialog(false);
+    }
+  }, [workspace]);
+
   const mainLayout = (
     <DragLayout
       orientation="horizontal"
@@ -190,24 +210,33 @@ export function WorkspaceRoot() {
           />
         }
       >
-        {selectedSequenceItem ? (
-          <SequenceItemPanel
-            key={selectedSequenceItem.id}
-            deleteNode={deleteNode}
-            selectedSequenceItem={selectedSequenceItem}
-            changeParent={changeParent}
-            runDiscovery={runDiscovery}
-            save={save}
-            path={path}
+        <>
+          {selectedSequenceItem ? (
+            <SequenceItemPanel
+              key={selectedSequenceItem.id}
+              deleteNode={deleteNode}
+              selectedSequenceItem={selectedSequenceItem}
+              changeParent={changeParent}
+              runDiscovery={runDiscovery}
+              save={save}
+              path={path}
+            />
+          ) : (
+            <NonIdealState
+              title="No node selected"
+              description="Select a node from the left navigation panel"
+              icon="info-sign"
+              iconSize={48}
+            />
+          )}
+          <DialogComponent
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            config={config}
+            setConfig={setConfig}
+            title="Configure setup project base URL"
           />
-        ) : (
-          <NonIdealState
-            title="No node selected"
-            description="Select a node from the left navigation panel"
-            icon="info-sign"
-            iconSize={48}
-          />
-        )}
+        </>
       </DragLayout>
     </DragLayout>
   );
@@ -225,6 +254,14 @@ export function WorkspaceRoot() {
         title={<Icon icon="box" size={24} title="Workspaces" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
+
+      {workspace && (
+        <Tab
+          id="config"
+          title={<Icon icon="cog" size={24} title="Config" />}
+          panel={<Config />}
+        />
+      )}
       <Tab
         id="mainLayout"
         title={
@@ -236,14 +273,6 @@ export function WorkspaceRoot() {
         }
         panel={mainLayout}
       />
-      {workspace && (
-        <Tab
-          id="config"
-          title={<Icon icon="cog" size={24} title="Config" />}
-          panel={<Config />}
-        />
-      )}
-
       <Tab
         id="methods"
         title={<Icon icon="code" size={24} title="Methods" />}
@@ -255,12 +284,14 @@ export function WorkspaceRoot() {
             }}
           />
         }
+        disabled={!flow?.graph}
       />
 
       <Tab
         id="sequences"
         title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
         panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
+        disabled={!flow?.graph}
       />
 
       <Tab
