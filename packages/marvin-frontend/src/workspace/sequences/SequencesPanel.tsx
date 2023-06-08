@@ -300,7 +300,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
     setDeleteVarIndices(null);
   };
 
-  const fiteredData = useMemo(() => {
+  const filteredData = useMemo(() => {
     return filter && blocks
       ? blocks?.filter(
           (v) =>
@@ -309,7 +309,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
       : blocks;
   }, [blocks, filter]);
 
-  if (blocks) {
+  if (filteredData) {
     return (
       <DragLayout
         orientation="horizontal"
@@ -326,10 +326,18 @@ export function SequencesPanel(props: SequencesPanelProps) {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 placeholder="Filter by name"
-                leftIcon="filter"
+                rightElement={
+                  <Button
+                    icon="delete"
+                    minimal={true}
+                    onClick={() => {
+                      setFilter('');
+                    }}
+                  />
+                }
               />
               <Menu>
-                {fiteredData.map((block, blockIndex) => (
+                {filteredData.map((block, blockIndex) => (
                   <MenuItem
                     title={block.name}
                     text={block.name}

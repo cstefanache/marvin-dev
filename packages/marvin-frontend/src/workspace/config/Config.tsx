@@ -11,6 +11,7 @@ import { TabContext } from '../../contexts/TabContext';
 import { Position, Toaster } from '@blueprintjs/core';
 
 import './ConfigStyles.scss';
+import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 
 export default function Config() {
   const [config, setConfig] = useState<JSONObject | undefined>();
@@ -42,17 +43,21 @@ export default function Config() {
   };
 
   return config ? (
-    <TabContext.Provider value={contextValue}>
-      <Toaster position={Position.TOP} ref={toastRef} />
-      <SchemaForm
-        className="config-container"
-        schema={ConfigSchema}
-        wrapper={CustomWrapper as unknown as ReactNode}
-        config={{ registry: CustomRegistry }}
-        data={config}
-        onSubmit={saveConfig}
-      />
-    </TabContext.Provider>
+    <div className="container">
+      <TitlePanel title={<div className="input">Config</div>}>
+        <TabContext.Provider value={contextValue}>
+          <Toaster position={Position.TOP} ref={toastRef} />
+          <SchemaForm
+            className="config-container"
+            schema={ConfigSchema}
+            wrapper={CustomWrapper as unknown as ReactNode}
+            config={{ registry: CustomRegistry }}
+            data={config}
+            onSubmit={saveConfig}
+          />
+        </TabContext.Provider>
+      </TitlePanel>
+    </div>
   ) : (
     <div className="config-container">
       <p>Loading...</p>

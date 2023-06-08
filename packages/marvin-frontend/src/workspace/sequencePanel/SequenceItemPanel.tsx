@@ -6,7 +6,6 @@ import Summary from './summary/Summary';
 import { AddMethod } from './addMethod/AddMethod';
 import {
   Button,
-  FormGroup,
   Icon,
   InputGroup,
   NonIdealState,
@@ -101,6 +100,7 @@ export function SequenceItemPanel(props: SequenceItemPanelProps) {
         title="Execution Output"
         suffix={[
           <InputGroup
+            placeholder="Filter by name"
             leftIcon="filter"
             value={filter}
             onChange={(evt) => setFilter(evt.target.value)}

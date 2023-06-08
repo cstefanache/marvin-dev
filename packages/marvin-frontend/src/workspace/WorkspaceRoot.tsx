@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Models } from '@marvin/discovery';
 import { DragLayout } from '../components/DragLayout/DragLayout';
-import { Icon, InputGroup, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
+import { Icon, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
 import { LeftNav } from './navigation/LeftNav';
 import './WorkspaceRoot.scss';
 import Config from './config/Config';
@@ -29,7 +29,7 @@ export function WorkspaceRoot() {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [flowState, setFlowState] = useState<number>(Math.random());
   const [path, setPath] = useState<string | undefined>(null);
-  const [subIds, setSubIds] = useState<any>([]);
+  const [subIds, setSubIds] = useState<string[]>([]);
   const [highlightedMethod, setHighlightedMethod] = useState<string | null>(
     null
   );
@@ -54,11 +54,13 @@ export function WorkspaceRoot() {
   };
   useEffect(() => {
     asyncLoadFn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
-  function reloadWorkspace() {
+  const reloadWorkspace = () => {
     asyncLoadFn();
-  }
+    setTab(null);
+  };
 
   const selectSequenceItem = async (item: TreeItem) => {
     if (subIds.includes(item.currentNode.id)) {
@@ -224,7 +226,7 @@ export function WorkspaceRoot() {
               title="No node selected"
               description="Select a node from the left navigation panel"
               icon="info-sign"
-              iconSize={100}
+              iconSize={48}
             />
           )}
           <DialogComponent
@@ -249,9 +251,10 @@ export function WorkspaceRoot() {
     >
       <Tab
         id="workspaces"
-        title={<Icon icon="box" size={24} title="Projects" />}
+        title={<Icon icon="box" size={24} title="Workspaces" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
+
       {workspace && (
         <Tab
           id="config"
@@ -261,12 +264,18 @@ export function WorkspaceRoot() {
       )}
       <Tab
         id="mainLayout"
-        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
+        title={
+          <Icon
+            icon="panel-stats"
+            size={24}
+            title={workspace?.name && workspace?.name}
+          />
+        }
         panel={mainLayout}
       />
       <Tab
         id="methods"
-        title={<Icon icon="code" size={24} title="Show Methods" />}
+        title={<Icon icon="code" size={24} title="Methods" />}
         panel={
           <Methods
             setHighlightedMethod={(id) => {
@@ -287,7 +296,7 @@ export function WorkspaceRoot() {
 
       <Tab
         id="generator"
-        title={<Icon icon="code-block" size={24} title="Generate Tests" />}
+        title={<Icon icon="code-block" size={24} title="Cypress Tests" />}
         panel={<Generate />}
       />
     </Tabs>

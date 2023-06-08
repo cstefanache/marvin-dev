@@ -97,93 +97,98 @@ export default function Methods(props: any) {
 
   return (
     <div className="methods">
-      <TitlePanel title="Methods">
-        <div className="methods__navigation">
-          <InputGroup
-            value={filter}
-            leftIcon="filter"
-            onChange={(e) => {
-              setFilter(e.target.value);
-            }}
-            rightElement={
-              <Button
-                icon="delete"
-                minimal={true}
-                onClick={() => {
-                  setFilter('');
+      <div className="methods__navigation">
+        <TitlePanel title="Methods">
+          <div>
+            <div className="filter-input">
+              <InputGroup
+                placeholder="Filter by name"
+                value={filter}
+                leftIcon="filter"
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+                rightElement={
+                  <Button
+                    icon="delete"
+                    minimal={true}
+                    onClick={() => {
+                      setFilter('');
+                    }}
+                  />
+                }
+              />
+            </div>
+            {actions && (
+              <TreeView
+                data={actions}
+                key={expandedIds.join(',')}
+                expandedIds={expandedIds}
+                nodeRenderer={({
+                  element,
+                  getNodeProps,
+                  isBranch,
+                  isExpanded,
+                  level,
+                  handleSelect,
+                }) => {
+                  const { currentNode, parentNode } = element as any;
+                  return !filter ||
+                    filter.length === 0 ||
+                    currentNode.name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase()) ? (
+                    <div
+                      {...getNodeProps()}
+                      onClick={() => {
+                        if (currentNode.path !== undefined) {
+                          setExitUrl(currentNode.path);
+                          setSelectedMethod(element);
+                        }
+                      }}
+                      style={{ paddingLeft: 20 * (level - 1) }}
+                    >
+                      {element.children?.length > 0 &&
+                        isBranch &&
+                        !isExpanded && <Icon icon="chevron-right" />}
+                      {element.children?.length > 0 &&
+                        isBranch &&
+                        isExpanded && <Icon icon="chevron-down" />}
+                      {(!isBranch || element.children?.length === 0) && (
+                        <Icon icon="code-block" />
+                      )}
+                      <span className="navigation-item">
+                        <span className="filler">
+                          {currentNode.name.trim().length === 0
+                            ? '[root]'
+                            : currentNode.name}
+                          {parentNode && currentNode.useCount
+                            ? ` (${currentNode.useCount})`
+                            : ''}
+                        </span>
+                        {currentNode.useCount === 0 && currentNode.uid && (
+                          <Icon
+                            icon="trash"
+                            onClick={handleDelete(currentNode)}
+                          />
+                        )}
+
+                        {currentNode.useCount > 0 && (
+                          <Icon
+                            icon="highlight"
+                            onClick={handleHighlight(currentNode)}
+                          />
+                        )}
+                      </span>
+                    </div>
+                  ) : null;
                 }}
               />
-            }
-            placeholder="Filter by name"
-          />
-          {actions && (
-            <TreeView
-              data={actions}
-              key={expandedIds.join(',')}
-              expandedIds={expandedIds}
-              nodeRenderer={({
-                element,
-                getNodeProps,
-                isBranch,
-                isExpanded,
-                level,
-                handleSelect,
-              }) => {
-                const { currentNode, parentNode } = element as any;
-                return !filter ||
-                  filter.length === 0 ||
-                  currentNode.name
-                    .toLowerCase()
-                    .includes(filter.toLowerCase()) ? (
-                  <div
-                    {...getNodeProps()}
-                    onClick={() => {
-                      if (currentNode.path !== undefined) {
-                        setExitUrl(currentNode.path);
-                        setSelectedMethod(element);
-                      }
-                    }}
-                    style={{ paddingLeft: 20 * (level - 1) }}
-                  >
-                    {element.children?.length > 0 &&
-                      isBranch &&
-                      !isExpanded && <Icon icon="chevron-right" />}
-                    {element.children?.length > 0 && isBranch && isExpanded && (
-                      <Icon icon="chevron-down" />
-                    )}
-                    {(!isBranch || element.children?.length === 0) && (
-                      <Icon icon="code-block" />
-                    )}
-                    <span className="navigation-item">
-                      <span className="filler">
-                        {currentNode.name.trim().length === 0
-                          ? '[root]'
-                          : currentNode.name}
-                        {parentNode && currentNode.useCount
-                          ? ` (${currentNode.useCount})`
-                          : ''}
-                      </span>
-                      {currentNode.useCount === 0 && currentNode.uid && (
-                        <Icon
-                          icon="trash"
-                          onClick={handleDelete(currentNode)}
-                        />
-                      )}
+            )}
+          </div>
+        </TitlePanel>
+      </div>
 
-                      {currentNode.useCount > 0 && (
-                        <Icon
-                          icon="highlight"
-                          onClick={handleHighlight(currentNode)}
-                        />
-                      )}
-                    </span>
-                  </div>
-                ) : null;
-              }}
-            />
-          )}
-        </div>
-      </TitlePanel>
       <div className="methods__content">
         {exitUrl !== null && (
           <CreateMethod

@@ -1,8 +1,9 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 
-import { Button, Icon, InputGroup } from '@blueprintjs/core';
+import { Button, Icon, InputGroup, NonIdealState } from '@blueprintjs/core';
 import './WorkspacesStyles.scss';
 import { WorkspaceContext } from '../contexts/WorkspaceContext';
+import { TitlePanel } from '../components/TitlePanel/TitlePanel';
 
 interface Props {
   selectWorkspace: (fromNew?: boolean) => void;
@@ -42,7 +43,7 @@ export default function Workspaces({ selectWorkspace }: Props) {
     asyncFn();
   };
 
-  const fiteredData = useMemo(() => {
+  const filteredData = useMemo(() => {
     return filter && workspaces
       ? workspaces?.filter(
           (v) =>
@@ -53,55 +54,64 @@ export default function Workspaces({ selectWorkspace }: Props) {
 
   return (
     <div className="container">
-      <div className="input">
-        <span>Workspace label</span>
-        <button onClick={selectWorkspaceFolder} />
-      </div>
-      <div className="filter-input">
-        <InputGroup
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter by name"
-          rightElement={
-            <Button
-              icon="delete"
-              minimal={true}
-              onClick={() => {
-                setFilter('');
-              }}
-            />
-          }
-        />
-      </div>
-      {workspaces && workspaces.length > 0 && (
-        <ul className="list">
-          <p>Recent:</p>
-          {fiteredData?.length ? (
-            fiteredData.map((workspace: { path: string; name: string }) => {
-              const workspaceName = workspace.name;
+      <TitlePanel
+        title={
+          <div className="input">
+            <span>Workspace</span>
+            <button onClick={selectWorkspaceFolder} />
+          </div>
+        }
+      >
+        <div>
+          <InputGroup
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Filter by name"
+            rightElement={
+              <Button
+                icon="delete"
+                minimal={true}
+                onClick={() => {
+                  setFilter('');
+                }}
+              />
+            }
+          />
+          {filteredData && filteredData.length > 0 ? (
+            <ul className="list">
+              <p>Recent:</p>
+              {filteredData.map((workspace: { path: string; name: string }) => {
+                const workspaceName = workspace.name;
 
-              return (
-                <li key={workspace.path}>
-                  <Icon icon="box" />
-                  <div
-                    className="item-text"
-                    onClick={() => selectExistingWorkspace(workspace)}
-                  >
-                    <p>{workspaceName}</p>
-                    <span>{workspace.path}</span>
-                  </div>
-                  <Icon
-                    icon="trash"
-                    onClick={() => deletePath(workspace.path)}
-                  />
-                </li>
-              );
-            })
+                return (
+                  <li key={workspace.path}>
+                    <Icon icon="box" />
+                    <div
+                      className="item-text"
+                      onClick={() => selectExistingWorkspace(workspace)}
+                    >
+                      <p>{workspaceName}</p>
+                      <span>{workspace.path}</span>
+                    </div>
+                    <Icon
+                      icon="trash"
+                      onClick={() => deletePath(workspace.path)}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
           ) : (
-            <div>No items found</div>
+            <NonIdealState
+              title="No items available"
+              description="If you think there should be, try reducing filtering."
+              icon="info-sign"
+              iconSize={48}
+              className="no-state"
+            />
           )}
-        </ul>
-      )}
+        </div>
+      </TitlePanel>
     </div>
   );
 }

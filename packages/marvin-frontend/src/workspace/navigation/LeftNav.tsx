@@ -121,7 +121,6 @@ export function LeftNav(props: {
               setSequenceFilter(evt.target.value);
             }}
           />
-
           {props.flow ? (
             <FlowNavigator
               runDiscovery={runDiscovery}

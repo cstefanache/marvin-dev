@@ -5,17 +5,21 @@
   flex-direction: column;
   width: 100%;
   height: calc(100vh - 50px);
-  padding-top: 48px;
+  padding-top: 38px;
   padding-left: 36px;
   padding-right: 36px;
   background-color: #2f343c;
+
+  div:first-child {
+    background-color: transparent;
+  }
 
   .input {
     display: flex;
     border-bottom: 1px solid #fff;
     background-color: transparent;
     color: $gray5;
-    margin-bottom: 32px;
+    margin: 12px 0;
     padding-bottom: 4px;
 
     span {
@@ -28,7 +32,7 @@
       cursor: pointer;
 
       &::after {
-        content: '\002B  New project';
+        content: '\002B New project';
         background-color: transparent;
         box-shadow: none;
         color: #2b95d6;
@@ -86,7 +90,9 @@
       padding-top: 0px;
     }
   }
-
+  .no-state {
+    margin-top: 50px;
+  }
   .filter-input {
     width: 300px;
   }
