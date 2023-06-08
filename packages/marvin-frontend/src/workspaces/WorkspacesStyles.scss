@@ -1,4 +1,4 @@
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/scss/variables';
 
 .container {
   display: flex;
@@ -8,12 +8,10 @@
   padding-top: 48px;
   padding-left: 36px;
   padding-right: 36px;
-  background-color: #2F343C;
-
+  background-color: #2f343c;
 
   .input {
     display: flex;
-    justify-content: space-between;
     border-bottom: 1px solid #fff;
     background-color: transparent;
     color: $gray5;
@@ -28,12 +26,12 @@
       background-color: transparent;
       border: none;
       cursor: pointer;
-      
+
       &::after {
-        content: "Open folder...  \f1ba";
+        content: '\002B  New project';
         background-color: transparent;
         box-shadow: none;
-        color: #2B95D6;
+        color: #2b95d6;
         min-width: 50px;
         width: unset;
       }
@@ -66,7 +64,7 @@
       .item-text {
         margin-left: 12px;
         flex-grow: 1;
-        
+
         p {
           margin-bottom: 2px;
         }
@@ -87,5 +85,9 @@
       padding: 12px;
       padding-top: 0px;
     }
+  }
+
+  .filter-input {
+    width: 300px;
   }
 }

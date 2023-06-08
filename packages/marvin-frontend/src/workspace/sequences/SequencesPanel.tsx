@@ -1,6 +1,12 @@
 import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
-import { MouseEventHandler, ReactNode, useEffect, useState } from 'react';
+import {
+  MouseEventHandler,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Models } from '@marvin/discovery';
 import {
   Button,
@@ -185,6 +191,8 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [deleteBlockIndex, setDeleteBlockIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [deleteVarIndices, setDeleteVarIndices] = useState<any[] | null>(null);
+  const [filter, setFilter] = useState<string>('');
+
   useEffect(() => {
     if (flow) {
       const { blocks } = flow;
@@ -292,6 +300,15 @@ export function SequencesPanel(props: SequencesPanelProps) {
     setDeleteVarIndices(null);
   };
 
+  const fiteredData = useMemo(() => {
+    return filter && blocks
+      ? blocks?.filter(
+          (v) =>
+            !filter || v.name?.toLowerCase().indexOf(filter.toLowerCase()) > -1
+        )
+      : blocks;
+  }, [blocks, filter]);
+
   if (blocks) {
     return (
       <DragLayout
@@ -299,35 +316,43 @@ export function SequencesPanel(props: SequencesPanelProps) {
         contextKey="methodPanelWidth"
         left={
           <TitlePanel
-            title="Method"
+            title="Sequences"
             suffix={[
               <Icon icon="add" onClick={() => setIsDefineNewOpen(true)} />,
             ]}
           >
-            <Menu>
-              {blocks.map((block, blockIndex) => (
-                <MenuItem
-                  title={block.name}
-                  text={block.name}
-                  icon="gantt-chart"
-                  onClick={() => {
-                    setSelectedBlockIndex(blockIndex);
-                    setSelectedBlock(block);
-                  }}
-                >
+            <div>
+              <InputGroup
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Filter by name"
+                leftIcon="filter"
+              />
+              <Menu>
+                {fiteredData.map((block, blockIndex) => (
                   <MenuItem
-                    text="Delete"
-                    icon="trash"
-                    onClick={() => setDeleteBlockIndex(blockIndex)}
-                  />
-                  <MenuItem
-                    text="Run"
-                    icon="play"
-                    onClick={() => props.runSequence(block.items, true)}
-                  />
-                </MenuItem>
-              ))}
-            </Menu>
+                    title={block.name}
+                    text={block.name}
+                    icon="gantt-chart"
+                    onClick={() => {
+                      setSelectedBlockIndex(blockIndex);
+                      setSelectedBlock(block);
+                    }}
+                  >
+                    <MenuItem
+                      text="Delete"
+                      icon="trash"
+                      onClick={() => setDeleteBlockIndex(blockIndex)}
+                    />
+                    <MenuItem
+                      text="Run"
+                      icon="play"
+                      onClick={() => props.runSequence(block.items, true)}
+                    />
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
           </TitlePanel>
         }
         defaultSize={350}

@@ -252,11 +252,6 @@ export function WorkspaceRoot() {
         title={<Icon icon="box" size={24} title="Projects" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
-      <Tab
-        id="mainLayout"
-        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
-        panel={mainLayout}
-      />
       {workspace && (
         <Tab
           id="config"
@@ -264,7 +259,11 @@ export function WorkspaceRoot() {
           panel={<Config />}
         />
       )}
-
+      <Tab
+        id="mainLayout"
+        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
+        panel={mainLayout}
+      />
       <Tab
         id="methods"
         title={<Icon icon="code" size={24} title="Show Methods" />}
@@ -276,12 +275,14 @@ export function WorkspaceRoot() {
             }}
           />
         }
+        disabled={!flow?.graph}
       />
 
       <Tab
         id="sequences"
         title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
         panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
+        disabled={!flow?.graph}
       />
 
       <Tab
