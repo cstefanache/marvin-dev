@@ -61,9 +61,9 @@ ipcMain.handle('get-flow', () => {
   return workspace.getFlow();
 });
 
-ipcMain.handle('set-blocks', (_, data:any) => {
+ipcMain.handle('set-blocks', (_, data: any) => {
   return workspace.setBlocks(data);
-})
+});
 
 ipcMain.handle('get-methods-for-path', (_, path) => {
   return workspace.getMethodsForPath(path);
@@ -155,7 +155,6 @@ ipcMain.handle('select-new-workspace-folder', async (data) => {
   promise.then((data) => {
     if (data.filePaths.length > 0) {
       const workspacePath = data.filePaths[0];
-
       const workspaceName = workspacePath
         .split('/')
         .pop()
