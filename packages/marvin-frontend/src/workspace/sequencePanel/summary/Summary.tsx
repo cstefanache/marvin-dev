@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { Alert, Icon, Intent, InputGroup } from '@blueprintjs/core';
 import './Summary.scss';
 export default function Summary(props: any) {
-  const { selectedElement, addBranch, newFolder, deleteNode, run } = props;
+  const {
+    selectedElement,
+    addBranch,
+    newFolder,
+    deleteNode,
+    run,
+    verticalIcons,
+    margin,
+  } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);
   const [newFolderName, setNewFolderName] = useState<any>(null);
@@ -13,28 +21,36 @@ export default function Summary(props: any) {
   };
 
   return (
-    <span className="summary">
+    <span className="summary" style={verticalIcons}>
       <Icon
         icon="trash"
         title="Remove current execution step and children"
         onClick={() => {
           setDeleteId(currentNode.id);
         }}
+        style={margin}
       />
-      <Icon icon="add" onClick={addBranch} title="Add new execution step" />
+      <Icon
+        icon="add"
+        onClick={addBranch}
+        title="Add new execution step"
+        style={margin}
+      />
       <Icon
         icon="folder-new"
         title="Create new folder"
         onClick={() => setNewFolderName('Method Group')}
+        style={margin}
       />
       <span className="divider" />
       <Icon
         icon="inheritance"
         title="Change parent"
         onClick={props.changeParent}
+        style={margin}
       />
       <span className="divider" />
-      <Icon icon="play" onClick={() => run(true)} title="Run" />
+      <Icon icon="play" onClick={() => run(true)} title="Run" style={margin} />
       <Icon icon="search-template" onClick={run} title="Run and Discover" />
       <Alert
         cancelButtonText="Cancel"

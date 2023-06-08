@@ -1,22 +1,42 @@
 import { DragLayout } from '../../components/DragLayout/DragLayout';
-import { Button, Icon, InputGroup } from '@blueprintjs/core';
+import {
+  Alert,
+  Button,
+  Icon,
+  InputGroup,
+  Intent,
+  Position,
+} from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import { useContext, useState } from 'react';
-import { Models } from '@marvin/discovery';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
+import { Popover2 } from '@blueprintjs/popover2';
+import Summary from '../sequencePanel/summary/Summary';
 
-export function LeftNav(props: {
-  flow: any;
-  selectSequenceItem: Function;
-  selectedSequenceItem?: TreeItem;
-  loadingIds: string[];
-  subIds: string[];
+export interface SequenceItemPanelProps {
+  selectedSequenceItem: TreeItem;
+  changeParent: Function;
   runDiscovery: Function;
-  highlightedMethod?: string;
-}) {
+  save: Function;
+  deleteNode: Function;
+  path: string;
+}
+
+export function LeftNav(
+  props: {
+    flow: any;
+    selectSequenceItem: Function;
+    selectedSequenceItem?: TreeItem;
+    loadingIds: string[];
+    subIds: string[];
+    runDiscovery: Function;
+    highlightedMethod?: string;
+  },
+  prop: SequenceItemPanelProps
+) {
   const {
     selectedSequenceItem,
     loadingIds,
@@ -29,6 +49,9 @@ export function LeftNav(props: {
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
     undefined
   );
+  const { deleteNode, changeParent, save } = prop;
+  const [data, setData] = useState<any | null>(null);
+
   const focusPanel = (
     <TitlePanel
       title="Focus"
@@ -82,6 +105,42 @@ export function LeftNav(props: {
     </TitlePanel>
   );
 
+  const menu = (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Summary
+        verticalIcons={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        margin={{
+          marginBottom: '4px',
+        }}
+        changeParent={changeParent}
+        selectedElement={selectedSequenceItem}
+        run={(skipDiscovery = false) =>
+          runDiscovery(selectedSequenceItem, skipDiscovery)
+        }
+        addBranch={() => setData(null)}
+        newFolder={(name: string) => {
+          save(
+            {
+              sequenceStep: name,
+              children: [],
+              url: selectedSequenceItem.currentNode.exitUrl,
+            },
+            selectedSequenceItem.currentNode
+          );
+        }}
+        deleteNode={deleteNode}
+      />
+    </div>
+  );
+
   return (
     <DragLayout
       orientation="vertical"
@@ -124,7 +183,7 @@ export function LeftNav(props: {
       >
         {props.flow ? (
           <FlowNavigator
-            runDiscovery={runDiscovery}
+            // runDiscovery={runDiscovery}
             graph={props.flow.graph}
             sequenceFilter={sequenceFilter}
             subIds={subIds}
@@ -134,15 +193,9 @@ export function LeftNav(props: {
             selectedId={selectedSequenceItem?.currentNode.id}
             onSelect={props.selectSequenceItem}
             actions={(elem: any) => (
-              <Icon
-                icon="locate"
-                size={12}
-                title="Show in focus window"
-                onClick={() => {
-                  workspaceContext.focus = elem;
-                  setFocus(elem);
-                }}
-              />
+              <Popover2 content={menu} position={Position.BOTTOM_LEFT} minimal>
+                <Icon icon="menu" />
+              </Popover2>
             )}
           />
         ) : (
