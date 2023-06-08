@@ -1,5 +1,5 @@
 import './Console.scss';
-import { Icon, InputGroup, Tab, Tabs } from '@blueprintjs/core';
+import { Button, Icon, InputGroup, Tab, Tabs } from '@blueprintjs/core';
 
 import { Log } from '../../components/log/Log';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
@@ -10,6 +10,7 @@ export default function Console(props: any) {
 
   const [currentTab, setCurrentTab] = useState<null | string>(null);
   const [tabs, setTabs] = useState([]);
+  const [filter, setFilter] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -39,7 +40,25 @@ export default function Console(props: any) {
   return (
     <TitlePanel
       title="Console"
-      collapsible={<InputGroup leftIcon="filter" placeholder="Filter" />}
+      collapsible={
+        <InputGroup
+          leftIcon="filter"
+          placeholder="Filter"
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}
+          rightElement={
+            <Button
+              icon="delete"
+              minimal={true}
+              onClick={() => {
+                setFilter('');
+              }}
+            />
+          }
+        />
+      }
       suffix={
         mainLayoutHoriz
           ? [
@@ -60,7 +79,7 @@ export default function Console(props: any) {
             ]
       }
     >
-      {currentTab && <Log key={currentTab} log={currentTab} />}
+      {currentTab && <Log key={currentTab} log={currentTab} filter={filter} />}
     </TitlePanel>
   );
 }
