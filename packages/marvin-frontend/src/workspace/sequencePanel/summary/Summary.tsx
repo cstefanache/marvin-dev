@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Alert, Icon, Intent, InputGroup } from '@blueprintjs/core';
 import './Summary.scss';
+import { Tooltip2 } from '@blueprintjs/popover2';
+
 export default function Summary(props: any) {
   const {
     selectedElement,
@@ -22,36 +24,58 @@ export default function Summary(props: any) {
 
   return (
     <span className="summary" style={verticalIcons}>
-      <Icon
-        icon="trash"
-        title="Remove current execution step and children"
-        onClick={() => {
-          setDeleteId(currentNode.id);
-        }}
-        style={margin}
-      />
-      <Icon
-        icon="add"
-        onClick={addBranch}
-        title="Add new execution step"
-        style={margin}
-      />
-      <Icon
-        icon="folder-new"
-        title="Create new folder"
-        onClick={() => setNewFolderName('Method Group')}
-        style={margin}
-      />
+      <Tooltip2 content="Remove" minimal>
+        <Icon
+          icon="trash"
+          title="Remove current execution step and children"
+          onClick={() => {
+            setDeleteId(currentNode.id);
+          }}
+          style={margin}
+        />
+      </Tooltip2>
+      <Tooltip2 content="Add" minimal>
+        <Icon
+          icon="add"
+          onClick={addBranch}
+          title="Add new execution step"
+          style={margin}
+        />
+      </Tooltip2>
+      <Tooltip2 content="Group Methods" minimal>
+        <Icon
+          icon="folder-new"
+          title="Create new folder"
+          onClick={() => setNewFolderName('Method Group')}
+          style={margin}
+        />
+      </Tooltip2>
       <span className="divider" />
-      <Icon
-        icon="inheritance"
-        title="Change parent"
-        onClick={props.changeParent}
-        style={margin}
-      />
+      <Tooltip2 content="Change parent" minimal>
+        <Icon
+          icon="inheritance"
+          title="Change parent"
+          onClick={props.changeParent}
+          style={margin}
+        />
+      </Tooltip2>
       <span className="divider" />
-      <Icon icon="play" onClick={() => run(true)} title="Run" style={margin} />
-      <Icon icon="search-template" onClick={run} title="Run and Discover" />
+      <Tooltip2 content="Run" minimal position="bottom">
+        <Icon
+          icon="play"
+          onClick={() => run(true)}
+          title="Play"
+          style={margin}
+        />
+      </Tooltip2>
+      <Tooltip2 content="Run and Discover" minimal>
+        <Icon
+          icon="search-template"
+          onClick={run}
+          title="Run and Discover"
+          style={margin}
+        />
+      </Tooltip2>
       <Alert
         cancelButtonText="Cancel"
         confirmButtonText="Confirm"

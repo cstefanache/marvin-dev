@@ -157,50 +157,56 @@ export function LeftNav(
             'Navigation'
           )
         }
-        collapsible={
-          <InputGroup
-            leftIcon="filter"
-            rightElement={
-              <Button
-                icon="delete"
-                minimal={true}
-                onClick={() => {
-                  setSequenceFilter('');
-                }}
-              />
-            }
-            placeholder="Filter"
-            value={sequenceFilter}
-            onChange={(evt) => {
-              setSequenceFilter(evt.target.value);
-            }}
-          />
-        }
         suffix={[
           <Icon icon="expand-all" size={12} title="Expand All" />,
           <Icon icon="collapse-all" size={12} title="Collapse All" />,
         ]}
       >
-        {props.flow ? (
-          <FlowNavigator
-            // runDiscovery={runDiscovery}
-            graph={props.flow.graph}
-            sequenceFilter={sequenceFilter}
-            subIds={subIds}
-            highlightedMethod={highlightedMethod}
-            autoExpand={true}
-            loadingIds={loadingIds}
-            selectedId={selectedSequenceItem?.currentNode.id}
-            onSelect={props.selectSequenceItem}
-            actions={(elem: any) => (
-              <Popover2 content={menu} position={Position.BOTTOM_LEFT} minimal>
-                <Icon icon="menu" />
-              </Popover2>
-            )}
-          />
-        ) : (
-          <div>Loading</div>
-        )}
+        <>
+          <div>
+            <InputGroup
+              leftIcon="filter"
+              rightElement={
+                <Button
+                  icon="delete"
+                  minimal={true}
+                  onClick={() => {
+                    setSequenceFilter('');
+                  }}
+                />
+              }
+              placeholder="Filter by name"
+              value={sequenceFilter}
+              onChange={(evt) => {
+                setSequenceFilter(evt.target.value);
+              }}
+            />
+          </div>
+          {props.flow ? (
+            <FlowNavigator
+              // runDiscovery={runDiscovery}
+              graph={props.flow.graph}
+              sequenceFilter={sequenceFilter}
+              subIds={subIds}
+              highlightedMethod={highlightedMethod}
+              autoExpand={true}
+              loadingIds={loadingIds}
+              selectedId={selectedSequenceItem?.currentNode.id}
+              onSelect={props.selectSequenceItem}
+              actions={(elem: any) => (
+                <Popover2
+                  content={menu}
+                  position={Position.BOTTOM_LEFT}
+                  minimal
+                >
+                  <Icon icon="menu" />
+                </Popover2>
+              )}
+            />
+          ) : (
+            <div>Loading</div>
+          )}
+        </>
       </TitlePanel>
     </DragLayout>
   );
