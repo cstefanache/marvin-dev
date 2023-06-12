@@ -179,7 +179,7 @@ const SelectMethod = (props: any) => {
     );
   };
 
-  console.log(props);
+  // console.log(props);
 
   return (
     <div className="select-method-panel">

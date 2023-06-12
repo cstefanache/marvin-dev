@@ -13,7 +13,7 @@ import { useContext, useState } from 'react';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
-import { Popover2 } from '@blueprintjs/popover2';
+
 import Summary from '../sequencePanel/summary/Summary';
 
 export interface SequenceItemPanelProps {
@@ -184,7 +184,6 @@ export function LeftNav(
           </div>
           {props.flow ? (
             <FlowNavigator
-              // runDiscovery={runDiscovery}
               graph={props.flow.graph}
               sequenceFilter={sequenceFilter}
               subIds={subIds}
@@ -192,16 +191,7 @@ export function LeftNav(
               autoExpand={true}
               loadingIds={loadingIds}
               selectedId={selectedSequenceItem?.currentNode.id}
-              onSelect={props.selectSequenceItem}
-              actions={(elem: any) => (
-                <Popover2
-                  content={menu}
-                  position={Position.BOTTOM_LEFT}
-                  minimal
-                >
-                  <Icon icon="menu" />
-                </Popover2>
-              )}
+              menu={menu}
             />
           ) : (
             <div>Loading</div>

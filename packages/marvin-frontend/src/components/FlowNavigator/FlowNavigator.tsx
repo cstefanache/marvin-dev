@@ -1,8 +1,9 @@
-import { Icon } from '@blueprintjs/core';
+import { Icon, Position } from '@blueprintjs/core';
 import { ReactElement, useEffect, useState } from 'react';
 import TreeView from 'react-accessible-treeview';
 import { localFlattenTree } from '../../utils';
 import './FlowNavigator.scss';
+import { Popover2 } from '@blueprintjs/popover2';
 interface FlowNavigatorProps {
   highlightedMethod?: string;
   graph: any;
@@ -15,6 +16,7 @@ interface FlowNavigatorProps {
   subIds: string[];
   sequenceFilter?: string;
   runDiscovery?: Function;
+  menu?: any;
 }
 
 export function FlowNavigator(props: FlowNavigatorProps) {
@@ -29,6 +31,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
     loadingIds,
     selectedId,
     runDiscovery,
+    menu,
   } = props;
   const [flow, setFlow] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState([]);
@@ -117,7 +120,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
       expandedIds={expandedIds}
       onExpand={(prop) => {
         const { element, treeState } = prop;
-        if (element) {
+        if (element && onSelect) {
           const { children } = element;
           const expandedIdsList = Array.from(prop.treeState.expandedIds).filter(
             (item) => !children.includes(item)
@@ -181,6 +184,15 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             </span>
             <span className="actions">
               {actions && actions(element)}
+              {menu && (
+                <Popover2
+                  content={menu}
+                  position={Position.BOTTOM_LEFT}
+                  minimal
+                >
+                  <Icon icon="menu" />
+                </Popover2>
+              )}
               {runDiscovery && (
                 <Icon
                   size={12}
