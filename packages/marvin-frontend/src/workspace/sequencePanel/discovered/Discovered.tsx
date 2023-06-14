@@ -3,6 +3,8 @@
 import { Callout, Tag } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { getIcon } from '../../../utils';
+import { Collapse } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 
 export default function DiscoveredElements(props: any) {
   const { exitUrl, filter } = props;
@@ -56,11 +58,19 @@ export default function DiscoveredElements(props: any) {
       }
     };
     getElements(exitUrl);
+    console.log(discoveredElements)
   }, [exitUrl]);
+
+  const [isOpenInfo, setIsOpenInfo] = useState(false);
+  const [isOpenInput, setIsOpenInput] = useState(false);
+  const [isOpenActions, setIsOpenActions] = useState(false);
+  const [isOpenIterables, setIsOpenIterables] = useState(false);
 
   return (
     discoveredElements && (
       <span>
+        <Button onClick={() => setIsOpenInfo(!isOpenInfo)}>Toggle Info</Button>
+        <Collapse isOpen={isOpenInfo}>
         {discoveredElements
           .filter(
             (item) =>
@@ -69,6 +79,7 @@ export default function DiscoveredElements(props: any) {
               (item.details || '').toLowerCase().includes(filter.toLowerCase())
           )
           .map((item: any) => (
+            item.from==="info" && (
             <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
               {item.text} | {item.details}
               <div>
@@ -78,7 +89,82 @@ export default function DiscoveredElements(props: any) {
                 <img src={`data:image/png;base64,${item.base64Image}`} />
               )}
             </Callout>
+            )
           ))}
+        </Collapse>
+
+        <Button onClick={() => setIsOpenInput(!isOpenInput)}>Toggle Input</Button>
+        <Collapse isOpen={isOpenInput}>
+        {discoveredElements
+          .filter(
+            (item) =>
+              filter.trim().length === 0 ||
+              (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
+              (item.details || '').toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((item: any) => (
+            item.from==="input" && (
+            <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
+              {item.text} | {item.details}
+              <div>
+                <Tag minimal={true}>{item.locator}</Tag>
+              </div>
+              {item.base64Image && (
+                <img src={`data:image/png;base64,${item.base64Image}`} />
+              )}
+            </Callout>
+            )
+          ))}
+        </Collapse>
+
+        <Button onClick={() => setIsOpenActions(!isOpenActions)}>Toggle Actions</Button>
+        <Collapse isOpen={isOpenActions}>
+        {discoveredElements
+          .filter(
+            (item) =>
+              filter.trim().length === 0 ||
+              (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
+              (item.details || '').toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((item: any) => (
+            item.from==="actions" && (
+            <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
+              {item.text} | {item.details}
+              <div>
+                <Tag minimal={true}>{item.locator}</Tag>
+              </div>
+              {item.base64Image && (
+                <img src={`data:image/png;base64,${item.base64Image}`} />
+              )}
+            </Callout>
+            )
+          ))}
+        </Collapse>
+
+        <Button onClick={() => setIsOpenIterables(!isOpenIterables)}>Toggle Iterables</Button>
+        <Collapse isOpen={isOpenIterables}>
+        {discoveredElements
+          .filter(
+            (item) =>
+              filter.trim().length === 0 ||
+              (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
+              (item.details || '').toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((item: any) => (
+            item.from==="iterable" && (
+            <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
+              {item.text} | {item.details}
+              <div>
+                <Tag minimal={true}>{item.locator}</Tag>
+              </div>
+              {item.base64Image && (
+                <img src={`data:image/png;base64,${item.base64Image}`} />
+              )}
+            </Callout>
+            )
+          ))}
+        </Collapse>
+
       </span>
     )
   );
