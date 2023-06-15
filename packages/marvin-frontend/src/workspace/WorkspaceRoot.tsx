@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Models } from '@marvin/discovery';
 import { DragLayout } from '../components/DragLayout/DragLayout';
-import { Icon, InputGroup, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
+import { Icon, Tabs, Tab, NonIdealState } from '@blueprintjs/core';
 import { LeftNav } from './navigation/LeftNav';
 import './WorkspaceRoot.scss';
 import Config from './config/Config';
@@ -14,6 +14,8 @@ import { getNodesForFilter } from '../utils';
 import Console from './console/Console';
 import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
+import { DialogComponent } from '../components/Dialog/DialogComponent';
+import { JSONObject } from '../types/Types';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -27,11 +29,13 @@ export function WorkspaceRoot() {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [flowState, setFlowState] = useState<number>(Math.random());
   const [path, setPath] = useState<string | undefined>(null);
-  const [subIds, setSubIds] = useState<any>([]);
+  const [subIds, setSubIds] = useState<string[]>([]);
   const [highlightedMethod, setHighlightedMethod] = useState<string | null>(
     null
   );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [config, setConfig] = useState<JSONObject | undefined>();
 
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
@@ -50,11 +54,13 @@ export function WorkspaceRoot() {
   };
   useEffect(() => {
     asyncLoadFn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
-  function reloadWorkspace() {
+  const reloadWorkspace = () => {
     asyncLoadFn();
-  }
+    setTab(null);
+  };
 
   const selectSequenceItem = async (item: TreeItem) => {
     if (subIds.includes(item.currentNode.id)) {
@@ -156,6 +162,22 @@ export function WorkspaceRoot() {
     window.electron.runDiscovery(sequence, skipDiscovery);
   };
 
+  useEffect(() => {
+    const asyncFn = async () => {
+      const config = await window.electron.getConfig();
+      setConfig(config);
+    };
+    asyncFn();
+  }, [config]);
+
+  useEffect(() => {
+    if (!config?.rootUrl) {
+      setOpenDialog(true);
+    } else {
+      setOpenDialog(false);
+    }
+  }, [workspace]);
+
   const mainLayout = (
     <DragLayout
       orientation="horizontal"
@@ -188,24 +210,33 @@ export function WorkspaceRoot() {
           />
         }
       >
-        {selectedSequenceItem ? (
-          <SequenceItemPanel
-            key={selectedSequenceItem.id}
-            deleteNode={deleteNode}
-            selectedSequenceItem={selectedSequenceItem}
-            changeParent={changeParent}
-            runDiscovery={runDiscovery}
-            save={save}
-            path={path}
+        <>
+          {selectedSequenceItem ? (
+            <SequenceItemPanel
+              key={selectedSequenceItem.id}
+              deleteNode={deleteNode}
+              selectedSequenceItem={selectedSequenceItem}
+              changeParent={changeParent}
+              runDiscovery={runDiscovery}
+              save={save}
+              path={path}
+            />
+          ) : (
+            <NonIdealState
+              title="No node selected"
+              description="Select a node from the left navigation panel"
+              icon="info-sign"
+              iconSize={48}
+            />
+          )}
+          <DialogComponent
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            config={config}
+            setConfig={setConfig}
+            title="Configure setup project base URL"
           />
-        ) : (
-          <NonIdealState
-            title="No node selected"
-            description="Select a node from the left navigation panel"
-            icon="info-sign"
-            iconSize={100}
-          />
-        )}
+        </>
       </DragLayout>
     </DragLayout>
   );
@@ -220,14 +251,10 @@ export function WorkspaceRoot() {
     >
       <Tab
         id="workspaces"
-        title={<Icon icon="box" size={24} title="Projects" />}
+        title={<Icon icon="box" size={24} title="Workspaces" />}
         panel={<Workspaces selectWorkspace={reloadWorkspace} />}
       />
-      <Tab
-        id="mainLayout"
-        title={<Icon icon="panel-stats" size={24} title="Workspace" />}
-        panel={mainLayout}
-      />
+
       {workspace && (
         <Tab
           id="config"
@@ -235,10 +262,20 @@ export function WorkspaceRoot() {
           panel={<Config />}
         />
       )}
-
+      <Tab
+        id="mainLayout"
+        title={
+          <Icon
+            icon="panel-stats"
+            size={24}
+            title={workspace?.name && workspace?.name}
+          />
+        }
+        panel={mainLayout}
+      />
       <Tab
         id="methods"
-        title={<Icon icon="code" size={24} title="Show Methods" />}
+        title={<Icon icon="code" size={24} title="Methods" />}
         panel={
           <Methods
             setHighlightedMethod={(id) => {
@@ -247,17 +284,19 @@ export function WorkspaceRoot() {
             }}
           />
         }
+        disabled={!flow?.graph}
       />
 
       <Tab
         id="sequences"
         title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
         panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
+        disabled={!flow?.graph}
       />
 
       <Tab
         id="generator"
-        title={<Icon icon="code-block" size={24} title="Generate Tests" />}
+        title={<Icon icon="code-block" size={24} title="Cypress Tests" />}
         panel={<Generate />}
       />
     </Tabs>
