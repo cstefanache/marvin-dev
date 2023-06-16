@@ -1,11 +1,6 @@
-// const showDiscoveredElements =
-
-import { Callout, Tag } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { getIcon } from '../../../utils';
-import { Collapse, Icon } from '@blueprintjs/core';
-import { Button } from '@blueprintjs/core';
 import './Discovered.scss';
+import DiscoveredGroup from './DiscoveredGroup';
 
 export default function DiscoveredElements(props: any) {
   const { exitUrl, filter } = props;
@@ -18,7 +13,7 @@ export default function DiscoveredElements(props: any) {
         const {
           items: { info, input, actions, iterable },
         } = discovered;
-        let items = [
+        const items = [
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
@@ -62,154 +57,33 @@ export default function DiscoveredElements(props: any) {
     console.log(discoveredElements);
   }, [exitUrl]);
 
-  const [isOpenInfo, setIsOpenInfo] = useState(false);
-  const [isOpenInput, setIsOpenInput] = useState(false);
-  const [isOpenActions, setIsOpenActions] = useState(false);
-  const [isOpenIterables, setIsOpenIterables] = useState(false);
-
   return (
     discoveredElements && (
       <span className="collapsible-span">
-        <div className="collapsible-header" onClick={() => {setIsOpenInfo(!isOpenInfo)}}>
-          Info
-          <Icon className={`chevron ${isOpenInfo ? 'down' : 'up'}`} icon="chevron-left" />
-        </div>
-        <Collapse isOpen={isOpenInfo}>
-          {discoveredElements
-            .filter(
-              (item) =>
-                filter.trim().length === 0 ||
-                (item.text || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase()) ||
-                (item.details || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase())
-            )
-            .map(
-              (item: any) =>
-                item.from === 'info' && (
-                  <Callout
-                    key={item.locator}
-                    icon={getIcon(item)}
-                    className="mt-2"
-                  >
-                    {item.text} | {item.details}
-                    <div>
-                      <Tag minimal={true}>{item.locator}</Tag>
-                    </div>
-                    {item.base64Image && (
-                      <img src={`data:image/png;base64,${item.base64Image}`} alt="icon"/>
-                    )}
-                  </Callout>
-                )
-            )}
-        </Collapse>
-
-        {/* <Button onClick={() => setIsOpenInput(!isOpenInput)}>
-          Toggle Input
-        </Button>
-        <Collapse isOpen={isOpenInput}>
-          {discoveredElements
-            .filter(
-              (item) =>
-                filter.trim().length === 0 ||
-                (item.text || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase()) ||
-                (item.details || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase())
-            )
-            .map(
-              (item: any) =>
-                item.from === 'input' && (
-                  <Callout
-                    key={item.locator}
-                    icon={getIcon(item)}
-                    className="mt-2"
-                  >
-                    {item.text} | {item.details}
-                    <div>
-                      <Tag minimal={true}>{item.locator}</Tag>
-                    </div>
-                    {item.base64Image && (
-                      <img src={`data:image/png;base64,${item.base64Image}`} />
-                    )}
-                  </Callout>
-                )
-            )}
-        </Collapse>
-
-        <Button onClick={() => setIsOpenActions(!isOpenActions)}>
-          Toggle Actions
-        </Button>
-        <Collapse isOpen={isOpenActions}>
-          {discoveredElements
-            .filter(
-              (item) =>
-                filter.trim().length === 0 ||
-                (item.text || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase()) ||
-                (item.details || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase())
-            )
-            .map(
-              (item: any) =>
-                item.from === 'actions' && (
-                  <Callout
-                    key={item.locator}
-                    icon={getIcon(item)}
-                    className="mt-2"
-                  >
-                    {item.text} | {item.details}
-                    <div>
-                      <Tag minimal={true}>{item.locator}</Tag>
-                    </div>
-                    {item.base64Image && (
-                      <img src={`data:image/png;base64,${item.base64Image}`} />
-                    )}
-                  </Callout>
-                )
-            )}
-        </Collapse>
-
-        <Button onClick={() => setIsOpenIterables(!isOpenIterables)}>
-          Toggle Iterables
-        </Button>
-        <Collapse isOpen={isOpenIterables}>
-          {discoveredElements
-            .filter(
-              (item) =>
-                filter.trim().length === 0 ||
-                (item.text || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase()) ||
-                (item.details || '')
-                  .toLowerCase()
-                  .includes(filter.toLowerCase())
-            )
-            .map(
-              (item: any) =>
-                item.from === 'iterable' && (
-                  <Callout
-                    key={item.locator}
-                    icon={getIcon(item)}
-                    className="mt-2"
-                  >
-                    {item.text} | {item.details}
-                    <div>
-                      <Tag minimal={true}>{item.locator}</Tag>
-                    </div>
-                    {item.base64Image && (
-                      <img src={`data:image/png;base64,${item.base64Image}`} />
-                    )}
-                  </Callout>
-                )
-            )}
-        </Collapse> */}
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="info"
+          label="Info"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="input"
+          label="Input"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="actions"
+          label="Actions"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="iterable"
+          label="Iterables"
+        />
       </span>
     )
   );
