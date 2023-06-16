@@ -38,3 +38,11 @@ body {
 .bp4-popover2-content {
   background: #2f343c;
 }
+
+.action {
+  cursor: pointer;
+
+  &:hover {
+    color: #2B95D6;
+  }
+}

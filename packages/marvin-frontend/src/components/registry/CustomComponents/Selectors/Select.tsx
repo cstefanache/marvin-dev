@@ -48,8 +48,8 @@ export default function CustomSelect(props: Props) {
       helperText={error}
       label={
         <div>
-          {title}{' '}
           <span
+            className='action'
             onClick={() => {
               handleChange(undefined);
             }}
