@@ -123,7 +123,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             (item) => !children.includes(item)
           );
           setExpandedIds(expandedIdsList);
-          onSelect(element);
+          // onSelect(element);
         }
       }}
       nodeRenderer={({

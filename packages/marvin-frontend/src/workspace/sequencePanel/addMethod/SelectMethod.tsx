@@ -179,8 +179,6 @@ const SelectMethod = (props: any) => {
     );
   };
 
-  console.log(props);
-
   return (
     <div className="select-method-panel">
       {propData && !schema && (
