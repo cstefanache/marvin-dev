@@ -1,20 +1,22 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './LogStyles.scss';
-// import post from 'README';
+import MarkDown from 'markdown-to-jsx';
+import mdFile from '../../README.md';
+
 export function Log({ log, filter }: { log: string; filter: string }) {
   const [messages, setMessages] = useState<any[]>([]);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const logsRef = useRef<null | HTMLDivElement>(null);
   const [markdown, setMarkdown] = useState<string>('');
 
-  // React.useEffect(() => {
-  //   fetch(post)
-  //     .then((res) => res.text())
-  //     .then((md) => {
-  //       setMarkdown(md);
-  //     });
-  // }, []);
-  // console.log(markdown);
+  useEffect(() => {
+    if (log !== 'Help' || !log) return;
+    fetch(mdFile.default)
+      .then((response) => response.text())
+      .then((res) => setMarkdown(res))
+      .catch((err) => console.log(err));
+  }, [log]);
+
   useEffect(() => {
     const asyncFn = async () => {
       const messages = await window.electron.getLogs(log);
@@ -33,7 +35,7 @@ export function Log({ log, filter }: { log: string; filter: string }) {
         scrollToBottom();
       }
     });
-  }, []);
+  }, [log]);
 
   useEffect(() => {
     scrollToBottom();
@@ -69,6 +71,9 @@ export function Log({ log, filter }: { log: string; filter: string }) {
         ></pre>
       ))}
       <div ref={messagesEndRef} />
+      {log === 'Help' && (
+        <MarkDown options={{ wrapper: 'article' }}>{markdown}</MarkDown>
+      )}
     </div>
   );
 }
