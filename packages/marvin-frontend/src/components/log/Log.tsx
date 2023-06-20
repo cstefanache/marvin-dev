@@ -9,13 +9,13 @@ export function Log({ log, filter }: { log: string; filter: string }) {
   const logsRef = useRef<null | HTMLDivElement>(null);
   const [markdown, setMarkdown] = useState<string>('');
 
-  useEffect(() => {
-    if (log !== 'Help' || !log) return;
-    fetch(mdFile.default)
-      .then((response) => response.text())
-      .then((res) => setMarkdown(res))
-      .catch((err) => console.log(err));
-  }, [log]);
+  // useEffect(() => {
+  //   if (log !== 'Help' || !log) return;
+  //   fetch(mdFile.default)
+  //     .then((response) => response.text())
+  //     .then((res) => setMarkdown(res))
+  //     .catch((err) => console.log(err));
+  // }, [log]);
 
   useEffect(() => {
     const asyncFn = async () => {
