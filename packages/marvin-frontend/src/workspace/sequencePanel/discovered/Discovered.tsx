@@ -15,7 +15,7 @@ export default function DiscoveredElements(props: any) {
         const {
           items: { info, input, actions, iterable },
         } = discovered;
-        let items = [
+        const items = [
           ...info.map((item: any) => ({ ...item, from: 'info' })),
           ...input.map((item: any) => ({ ...item, from: 'input' })),
           ...actions.map((item: any) => ({ ...item, from: 'actions' })),
@@ -47,7 +47,7 @@ export default function DiscoveredElements(props: any) {
             }
             return memo;
           }, []),
-        ]
+        ];
         // .filter(
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
@@ -68,14 +68,14 @@ export default function DiscoveredElements(props: any) {
               (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
               (item.details || '').toLowerCase().includes(filter.toLowerCase())
           )
-          .map((item: any) => (
+          .map((item: any, i: number) => (
             <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
               {item.text} | {item.details}
               <div>
                 <Tag minimal={true}>{item.locator}</Tag>
               </div>
               {item.base64Image && (
-                <img src={`data:image/png;base64,${item.base64Image}`} />
+                <img alt="" src={`data:image/png;base64,${item.base64Image}`} />
               )}
             </Callout>
           ))}

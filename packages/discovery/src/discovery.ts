@@ -6,7 +6,6 @@ import {
   PageDiscoveryResult,
 } from './models/models';
 import { log } from './utils/logger';
-import * as uuid from 'uuid';
 
 const defaultAliases = {
   info: [
@@ -187,9 +186,9 @@ export default class Discovery {
 
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
-    let rootEl = parent || page;
-    let excludeRules = this.config.aliases.optimizer?.exclude || [];
-    let priorityRules = this.config.aliases.optimizer?.priority || [];
+    const rootEl = parent || page;
+    const excludeRules = this.config.aliases.optimizer?.exclude || [];
+    const priorityRules = this.config.aliases.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
@@ -219,7 +218,7 @@ export default class Discovery {
 
     // const text = await element.evaluate((el) => el.textContent);
 
-    var attributes = await page.evaluate(
+    const attributes = await page.evaluate(
       (element) =>
         Array.from(element.attributes, ({ name, value }) => [name, value]),
       element
@@ -265,7 +264,7 @@ export default class Discovery {
         (cls) => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
       );
 
-      for (let currentClass of filterClasses) {
+      for (const currentClass of filterClasses) {
         const isUnique = await this.isLocatorUnique(
           locator + `.${currentClass}`,
           rootEl,
@@ -287,7 +286,7 @@ export default class Discovery {
           : undefined;
 
       if (parentElement) {
-        let parentLocator = await this.getLocator(
+        const parentLocator = await this.getLocator(
           parentElement,
           page,
           undefined,
@@ -299,7 +298,7 @@ export default class Discovery {
             rootEl
           );
           if (!isUnique) {
-            let newLocator = `${parentLocator.trim()} ${locator}`;
+            const newLocator = `${parentLocator.trim()} ${locator}`;
             const cleanLocator = newLocator.trim().endsWith('>')
               ? newLocator
                   .trim()

@@ -1,9 +1,9 @@
-import { Icon, Position } from '@blueprintjs/core';
+import { Button, Icon, Position, mergeRefs } from '@blueprintjs/core';
 import { ReactElement, useEffect, useState } from 'react';
 import TreeView from 'react-accessible-treeview';
 import { localFlattenTree } from '../../utils';
 import './FlowNavigator.scss';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 interface FlowNavigatorProps {
   highlightedMethod?: string;
   graph: any;
@@ -187,11 +187,40 @@ export function FlowNavigator(props: FlowNavigatorProps) {
               {menu && (
                 <Popover2
                   content={menu}
-                  position={Position.BOTTOM_LEFT}
+                  position={Position.BOTTOM}
                   minimal
-                >
-                  <Icon icon="menu" />
-                </Popover2>
+                  canEscapeKeyClose
+                  renderTarget={({
+                    isOpen: isPopoverOpen,
+                    ref: ref1,
+                    ...popoverProps
+                  }) => (
+                    <Tooltip2
+                      minimal
+                      content="View actions"
+                      disabled={isPopoverOpen}
+                      // openOnTargetFocus={false}
+                      renderTarget={({
+                        isOpen: isTooltipOpen,
+                        ref: ref2,
+                        ...tooltipProps
+                      }) => (
+                        <Button
+                          icon="menu"
+                          {...popoverProps}
+                          {...tooltipProps}
+                          active={isPopoverOpen}
+                          elementRef={mergeRefs(ref1, ref2)}
+                          small
+                        />
+                      )}
+                    />
+                  )}
+                />
+                //   <Tooltip2 content="View actions" minimal hoverCloseDelay={50}>
+                //     <Icon icon="menu" />
+                //   </Tooltip2>
+                // </Popover2>
               )}
               {runDiscovery && (
                 <Icon

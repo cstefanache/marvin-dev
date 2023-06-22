@@ -213,8 +213,8 @@ export default class Workspace {
     const runner = new Runner(this.config, flow, state);
     for (const seq of sequence) {
       const { store } = seq;
-      console.log('###########')
-      console.log(store)
+      console.log('###########');
+      console.log(store);
       await runner.run(page, seq.sequences, callback, store);
     }
 
