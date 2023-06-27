@@ -4,26 +4,18 @@ import './Summary.scss';
 import { Tooltip2 } from '@blueprintjs/popover2';
 
 export default function Summary(props: any) {
-  const {
-    selectedElement,
-    addBranch,
-    newFolder,
-    deleteNode,
-    run,
-    verticalIcons,
-    margin,
-  } = props;
+  const { selectedElement, addBranch, newFolder, deleteNode, run } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);
   const [newFolderName, setNewFolderName] = useState<any>(null);
-  const [menuItems, setMenuItems] = useState<any>(null);
+
   const handleMoveConfirm = () => {
     deleteNode(deleteId);
     setDeleteId(null);
   };
 
   return (
-    <span className="summary" style={verticalIcons}>
+    <span className="summary">
       <Tooltip2 content="Remove" minimal>
         <Icon
           icon="trash"
@@ -31,23 +23,16 @@ export default function Summary(props: any) {
           onClick={() => {
             setDeleteId(currentNode.id);
           }}
-          style={margin}
         />
       </Tooltip2>
       <Tooltip2 content="Add" minimal>
-        <Icon
-          icon="add"
-          onClick={addBranch}
-          title="Add new execution step"
-          style={margin}
-        />
+        <Icon icon="add" onClick={addBranch} title="Add new execution step" />
       </Tooltip2>
       <Tooltip2 content="Group Methods" minimal>
         <Icon
           icon="folder-new"
           title="Create new folder"
           onClick={() => setNewFolderName('Method Group')}
-          style={margin}
         />
       </Tooltip2>
       <span className="divider" />
@@ -56,25 +41,14 @@ export default function Summary(props: any) {
           icon="inheritance"
           title="Change parent"
           onClick={props.changeParent}
-          style={margin}
         />
       </Tooltip2>
       <span className="divider" />
       <Tooltip2 content="Run" minimal position="bottom">
-        <Icon
-          icon="play"
-          onClick={() => run(true)}
-          title="Play"
-          style={margin}
-        />
+        <Icon icon="play" onClick={() => run(true)} title="Play" />
       </Tooltip2>
       <Tooltip2 content="Run and Discover" minimal>
-        <Icon
-          icon="search-template"
-          onClick={run}
-          title="Run and Discover"
-          style={margin}
-        />
+        <Icon icon="search-template" onClick={run} title="Run and Discover" />
       </Tooltip2>
       <Alert
         cancelButtonText="Cancel"

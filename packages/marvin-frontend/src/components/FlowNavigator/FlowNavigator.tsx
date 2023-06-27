@@ -16,7 +16,7 @@ interface FlowNavigatorProps {
   subIds: string[];
   sequenceFilter?: string;
   runDiscovery?: Function;
-  menu?: any;
+  menu?: Function;
 }
 
 export function FlowNavigator(props: FlowNavigatorProps) {
@@ -184,44 +184,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             </span>
             <span className="actions">
               {actions && actions(element)}
-              {menu && (
-                <Popover2
-                  content={menu}
-                  position={Position.BOTTOM}
-                  minimal
-                  canEscapeKeyClose
-                  renderTarget={({
-                    isOpen: isPopoverOpen,
-                    ref: ref1,
-                    ...popoverProps
-                  }) => (
-                    <Tooltip2
-                      minimal
-                      content="View actions"
-                      disabled={isPopoverOpen}
-                      // openOnTargetFocus={false}
-                      renderTarget={({
-                        isOpen: isTooltipOpen,
-                        ref: ref2,
-                        ...tooltipProps
-                      }) => (
-                        <Button
-                          icon="menu"
-                          {...popoverProps}
-                          {...tooltipProps}
-                          active={isPopoverOpen}
-                          elementRef={mergeRefs(ref1, ref2)}
-                          small
-                        />
-                      )}
-                    />
-                  )}
-                />
-                //   <Tooltip2 content="View actions" minimal hoverCloseDelay={50}>
-                //     <Icon icon="menu" />
-                //   </Tooltip2>
-                // </Popover2>
-              )}
+              {menu && <div>{menu(element)}</div>}
               {runDiscovery && (
                 <Icon
                   size={12}

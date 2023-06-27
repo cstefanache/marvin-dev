@@ -1,56 +1,43 @@
 import { DragLayout } from '../../components/DragLayout/DragLayout';
-import {
-  Alert,
-  Button,
-  Icon,
-  InputGroup,
-  Intent,
-  Position,
-} from '@blueprintjs/core';
+import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
-
-import Summary from '../sequencePanel/summary/Summary';
+import ActionsMenu from './ActionsMenu';
 
 export interface SequenceItemPanelProps {
   selectedSequenceItem: TreeItem;
   changeParent: Function;
-  runDiscovery: Function;
+  // runDiscovery: Function;
   save: Function;
   deleteNode: Function;
   path: string;
 }
 
-export function LeftNav(
-  props: {
-    flow: any;
-    selectSequenceItem: Function;
-    selectedSequenceItem?: TreeItem;
-    loadingIds: string[];
-    subIds: string[];
-    runDiscovery: Function;
-    highlightedMethod?: string;
-  },
-  prop: SequenceItemPanelProps
-) {
+export function LeftNav(props: any, itemPanel: SequenceItemPanelProps) {
   const {
-    selectedSequenceItem,
     loadingIds,
-    runDiscovery,
     subIds,
     highlightedMethod,
+    runDiscovery,
+    selectedSequenceItem,
   } = props;
+  const { deleteNode, changeParent, save } = itemPanel;
+
   const workspaceContext = useContext(WorkspaceContext);
   const [focus, setFocus] = useState<any>(workspaceContext.focus);
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
     undefined
   );
-  const { deleteNode, changeParent, save } = prop;
+
   const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    setData(selectedSequenceItem?.currentNode);
+  }, [selectedSequenceItem]);
 
   const focusPanel = (
     <TitlePanel
@@ -105,42 +92,6 @@ export function LeftNav(
     </TitlePanel>
   );
 
-  const menu = (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Summary
-        verticalIcons={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-        margin={{
-          marginBottom: '4px',
-        }}
-        changeParent={changeParent}
-        selectedElement={selectedSequenceItem}
-        run={(skipDiscovery = false) =>
-          runDiscovery(selectedSequenceItem, skipDiscovery)
-        }
-        addBranch={() => setData(null)}
-        newFolder={(name: string) => {
-          save(
-            {
-              sequenceStep: name,
-              children: [],
-              url: selectedSequenceItem.currentNode.exitUrl,
-            },
-            selectedSequenceItem.currentNode
-          );
-        }}
-        deleteNode={deleteNode}
-      />
-    </div>
-  );
-
   return (
     <DragLayout
       orientation="vertical"
@@ -191,7 +142,30 @@ export function LeftNav(
               autoExpand={true}
               loadingIds={loadingIds}
               selectedId={selectedSequenceItem?.currentNode.id}
-              menu={menu}
+              onSelect={props.selectSequenceItem}
+              menu={(element) => (
+                <ActionsMenu
+                  element={element}
+                  selectSequenceItem={props.selectSequenceItem}
+                  changeParent={changeParent}
+                  selectedElement={selectedSequenceItem}
+                  run={(skipDiscovery = false) =>
+                    runDiscovery(element, skipDiscovery)
+                  }
+                  addBranch={() => setData(null)}
+                  newFolder={(name: string) => {
+                    save(
+                      {
+                        sequenceStep: name,
+                        children: [],
+                        url: selectedSequenceItem.currentNode.exitUrl,
+                      },
+                      selectedSequenceItem.currentNode
+                    );
+                  }}
+                  deleteNode={deleteNode}
+                />
+              )}
             />
           ) : (
             <div>Loading</div>
