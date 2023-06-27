@@ -18,6 +18,8 @@ const variableSchema = {
     rootUrl: {
       type: 'string',
       title: 'URL',
+      format: 'uri',
+      pattern: '^https?://',
     },
   },
   required: ['rootUrl'],
@@ -26,20 +28,22 @@ export function DialogComponent(props: DialogProps) {
   const { onClose, open, config, setConfig, title } = props;
   const toastRef = useRef(null);
 
-  const saveConfig = (data: JSONObject) => {
-    try {
-      window.electron.setConfig(data);
-      setConfig(data);
-      if (toastRef.current) {
-        (toastRef.current as Toaster).show({
-          intent: 'primary',
-          message: 'Config saved',
-          timeout: 3000,
-        });
+  const saveConfig = (data: JSONObject, errors: any[]) => {
+    if (!errors || errors.length === 0) {
+      try {
+        window.electron.setConfig(data);
+        setConfig(data);
+        if (toastRef.current) {
+          (toastRef.current as Toaster).show({
+            intent: 'primary',
+            message: 'Config saved',
+            timeout: 3000,
+          });
+        }
+        onClose();
+      } catch (e) {
+        console.log(e);
       }
-      onClose();
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -49,6 +53,9 @@ export function DialogComponent(props: DialogProps) {
       <Dialog
         title={title}
         isOpen={open}
+        canOutsideClickClose={false}
+        canEscapeKeyClose={false}
+        isCloseButtonShown={false}
         onClose={() => onClose()}
         className="modal"
       >

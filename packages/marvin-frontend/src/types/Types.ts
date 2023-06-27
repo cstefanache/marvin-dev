@@ -23,10 +23,12 @@ export interface Property {
   title: string;
   type: string;
   uiType: string;
+  default?: any;
   readOnly: boolean;
   uiIndex?: number;
   properties?: any;
   enum?: any;
   inputType?: string;
   iteratorRoot?: boolean;
+  collapsed?: boolean;
 }

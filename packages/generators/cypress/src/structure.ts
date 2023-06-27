@@ -449,9 +449,8 @@ export default class Structure {
               sequence
             );
 
-            actionItem.internalStore = store;
-
             if (actionItem) {
+              actionItem.internalStore = store;
               actionItems.push(actionItem);
             }
           }

@@ -466,6 +466,8 @@ export function SequencesPanel(props: SequencesPanelProps) {
                   <Dialog
                     title="Add Sequence"
                     isOpen={isAddOpen}
+                    canOutsideClickClose={false}
+                    canEscapeKeyClose={false}
                     onClose={() => setIsAddOpen(false)}
                   >
                     <DialogBody>

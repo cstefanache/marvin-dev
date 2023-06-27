@@ -168,7 +168,8 @@ export function WorkspaceRoot() {
       setConfig(config);
     };
     asyncFn();
-  }, [config]);
+  }, []);
+
 
   useEffect(() => {
     if (!config?.rootUrl) {
@@ -176,7 +177,8 @@ export function WorkspaceRoot() {
     } else {
       setOpenDialog(false);
     }
-  }, [workspace]);
+  }, [config]);
+
 
   const mainLayout = (
     <DragLayout

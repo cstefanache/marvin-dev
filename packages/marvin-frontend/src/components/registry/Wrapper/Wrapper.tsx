@@ -59,11 +59,26 @@ export const getInputIcon = (
 
 interface CustomWrapperProps {
   property: Property;
+  value: any;
   children: JSX.Element | JSX.Element[];
 }
 
-function Wrapper({ property, children }: CustomWrapperProps) {
-  const { className, properties, uiType, uiIndex, description } = property;
+function Wrapper({ property, value, children }: CustomWrapperProps) {
+  const {
+    className,
+    title,
+    properties,
+    uiType,
+    uiIndex,
+    description,
+    collapsed,
+    default: defaultValue,
+  } = property;
+
+  const [allowCollapse, setAllowCollapsed] = useState(collapsed);
+  const [isCollapsed, setIsCollapsed] = useState(
+    collapsed && (!value || value === defaultValue)
+  );
 
   const renderWrapperElements = () => {
     switch (uiType) {
@@ -86,8 +101,32 @@ function Wrapper({ property, children }: CustomWrapperProps) {
               property.type ? `${property.type}-` : ''
             }wrapper field-wrapper ${property.className || ''}`}
           >
-            {property.description && property.type === 'array' && <h3>{property.description}</h3>}
-            {children}
+            {title && (
+              <div>
+                {title || description}
+                {isCollapsed &&
+                  allowCollapse &&
+                  (!value ? (
+                    <Icon icon="plus" onClick={() => setIsCollapsed(false)} />
+                  ) : (
+                    <Icon
+                      icon="chevron-right"
+                      onClick={() => setIsCollapsed(false)}
+                    />
+                  ))}
+                {!isCollapsed && allowCollapse && (
+                  <Icon
+                    icon="chevron-down"
+                    onClick={() => setIsCollapsed(true)}
+                  />
+                )}
+              </div>
+            )}
+            {property.description &&
+              title.trim() !== description.trim() &&
+              property.type === 'array' && <h3>{property.description}</h3>}
+
+            {!isCollapsed && children}
           </div>
         );
     }
@@ -95,12 +134,21 @@ function Wrapper({ property, children }: CustomWrapperProps) {
   return <>{renderWrapperElements()}</>;
 }
 
-export function CustomWrapper({ property, children }: CustomWrapperProps) {
-  return <Wrapper property={property}>{children}</Wrapper>;
+export function CustomWrapper({
+  property,
+  value,
+  children,
+}: CustomWrapperProps) {
+  return (
+    <Wrapper value={value} property={property}>
+      {children}
+    </Wrapper>
+  );
 }
 
 export function SelectMethodCustomWrapper({
   property,
+  value,
   children,
 }: CustomWrapperProps) {
   const { inputType, title, store, storeName, iterator } = property as any;
@@ -137,7 +185,9 @@ export function SelectMethodCustomWrapper({
             : { marginBottom: 10 }
         }
       >
-        <Wrapper property={property}>{children}</Wrapper>
+        <Wrapper value={value} property={property}>
+          {children}
+        </Wrapper>
         {storeComponent}
       </div>
     );
