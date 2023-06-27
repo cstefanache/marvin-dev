@@ -11,21 +11,28 @@ import ActionsMenu from './ActionsMenu';
 export interface SequenceItemPanelProps {
   selectedSequenceItem: TreeItem;
   changeParent: Function;
-  // runDiscovery: Function;
+  runDiscovery: Function;
   save: Function;
   deleteNode: Function;
   path: string;
+  loadingIds: any;
+  subIds: any;
+  highlightedMethod: any;
+  flow: any;
+  selectSequenceItem: Function;
 }
 
-export function LeftNav(props: any, itemPanel: SequenceItemPanelProps) {
+export function LeftNav(props: SequenceItemPanelProps) {
   const {
     loadingIds,
     subIds,
     highlightedMethod,
     runDiscovery,
     selectedSequenceItem,
+    changeParent,
+    save,
+    deleteNode,
   } = props;
-  const { deleteNode, changeParent, save } = itemPanel;
 
   const workspaceContext = useContext(WorkspaceContext);
   const [focus, setFocus] = useState<any>(workspaceContext.focus);
@@ -150,7 +157,8 @@ export function LeftNav(props: any, itemPanel: SequenceItemPanelProps) {
                   changeParent={changeParent}
                   selectedElement={selectedSequenceItem}
                   run={(skipDiscovery = false) =>
-                    runDiscovery(element, skipDiscovery)
+                    selectedSequenceItem &&
+                    runDiscovery(selectedSequenceItem, skipDiscovery)
                   }
                   addBranch={() => setData(null)}
                   newFolder={(name: string) => {

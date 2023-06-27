@@ -187,12 +187,16 @@ export function WorkspaceRoot() {
         <LeftNav
           flow={flow}
           subIds={subIds}
+          deleteNode={deleteNode}
+          selectedSequenceItem={selectedSequenceItem}
+          changeParent={changeParent}
           runDiscovery={runDiscovery}
+          save={save}
           key={flowState}
           highlightedMethod={highlightedMethod}
           loadingIds={loadingIds}
           selectSequenceItem={selectSequenceItem}
-          selectedSequenceItem={selectedSequenceItem}
+          path={path}
         />
       }
     >
