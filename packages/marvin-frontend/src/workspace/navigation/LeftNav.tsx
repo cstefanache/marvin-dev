@@ -152,14 +152,17 @@ export function LeftNav(props: SequenceItemPanelProps) {
               onSelect={props.selectSequenceItem}
               menu={(element) => (
                 <ActionsMenu
+                  onSelect={props.selectSequenceItem}
                   element={element}
                   selectSequenceItem={props.selectSequenceItem}
                   changeParent={changeParent}
                   selectedElement={selectedSequenceItem}
-                  run={(skipDiscovery = false) =>
+                  run={(skipDiscovery = false) => {
+                    workspaceContext.focus = selectedSequenceItem;
+                    setFocus(selectedSequenceItem);
                     selectedSequenceItem &&
-                    runDiscovery(selectedSequenceItem, skipDiscovery)
-                  }
+                      runDiscovery(selectedSequenceItem, skipDiscovery);
+                  }}
                   addBranch={() => setData(null)}
                   newFolder={(name: string) => {
                     save(

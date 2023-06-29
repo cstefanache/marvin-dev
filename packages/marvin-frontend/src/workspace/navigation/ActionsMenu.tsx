@@ -10,6 +10,7 @@ export default function ActionsMenu(props: any) {
     run,
     selectSequenceItem,
     element,
+    onSelect,
   } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);

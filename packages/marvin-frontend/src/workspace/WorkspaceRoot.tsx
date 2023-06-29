@@ -16,6 +16,7 @@ import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
 import { DialogComponent } from '../components/Dialog/DialogComponent';
 import { JSONObject } from '../types/Types';
+import Help from './help/Help';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ export function WorkspaceRoot() {
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
     setWorkspace(workspace);
-
+    console.log(workspace);
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);
@@ -302,6 +303,12 @@ export function WorkspaceRoot() {
         id="generator"
         title={<Icon icon="code-block" size={24} title="Cypress Tests" />}
         panel={<Generate />}
+      />
+      <Tab
+        className="help-tab"
+        id="help"
+        title={<Icon icon="help" size={24} title="Help" />}
+        panel={<Help />}
       />
     </Tabs>
   );
