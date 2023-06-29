@@ -50,10 +50,6 @@ export const testLogger = new Logger('Tests', 'green');
 logs['Tests'] = testLogger;
 registerLogger(testLogger, 'Tests');
 
-export const helpLogger = new Logger('Help', 'green');
-logs['Help'] = helpLogger;
-registerLogger(helpLogger, 'Help');
-
 export default function getLog(section: string, color = 'grey'): Logger {
   let log = logs[section];
   if (!log) {

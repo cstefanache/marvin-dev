@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './LogStyles.scss';
-import MarkDown from 'markdown-to-jsx';
-import mdFile from '../../README.md';
 
 export function Log({ log, filter }: { log: string; filter: string }) {
   const [messages, setMessages] = useState<any[]>([]);
@@ -62,9 +60,6 @@ export function Log({ log, filter }: { log: string; filter: string }) {
         ></pre>
       ))}
       <div ref={messagesEndRef} />
-      {log === 'Help' && (
-        <MarkDown options={{ wrapper: 'article' }}>{mdFile}</MarkDown>
-      )}
     </div>
   );
 }
