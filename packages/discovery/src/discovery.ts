@@ -11,12 +11,12 @@ export default class Discovery {
 
   constructor(private readonly config: Config) {
     this.aliases = {
-      urlReplacers: config.aliases?.urlReplacers || [],
-      optimizer: config.aliases?.optimizer,
-      info: [...(config.aliases?.info || [])],
-      action: [...(config.aliases?.action || [])],
-      input: [...(config.aliases?.input || [])],
-      iterators: [...(config.aliases?.iterators || [])],
+      urlReplacers: config?.aliases?.urlReplacers || [],
+      optimizer: config?.aliases?.optimizer,
+      info: [...(config?.aliases?.info || [])],
+      action: [...(config?.aliases?.action || [])],
+      input: [...(config?.aliases?.input || [])],
+      iterators: [...(config?.aliases?.iterators || [])],
       store: [],
       hack: {
         pre: '',
@@ -129,9 +129,9 @@ export default class Discovery {
 
     const tag = await element.evaluate((el) => el.tagName);
     let locator: any = '';
-    const rootEl = parent || page;
-    const excludeRules = this.config.aliases.optimizer?.exclude || [];
-    const priorityRules = this.config.aliases.optimizer?.priority || [];
+    let rootEl = parent || page;
+    let excludeRules = this.config.aliases.optimizer?.exclude || [];
+    let priorityRules = this.config.aliases.optimizer?.priority || [];
 
     if (!this.matchesAnyRule('', tag.toLowerCase(), 'tag', excludeRules)) {
       locator += tag.toLowerCase();
@@ -161,7 +161,7 @@ export default class Discovery {
 
     // const text = await element.evaluate((el) => el.textContent);
 
-    const attributes = await page.evaluate(
+    let attributes = await page.evaluate(
       (element) =>
         Array.from(element.attributes, ({ name, value }) => [name, value]),
       element

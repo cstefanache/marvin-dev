@@ -87,30 +87,18 @@ export default class Workspace {
         outputPath: `${path}/output/e2e`,
 
         aliases: {
-          urlReplacers: this.config.aliases?.urlReplacers || [],
-          optimizer: this.config.aliases?.optimizer || {
+          urlReplacers: this.config?.aliases?.urlReplacers || [],
+          optimizer: this.config?.aliases?.optimizer || {
             exclude: [],
             priority: [],
           },
-          info: [
-            ...this.discovery.mergeAndFilter(
-              defaultAliases.info,
-              this.config?.aliases?.info || []
-            ),
-            ...(this.config?.aliases?.info || []),
-          ],
+          info: [...defaultAliases.info, ...(this.config?.aliases?.info || [])],
           action: [
-            ...this.discovery.mergeAndFilter(
-              defaultAliases.action,
-              this.config?.aliases?.action || []
-            ),
+            ...defaultAliases.action,
             ...(this.config?.aliases?.action || []),
           ],
           input: [
-            ...this.discovery.mergeAndFilter(
-              defaultAliases.input,
-              this.config?.aliases?.input || []
-            ),
+            ...defaultAliases.input,
             ...(this.config?.aliases?.input || []),
           ],
           iterators: [
