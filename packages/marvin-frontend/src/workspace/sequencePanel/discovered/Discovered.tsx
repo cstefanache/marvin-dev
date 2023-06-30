@@ -1,8 +1,6 @@
-// const showDiscoveredElements =
-
-import { Callout, Tag } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { getIcon } from '../../../utils';
+import './Discovered.scss';
+import DiscoveredGroup from './DiscoveredGroup';
 
 export default function DiscoveredElements(props: any) {
   const { exitUrl, filter } = props;
@@ -60,25 +58,31 @@ export default function DiscoveredElements(props: any) {
 
   return (
     discoveredElements && (
-      <span>
-        {discoveredElements
-          .filter(
-            (item) =>
-              filter.trim().length === 0 ||
-              (item.text || '').toLowerCase().includes(filter.toLowerCase()) ||
-              (item.details || '').toLowerCase().includes(filter.toLowerCase())
-          )
-          .map((item: any, i: number) => (
-            <Callout key={item.locator} icon={getIcon(item)} className="mt-2">
-              {item.text} | {item.details}
-              <div>
-                <Tag minimal={true}>{item.locator}</Tag>
-              </div>
-              {item.base64Image && (
-                <img alt="" src={`data:image/png;base64,${item.base64Image}`} />
-              )}
-            </Callout>
-          ))}
+      <span className="collapsible-span">
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="info"
+          label="Info"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="input"
+          label="Input"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="actions"
+          label="Actions"
+        />
+        <DiscoveredGroup
+          discoveredElements={discoveredElements}
+          filter={filter}
+          category="iterable"
+          label="Iterables"
+        />
       </span>
     )
   );

@@ -16,7 +16,7 @@ import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
 import { DialogComponent } from '../components/Dialog/DialogComponent';
 import { JSONObject } from '../types/Types';
-import Help from './help/Help';
+import { Help } from './help/Help';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import MarkDown from 'markdown-to-jsx';
 import mdFile from '../../README.md';
 
-export default function Help() {
+export function Help() {
   return (
     <div className="container">
       <MarkDown options={{ wrapper: 'article' }}>{mdFile}</MarkDown>
