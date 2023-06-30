@@ -207,7 +207,7 @@ export default class Discovery {
         (cls) => !this.matchesAnyRule('class', cls, 'attribute', excludeRules)
       );
 
-      for (const currentClass of filterClasses) {
+      for (let currentClass of filterClasses) {
         const isUnique = await this.isLocatorUnique(
           locator + `.${currentClass}`,
           rootEl,
@@ -229,7 +229,7 @@ export default class Discovery {
           : undefined;
 
       if (parentElement) {
-        const parentLocator = await this.getLocator(
+        let parentLocator = await this.getLocator(
           parentElement,
           page,
           undefined,
@@ -241,7 +241,7 @@ export default class Discovery {
             rootEl
           );
           if (!isUnique) {
-            const newLocator = `${parentLocator.trim()} ${locator}`;
+            let newLocator = `${parentLocator.trim()} ${locator}`;
             const cleanLocator = newLocator.trim().endsWith('>')
               ? newLocator
                   .trim()
