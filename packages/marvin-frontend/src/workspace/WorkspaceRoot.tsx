@@ -41,7 +41,7 @@ export function WorkspaceRoot() {
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
     setWorkspace(workspace);
-    console.log(workspace);
+
     if (workspace) {
       const path = await window.electron.getWorkspacePath();
       setPath(path);

@@ -43,7 +43,7 @@ export function LeftNav(props: SequenceItemPanelProps) {
   const [data, setData] = useState<any | null>(null);
 
   useEffect(() => {
-    setData(selectedSequenceItem?.currentNode);
+    setData(selectedSequenceItem);
   }, [selectedSequenceItem]);
 
   const focusPanel = (
@@ -152,17 +152,13 @@ export function LeftNav(props: SequenceItemPanelProps) {
               onSelect={props.selectSequenceItem}
               menu={(element) => (
                 <ActionsMenu
-                  onSelect={props.selectSequenceItem}
                   element={element}
                   selectSequenceItem={props.selectSequenceItem}
                   changeParent={changeParent}
                   selectedElement={selectedSequenceItem}
-                  run={(skipDiscovery = false) => {
-                    workspaceContext.focus = selectedSequenceItem;
-                    setFocus(selectedSequenceItem);
-                    selectedSequenceItem &&
-                      runDiscovery(selectedSequenceItem, skipDiscovery);
-                  }}
+                  run={(skipDiscovery = false, el) =>
+                    runDiscovery(el, skipDiscovery)
+                  }
                   addBranch={() => setData(null)}
                   newFolder={(name: string) => {
                     save(

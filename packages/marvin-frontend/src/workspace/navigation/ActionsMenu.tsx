@@ -10,7 +10,6 @@ export default function ActionsMenu(props: any) {
     run,
     selectSequenceItem,
     element,
-    onSelect,
   } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);
@@ -44,11 +43,11 @@ export default function ActionsMenu(props: any) {
           icon="inheritance"
           onClick={props.changeParent}
         />
-        <MenuItem text="Run" icon="play" onClick={() => run(true)} />
+        <MenuItem text="Run" icon="play" onClick={() => run(true, element)} />
         <MenuItem
           text="Run and Discover"
           icon="search-template"
-          onClick={run}
+          onClick={() => run(false, element)}
         />
       </MenuItem>
       <Alert

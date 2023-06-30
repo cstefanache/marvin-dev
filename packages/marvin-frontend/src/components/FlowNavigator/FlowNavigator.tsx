@@ -184,7 +184,7 @@ export function FlowNavigator(props: FlowNavigatorProps) {
             </span>
             <span className="actions">
               {actions && actions(element)}
-              {menu && <div>{menu(element)}</div>}
+              {menu && menu(element)}
               {runDiscovery && (
                 <Icon
                   size={12}
