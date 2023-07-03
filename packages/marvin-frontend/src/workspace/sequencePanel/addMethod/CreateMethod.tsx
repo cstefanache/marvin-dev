@@ -1,7 +1,7 @@
 import './AddMethodStyles.scss';
-import { useEffect, useState } from 'react';
+
 import * as uuid from 'uuid';
-import { KeyInput } from 'puppeteer';
+
 import {
   Button,
   Checkbox,
@@ -11,8 +11,11 @@ import {
   Tag,
 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
-import { getIcon } from '../../../utils';
+import { useEffect, useState } from 'react';
+
 import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
+import { KeyInput } from 'puppeteer';
+import { getIcon } from '../../../utils';
 import { keyInputType } from '../../../constants/keyConstants';
 
 export interface Discovered {
@@ -357,7 +360,6 @@ const CreateMethod = (props: any) => {
                 ]}
               />
               {/* <p className="locator">{step.locator}</p> */}
-<<<<<<< HEAD
               {step.type === 'keyEvent' && (
                 <Select2
                   fill={true}
@@ -376,17 +378,6 @@ const CreateMethod = (props: any) => {
                     rightIcon="double-caret-vertical"
                   />
                 </Select2>
-=======
-              {(step.type === 'clearAndFill' || step.type === 'fill') && (
-                <InputGroup
-                  placeholder="Key event"
-                  value={step.keyEvent}
-                  onChange={(e) => {
-                    step.keyEvent = e.target.value
-                    setSequence([...sequence]);
-                  }}
-                />
->>>>>>> 6977e0b (WIP: add keyEvent field)
               )}
               <InputGroup
                 value={step.locator}
