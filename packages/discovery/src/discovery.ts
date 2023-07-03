@@ -6,75 +6,17 @@ import {
   PageDiscoveryResult,
 } from './models/models';
 import { log } from './utils/logger';
-import * as uuid from 'uuid';
-
-const defaultAliases = {
-  info: [
-    {
-      name: 'Headers',
-      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-    },
-  ],
-  action: [
-    {
-      name: 'Buttons',
-      selectors: ['button'],
-    },
-    {
-      name: 'Links',
-      selectors: ['a'],
-    },
-  ],
-  input: [
-    {
-      name: 'Form Elements',
-      selectors: ['input', 'textarea'],
-    },
-  ],
-  iterators: [
-    {
-      name: 'List Iterator',
-      selectors: ['ul', 'ol'],
-      identifier: 'li',
-      elements: [
-        {
-          name: 'List Item',
-          selector: 'li',
-        },
-      ],
-    },
-  ],
-};
-
 export default class Discovery {
   private aliases: Aliases;
 
   constructor(private readonly config: Config) {
     this.aliases = {
-      urlReplacers: config.aliases?.urlReplacers || [],
-      optimizer: config.aliases?.optimizer,
-      info: [
-        ...this.mergeAndFilter(defaultAliases.info, config.aliases?.info || []),
-        ...(config.aliases?.info || []),
-      ],
-      action: [
-        ...this.mergeAndFilter(
-          defaultAliases.action,
-          config.aliases?.action || []
-        ),
-        ...(config.aliases?.action || []),
-      ],
-      input: [
-        ...this.mergeAndFilter(
-          defaultAliases.input,
-          config.aliases?.input || []
-        ),
-        ...(config.aliases?.input || []),
-      ],
-      iterators: [
-        ...defaultAliases.iterators,
-        ...(config.aliases?.iterators || []),
-      ],
+      urlReplacers: config?.aliases?.urlReplacers || [],
+      optimizer: config?.aliases?.optimizer,
+      info: [...(config?.aliases?.info || [])],
+      action: [...(config?.aliases?.action || [])],
+      input: [...(config?.aliases?.input || [])],
+      iterators: [...(config?.aliases?.iterators || [])],
       store: [],
       hack: {
         pre: '',
@@ -219,7 +161,7 @@ export default class Discovery {
 
     // const text = await element.evaluate((el) => el.textContent);
 
-    var attributes = await page.evaluate(
+    let attributes = await page.evaluate(
       (element) =>
         Array.from(element.attributes, ({ name, value }) => [name, value]),
       element

@@ -1,10 +1,55 @@
 import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
 import * as uuid from 'uuid';
-import { Config, Flow, Models, Runner, State } from '@marvin/discovery';
+import {
+  Config,
+  Flow,
+  Models,
+  Runner,
+  State,
+  Discovery,
+} from '@marvin/discovery';
 import getLog from './logging';
 import App from '../app';
 const logger = getLog('Workspace');
+
+const defaultAliases = {
+  info: [
+    {
+      name: 'Headers',
+      selectors: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    },
+  ],
+  action: [
+    {
+      name: 'Buttons',
+      selectors: ['button'],
+    },
+    {
+      name: 'Links',
+      selectors: ['a'],
+    },
+  ],
+  input: [
+    {
+      name: 'Form Elements',
+      selectors: ['input', 'textarea'],
+    },
+  ],
+  iterators: [
+    {
+      name: 'List Iterator',
+      selectors: ['ul', 'ol'],
+      identifier: 'li',
+      elements: [
+        {
+          name: 'List Item',
+          selector: 'li',
+        },
+      ],
+    },
+  ],
+};
 
 function debounce(func, timeout = 300) {
   let timer;
@@ -19,8 +64,8 @@ function debounce(func, timeout = 300) {
 export default class Workspace {
   public config: Config;
   public flow: Models.FlowModel;
+  public discovery: Discovery;
 
-  private folder: string;
   private output: Models.Discovered;
 
   async initialize(path: string, name: string, url?: string) {
@@ -29,7 +74,6 @@ export default class Workspace {
     } else {
       fs.mkdirSync(path);
     }
-
     if (fs.existsSync(`${path}/config.json`)) {
       logger.error(`Workspace config already exists at ${path}/config.json`);
       await this.loadWorkspace(path);
@@ -43,15 +87,24 @@ export default class Workspace {
         outputPath: `${path}/output/e2e`,
 
         aliases: {
-          urlReplacers: [],
-          optimizer: {
+          urlReplacers: this.config?.aliases?.urlReplacers || [],
+          optimizer: this.config?.aliases?.optimizer || {
             exclude: [],
             priority: [],
           },
-          action: [],
-          input: [],
-          info: [],
-          iterators: [],
+          info: [...defaultAliases.info, ...(this.config?.aliases?.info || [])],
+          action: [
+            ...defaultAliases.action,
+            ...(this.config?.aliases?.action || []),
+          ],
+          input: [
+            ...defaultAliases.input,
+            ...(this.config?.aliases?.input || []),
+          ],
+          iterators: [
+            ...defaultAliases.iterators,
+            ...(this.config?.aliases?.iterators || []),
+          ],
           store: [],
           hack: {
             pre: '',
@@ -213,8 +266,8 @@ export default class Workspace {
     const runner = new Runner(this.config, flow, state);
     for (const seq of sequence) {
       const { store } = seq;
-      console.log('###########')
-      console.log(store)
+      console.log('###########');
+      console.log(store);
       await runner.run(page, seq.sequences, callback, store);
     }
 

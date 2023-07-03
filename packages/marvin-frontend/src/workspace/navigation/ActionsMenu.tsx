@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { Alert, Icon, Intent, InputGroup } from '@blueprintjs/core';
-import './Summary.scss';
-import { Tooltip2 } from '@blueprintjs/popover2';
+import { Alert, Intent, InputGroup, MenuItem } from '@blueprintjs/core';
 
-export default function Summary(props: any) {
-  const { selectedElement, addBranch, newFolder, deleteNode, run } = props;
+export default function ActionsMenu(props: any) {
+  const {
+    selectedElement,
+    addBranch,
+    newFolder,
+    deleteNode,
+    run,
+    selectSequenceItem,
+    element,
+  } = props;
   const { currentNode } = selectedElement || {};
   const [deleteId, setDeleteId] = useState<any>(null);
   const [newFolderName, setNewFolderName] = useState<any>(null);
@@ -13,43 +19,37 @@ export default function Summary(props: any) {
     deleteNode(deleteId);
     setDeleteId(null);
   };
-
   return (
-    <span className="summary">
-      <Tooltip2 content="Remove" minimal>
-        <Icon
+    <div>
+      <MenuItem
+        onClick={() => selectSequenceItem(element)}
+        style={{ height: 18, width: 28, padding: 0 }}
+      >
+        <MenuItem
+          text="Delete"
           icon="trash"
-          title="Remove current execution step and children"
           onClick={() => {
             setDeleteId(currentNode.id);
           }}
         />
-      </Tooltip2>
-      <Tooltip2 content="Add" minimal>
-        <Icon icon="add" onClick={addBranch} title="Add new execution step" />
-      </Tooltip2>
-      <Tooltip2 content="Group Methods" minimal>
-        <Icon
+        <MenuItem text="Add" icon="add" onClick={addBranch} />
+        <MenuItem
+          text="New folder"
           icon="folder-new"
-          title="Create new folder"
           onClick={() => setNewFolderName('Method Group')}
         />
-      </Tooltip2>
-      <span className="divider" />
-      <Tooltip2 content="Change parent" minimal>
-        <Icon
+        <MenuItem
+          text="Change Parent"
           icon="inheritance"
-          title="Change parent"
           onClick={props.changeParent}
         />
-      </Tooltip2>
-      <span className="divider" />
-      <Tooltip2 content="Run" minimal position="bottom">
-        <Icon icon="play" onClick={() => run(true)} title="Play" />
-      </Tooltip2>
-      <Tooltip2 content="Run and Discover" minimal>
-        <Icon icon="search-template" onClick={run} title="Run and Discover" />
-      </Tooltip2>
+        <MenuItem text="Run" icon="play" onClick={() => run(true, element)} />
+        <MenuItem
+          text="Run and Discover"
+          icon="search-template"
+          onClick={() => run(false, element)}
+        />
+      </MenuItem>
       <Alert
         cancelButtonText="Cancel"
         confirmButtonText="Confirm"
@@ -86,6 +86,6 @@ export default function Summary(props: any) {
           able to restore it later, but it will become private to you.
         </p>
       </Alert>
-    </span>
+    </div>
   );
 }

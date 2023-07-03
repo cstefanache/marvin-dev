@@ -82,7 +82,7 @@ const SelectMethod = (props: any) => {
           condition: {
             type: 'string',
             title: 'Condition',
-            collapsed: true
+            collapsed: true,
           },
           parameters: {
             type: 'object',
@@ -128,26 +128,26 @@ const SelectMethod = (props: any) => {
             description:
               'Run this step and its children for each matched element',
             enum: discovered,
-            collapsed: true
+            collapsed: true,
           },
           loop: {
             type: 'integer',
             title: 'Sequence Execution Loop',
             default: 1,
             description: 'Number of times to loop this step',
-            collapsed: true
+            collapsed: true,
           },
           methodLoop: {
             type: 'integer',
             title: 'Method Loop',
             default: 1,
             description: 'Number of times to loop this method',
-            collapsed: true
+            collapsed: true,
           },
           postDelay: {
             type: 'integer',
             title: 'Post Delay',
-            collapsed: true
+            collapsed: true,
           },
         },
       };

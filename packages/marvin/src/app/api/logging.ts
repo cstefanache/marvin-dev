@@ -8,13 +8,21 @@ export class Logger {
 
   constructor(public section: string, color: string) {
     this.consoleLogFn = (colors as any)[color];
-    this.log(`Logger initialized for ${section}`)
+    this.log(`Logger initialized for ${section}`);
   }
 
-  public log(message: string, col?: string, overwriteLast: boolean = false): void {
+  public log(
+    message: string,
+    col?: string,
+    overwriteLast: boolean = false
+  ): void {
     console.log(this.consoleLogFn(`[ ${this.section} ] ${message}`));
     if (App.mainWindow) {
-      App.mainWindow.webContents.send('log', this.section, [col, message, overwriteLast]);
+      App.mainWindow.webContents.send('log', this.section, [
+        col,
+        message,
+        overwriteLast,
+      ]);
     }
     if (overwriteLast) {
       this.logs.pop();
@@ -37,7 +45,6 @@ export const logs: { [key: string]: Logger } = {};
 const marvinLogger = new Logger('Runner', 'yellow');
 logs['Runner'] = marvinLogger;
 registerLogger(marvinLogger);
-
 
 export const testLogger = new Logger('Tests', 'green');
 logs['Tests'] = testLogger;
