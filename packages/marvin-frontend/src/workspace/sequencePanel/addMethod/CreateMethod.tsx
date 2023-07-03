@@ -1,7 +1,7 @@
 import './AddMethodStyles.scss';
-
+import { useEffect, useState } from 'react';
 import * as uuid from 'uuid';
-
+import { KeyInput } from 'puppeteer';
 import {
   Button,
   Checkbox,
@@ -11,11 +11,8 @@ import {
   Tag,
 } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
-import { useEffect, useState } from 'react';
-
-import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
-import { KeyInput } from 'puppeteer';
 import { getIcon } from '../../../utils';
+import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
 import { keyInputType } from '../../../constants/keyConstants';
 
 export interface Discovered {
@@ -103,7 +100,6 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod } = props;
-  const [keyEvent, setKeyEvent] = useState('');
 
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
@@ -164,12 +160,11 @@ const CreateMethod = (props: any) => {
 
     const { selectedMethod } = props;
     if (selectedMethod && selectedMethod.sequence) {
-      const { name, uid, sequence, isGlobal, keyEvent } = selectedMethod;
+      const { name, uid, sequence, isGlobal } = selectedMethod;
       setUid(uid);
       setSequence(sequence);
       setMethodName(name);
       setIsGlobal(isGlobal);
-      setKeyEvent(keyEvent);
     }
   }, []);
 
@@ -180,7 +175,6 @@ const CreateMethod = (props: any) => {
       path: exitUrl,
       isGlobal,
       sequence,
-      keyEvent: keyEvent,
     };
     // if (iterator) {
     //   saveObject['iterator'] = iterator;
