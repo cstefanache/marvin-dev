@@ -2,32 +2,49 @@ import { DragLayout } from '../../components/DragLayout/DragLayout';
 import { Button, Icon, InputGroup } from '@blueprintjs/core';
 import { TitlePanel } from '../../components/TitlePanel/TitlePanel';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TreeItem } from '../sequencePanel/SequenceItemPanel';
 import { WorkspaceContext } from '../../contexts/WorkspaceContext';
 import { localFlattenTree } from '../../utils';
+import ActionsMenu from './ActionsMenu';
 
-export function LeftNav(props: {
+export interface SequenceItemPanelProps {
+  selectedSequenceItem: TreeItem;
+  changeParent: Function;
+  runDiscovery: Function;
+  save: Function;
+  deleteNode: Function;
+  path: string;
+  loadingIds: any;
+  subIds: any;
+  highlightedMethod: any;
   flow: any;
   selectSequenceItem: Function;
-  selectedSequenceItem?: TreeItem;
-  loadingIds: string[];
-  subIds: string[];
-  runDiscovery: Function;
-  highlightedMethod?: string;
-}) {
+}
+
+export function LeftNav(props: SequenceItemPanelProps) {
   const {
-    selectedSequenceItem,
     loadingIds,
-    runDiscovery,
     subIds,
     highlightedMethod,
+    runDiscovery,
+    selectedSequenceItem,
+    changeParent,
+    save,
+    deleteNode,
   } = props;
+
   const workspaceContext = useContext(WorkspaceContext);
   const [focus, setFocus] = useState<any>(workspaceContext.focus);
   const [sequenceFilter, setSequenceFilter] = useState<string | undefined>(
     undefined
   );
+
+  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    setData(selectedSequenceItem);
+  }, [selectedSequenceItem]);
 
   const focusPanel = (
     <TitlePanel
@@ -103,27 +120,28 @@ export function LeftNav(props: {
           <Icon icon="collapse-all" size={12} title="Collapse All" />,
         ]}
       >
-        <div>
-          <InputGroup
-            leftIcon="filter"
-            rightElement={
-              <Button
-                icon="delete"
-                minimal={true}
-                onClick={() => {
-                  setSequenceFilter('');
-                }}
-              />
-            }
-            placeholder="Filter by name"
-            value={sequenceFilter}
-            onChange={(evt) => {
-              setSequenceFilter(evt.target.value);
-            }}
-          />
+        <>
+          <div>
+            <InputGroup
+              leftIcon="filter"
+              rightElement={
+                <Button
+                  icon="delete"
+                  minimal={true}
+                  onClick={() => {
+                    setSequenceFilter('');
+                  }}
+                />
+              }
+              placeholder="Filter by name"
+              value={sequenceFilter}
+              onChange={(evt) => {
+                setSequenceFilter(evt.target.value);
+              }}
+            />
+          </div>
           {props.flow ? (
             <FlowNavigator
-              runDiscovery={runDiscovery}
               graph={props.flow.graph}
               sequenceFilter={sequenceFilter}
               subIds={subIds}
@@ -132,22 +150,34 @@ export function LeftNav(props: {
               loadingIds={loadingIds}
               selectedId={selectedSequenceItem?.currentNode.id}
               onSelect={props.selectSequenceItem}
-              actions={(elem: any) => (
-                <Icon
-                  icon="locate"
-                  size={12}
-                  title="Show in focus window"
-                  onClick={() => {
-                    workspaceContext.focus = elem;
-                    setFocus(elem);
+              menu={(element) => (
+                <ActionsMenu
+                  element={element}
+                  selectSequenceItem={props.selectSequenceItem}
+                  changeParent={changeParent}
+                  selectedElement={selectedSequenceItem}
+                  run={(skipDiscovery = false, el) =>
+                    runDiscovery(el, skipDiscovery)
+                  }
+                  addBranch={() => setData(null)}
+                  newFolder={(name: string) => {
+                    save(
+                      {
+                        sequenceStep: name,
+                        children: [],
+                        url: selectedSequenceItem.currentNode.exitUrl,
+                      },
+                      selectedSequenceItem.currentNode
+                    );
                   }}
+                  deleteNode={deleteNode}
                 />
               )}
             />
           ) : (
             <div>Loading</div>
           )}
-        </div>
+        </>
       </TitlePanel>
     </DragLayout>
   );

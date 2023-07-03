@@ -16,6 +16,7 @@ import Generate from './generator/Generate';
 import { SequencesPanel } from './sequences/SequencesPanel';
 import { DialogComponent } from '../components/Dialog/DialogComponent';
 import { JSONObject } from '../types/Types';
+import { Help } from './help/Help';
 
 export function WorkspaceRoot() {
   const navigate = useNavigate();
@@ -170,7 +171,6 @@ export function WorkspaceRoot() {
     asyncFn();
   }, []);
 
-
   useEffect(() => {
     if (!config?.rootUrl) {
       setOpenDialog(true);
@@ -178,7 +178,6 @@ export function WorkspaceRoot() {
       setOpenDialog(false);
     }
   }, [config]);
-
 
   const mainLayout = (
     <DragLayout
@@ -189,12 +188,16 @@ export function WorkspaceRoot() {
         <LeftNav
           flow={flow}
           subIds={subIds}
+          deleteNode={deleteNode}
+          selectedSequenceItem={selectedSequenceItem}
+          changeParent={changeParent}
           runDiscovery={runDiscovery}
+          save={save}
           key={flowState}
           highlightedMethod={highlightedMethod}
           loadingIds={loadingIds}
           selectSequenceItem={selectSequenceItem}
-          selectedSequenceItem={selectedSequenceItem}
+          path={path}
         />
       }
     >
@@ -300,6 +303,12 @@ export function WorkspaceRoot() {
         id="generator"
         title={<Icon icon="code-block" size={24} title="Cypress Tests" />}
         panel={<Generate />}
+      />
+      <Tab
+        className="help-tab"
+        id="help"
+        title={<Icon icon="help" size={24} title="Help" />}
+        panel={<Help />}
       />
     </Tabs>
   );
