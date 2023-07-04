@@ -1,7 +1,7 @@
 import './AddMethodStyles.scss';
-import { useEffect, useState } from 'react';
+
 import * as uuid from 'uuid';
-import { KeyInput } from 'puppeteer';
+
 import {
   Button,
   Checkbox,
@@ -10,9 +10,18 @@ import {
   MenuItem,
   Tag,
 } from '@blueprintjs/core';
+import {
+  CustomRegistry,
+  CustomWrapper,
+} from '../../../components/registry/Wrapper/Wrapper';
 import { ItemPredicate, ItemRenderer, Select2 } from '@blueprintjs/select';
-import { getIcon } from '../../../utils';
+import { useEffect, useState } from 'react';
+
+import CreateSchema from '../../../schemas/method.schema.json';
 import { EditableSelectionBox } from '../../../components/editableSelectionBox/EditableSelectionBox';
+import { KeyInput } from 'puppeteer';
+import { SchemaForm } from '@ascentcore/react-schema-form';
+import { getIcon } from '../../../utils';
 import { keyInputType } from '../../../constants/keyConstants';
 
 export interface Discovered {
@@ -264,6 +273,15 @@ const CreateMethod = (props: any) => {
 
   return (
     <div className="create-container">
+       <div>
+      <div>
+        <SchemaForm
+          schema={CreateSchema}
+          wrapper={CustomWrapper as unknown as React.ReactNode}
+          config={{ registry: CustomRegistry }}
+        />
+      </div>
+    </div>
       <div>
         <Tag>Url</Tag>: {exitUrl}
       </div>

@@ -108,3 +108,9 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
   //   background-color: $item-bg-color;
   // }
 }
+.boolean-wrapper {
+  display:flex;
+  flex-direction:row-reverse;
+  justify-content: start;
+
+}

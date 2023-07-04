@@ -1,3 +1,5 @@
+import './TextFieldStyles.scss';
+
 import {
   FormGroup,
   InputGroup,
@@ -7,8 +9,6 @@ import {
 
 import { Property } from '../../../../types/Types';
 import { getInputIcon } from '../../Wrapper/Wrapper';
-
-import './TextFieldStyles.scss';
 
 interface Props {
   property: Property;
@@ -27,6 +27,7 @@ export default function CustomTextField(props: Props) {
     readOnly,
     inputType,
     iteratorRoot,
+    placeholder,
   } = property;
 
   const handleChange = (event: any) => {
@@ -52,6 +53,7 @@ export default function CustomTextField(props: Props) {
       } else {
         return (
           <InputGroup
+          placeholder={placeholder}
             value={value ? `${value}` : undefined}
             onChange={handleChange}
             leftElement={getInputIcon(title, inputType, iteratorRoot)}
