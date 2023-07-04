@@ -31,4 +31,5 @@ export interface Property {
   inputType?: string;
   iteratorRoot?: boolean;
   collapsed?: boolean;
+  placeholder:string;
 }

@@ -8,22 +8,15 @@
     "method": {
       "type": "string",
       "title": "Method Name",
+      "placeholder":"Method Name",
       "uiType": "item",
       "size": { "xs": 12 }
     },
-    "itemRoot": {
-      "type": "string",
-      "title": "Iterator Item Root (optional)",
-      "description": "Look for selectors with an element as root instead of the whole document",
+    "globalMethod":{
+      "type":"boolean",
+      "title":"Global Method",
       "uiType": "item",
       "size": { "xs": 12 }
-    },
-    "sequence": {
-      "type": "array",
-      "title": "Action Sequence",
-      "size": { "xs": 12 },
-      "uiType": "container",
-      "items": { "$ref": "#/definitions/SequenceItem" }
     }
   },
   "definitions": {
