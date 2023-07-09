@@ -23,6 +23,12 @@
       "title":"Sequence",
       "uiType": "enum",
       "size": { "xs": 12 }
+    },
+    "Sequddence":{
+      "type":"string",
+      "title":"Sequence",
+      "uiType": "enum",
+      "size": { "xs": 12 }
     }
   },
   "definitions": {
