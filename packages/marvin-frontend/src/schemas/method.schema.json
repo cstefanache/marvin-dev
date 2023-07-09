@@ -17,6 +17,12 @@
       "title":"Global Method",
       "uiType": "item",
       "size": { "xs": 12 }
+    },
+    "Sequence":{
+      "type":"string",
+      "title":"Sequence",
+      "uiType": "enum",
+      "size": { "xs": 12 }
     }
   },
   "definitions": {
