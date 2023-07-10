@@ -115,7 +115,8 @@ const CreateMethod = (props: any) => {
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
   const [isGlobal, setIsGlobal] = useState<boolean>(false);
-  const [uid, setUid] = useState<string>(uuid.v4());
+  const [uid, setUid] = useState<string>(uuid.v4()); 
+  const [schema, setSchema] = useState<null | any>(null)
 
   useEffect(() => {
     const asyncFn = async () => {
@@ -162,6 +163,15 @@ const CreateMethod = (props: any) => {
         //     index === self.findIndex((t) => t.locator === value.locator)
         // );
 
+        setSchema({
+          ...CreateSchema,
+          properties: {          
+            ...CreateSchema.properties,
+          sequence: {
+            ...CreateSchema.properties.sequence,
+            enum: items.reduce( (memo, item) => { memo.push( item.locator); return memo}, [])
+          }}
+        })
         setItems(items);
       }
     };
@@ -176,7 +186,7 @@ const CreateMethod = (props: any) => {
       setIsGlobal(isGlobal);
     }
   }, []);
-
+  console.log(schema)
   async function doSave() {
     const saveObject: any = {
       uid,
@@ -275,11 +285,11 @@ const CreateMethod = (props: any) => {
     <div className="create-container">
        <div>
       <div>
-        <SchemaForm
-          schema={CreateSchema}
+       {schema && <SchemaForm
+          schema={schema}
           wrapper={CustomWrapper as unknown as React.ReactNode}
           config={{ registry: CustomRegistry }}
-        />
+        />}
       </div>
     </div>
       <div>
