@@ -9,48 +9,18 @@
       "type": "string",
       "title": "Method Name",
       "placeholder":"Method Name",
-      "uiType": "item",
       "size": { "xs": 12 }
     },
     "globalMethod":{
       "type":"boolean",
       "title":"Global Method",
+      "size": { "xs": 12 }
+    },
+    "sequence":{
+      "type":"string",
+      "title":"Sequence",
       "uiType": "item",
       "size": { "xs": 12 }
-    },
-    "Sequence":{
-      "type":"string",
-      "title":"Sequence",
-      "uiType": "enum",
-      "size": { "xs": 12 }
-    },
-    "Sequddence":{
-      "type":"string",
-      "title":"Sequence",
-      "uiType": "enum",
-      "size": { "xs": 12 }
-    }
-  },
-  "definitions": {
-    "SequenceItem": {
-      "type": "object",
-      "title": "Sequence Item",      
-
-      "properties": {
-        "type": {
-          "type": "string",
-          "title": "Type",
-          "enum": ["click", "fill"],
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 4 }
-        },
-        "locator": {
-          "type": "string",
-          "title": "Locator",
-          "uiType": "item",
-          "size": { "xs": 12, "sm": 8 }
-        }
-      }
     }
   }
 }
