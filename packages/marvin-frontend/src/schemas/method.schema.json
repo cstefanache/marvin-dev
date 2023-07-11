@@ -21,6 +21,44 @@
       "title":"Sequence",
       "uiType": "item",
       "size": { "xs": 12 }
+      },
+      "sequenceContainer":{
+        "type":"object",
+        "title":"Container",
+        "uiType": "tab",
+        "size": { "xs": 12 },
+        "properties": {
+          "locator":{
+            "type": "string",
+            "title": "Select locator",
+            "size": { "xs": 12, "sm": 6 }
+          },
+          "select":{
+            "type": "string",
+            "title": "Select action",
+            "size": { "xs": 12, "sm": 6 }
+          },
+          "keyEvent":{
+            "type": "string",
+            "title": "Key Event",
+            "size": { "xs": 12, "sm": 6 }
+          },
+          "storeContent":{
+            "type":"boolean",
+            "title":"Store content",
+            "size": { "xs": 12 }
+          },
+          "variableName":{
+            "type":"string",
+            "placeholder":"Variable name",
+            "size": { "xs": 12 }
+          },
+          "storeValue":{
+            "type":"string",
+            "placeholder":"Store value from attribute",
+            "size": { "xs": 12 }
+          }
+    }
     }
   }
 }
