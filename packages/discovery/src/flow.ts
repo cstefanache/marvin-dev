@@ -60,7 +60,7 @@ export default class Flow {
     overwrite = false
   ): Promise<PageDiscoveryResult> {
     if (this.config.delayedDiscovery) {
-      log(`Delaying discovery for ${this.config.delayedDiscovery}ms`)
+      log(`Delaying discovery for ${this.config.delayedDiscovery}ms`);
       await new Promise((res: Function) => {
         setTimeout(() => res(), this.config.delayedDiscovery);
       });
@@ -149,7 +149,9 @@ export default class Flow {
     waitForNetworkIdle = true
   ): Promise<Page> {
     log(`Navigating to ${url} ...`, 'blue');
-    const page = await this.browser.newPage();
+    // const page = await this.browser.newPage();
+    const pages = await this.browser.pages();
+    let page = pages.length ? pages[0] : await this.browser.newPage();
     await page.goto(url);
     if (
       this.config.aliases.hack &&
@@ -159,9 +161,13 @@ export default class Flow {
       page.addScriptTag({ content: this.config.aliases.hack.pre });
     }
     if (waitForNetworkIdle) {
-      await page.waitForNetworkIdle({
-        timeout: this.config.defaultTimeout,
-      });
+      try {
+        await page.waitForNetworkIdle({
+          timeout: this.config.defaultTimeout,
+        });
+      } catch (err) {
+        log(`Error waiting for network idle: ${err}`, 'red')
+      }
     }
     return page;
   }
