@@ -40,6 +40,7 @@ export interface TreeItem {
 
 export interface SequencesPanelProps {
   flow: Models.FlowModel;
+  config: any;
   runSequence: Function;
 }
 
@@ -177,7 +178,7 @@ const variableSchema = {
 };
 
 export function SequencesPanel(props: SequencesPanelProps) {
-  const { flow } = props;
+  const { flow, config } = props;
 
   const [selectedBlockIndex, setSelectedBlockIndex] = useState<number>(0);
   const [selectedBlock, setSelectedBlock] = useState<Models.Block>(null);
@@ -489,7 +490,13 @@ export function SequencesPanel(props: SequencesPanelProps) {
                               sequence.sequences.push(currentNode.id);
                               return sequence;
                             }
-                            const seq = { store: [], sequences: [] };
+                            const seq = {
+                              store:
+                                selectedBlock.items.length === 0
+                                  ? config.aliases.store
+                                  : [],
+                              sequences: [],
+                            };
                             addToSeq(element, seq);
                             const sequences = [...selectedBlock.items];
                             sequences.push(seq);
