@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Icon, Intent, InputGroup } from '@blueprintjs/core';
 import './Summary.scss';
 import { Tooltip2 } from '@blueprintjs/popover2';
@@ -13,6 +13,20 @@ export default function Summary(props: any) {
     deleteNode(deleteId);
     setDeleteId(null);
   };
+
+  useEffect(() => {
+    function onKeyPress(e: KeyboardEvent) {
+      setDeleteId((currentDeleteId) => {
+        deleteNode(currentDeleteId);
+        return null;
+      });
+    }
+    document.addEventListener('keypress', onKeyPress);
+
+    return () => {
+      document.removeEventListener('keypress', onKeyPress);
+    };
+  }, []);
 
   return (
     <span className="summary">
@@ -82,8 +96,8 @@ export default function Summary(props: any) {
         onConfirm={handleMoveConfirm}
       >
         <p>
-          Are you sure you want to move <b>filename</b> to Trash? You will be
-          able to restore it later, but it will become private to you.
+          Are you sure you want to delete this Method? <br />
+          You will not be able to undo this action.
         </p>
       </Alert>
     </span>
