@@ -15,11 +15,16 @@ export default function Summary(props: any) {
   };
 
   useEffect(() => {
-    function onKeyPress(e: KeyboardEvent) {
-      setDeleteId((currentDeleteId) => {
-        deleteNode(currentDeleteId);
-        return null;
-      });
+    function onKeyPress(e: KeyboardEvent) { // this triggers on any keypress
+      if (e.key === 'Enter') { // even if the modal is closed
+        setDeleteId((currentDeleteId) => {
+          if (currentDeleteId !== null) {
+          deleteNode(currentDeleteId);
+
+          }
+          return null;
+        });
+      }
     }
     document.addEventListener('keypress', onKeyPress);
 
