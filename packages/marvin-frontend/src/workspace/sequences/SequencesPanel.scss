@@ -1,3 +1,6 @@
+@import "../../variables";
+
+
 .variable-form {
     &.ra-schema-form {
         flex-direction: column;
@@ -16,6 +19,20 @@
         row-gap: 10px;
         flex-grow: 1;
         overflow: auto;
+
+        .loading {
+            color: rgb(136, 255, 140) !important;
+            background-color: transparent;
+        }
+
+        .bp4-icon-cog {
+            animation: rotation 2s infinite linear;
+        }
+
+        .bp4-icon:hover {
+            color: $action-color;
+            cursor: pointer;
+        }
 
         .sequences-wrapper {
             display: flex;
@@ -42,14 +59,14 @@
 
                 .variable {
                     display: inline-block;
-                    background-color: rgb(95, 98, 186);                    
+                    background-color: rgb(95, 98, 186);
                     padding: 0 20px 0 0;
                     border-radius: 2px;
                     position: relative;
-                    border: 1px solid rgba(255,255,255,.3);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
 
                     .variable-key {
-                        background-color: rgba(0, 0, 0, .3);
+                        background-color: rgba(0, 0, 0, 0.3);
                         display: inline-block;
                         padding: 4px;
                     }
@@ -62,7 +79,6 @@
                     }
 
                     &:hover {
-                        
                         .bp4-icon-trash {
                             visibility: visible;
                             cursor: pointer;
@@ -78,7 +94,7 @@
                 column-gap: 5px;
                 row-gap: 5px;
                 align-items: center;
-                border-top: 1px solid rgba(255,255,255,.3);
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
                 padding-top: 5px;
             }
         }
