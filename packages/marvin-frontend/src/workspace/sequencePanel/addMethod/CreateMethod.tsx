@@ -34,7 +34,14 @@ export interface Discovered {
 export interface DiscoveredItem extends Discovered {
   elements: Discovered[];
 }
-
+const options=[
+  'check',
+  'click',
+  'clearAndFill',
+  'fill',
+  'noAction',
+  'keyEvent',
+]
 const filterItems: ItemPredicate<DiscoveredItem> = (
   query,
   item,
