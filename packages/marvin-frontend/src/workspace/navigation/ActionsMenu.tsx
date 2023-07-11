@@ -22,6 +22,7 @@ export default function ActionsMenu(props: any) {
   return (
     <div>
       <MenuItem
+        icon="more"
         onClick={() => selectSequenceItem(element)}
         style={{ height: 18, width: 28, padding: 0 }}
       >

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 import { Page } from 'puppeteer';
 import Flow from './flow';
 import { Config, KeyValuePair, Sequence, Alias } from './models/config';
@@ -274,6 +277,10 @@ export default class Runner {
         if (press) {
           await page.keyboard.press(press);
         }
+      } else if (type === 'keyEvent') {
+        log(`  [ ] Triggering key press ${press}`);
+        await page.keyboard.press(press);
+        log(`  [x] Triggered key press ${press}`);
       } else if (type === 'click') {
         const element = await page.$(locator);
 
@@ -556,7 +563,7 @@ export default class Runner {
       this.store = {
         library,
         ...this.config.aliases.store.reduce((memo: any, item: KeyValuePair) => {
-          console.log(item)
+          console.log(item);
           memo[item.key] = item.value;
           return memo;
         }, {}),

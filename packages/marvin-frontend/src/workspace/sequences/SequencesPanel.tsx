@@ -340,8 +340,13 @@ export function SequencesPanel(props: SequencesPanelProps) {
                 {filteredData.map((block, blockIndex) => (
                   <MenuItem
                     title={block.name}
-                    text={block.name}
-                    icon="gantt-chart"
+                    text={
+                      <div>
+                        <Icon icon="gantt-chart" />
+                        {block.name}
+                      </div>
+                    }
+                    icon="more"
                     onClick={() => {
                       setSelectedBlockIndex(blockIndex);
                       setSelectedBlock(block);
