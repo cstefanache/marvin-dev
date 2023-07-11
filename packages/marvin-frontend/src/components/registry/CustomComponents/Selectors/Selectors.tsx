@@ -37,7 +37,6 @@ export default function Selectors({ value, onChange }: Props) {
     <>
       <FormGroup
         helperText="Press Enter to add"
-        label="Add Selector"
         inline={false}
         className="form-group"
       >
