@@ -133,6 +133,7 @@ export function WorkspaceRoot() {
   window.ipcRender.receive('run-completed', async (id: string) => {
     setLoadingIds([]);
     reloadWorkspace();
+    setRunning(false);
   });
 
   const runDiscovery = async (element: any, skipDiscovery = false) => {
@@ -152,7 +153,13 @@ export function WorkspaceRoot() {
     window.electron.runDiscovery(
       [{ sequences: addToSeq(element, []) }],
       skipDiscovery === true
-    );
+    ).catch((e: any) => {
+      console.error(e )
+      setRunning(false);
+      setLoadingIds([]);
+      
+      // window.electron.dialog.showMessageBoxSync({type: 'error', message: "Unexpected error occurred. Restarting the application.", title: "Error"});
+    });
     setLoadingIds([
       ...localLoadingIds,
       localLoadingIds[localLoadingIds.length - 1] + '-discovery',
@@ -160,7 +167,11 @@ export function WorkspaceRoot() {
   };
 
   const runSequence = async (sequence: string[][], skipDiscovery = false) => {
-    window.electron.runDiscovery(sequence, skipDiscovery);
+    setRunning(true);
+    window.electron.runDiscovery(sequence, skipDiscovery).catch((e: any) => { 
+      setLoadingIds([]);
+      setRunning(false);
+    });
   };
 
   useEffect(() => {
@@ -295,7 +306,7 @@ export function WorkspaceRoot() {
       <Tab
         id="sequences"
         title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
-        panel={<SequencesPanel flow={flow} config={config} runSequence={runSequence} />}
+        panel={<SequencesPanel running={running}flow={flow} config={config} runSequence={runSequence} />}
         disabled={!flow?.graph}
       />
 

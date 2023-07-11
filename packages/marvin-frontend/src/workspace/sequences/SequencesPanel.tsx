@@ -40,6 +40,7 @@ export interface TreeItem {
 
 export interface SequencesPanelProps {
   flow: Models.FlowModel;
+  running: boolean;
   config: any;
   runSequence: Function;
 }

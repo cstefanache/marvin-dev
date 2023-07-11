@@ -50,6 +50,10 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
     flex-grow: 1;
   }
 
+  .value-filled {
+    color: $action-color;
+  }
+
   .field-wrapper h3 {
     width: 100%;
     border-bottom: 1px solid $item-bg-color;
@@ -79,7 +83,7 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
     width: 30px;
   }
 
-  .bp4-icon:hover {
+  .actionable:hover {
     cursor: pointer;
     color: $action-color;
   }
@@ -102,6 +106,11 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
 
   .object-wrapper {
     border: 1px solid $item-bg-color;
+    padding: 5px;
+
+    .schema-title {
+      padding-bottom: 5px;
+    }
   }
   // .object-wrapper {
   //   flex-grow: 1;
