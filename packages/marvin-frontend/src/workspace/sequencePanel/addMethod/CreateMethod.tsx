@@ -177,7 +177,11 @@ const CreateMethod = (props: any) => {
           sequence: {
             ...CreateSchema.properties.sequence,
             enum: items.reduce( (memo, item) => { memo.push( item.locator); return memo}, [])
-          }}
+          }},
+          sequenceContainer:{
+            ...CreateSchema.properties.sequenceContainer.properties.locator,
+            enum:options
+          }
         })
         setItems(items);
       }
@@ -194,6 +198,7 @@ const CreateMethod = (props: any) => {
     }
   }, []);
   console.log(schema)
+  console.log('bgfh',items)
   async function doSave() {
     const saveObject: any = {
       uid,

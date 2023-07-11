@@ -31,7 +31,8 @@
           "locator":{
             "type": "string",
             "title": "Select locator",
-            "size": { "xs": 12, "sm": 6 }
+            "uiType": "item",
+            "size": { "xs": 12 }
           },
           "select":{
             "type": "string",
