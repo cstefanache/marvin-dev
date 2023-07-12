@@ -31,6 +31,13 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
   }
 }
 
+.create-container {
+  .ra-schema-form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .ra-schema-form {
   display: flex;
   flex-direction: row-reverse;

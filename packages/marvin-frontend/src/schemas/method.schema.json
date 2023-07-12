@@ -8,58 +8,111 @@
     "method": {
       "type": "string",
       "title": "Method Name",
-      "placeholder":"Method Name",
+      "placeholder": "Method Name",
       "size": { "xs": 12 }
     },
-    "globalMethod":{
-      "type":"boolean",
-      "title":"Global Method",
+    "isGlobal": {
+      "type": "boolean",
+      "title": "Global Method",
       "size": { "xs": 12 }
     },
-    "sequence":{
-      "type":"string",
-      "title":"Sequence",
-      "uiType": "item",
-      "size": { "xs": 12 }
-      },
-      "sequenceContainer":{
-        "type":"object",
-        "title":"Container",
-        "uiType": "tab",
-        "size": { "xs": 12 },
-        "properties": {
-          "locator":{
-            "type": "string",
-            "title": "Select locator",
-            "uiType": "item",
-            "size": { "xs": 12 }
-          },
-          "select":{
-            "type": "string",
-            "title": "Select action",
-            "size": { "xs": 12, "sm": 6 }
-          },
-          "keyEvent":{
-            "type": "string",
-            "title": "Key Event",
-            "size": { "xs": 12, "sm": 6 }
-          },
-          "storeContent":{
-            "type":"boolean",
-            "title":"Store content",
-            "size": { "xs": 12 }
-          },
-          "variableName":{
-            "type":"string",
-            "placeholder":"Variable name",
-            "size": { "xs": 12 }
-          },
-          "storeValue":{
-            "type":"string",
-            "placeholder":"Store value from attribute",
-            "size": { "xs": 12 }
-          }
+    "sequence": {
+      "type": "array",
+      "title": "Sequence",
+      "items": { "$ref": "#/definitions/SequenceItem" }
     }
+  },
+  "definitions": {
+    "SequenceItem": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "placeholder": "Type",
+          "enum": [
+            "check",
+            "click",
+            "clearAndFill",
+            "fill",
+            "noAction",
+            "keyEvent"
+          ],
+          "size": { "xs": 12 }
+        },
+        "locator": {
+          "type": "string",
+          "title": "Locator",
+          "placeholder": "Locator",
+          "size": { "xs": 12 }
+        },
+        "store": {
+          "type": "boolean",
+          "title": "Store content or attribute value"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "store": { "const": true }
+            }
+          },
+          "then": {
+            "required": ["storeName"],
+            "properties": {
+              "storeName": {
+                "type": "string",
+                "title": "Store Name",
+                "placeholder": "Store Name",
+                "size": { "xs": 12 }
+              },
+              "storeAttribute": {
+                "type": "string",
+                "title": "Attribute Name",
+                "placeholder": "Attribute Name",
+                "size": { "xs": 12 }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "check" }
+            }
+          },
+          "then": {
+            "properties": {
+              "op": {
+                "type": "string",
+                "title": "Opearator",
+                "enum": [
+                  "eq",
+                  "neq",
+                  "gt",
+                  "lt",
+                  "gte",
+                  "lte",
+                  "contains",
+                  "doesNotContain"
+                ],
+                "size": { "xs": 12 }
+              },
+              "isNumber": {
+                "type": "boolean",
+                "title": "Is Number",
+                "size": { "xs": 12 }
+              },
+              "process": {
+                "type": "string",
+                "title": "Process",
+                "size": { "xs": 12 }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

@@ -34,14 +34,14 @@ export interface Discovered {
 export interface DiscoveredItem extends Discovered {
   elements: Discovered[];
 }
-const options=[
+const options = [
   'check',
   'click',
   'clearAndFill',
   'fill',
   'noAction',
   'keyEvent',
-]
+];
 const filterItems: ItemPredicate<DiscoveredItem> = (
   query,
   item,
@@ -87,6 +87,19 @@ const renderItem: ItemRenderer<DiscoveredItem> = (
   );
 };
 
+function LocalSelectWrapper(items, selectItem) {
+  return ({ property, value, children }: any) => {
+    return (
+      <CustomWrapper value={value} property={property}>
+        {property.className === 'ra-submit-button' && items && (
+          <DiscoveredSelect items={items} onSelect={selectItem} />
+        )}
+        {children}
+      </CustomWrapper>
+    );
+  };
+}
+
 const DiscoveredSelect = (props: any) => {
   const { items, onSelect } = props;
   return (
@@ -115,16 +128,15 @@ const DiscoveredSelect = (props: any) => {
 };
 
 const CreateMethod = (props: any) => {
-  const { exitUrl, saveMethod } = props;
-
+  const { exitUrl, saveMethod,selectedMethod } = props;
+  console.log(selectedMethod)
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
   const [methodName, setMethodName] = useState<string>('');
   const [isGlobal, setIsGlobal] = useState<boolean>(false);
-  const [uid, setUid] = useState<string>(uuid.v4()); 
-  const [schema, setSchema] = useState<null | any>(null)
-
+  const [uid, setUid] = useState<string>(uuid.v4());
+  const [schema, setSchema] = useState<null | any>(null);
   useEffect(() => {
     const asyncFn = async () => {
       const discovered = await window.electron.getDiscoveredForPath(exitUrl);
@@ -181,27 +193,36 @@ const CreateMethod = (props: any) => {
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
         // );
-        console.log(discovered);
-
-        setSchema({
-          ...CreateSchema,
-          properties: {          
-            ...CreateSchema.properties,
-          sequence: {
-            ...CreateSchema.properties.sequence,
-            enum: items.reduce( (memo, item) => { memo.push( item.locator); return memo}, [])
-          }},
-          sequenceContainer:{
-            ...CreateSchema.properties.sequenceContainer.properties.locator,
-            enum:options
+        const enumValue = items.reduce((memo, item) => {
+          if (memo.indexOf(item.locator) === -1) {
+            memo.push(item.locator);
           }
-        })
+          return memo;
+        }, []);
+
+
+        const builtSchema = {
+          ...CreateSchema,
+
+          // properties: {
+          //   ...CreateSchema.properties,
+          //   // sequence: {
+          //   //   ...CreateSchema.properties.sequence,
+          //   //   ...enumValue,
+          //   // },
+          // },
+          // sequenceContainer: {
+          //   ...CreateSchema.properties.sequenceContainer.properties.locator,
+          //   enum: options,
+          // },
+        };
+        setSchema(builtSchema);
         setItems(items);
       }
     };
     asyncFn();
 
-    const { selectedMethod } = props;
+   
     if (selectedMethod && selectedMethod.sequence) {
       const { name, uid, sequence, isGlobal } = selectedMethod;
       setUid(uid);
@@ -210,8 +231,6 @@ const CreateMethod = (props: any) => {
       setIsGlobal(isGlobal);
     }
   }, []);
-  console.log(schema)
-  console.log('bgfh',items)
   async function doSave() {
     const saveObject: any = {
       uid,
@@ -308,15 +327,19 @@ const CreateMethod = (props: any) => {
 
   return (
     <div className="create-container">
-       <div>
-      <div>
-       {schema && <SchemaForm
+      {schema && (
+        <SchemaForm
           schema={schema}
-          wrapper={CustomWrapper as unknown as React.ReactNode}
+          data={selectedMethod}
+          wrapper={
+            LocalSelectWrapper(items, selectItem) as unknown as React.ReactNode
+          }
           config={{ registry: CustomRegistry }}
-        />}
-      </div>
-    </div>
+          onSubmit={ (data, err) => {
+            console.log(data, err)
+          }}
+        />
+      )}
       <div>
         <Tag>Url</Tag>: {exitUrl}
       </div>
@@ -512,7 +535,6 @@ const CreateMethod = (props: any) => {
             </div>
           );
         })}
-        {items && <DiscoveredSelect items={items} onSelect={selectItem} />}
       </div>
       <Button icon="floppy-disk" intent="success" onClick={doSave}>
         Save
