@@ -18,7 +18,7 @@ interface Props {
 
 export default function CustomSelect(props: Props) {
   const { property, value, onChange } = props;
-  const { type, enum: list, error, title, description, isRequired } = property;
+  const { type, enum: list, description, isRequired } = property;
 
   const handleChange = (value: any) => {
     onChange(value);
@@ -45,10 +45,6 @@ export default function CustomSelect(props: Props) {
 
   return (
     <FormGroup
-      helperText={error}
-      // label={
-
-      // }
       inline={false}
       labelInfo={isRequired && '(required)'}
       className="form-group"

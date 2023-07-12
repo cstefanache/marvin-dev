@@ -1,6 +1,5 @@
 @import "../../variables";
 
-
 .variable-form {
     &.ra-schema-form {
         flex-direction: column;
@@ -29,9 +28,11 @@
             animation: rotation 2s infinite linear;
         }
 
-        .bp4-icon:hover {
-            color: $action-color;
-            cursor: pointer;
+        .sequences-wrapper-controls {
+            .bp4-icon:hover {
+                color: $action-color;
+                cursor: pointer;
+            }
         }
 
         .sequences-wrapper {
@@ -75,7 +76,6 @@
                         position: absolute;
                         right: 4px;
                         top: 6px;
-                        visibility: hidden;
                     }
 
                     &:hover {

@@ -94,7 +94,10 @@ export default class Workspace {
         outputPath: `${path}/output/e2e`,
 
         aliases: {
-          urlReplacers: this.config?.aliases?.urlReplacers || [],
+          urlReplacers: [
+            ...defaultAliases.urlReplacers,
+            ...(this.config?.aliases?.urlReplacers || []),
+          ],
           optimizer: this.config?.aliases?.optimizer || {
             exclude: [],
             priority: [],

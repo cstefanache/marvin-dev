@@ -96,13 +96,12 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
     row-gap: 10px;
   }
 
-  // .array-wrapper {
-  //   display: flex;
-  //   flex-direction: row-reverse;
-  //   flex-wrap: wrap;
-  //   flex-grow: 1;
-  //   row-gap: 20px;
-  // }
+  .error {
+    .schema-title,
+    .error-message {
+      color: $error-color;
+    }
+  }
 
   .object-wrapper {
     border: 1px solid $item-bg-color;
@@ -112,8 +111,5 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
       padding-bottom: 5px;
     }
   }
-  // .object-wrapper {
-  //   flex-grow: 1;
-  //   background-color: $item-bg-color;
-  // }
+ 
 }

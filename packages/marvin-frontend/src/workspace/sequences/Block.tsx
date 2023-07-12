@@ -31,7 +31,7 @@ export function Block(props: {
 
   if (actionItem) {
     return (
-      <Tag icon={props.loading ? "cog": "flow-linear"} className={props.loading ? 'loading' : ''} intent='primary'>
+      <Tag large={true} round={true} icon={props.loading ? "cog": "flow-linear"} className={props.loading ? 'loading' : ''} intent='primary'>
         {actionItem.sequenceStep}
       </Tag>
     );
