@@ -253,13 +253,7 @@ export function SequencesPanel(props: SequencesPanelProps) {
                   />
                 }
               />
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '100%',
-                }}
-              >
+              <div>
                 {filteredData.map((block, blockIndex) => (
                   <Popover2
                     className="menu-item"
