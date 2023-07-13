@@ -26,19 +26,21 @@ export default function Config() {
     asyncFn();
   }, []);
 
-  const saveConfig = (data: JSONObject) => {
-    try {
-      window.electron.setConfig(data);
-      setConfig(data);
-      if (toastRef.current) {
-        (toastRef.current as Toaster).show({
-          intent: 'primary',
-          message: 'Config saved',
-          timeout: 3000,
-        });
+  const saveConfig = (data: JSONObject, err: any) => {
+    if (err.length === 0) {
+      try {
+        window.electron.setConfig(data);
+        setConfig(data);
+        if (toastRef.current) {
+          (toastRef.current as Toaster).show({
+            intent: 'primary',
+            message: 'Config saved',
+            timeout: 3000,
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   };
 

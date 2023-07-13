@@ -22,6 +22,8 @@ import {
   DialogBody,
   DialogFooter,
 } from '@blueprintjs/core';
+
+import { SequencesBlock } from './Sequence';
 import './SequencesPanel.scss';
 import { FlowNavigator } from '../../components/FlowNavigator/FlowNavigator';
 import Console from '../console/Console';
@@ -41,124 +43,9 @@ export interface TreeItem {
 
 export interface SequencesPanelProps {
   flow: Models.FlowModel;
+  running: boolean;
+  config: any;
   runSequence: Function;
-}
-
-function Block(props: { id: string; flow: Models.FlowModel }) {
-  const [actionItem, setActionItem] = useState<Models.ActionItem>(null);
-  useEffect(() => {
-    function findActionItemById(
-      id: string,
-      parent: Models.ActionItem[]
-    ): Models.ActionItem {
-      for (let i = 0; i < parent.length; i++) {
-        const item = parent[i];
-        if (item.id === id) {
-          return item;
-        } else if (item.children) {
-          const child = findActionItemById(id, item.children);
-          if (child) {
-            return child;
-          }
-        }
-      }
-    }
-
-    setActionItem(findActionItemById(props.id, props.flow.graph));
-  }, [props.id]);
-
-  if (actionItem) {
-    return (
-      <Tag icon="flow-linear" intent="primary">
-        {actionItem.sequenceStep}
-      </Tag>
-    );
-  } else {
-    return <Tag icon="error">{props.id} missing</Tag>;
-  }
-}
-
-function SequencesBlock(props: {
-  sequence: Models.SequenceItem;
-  flow: Models.FlowModel;
-  deleteSequence: MouseEventHandler;
-  addVariable: Function;
-  deleteVariable: Function;
-  moveSequence: Function;
-  cutAtIndex: Function;
-  isFirst: boolean;
-  isLast: boolean;
-  index: number;
-}) {
-  const {
-    sequence,
-    isFirst,
-    isLast,
-    deleteSequence,
-    cutAtIndex,
-    moveSequence,
-    flow,
-    index,
-  } = props;
-
-  return (
-    <div className="sequences-wrapper">
-      <div className="sequences-wrapper-controls">
-        <Tag className="bp4-round" intent="primary">
-          {index + 1}
-        </Tag>
-        <Icon
-          icon="trash"
-          title="Delete from sequence"
-          onClick={deleteSequence}
-        />
-        {!isFirst && (
-          <Icon
-            icon="chevron-up"
-            title="Move up"
-            onClick={() => moveSequence(true)}
-          />
-        )}
-        {!isLast && (
-          <Icon
-            icon="chevron-down"
-            title="Move down"
-            onClick={() => moveSequence(false)}
-          />
-        )}
-        <span className="divider"></span>
-        Variables
-        <Icon
-          icon="add"
-          title="Add variable"
-          onClick={() => props.addVariable()}
-        />
-        {(sequence.store || []).map((item, index) => (
-          <span className="variable">
-            <span className="variable-key">{item.key}</span> {item.value}
-            <Icon
-              icon="trash"
-              size={12}
-              onClick={() => props.deleteVariable(index)}
-            />
-          </span>
-        ))}
-      </div>
-      <div className="sequences-block">
-        {sequence.sequences.map((step, index) => (
-          <>
-            <Block id={step} flow={flow} />
-            {index < sequence.sequences.length - 1 && (
-              <span className="sequenceAction">
-                <Icon icon="chevron-right" />
-                <Icon icon="cut" onClick={() => cutAtIndex(index + 1)} />
-              </span>
-            )}
-          </>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 const variableSchema = {
@@ -178,7 +65,7 @@ const variableSchema = {
 };
 
 export function SequencesPanel(props: SequencesPanelProps) {
-  const { flow } = props;
+  const { flow, config } = props;
 
   const [selectedBlockIndex, setSelectedBlockIndex] = useState<number>(0);
   const [selectedBlock, setSelectedBlock] = useState<Models.Block>(null);
@@ -193,6 +80,8 @@ export function SequencesPanel(props: SequencesPanelProps) {
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [deleteVarIndices, setDeleteVarIndices] = useState<any[] | null>(null);
   const [filter, setFilter] = useState<string>('');
+
+  const [loadingIds, setLoadingIds] = useState<string[][]>([]);
 
   useEffect(() => {
     if (flow) {
@@ -216,6 +105,23 @@ export function SequencesPanel(props: SequencesPanelProps) {
         }
       }
     }
+
+    window.ipcRender.receive('action-finished', (id: string) => {
+      setLoadingIds((loadingIds: any) => {
+        for (let i = 0; i < loadingIds.length; i++) {
+          const index = loadingIds[i].indexOf(id);
+          if (index !== -1) {
+            loadingIds[i].splice(index, 1);
+            break;
+          }
+        }
+        return [...loadingIds];
+      });
+    });
+
+    window.ipcRender.receive('run-completed', async (id: string) => {
+      setLoadingIds([]);
+    });
   }, [flow]);
 
   const deleteSequence = (index: number) => {
@@ -309,6 +215,16 @@ export function SequencesPanel(props: SequencesPanelProps) {
         )
       : blocks;
   }, [blocks, filter]);
+
+  const runSequence = (sequence: any, flag: boolean) => {
+    const loadingIdsLocal = sequence.reduce((memo, item: any) => {
+      memo.push([...item.sequences]);
+      return memo;
+    }, []);
+
+    setLoadingIds(loadingIdsLocal);
+    props.runSequence(sequence, flag);
+  };
 
   if (filteredData) {
     return (
@@ -414,16 +330,16 @@ export function SequencesPanel(props: SequencesPanelProps) {
                     <Button icon="floppy-disk" minimal onClick={saveBlocks} />
                     <Button
                       icon="play"
+                      disabled={loadingIds.length > 0}
                       minimal
-                      onClick={() =>
-                        props.runSequence(selectedBlock.items, true)
-                      }
+                      onClick={() => runSequence(selectedBlock.items, true)}
                     />
                   </h4>
                   <div className="sequences-list">
                     {(selectedBlock.items || []).map((sequence, index) => (
                       <SequencesBlock
                         index={index}
+                        loadingIds={loadingIds[index]}
                         isFirst={index === 0}
                         isLast={index === selectedBlock.items.length - 1}
                         deleteSequence={() => setDeleteIndex(index)}
@@ -504,7 +420,13 @@ export function SequencesPanel(props: SequencesPanelProps) {
                               sequence.sequences.push(currentNode.id);
                               return sequence;
                             }
-                            const seq = { store: [], sequences: [] };
+                            const seq = {
+                              store:
+                                selectedBlock.items.length === 0
+                                  ? config.aliases.store
+                                  : [],
+                              sequences: [],
+                            };
                             addToSeq(element, seq);
                             const sequences = [...selectedBlock.items];
                             sequences.push(seq);

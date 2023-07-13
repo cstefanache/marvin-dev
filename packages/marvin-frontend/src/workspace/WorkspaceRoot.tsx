@@ -35,8 +35,8 @@ export function WorkspaceRoot() {
     null
   );
   const [mainLayoutHoriz, setMainLayoutHoriz] = useState<boolean>(false);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [config, setConfig] = useState<JSONObject | undefined>();
+  const [saneConfiguration, setSaneConfiguration] = useState<boolean>(false);
 
   const asyncLoadFn = async () => {
     const workspace = await window.electron.getWorkspace();
@@ -51,6 +51,15 @@ export function WorkspaceRoot() {
       const flow = await window.electron.getFlow();
       setFlow(flow);
       setFlowState(Math.random());
+
+      const config = await window.electron.getConfig();
+      setConfig(config);
+      if (!config.rootUrl || config.rootUrl.trim() === '') {
+        setTab('config');        
+      }
+
+      setSaneConfiguration(config.rootUrl && config.rootUrl.trim() !== '');
+      console.log('####', config)
     }
   };
   useEffect(() => {
@@ -133,6 +142,7 @@ export function WorkspaceRoot() {
   window.ipcRender.receive('run-completed', async (id: string) => {
     setLoadingIds([]);
     reloadWorkspace();
+    setRunning(false);
   });
 
   const runDiscovery = async (element: any, skipDiscovery = false) => {
@@ -149,10 +159,18 @@ export function WorkspaceRoot() {
       localLoadingIds.push(currentNode.id);
       return sequence;
     }
-    window.electron.runDiscovery(
-      [{ sequences: addToSeq(element, []) }],
-      skipDiscovery === true
-    );
+    window.electron
+      .runDiscovery(
+        [{ sequences: addToSeq(element, []) }],
+        skipDiscovery === true
+      )
+      .catch((e: any) => {
+        console.error(e);
+        setRunning(false);
+        setLoadingIds([]);
+
+        // window.electron.dialog.showMessageBoxSync({type: 'error', message: "Unexpected error occurred. Restarting the application.", title: "Error"});
+      });
     setLoadingIds([
       ...localLoadingIds,
       localLoadingIds[localLoadingIds.length - 1] + '-discovery',
@@ -160,24 +178,15 @@ export function WorkspaceRoot() {
   };
 
   const runSequence = async (sequence: string[][], skipDiscovery = false) => {
-    window.electron.runDiscovery(sequence, skipDiscovery);
+    setRunning(true);
+    window.electron.runDiscovery(sequence, skipDiscovery).catch((e: any) => {
+      setLoadingIds([]);
+      setRunning(false);
+    });
   };
 
-  useEffect(() => {
-    const asyncFn = async () => {
-      const config = await window.electron.getConfig();
-      setConfig(config);
-    };
-    asyncFn();
-  }, []);
+ 
 
-  useEffect(() => {
-    if (!config?.rootUrl) {
-      setOpenDialog(true);
-    } else {
-      setOpenDialog(false);
-    }
-  }, [config]);
 
   const mainLayout = (
     <DragLayout
@@ -234,13 +243,13 @@ export function WorkspaceRoot() {
               iconSize={48}
             />
           )}
-          <DialogComponent
+          {/* <DialogComponent
             open={openDialog}
             onClose={() => setOpenDialog(false)}
             config={config}
             setConfig={setConfig}
             title="Configure setup project base URL"
-          />
+          /> */}
         </>
       </DragLayout>
     </DragLayout>
@@ -269,6 +278,7 @@ export function WorkspaceRoot() {
       )}
       <Tab
         id="mainLayout"
+        disabled={!saneConfiguration}
         title={
           <Icon
             icon="panel-stats"
@@ -289,20 +299,28 @@ export function WorkspaceRoot() {
             }}
           />
         }
-        disabled={!flow?.graph}
+        disabled={!saneConfiguration || !flow?.graph}
       />
 
       <Tab
         id="sequences"
         title={<Icon icon="gantt-chart" size={24} title="Sequences" />}
-        panel={<SequencesPanel flow={flow} runSequence={runSequence} />}
-        disabled={!flow?.graph}
+        panel={
+          <SequencesPanel
+            running={running}
+            flow={flow}
+            config={config}
+            runSequence={runSequence}
+          />
+        }
+        disabled={!saneConfiguration || !flow?.graph}
       />
 
       <Tab
         id="generator"
         title={<Icon icon="code-block" size={24} title="Cypress Tests" />}
         panel={<Generate />}
+        disabled={!saneConfiguration || !flow?.graph}
       />
       <Tab
         className="help-tab"

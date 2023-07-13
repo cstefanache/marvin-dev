@@ -122,19 +122,31 @@ const CreateMethod = (props: any) => {
           // ...iterable.map((item: any) => ({ ...item, from: 'iterable' })),
           ...iterable.reduce((memo: any[], item: any) => {
             const { identifier, iteratorName, elements } = item;
-            elements.forEach((element: any) => {
+            if (elements.length) {
+              elements.forEach((element: any) => {
+                memo.push({
+                  from: 'iterable',
+                  text: element.text,
+                  locator: element.locator,
+                  details: iteratorName,
+                  iterator: {
+                    name: iteratorName,
+                    identifier,
+                  },
+                });
+              });
+            } else {
               memo.push({
                 from: 'iterable',
-                text: element.text,
-                locator: element.locator,
+                text: iteratorName,
+                locator: identifier,
                 details: iteratorName,
                 iterator: {
                   name: iteratorName,
                   identifier,
                 },
               });
-            });
-
+            }
             // if (!elements.length) {
             //   memo.push({
             //     from: 'iterable',
@@ -152,7 +164,7 @@ const CreateMethod = (props: any) => {
         //   (value, index, self) =>
         //     index === self.findIndex((t) => t.locator === value.locator)
         // );
-
+        console.log(discovered);
         setItems(items);
       }
     };

@@ -4,15 +4,9 @@
   "type": "object",
   "title": "Marvin Config",
   "description": "Marvin Config Schema",
-  "required": [],
+  "required": ["rootUrl"],
   "properties": {
-    "name": {
-      "type": "string",
-      "size": { "xs": 12 },
-      "uiType": "item",
-      "title": "Name",
-      "readOnly": true
-    },
+    
     "rootUrl": {
       "type": "string",
       "size": { "xs": 12, "sm": 6 },

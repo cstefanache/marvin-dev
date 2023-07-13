@@ -154,7 +154,7 @@ export default class Runner {
             }
           } else {
             throw new Error(
-              `Missing iterator config for ${iteratorConfig.name}`
+              `Missing iterator config for ${iterator.name}`
             );
           }
 

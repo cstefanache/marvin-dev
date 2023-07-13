@@ -18,41 +18,52 @@ import './WrapperStyles.scss';
 export const getInputIcon = (
   title?: string,
   inputType?: string,
-  isIteratorRoot?: boolean
+  isIteratorRoot?: boolean,
+  size: number = 16
 ) => {
   if (inputType) {
     return <Icon icon={getActionIcon(inputType)} />;
   } else if (title) {
     const lowerName = title?.toLowerCase();
     if (isIteratorRoot) {
-      return <Icon icon="property" />;
+      return <Icon size={size} icon="property" />;
+    } else if (lowerName === 'selectors') {
+      return <Icon size={size} icon="select" />;
     } else if (lowerName === 'condition') {
-      return <Icon icon="playbook" />;
+      return <Icon size={size} icon="playbook" />;
     } else if (lowerName === 'sequence step name') {
-      return <Icon icon="id-number" />;
+      return <Icon size={size} icon="id-number" />;
     } else if (lowerName === 'name') {
-      return <Icon icon="person" />;
+      return <Icon size={size} icon="person" />;
     } else if (lowerName === 'selector' || lowerName === 'locator') {
-      return <Icon icon="code" />;
+      return <Icon size={size} icon="code" />;
     } else if (lowerName === 'root url') {
-      return <Icon icon="open-application" />;
+      return <Icon size={size} icon="open-application" />;
     } else if (lowerName === 'default timeout') {
-      return <Icon icon="time" />;
+      return <Icon size={size} icon="time" />;
+    } else if (lowerName === 'delayed discovery') {
+      return <Icon size={size} icon="stopwatch" />;
     } else if (lowerName === 'identifiers') {
-      return <Icon icon="array" />;
+      return <Icon size={size} icon="array" />;
     } else if (lowerName === 'identifier') {
-      return <Icon icon="tag" />;
+      return <Icon size={size} icon="tag" />;
     } else if (lowerName === 'type') {
-      return <Icon icon="list" />;
+      return <Icon size={size} icon="list" />;
     } else if (lowerName === 'regex') {
-      return <Icon icon="book" />;
+      return <Icon size={size} icon="regex" />;
+    } else if (lowerName === 'key') {
+      return <Icon size={size} icon="key" />;
+    } else if (lowerName === 'value' || lowerName === 'exact match') {
+      return <Icon size={size} icon="numerical" />;
+    } else if (lowerName === 'alias') {
+      return <Icon size={size} icon="bookmark" />;
     } else if (
       lowerName === 'sequence execution loop' ||
       lowerName === 'method loop'
     ) {
-      return <Icon icon="array" />;
+      return <Icon size={size} icon="array" />;
     } else if (lowerName === 'post delay') {
-      return <Icon icon="stopwatch" />;
+      return <Icon size={size} icon="stopwatch" />;
     }
   }
 };
@@ -69,6 +80,7 @@ function Wrapper({ property, value, children }: CustomWrapperProps) {
     title,
     properties,
     uiType,
+    error,
     uiIndex,
     description,
     collapsed,
@@ -91,7 +103,11 @@ function Wrapper({ property, value, children }: CustomWrapperProps) {
           </div>
         );
       case 'tab':
-        return <TabPanel index={uiIndex || 0}>{children}</TabPanel>;
+        return (
+          <TabPanel index={uiIndex || 0}>
+              {children}
+          </TabPanel>
+        );
       default:
         return (
           <div
@@ -99,24 +115,42 @@ function Wrapper({ property, value, children }: CustomWrapperProps) {
             data-registry={property.registryKey}
             className={`${
               property.type ? `${property.type}-` : ''
-            }wrapper field-wrapper ${property.className || ''}`}
+            }wrapper field-wrapper ${property.className || ''} ${
+              error && 'error'
+            }`}
           >
             {title && (
-              <div>
+              <div className="schema-title">
+                <span
+                  style={{ marginRight: 5 }}
+                  className={value ? 'value-filled' : ''}
+                >
+                  {error ? (
+                    <Icon icon="warning-sign" size={12} />
+                  ) : (
+                    getInputIcon(title, property.inputType, false, 12)
+                  )}
+                </span>
                 {title || description}
                 {isCollapsed &&
                   allowCollapse &&
                   (!value ? (
-                    <Icon icon="plus" onClick={() => setIsCollapsed(false)} />
+                    <Icon
+                      icon="plus"
+                      className="actionable"
+                      onClick={() => setIsCollapsed(false)}
+                    />
                   ) : (
                     <Icon
                       icon="chevron-right"
+                      className="actionable"
                       onClick={() => setIsCollapsed(false)}
                     />
                   ))}
                 {!isCollapsed && allowCollapse && (
                   <Icon
                     icon="chevron-down"
+                    className="actionable"
                     onClick={() => setIsCollapsed(true)}
                   />
                 )}
@@ -124,8 +158,10 @@ function Wrapper({ property, value, children }: CustomWrapperProps) {
             )}
             {property.description &&
               title.trim() !== description.trim() &&
-              property.type === 'array' && <h3>{property.description}</h3>}
-
+              property.type === 'array' && (
+                <div style={{ width: '100%' }}>{property.description}</div>
+              )}
+            {error && <div className="error-message">{error[0].message}</div>}
             {!isCollapsed && children}
           </div>
         );

@@ -71,7 +71,7 @@ const SelectMethod = (props: any) => {
         setData({ sequenceStep: `Exec: ${selectedMethod.method}` });
       }
       const method = selectedMethod;
-      const schema = {
+      const schema: any = {
         type: 'object',
         title: method.method,
         properties: {
@@ -122,14 +122,7 @@ const SelectMethod = (props: any) => {
                 }, {}),
             },
           },
-          forEach: {
-            type: 'string',
-            title: 'For Each Matched Element',
-            description:
-              'Run this step and its children for each matched element',
-            enum: discovered,
-            collapsed: true,
-          },
+
           loop: {
             type: 'integer',
             title: 'Sequence Execution Loop',
@@ -151,6 +144,19 @@ const SelectMethod = (props: any) => {
           },
         },
       };
+
+      if (discovered && discovered.length) {
+        schema.forEach = {
+          type: 'string',
+          title: 'For Each Matched Element',
+          optional: true,
+          description:
+            'Run this step and its children for each matched element',
+          enum: [...new Set(discovered)],
+          collapsed: true,
+        };
+      }
+
       setSchema(schema);
     }
   }, [selectedMethod]);
