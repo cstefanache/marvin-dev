@@ -24,7 +24,7 @@ export default function ActionsMenu(props: any) {
       <MenuItem
         icon="more"
         onClick={() => selectSequenceItem(element)}
-        style={{ height: 18, width: 28, padding: 0 }}
+        style={{ height: 18, width: 18, padding: 0 }}
       >
         <MenuItem
           text="Delete"
