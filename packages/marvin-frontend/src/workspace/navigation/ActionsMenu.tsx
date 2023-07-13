@@ -70,6 +70,7 @@ export default function ActionsMenu(props: any) {
           onChange={(e: any) => setNewFolderName(e.target.value)}
           placeholder="Folder name"
           value={newFolderName}
+          style={{ width: '100%' }}
         />
       </Alert>
 

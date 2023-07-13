@@ -30,6 +30,7 @@ import {
   CustomRegistry,
   CustomWrapper,
 } from '../../components/registry/Wrapper/Wrapper';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 
 export interface TreeItem {
   id: number;
@@ -336,35 +337,44 @@ export function SequencesPanel(props: SequencesPanelProps) {
                   />
                 }
               />
-              <Menu>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
                 {filteredData.map((block, blockIndex) => (
-                  <MenuItem
-                    title={block.name}
-                    text={
-                      <div>
-                        <Icon icon="gantt-chart" />
-                        {block.name}
-                      </div>
+                  <Popover2
+                    className="menu-item"
+                    content={
+                      <Menu>
+                        <MenuItem
+                          text="Delete"
+                          icon="trash"
+                          onClick={() => setDeleteBlockIndex(blockIndex)}
+                        />
+                        <MenuItem
+                          text="Run"
+                          icon="play"
+                          onClick={() => props.runSequence(block.items, true)}
+                        />
+                      </Menu>
                     }
-                    icon="more"
-                    onClick={() => {
-                      setSelectedBlockIndex(blockIndex);
-                      setSelectedBlock(block);
-                    }}
+                    placement="right"
+                    fill={true}
+                    minimal
                   >
-                    <MenuItem
-                      text="Delete"
-                      icon="trash"
-                      onClick={() => setDeleteBlockIndex(blockIndex)}
+                    <Button
+                      alignText="left"
+                      icon="gantt-chart"
+                      rightIcon="more"
+                      text={block.name}
+                      minimal
                     />
-                    <MenuItem
-                      text="Run"
-                      icon="play"
-                      onClick={() => props.runSequence(block.items, true)}
-                    />
-                  </MenuItem>
+                  </Popover2>
                 ))}
-              </Menu>
+              </div>
             </div>
           </TitlePanel>
         }
