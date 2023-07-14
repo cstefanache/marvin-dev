@@ -22,8 +22,9 @@ export default function ActionsMenu(props: any) {
   return (
     <div>
       <MenuItem
+        icon="more"
         onClick={() => selectSequenceItem(element)}
-        style={{ height: 18, width: 28, padding: 0 }}
+        style={{ height: 18, width: 18, padding: 0 }}
       >
         <MenuItem
           text="Delete"
@@ -69,6 +70,7 @@ export default function ActionsMenu(props: any) {
           onChange={(e: any) => setNewFolderName(e.target.value)}
           placeholder="Folder name"
           value={newFolderName}
+          style={{ width: '100%' }}
         />
       </Alert>
 

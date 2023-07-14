@@ -1,119 +1,183 @@
-@import "../../variables";
+@import '../../variables';
 
 .variable-form {
-    &.ra-schema-form {
-        flex-direction: column;
-    }
+  &.ra-schema-form {
+    flex-direction: column;
+  }
 }
 
 .sequences {
-    padding: 10px;
-    height: 100%;
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .sequences-list {
     display: flex;
     flex-direction: column;
+    row-gap: 10px;
+    flex-grow: 1;
+    overflow: auto;
 
-    .sequences-list {
+    .sequences-wrapper {
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 5px;
+      row-gap: 5px;
+
+      .sequences-wrapper-controls {
         display: flex;
-        flex-direction: column;
-        row-gap: 10px;
-        flex-grow: 1;
-        overflow: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 5px;
+        row-gap: 5px;
+        align-items: center;
 
+        .divider {
+          width: 1px;
+          height: 20px;
+          margin: 0 4px;
+          background-color: rgba(255, 255, 255, 0.3);
+          display: inline-block;
+        }
         .loading {
-            color: rgb(136, 255, 140) !important;
-            background-color: transparent;
+          color: rgb(136, 255, 140) !important;
+          background-color: transparent;
         }
 
         .bp4-icon-cog {
-            animation: rotation 2s infinite linear;
+          animation: rotation 2s infinite linear;
         }
 
         .sequences-wrapper-controls {
-            .bp4-icon:hover {
-                color: $action-color;
-                cursor: pointer;
-            }
+          .bp4-icon:hover {
+            color: $action-color;
+            cursor: pointer;
+          }
         }
 
         .sequences-wrapper {
+          display: flex;
+          flex-direction: column;
+          background-color: rgba(255, 255, 255, 0.1);
+          padding: 5px;
+          row-gap: 5px;
+
+          .sequences-wrapper-controls {
             display: flex;
-            flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 5px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            column-gap: 5px;
             row-gap: 5px;
+            align-items: center;
 
-            .sequences-wrapper-controls {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                column-gap: 5px;
-                row-gap: 5px;
-                align-items: center;
-
-                .divider {
-                    width: 1px;
-                    height: 20px;
-                    margin: 0 4px;
-                    background-color: rgba(255, 255, 255, 0.3);
-                    display: inline-block;
-                }
-
-                .variable {
-                    display: inline-block;
-                    background-color: rgb(95, 98, 186);
-                    padding: 0 20px 0 0;
-                    border-radius: 2px;
-                    position: relative;
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-
-                    .variable-key {
-                        background-color: rgba(0, 0, 0, 0.3);
-                        display: inline-block;
-                        padding: 4px;
-                    }
-
-                    .bp4-icon-trash {
-                        position: absolute;
-                        right: 4px;
-                        top: 6px;
-                    }
-
-                    &:hover {
-                        .bp4-icon-trash {
-                            visibility: visible;
-                            cursor: pointer;
-                        }
-                    }
-                }
+            .divider {
+              width: 1px;
+              height: 20px;
+              margin: 0 4px;
+              background-color: rgba(255, 255, 255, 0.3);
+              display: inline-block;
             }
 
-            .sequences-block {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                column-gap: 5px;
-                row-gap: 5px;
-                align-items: center;
-                border-top: 1px solid rgba(255, 255, 255, 0.3);
-                padding-top: 5px;
+            .variable {
+              display: inline-block;
+              background-color: rgb(95, 98, 186);
+              padding: 0 20px 0 0;
+              border-radius: 2px;
+              position: relative;
+              border: 1px solid rgba(255, 255, 255, 0.3);
+
+              .variable-key {
+                background-color: rgba(0, 0, 0, 0.3);
+                display: inline-block;
+                padding: 4px;
+              }
+
+              .bp4-icon-trash {
+                position: absolute;
+                right: 4px;
+                top: 6px;
+              }
+
+              &:hover {
+                .bp4-icon-trash {
+                  visibility: visible;
+                  cursor: pointer;
+                }
+              }
             }
+          }
+
+          .sequences-block {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            column-gap: 5px;
+            row-gap: 5px;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 5px;
+          }
         }
 
-        .sequenceAction {
-            .bp4-icon-cut {
-                display: none;
-            }
+        .variable {
+          display: inline-block;
+          background-color: rgb(95, 98, 186);
+          padding: 0 20px 0 0;
+          border-radius: 2px;
+          position: relative;
+          border: 1px solid rgba(255, 255, 255, 0.3);
 
-            &:hover {
-                cursor: pointer;
-                .bp4-icon-cut {
-                    display: inline-block;
-                }
+          .variable-key {
+            background-color: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            padding: 4px;
+          }
 
-                .bp4-icon-chevron-right {
-                    display: none;
-                }
+          .bp4-icon-trash {
+            position: absolute;
+            right: 4px;
+            top: 6px;
+            visibility: hidden;
+          }
+
+          &:hover {
+            .bp4-icon-trash {
+              visibility: visible;
+              cursor: pointer;
             }
+          }
         }
+      }
+
+      .sequences-block {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 5px;
+        row-gap: 5px;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        padding-top: 5px;
+      }
     }
+
+    .sequenceAction {
+      .bp4-icon-cut {
+        display: none;
+      }
+
+      &:hover {
+        cursor: pointer;
+        .bp4-icon-cut {
+          display: inline-block;
+        }
+
+        .bp4-icon-chevron-right {
+          display: none;
+        }
+      }
+    }
+  }
 }

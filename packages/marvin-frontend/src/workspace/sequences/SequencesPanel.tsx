@@ -32,6 +32,7 @@ import {
   CustomRegistry,
   CustomWrapper,
 } from '../../components/registry/Wrapper/Wrapper';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 
 export interface TreeItem {
   id: number;
@@ -252,30 +253,38 @@ export function SequencesPanel(props: SequencesPanelProps) {
                   />
                 }
               />
-              <Menu>
+              <div>
                 {filteredData.map((block, blockIndex) => (
-                  <MenuItem
-                    title={block.name}
-                    text={block.name}
-                    icon="gantt-chart"
-                    onClick={() => {
-                      setSelectedBlockIndex(blockIndex);
-                      setSelectedBlock(block);
-                    }}
+                  <Popover2
+                    className="menu-item"
+                    content={
+                      <Menu>
+                        <MenuItem
+                          text="Delete"
+                          icon="trash"
+                          onClick={() => setDeleteBlockIndex(blockIndex)}
+                        />
+                        <MenuItem
+                          text="Run"
+                          icon="play"
+                          onClick={() => props.runSequence(block.items, true)}
+                        />
+                      </Menu>
+                    }
+                    placement="right"
+                    fill={true}
+                    minimal
                   >
-                    <MenuItem
-                      text="Delete"
-                      icon="trash"
-                      onClick={() => setDeleteBlockIndex(blockIndex)}
+                    <Button
+                      alignText="left"
+                      icon="gantt-chart"
+                      rightIcon="more"
+                      text={block.name}
+                      minimal
                     />
-                    <MenuItem
-                      text="Run"
-                      icon="play"
-                      onClick={() => runSequence(block.items, true)}
-                    />
-                  </MenuItem>
+                  </Popover2>
                 ))}
-              </Menu>
+              </div>
             </div>
           </TitlePanel>
         }

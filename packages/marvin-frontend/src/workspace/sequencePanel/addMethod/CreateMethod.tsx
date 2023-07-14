@@ -359,15 +359,15 @@ const CreateMethod = (props: any) => {
                   fill={true}
                   items={keyInputType}
                   onItemSelect={(item) => {
-                    step.keyItem = item;
+                    step.press = item;
                     setSequence([...sequence]);
                   }}
                   itemRenderer={keyEventItemRenderer}
                 >
                   <Button
-                    key={step.keyItem}
+                    key={step.press}
                     fill={true}
-                    text={`KeyEvent: ${step.keyItem}` || 'Select key event'}
+                    text={`KeyEvent: ${step.press}` || 'Select key event'}
                     alignText="left"
                     rightIcon="double-caret-vertical"
                   />
