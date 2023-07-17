@@ -108,7 +108,6 @@ const DiscoveredSelect = (props: any) => {
 
 const CreateMethod = (props: any) => {
   const { exitUrl, saveMethod, selectedMethod } = props;
-  console.log('selectedMethod', selectedMethod);
   const [items, setItems] = useState<any>(null);
   // const [iterator, setIterator] = useState<any>(null);
   const [sequence, setSequence] = useState<any>([]);
@@ -125,7 +124,7 @@ const CreateMethod = (props: any) => {
             <DiscoveredSelect items={items} onSelect={selectItem} />
           )}
 
-          {property.title === 'Locator' ? (property.placeholder = 'ddd') : ''}
+          {property.title === 'Locator' ? (property.value = '') : ''}
           {console.log('sequence from inside', sequence )}
           {children}
         </CustomWrapper>

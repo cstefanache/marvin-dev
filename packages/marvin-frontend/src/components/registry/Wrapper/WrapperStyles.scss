@@ -70,8 +70,19 @@ $item-bg-color: rgba(255, 255, 255, 0.2);
 
   .ra-remove-button {
     background-color: $item-bg-color;
-    padding-top: 12px;
     text-align: center;
+    padding-top: 12px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    gap: 10px;
 
     &:hover {
       background-color: rgb(135, 131, 116);
