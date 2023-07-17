@@ -4,6 +4,9 @@
     &.ra-schema-form {
         flex-direction: column;
     }
+    &.ra-schema-form > div{
+        flex-grow: 0!important;
+    }
 }
 
 .sequences {

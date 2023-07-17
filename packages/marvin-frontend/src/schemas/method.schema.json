@@ -28,8 +28,8 @@
       "properties": {
         "type": {
           "type": "string",
-          "title": "Type",
           "placeholder": "Type",
+          "title": "Type",
           "enum": [
             "check",
             "click",
@@ -86,7 +86,7 @@
             "properties": {
               "op": {
                 "type": "string",
-                "title": "Opearator",
+                "title": "Operator",
                 "enum": [
                   "eq",
                   "neq",
@@ -106,7 +106,25 @@
               },
               "process": {
                 "type": "string",
-                "title": "Process",
+                "title": "Post process value",
+                "placeholder":"Post process value",
+                "size": { "xs": 12 }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "keyEvent" }
+            }
+          },
+          "then": {
+            "properties": {
+              "keyEvent": {
+                "type": "string",
+                "title":"Key Event",
+                "placeholder":"Key event",
                 "size": { "xs": 12 }
               }
             }
