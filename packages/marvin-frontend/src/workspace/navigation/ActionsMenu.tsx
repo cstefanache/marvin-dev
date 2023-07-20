@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Alert, Intent, InputGroup, MenuItem } from '@blueprintjs/core';
+import './ActionsMenu.scss'
 
 export default function ActionsMenu(props: any) {
   const {
@@ -62,6 +63,7 @@ export default function ActionsMenu(props: any) {
           newFolder(newFolderName);
           setNewFolderName(null);
         }}
+        className="alert"
       >
         <p>Enter folder name:</p>
         <InputGroup
@@ -84,8 +86,8 @@ export default function ActionsMenu(props: any) {
         onConfirm={handleMoveConfirm}
       >
         <p>
-          Are you sure you want to move <b>filename</b> to Trash? You will be
-          able to restore it later, but it will become private to you.
+          Are you sure you want to remove this Method? You will not be able to
+          undo this action.
         </p>
       </Alert>
     </div>
